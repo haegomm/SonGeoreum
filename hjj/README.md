@@ -6,4 +6,7 @@
 게임하기, 나의 단어장 기능 명세 작성   
    
 # 23.01.17
-OpenVidu 공부, ERD 작성, BackEnd 역할 나누기
+OpenVidu 공부, ERD 작성, BackEnd 역할 나누기   
+
+# 23.01.18
+기본 API 명세 작성
