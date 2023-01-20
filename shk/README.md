@@ -44,9 +44,7 @@ frontend
     │   ├── button
     │   ├── card
     │   ├── icon
-    │   ├── input
     │   ├── modal
-    │   ├── nameSquare
     │   ├── navbar
     │   ├── spinner
     │   └── timer
@@ -158,3 +156,36 @@ frontend
   1. docker desktop 설치
 
      [Download Docker Desktop | Docker](https://www.docker.com/products/docker-desktop)
+
+<br>
+
+<aside>
+
+## 💚 1월 20일 금요일
+
+</aside>
+
+✅ 스크럼 회의
+
+✅ opendivu 기술 공유
+
+✅ opendivu custom 도전
+
+💡영묵님 기술 공유 시간💡
+
+- opendivu란? kurento에 기반한 사용하기 쉬운 오픈 소스 플랫폼
+  1. 백에서 세션 만들고
+  2. 커넥션 통로를 만들어 토큰을 프론트에 보내주면
+  3. 그 토큰을 통해 세션과 연결된다!
+- 서버 역할
+  1. 서버만들기
+  2. 커넥션 만들기
+  3. 토큰 만들기
+- 영묵님이 만들어온 백 서버
+  암호키(secret) : BBB
+  URL : https://mook-temp.shop
+- 개념
+  mySessionId → 백에서 고유 아이디를 생성해서 세션을 만들것, 백에 안보내도 됨
+  suceess: response로 sessionId를 반환해줌
+
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8eeb1a7e-f5e4-420c-baf6-c719f40b0db2/Untitled.png)
