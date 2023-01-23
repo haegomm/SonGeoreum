@@ -2,6 +2,8 @@ package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.service.GameService;
 import io.openvidu.java.client.OpenVidu;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
 
@@ -54,10 +57,18 @@ public class GameController {
     private static final int POOL_ADDITION_NO = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO);
 
     @PostConstruct
-
-    public void init() {
+    public void init() throws OpenViduJavaClientException, OpenViduHttpException {
         // OpenVidu 객체 초기화 (WAS 띄우고 한번만 실행 (@PostConstruct))
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+
+        // 대기방 큐 초기화
+        standbyRooms = new ArrayDeque<>();
+
+        // 최초 방 갯수만큼 Session 생성 + 큐에 추가
+        for (int i = 0; i < INITIAL_ROOM_NO; i++) {
+            Session session = openVidu.createSession();
+            standbyRooms.add(session);
+        }
     }
 
     // OpenVidu 세션(방) 생성 및/또는 입장
