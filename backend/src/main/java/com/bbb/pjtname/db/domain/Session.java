@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED) //모든 필드 값을 파라미터로 받는 생성자를 만듦
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //기본생성자 생성
-public class Room implements Serializable {
+public class Session implements Serializable {
 
     //pk
     @Id
