@@ -16,3 +16,6 @@ OpenVidu 공부, ERD 작성, BackEnd 역할 나누기
 
 # 23.01.20
 spring boot 기본 세팅, 영묵님에게 openvide 강의 듣기
+
+# 23.01.25
+서비스명, 기본용어 정하기
