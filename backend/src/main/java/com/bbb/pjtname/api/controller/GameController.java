@@ -1,5 +1,6 @@
 package com.bbb.pjtname.api.controller;
 
+import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.api.service.GameService;
 import io.openvidu.java.client.Connection;
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,20 +38,49 @@ public class GameController {
         try {
             resultMap = gameService.enterRoom();
             Connection connection = (Connection) resultMap.get("connection");
+
             if (connection == null) {
                 throw new Exception();
             }
+
+            log.debug("i got connection");
+
             // 토큰 삽입
             resultMap.put("token", connection.getToken());
             resultMap.put("message", SUCCESS);
+
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
             resultMap = new HashMap<>();
             resultMap.put("message", FAIL);
+
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<>(resultMap, httpStatus);
+    }
+
+    // 대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제
+    @ApiOperation(value = "대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제")
+    @PutMapping("/session/user")
+    public ResponseEntity<String> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) {
+
+        HttpStatus httpStatus = null;
+        String message = null;
+
+        log.debug("이건 gameRemoveUserReq == {}", gameRemoveUserReq);
+
+        int result = gameService.removeUser(gameRemoveUserReq);
+
+        if (result == 0) {
+            httpStatus = HttpStatus.OK;
+            message = SUCCESS;
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            message = FAIL;
+        }
+
+        return new ResponseEntity<>(message, httpStatus);
     }
 
     // 게임 종료 및 게임방 초기화

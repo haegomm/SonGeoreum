@@ -1,5 +1,6 @@
 package com.bbb.pjtname.api.service;
 
+import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.db.repository.SessionRepository;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -66,6 +67,12 @@ public class GameService {
     }
 
     public int exitRoom(String id) {
+        // 성공 시 0, 실패 시 1 반환
+        return 0;
+    }
+
+    public int removeUser(GameRemoveUserReq gameRemoveUserReq) {
+        // 성공 시 0, 실패 시 1 반환
         return 0;
     }
 }
