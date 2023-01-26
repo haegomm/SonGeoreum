@@ -20,11 +20,11 @@ public class GamelogUser implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "gamelog_id")
     private Gamelog gamelog;
 
 
