@@ -64,4 +64,8 @@ public class GameService {
     public Map<String, Object> enterRoom() {
         return null;
     }
+
+    public int exitRoom(String id) {
+        return 0;
+    }
 }

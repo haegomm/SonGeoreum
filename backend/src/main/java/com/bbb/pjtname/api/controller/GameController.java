@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +36,9 @@ public class GameController {
         try {
             resultMap = gameService.enterRoom();
             Connection connection = (Connection) resultMap.get("connection");
+            if (connection == null) {
+                throw new Exception();
+            }
             // 토큰 삽입
             resultMap.put("token", connection.getToken());
             resultMap.put("message", SUCCESS);
@@ -49,5 +50,26 @@ public class GameController {
         }
 
         return new ResponseEntity<>(resultMap, httpStatus);
+    }
+
+    // 게임 종료 및 게임방 초기화
+    @ApiOperation(value = "게임 종료 및 게임방 초기화")
+    @DeleteMapping("/session")
+    public ResponseEntity<String> exitRoom(@RequestParam("sessionId") String id) {
+
+        HttpStatus httpStatus = null;
+        String message = null;
+
+        int result = gameService.exitRoom(id);
+
+        if (result == 0) {
+            httpStatus = HttpStatus.OK;
+            message = SUCCESS;
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            message = FAIL;
+        }
+
+        return new ResponseEntity<>(message, httpStatus);
     }
 }
