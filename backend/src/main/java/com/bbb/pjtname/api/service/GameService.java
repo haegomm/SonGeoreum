@@ -88,10 +88,9 @@ public class GameService {
         // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
         Session availableSession = standbyRooms.peek();
         String sessionId = availableSession.getSessionId();
-
-        // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
-        // 코드가 정상적으로 돌아갈 경우 4 이상일 경우는 없긴 함
         int connectedPlayersCnt = availableSession.getActiveConnections().size();
+
+        // 비정상적인 코드일때 처리 또는 throw exception
         if (connectedPlayersCnt == ROOM_SIZE) {
             toGameRooms(sessionId);
             availableSession = standbyRooms.peek();
@@ -99,6 +98,7 @@ public class GameService {
             throw new RoomOverflowException();
         }
 
+        // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
         connection = availableSession.createConnection();
 
         if (connection == null) {
@@ -127,13 +127,25 @@ public class GameService {
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
         try {
+            Session session = gameRooms.get(id);
+            if (session == null) {
+                throw new NotFoundException("세션을 찾을 수 없습니다.");
+            }
 
+            // 해당 세션에 연결된 모든 connection 퇴출
+            session.close();
+
+            // 위에께 session을 아예 삭제해버리면 아래 코드 사용
+//            for (Connection c : session.getConnections()) {
+//                session.forceDisconnect(c);
+//            }
+
+            return 0;
         } catch (Exception e) {
-
+            log.error(e.getMessage());
+            return 1;
         }
-
-
-        return 0;
+        
     }
 
     public int removeUser(GameRemoveUserReq gameRemoveUserReq) {
@@ -142,14 +154,20 @@ public class GameService {
             String sessionId = gameRemoveUserReq.getSessionId();
             String connectionId = gameRemoveUserReq.getConnectionId();
             Session standbySession = standbyRooms.peek();
+
             if (!sessionId.equals(standbySession.getSessionId())) {
-                throw new NotFoundException("");
+                throw new NotFoundException("세션이 일치하지 않습니다");
             }
 
-        } catch (Exception e) {
+            // 해당 connection의 연결 해제
+            standbySession.forceDisconnect(connectionId);
 
+            return 0;
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return 1;
         }
-        return 0;
     }
 
     public void increaseRoomBuffer() throws OpenViduJavaClientException, OpenViduHttpException {
