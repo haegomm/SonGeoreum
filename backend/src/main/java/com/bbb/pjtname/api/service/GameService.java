@@ -4,6 +4,7 @@ import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
 import com.bbb.pjtname.exception.NoConnectionError;
+import com.bbb.pjtname.exception.NotFoundException;
 import com.bbb.pjtname.exception.RoomOverflowException;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
@@ -86,12 +87,13 @@ public class GameService {
 
         // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
         Session availableSession = standbyRooms.peek();
+        String sessionId = availableSession.getSessionId();
 
         // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
         // 코드가 정상적으로 돌아갈 경우 4 이상일 경우는 없긴 함
         int connectedPlayersCnt = availableSession.getActiveConnections().size();
         if (connectedPlayersCnt == ROOM_SIZE) {
-            toGameRooms(availableSession.getSessionId());
+            toGameRooms(sessionId);
             availableSession = standbyRooms.peek();
         } else if (connectedPlayersCnt > ROOM_SIZE) {
             throw new RoomOverflowException();
@@ -105,7 +107,7 @@ public class GameService {
 
         // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
-            toGameRooms(availableSession.getSessionId());
+            toGameRooms(sessionId);
             playGame = true;
         }
 
@@ -117,17 +119,36 @@ public class GameService {
         // 반환값 세팅
         resultMap.put("token", connection.getToken());
         resultMap.put("playGame", playGame);
+        resultMap.put("sessionId", sessionId);
 
         return resultMap;
     }
 
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
+        try {
+
+        } catch (Exception e) {
+
+        }
+
+
         return 0;
     }
 
     public int removeUser(GameRemoveUserReq gameRemoveUserReq) {
         // 성공 시 0, 실패 시 1 반환
+        try {
+            String sessionId = gameRemoveUserReq.getSessionId();
+            String connectionId = gameRemoveUserReq.getConnectionId();
+            Session standbySession = standbyRooms.peek();
+            if (!sessionId.equals(standbySession.getSessionId())) {
+                throw new NotFoundException("");
+            }
+
+        } catch (Exception e) {
+
+        }
         return 0;
     }
 
