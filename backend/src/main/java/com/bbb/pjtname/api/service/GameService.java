@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -39,7 +40,7 @@ public class GameService {
     private Queue<Session> standbyRooms;
 
     // 게임중인 방
-    private Map<String, Session> gameRooms;
+    private Map<String, Map<String, Object>> gameRooms;
 
     ////////// 방 생성 관련 상수 변수 //////////
     // 최초 생성 방 갯수 (pool)
@@ -127,7 +128,11 @@ public class GameService {
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
         try {
-            Session session = gameRooms.get(id);
+            Map<String, Object> sessionInfo = gameRooms.get(id);
+
+            Session session = (Session) sessionInfo.get("session");
+            LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
+
             if (session == null) {
                 throw new NotFoundException("세션을 찾을 수 없습니다.");
             }
@@ -140,12 +145,19 @@ public class GameService {
 //                session.forceDisconnect(c);
 //            }
 
+            // 빈 세션을 HashMap에서 빼고 큐로 넣기
+            gameRooms.remove(id);
+            standbyRooms.add(session);
+
+            // DB에 게임 로그 저장*****************
+
+
             return 0;
         } catch (Exception e) {
             log.error(e.getMessage());
             return 1;
         }
-        
+
     }
 
     public int removeUser(GameRemoveUserReq gameRemoveUserReq) {
@@ -178,7 +190,11 @@ public class GameService {
     }
 
     public void toGameRooms(String sessionId) {
+        Map<String, Object> sessionInfo = new ConcurrentHashMap<>();
         Session session = standbyRooms.poll();
-        gameRooms.put(sessionId, session);
+        LocalDateTime startDate = LocalDateTime.now();
+        sessionInfo.put("session", session);
+        sessionInfo.put("startDate", startDate);
+        gameRooms.put(sessionId, sessionInfo);
     }
 }
