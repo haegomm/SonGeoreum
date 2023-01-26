@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+////////////////////////////////////////////////////////////////////// 안쓰기로 함 ////////////////////////////////////
+
 @Entity
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED) //모든 필드 값을 파라미터로 받는 생성자를 만듦
