@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayDeque;
+import java.util.Map;
 import java.util.Queue;
 
 @Slf4j
@@ -58,5 +59,9 @@ public class GameService {
             Session session = openVidu.createSession();
             standbyRooms.add(session);
         }
+    }
+
+    public Map<String, Object> enterRoom() {
+        return null;
     }
 }
