@@ -465,3 +465,5 @@ const DiaryEditor = () => {
 <br>
 
 ## 🎀 
+
+## cors 문제 해결
