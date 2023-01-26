@@ -3,6 +3,7 @@ package com.bbb.pjtname.api.service;
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
+import com.bbb.pjtname.exception.NoConnectionError;
 import com.bbb.pjtname.exception.RoomOverflowException;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
@@ -95,7 +96,12 @@ public class GameService {
         } else if (connectedPlayersCnt > ROOM_SIZE) {
             throw new RoomOverflowException();
         }
+
         connection = availableSession.createConnection();
+
+        if (connection == null) {
+            throw new NoConnectionError();
+        }
 
         // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -111,7 +117,7 @@ public class GameService {
         // 반환값 세팅
         resultMap.put("token", connection.getToken());
         resultMap.put("playGame", playGame);
-        
+
         return resultMap;
     }
 
