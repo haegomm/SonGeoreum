@@ -2,7 +2,6 @@ package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.api.service.GameService;
-import io.openvidu.java.client.Connection;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -37,20 +36,15 @@ public class GameController {
         // gameService의 큐 맨 앞에 있는 session에 connection 생성하고 반환
         try {
             resultMap = gameService.enterRoom();
-            Connection connection = (Connection) resultMap.get("connection");
 
-            if (connection == null) {
-                throw new Exception();
-            }
+            log.debug("Connection 성공");
 
-            log.debug("i got connection");
-
-            // 토큰 삽입
-            resultMap.put("token", connection.getToken());
             resultMap.put("message", SUCCESS);
 
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
+            log.error(e.getMessage());
+            
             resultMap = new HashMap<>();
             resultMap.put("message", FAIL);
 
