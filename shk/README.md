@@ -189,3 +189,29 @@ frontend
   suceess: response로 sessionId를 반환해줌
 
   ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8eeb1a7e-f5e4-420c-baf6-c719f40b0db2/Untitled.png)
+
+<br>
+
+<aside>
+
+## 💚 1월 27일 금요일
+
+</aside>
+
+✅ 게임 구현 현황 영상
+
+✅ openvidu custom
+
+### Publisher
+
+OpenVidu 객체 생성 → session 생성 → token 생성 → user media 객체 생성 → publish
+
+### Subscriber
+
+OpenVidu 객체 생성 → session 생성 → 메세지 수신 이벤트 정의 → 수신된 이벤트 처리
+
+- [O] onbeforeunload 추가하기
+- [O] leavesession에서 다음 사항을 body로 보내기
+  → token, connectionId,
+
+✅ openvidu 서버 연결 노력중..
