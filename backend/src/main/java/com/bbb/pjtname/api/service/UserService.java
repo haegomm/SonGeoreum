@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -17,7 +19,9 @@ public class UserService {
 
     public void insertUser(InsertUserReq insertUserReq) {
 
-        User user = User.builder().insertUserReq(insertUserReq).build();
+        LocalDateTime createDate = LocalDateTime.now();
+
+        User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).build();
 
         //이메일 중복 체크
         duplicateEmail(user.getEmail());
@@ -26,10 +30,18 @@ public class UserService {
     }
 
     //이메일 중복 체크
-    private void duplicateEmail(String email) {
+    public void duplicateEmail(String email) {
         if(userRepository.findByEmail(email).isPresent()){
             throw new NotFoundException("중복된 이메일입니다.");
         }
+    }
+
+    //닉네임 중복 체크
+    public String duplicateNickname(String nickname) {
+        if(userRepository.findByNickname(nickname)==null){
+            return "OK";
+        }
+        return "Fail";
     }
 
     //로그인
@@ -58,4 +70,6 @@ public class UserService {
         log.debug("member : {} ", member);
         member.deleteRefreshToken();
     }
+
+
 }

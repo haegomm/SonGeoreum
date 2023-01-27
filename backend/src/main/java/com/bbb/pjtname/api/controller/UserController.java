@@ -6,6 +6,7 @@ import com.bbb.pjtname.api.service.JwtService;
 import com.bbb.pjtname.api.service.UserService;
 import com.bbb.pjtname.exception.NotFoundException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,27 @@ public class UserController {
 
     private final JwtService jwtService;
 
+
+    //이메일 중복체크
+    @ApiOperation(value = "이메일 중복체크")
+    @GetMapping("/signup/email")
+    public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email){
+        userService.duplicateEmail(email);
+        return new ResponseEntity<String>("OK", HttpStatus.OK);
+    }
+
+    //닉네임 중복체크
+    @ApiOperation(value = "닉네임 중복체크")
+    @GetMapping("/signup/nickname")
+    public ResponseEntity<String> duplicateNickname(@RequestParam("nickname") String nickname){
+        String message = userService.duplicateNickname(nickname);
+        return new ResponseEntity<String>(message, HttpStatus.MULTI_STATUS);
+    }
+
     //회원가입
     @ApiOperation(value = "회원가입") //해당 Api의 설명
     @PostMapping("/signup")
-    public ResponseEntity<String> InsertUser(@Validated @RequestBody InsertUserReq insertUserReq){
+    public ResponseEntity<String> insertUser(@Validated @RequestBody InsertUserReq insertUserReq){
         log.debug("회원가입 정보 = {} ", insertUserReq);
         userService.insertUser(insertUserReq);
         return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
