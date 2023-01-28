@@ -39,15 +39,15 @@ public class UserController {
     //이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email")
-    public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email){
+    public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email) throws DuplicateException {
 
         log.debug("중복체크 요청 이메일 = {}", email);
 
-        try{
+        try {
             userService.duplicateEmail(email);
             return new ResponseEntity<String>(OK, HttpStatus.OK);
-        }catch (DuplicateException e){
-            e.printStackTrace();
+        } catch (DuplicateException e) {
+            log.error(e.getMessage());
             return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
         }
     }
@@ -55,32 +55,40 @@ public class UserController {
     //닉네임 중복체크
     @ApiOperation(value = "닉네임 중복체크")
     @GetMapping("/signup/nickname")
-    public ResponseEntity<String> duplicateNickname(@RequestParam("nickname") String nickname){
-        String message = userService.duplicateNickname(nickname);
-        return new ResponseEntity<String>(message, HttpStatus.MULTI_STATUS);
+    public ResponseEntity<String> duplicateNickname(@RequestParam("nickname") String nickname) throws DuplicateException {
+
+        log.debug("중복체크 요청 닉네임 = {}", nickname);
+
+        try {
+            userService.duplicateNickname(nickname);
+            return new ResponseEntity<String>(OK, HttpStatus.OK);
+        } catch (DuplicateException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+        }
     }
 
     //회원가입
     @ApiOperation(value = "회원가입") //해당 Api의 설명
     @PostMapping("/signup")
-    public ResponseEntity<String> insertUser(@Validated @RequestBody InsertUserReq insertUserReq){
+    public ResponseEntity<String> insertUser(@Validated @RequestBody InsertUserReq insertUserReq) {
         log.debug("회원가입 정보 = {} ", insertUserReq);
         userService.insertUser(insertUserReq);
-        return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     //로그인
     @ApiOperation(value = "로그인") //해당 Api의 설명
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginMember(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) throws NotFoundException {
-       log.debug("로그인 요청 들어옴.");
+        log.debug("로그인 요청 들어옴.");
 
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
         try {
             User loginUser = userService.loginUser(email, password);
-            if(loginUser != null) {
+            if (loginUser != null) {
                 String accessToken = jwtService.createAccessToken("id", loginUser.getId());// key, data
                 String refreshToken = jwtService.createRefreshToken("id", loginUser.getId());// key, data
                 userService.saveRefreshToken(email, refreshToken);
@@ -91,13 +99,12 @@ public class UserController {
                 resultMap.put("message", SUCCESS);
                 status = HttpStatus.ACCEPTED;
 
-            }
-            else {
+            } else {
                 resultMap.put("message", FAIL);
                 status = HttpStatus.ACCEPTED;
                 //model.addAttribute("msg", "로그인 실패 ID 또는 PW를 확인하세요.");
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
             log.error("로그인 실패 : {}", e);
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -126,6 +133,7 @@ public class UserController {
 //		session.invalidate();
 //		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
+
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @PostMapping("/refresh/{email}")
     public ResponseEntity<?> refreshToken(@PathVariable("email") String email, HttpServletRequest request)
