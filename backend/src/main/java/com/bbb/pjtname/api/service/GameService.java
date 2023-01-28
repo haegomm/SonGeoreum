@@ -1,6 +1,8 @@
 package com.bbb.pjtname.api.service;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
+import com.bbb.pjtname.db.domain.Gamelog;
+import com.bbb.pjtname.db.domain.GamelogUser;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
 import com.bbb.pjtname.exception.NoConnectionError;
@@ -150,6 +152,8 @@ public class GameService {
             standbyRooms.add(session);
 
             // DB에 게임 로그 저장*****************
+            Gamelog gamelog = new Gamelog();
+            GamelogUser gamelogUser = new GamelogUser();
 
 
             return 0;
