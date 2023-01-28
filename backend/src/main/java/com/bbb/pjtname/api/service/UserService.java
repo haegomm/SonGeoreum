@@ -3,6 +3,7 @@ package com.bbb.pjtname.api.service;
 import com.bbb.pjtname.api.request.InsertUserReq;
 import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.db.repository.UserRepository;
+import com.bbb.pjtname.exception.DuplicateException;
 import com.bbb.pjtname.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class UserService {
     //이메일 중복 체크
     public void duplicateEmail(String email) {
         if(userRepository.findByEmail(email).isPresent()){
-            throw new NotFoundException("중복된 이메일입니다.");
+            throw new DuplicateException("중복된 이메일입니다.");
         }
     }
 

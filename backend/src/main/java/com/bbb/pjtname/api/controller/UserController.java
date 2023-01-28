@@ -4,6 +4,7 @@ import com.bbb.pjtname.api.request.InsertUserReq;
 import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.api.service.JwtService;
 import com.bbb.pjtname.api.service.UserService;
+import com.bbb.pjtname.exception.DuplicateException;
 import com.bbb.pjtname.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,6 +30,7 @@ public class UserController {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    private static final String OK = "OK";
     private final UserService userService;
 
     private final JwtService jwtService;
@@ -38,8 +40,16 @@ public class UserController {
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email")
     public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email){
-        userService.duplicateEmail(email);
-        return new ResponseEntity<String>("OK", HttpStatus.OK);
+
+        log.debug("중복체크 요청 이메일 = {}", email);
+
+        try{
+            userService.duplicateEmail(email);
+            return new ResponseEntity<String>(OK, HttpStatus.OK);
+        }catch (DuplicateException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+        }
     }
 
     //닉네임 중복체크
