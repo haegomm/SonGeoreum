@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.7'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 group = 'com.ssafy'
@@ -9,31 +9,38 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
-	implementation "io.jsonwebtoken:jjwt:0.9.1"
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+    implementation "io.jsonwebtoken:jjwt:0.9.1"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//	Spring Security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    testImplementation 'org.springframework.security:spring-security-test'
+
+//  Kakao Login
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 //	OpenVidu Java Client
-	implementation 'io.openvidu:openvidu-java-client:2.24.0'
+    implementation 'io.openvidu:openvidu-java-client:2.24.0'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
