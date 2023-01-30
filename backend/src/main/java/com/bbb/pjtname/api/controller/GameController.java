@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/game")
+@RequestMapping("api/game")
 @RequiredArgsConstructor
 @Api(tags = {"게임 API"}) // Swagger에 보여줄 명칭
 public class GameController {

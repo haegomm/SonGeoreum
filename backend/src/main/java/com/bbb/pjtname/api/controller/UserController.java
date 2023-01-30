@@ -1,13 +1,12 @@
 package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.request.InsertUserReq;
-import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.api.service.JwtService;
 import com.bbb.pjtname.api.service.UserService;
+import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.exception.DuplicateException;
 import com.bbb.pjtname.exception.NotFoundException;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/user")
 @RequiredArgsConstructor
 @Api(tags = {"사용자 API"}) // Swagger에 보여줄 명칭
 public class UserController {
