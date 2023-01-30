@@ -6,6 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +23,12 @@ public class CategoryController {
 
     @GetMapping
     @ApiOperation(value = "카테고리의 목록을 조회합니다.")
-    public List<CategoryRes> findCategoryList() {
+    public ResponseEntity<List<CategoryRes>> findCategoryList() {
 
         List<CategoryRes> categoryResList = categoryService.findAllCategory();
 
         log.debug("find category list: {}", categoryResList);
 
-        return categoryResList;
+        return new ResponseEntity<List<CategoryRes>>(categoryResList, HttpStatus.OK);
     }
 }
