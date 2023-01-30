@@ -64,7 +64,7 @@ public class User implements Serializable {
 
     //회원가입
     @Builder
-    public User(InsertUserReq insertUserReq, LocalDateTime createDate){
+    public User(InsertUserReq insertUserReq, LocalDateTime createDate) {
         this.userType = insertUserReq.getUserType();
         this.email = insertUserReq.getEmail();
         this.password = insertUserReq.getPassword();
@@ -76,14 +76,23 @@ public class User implements Serializable {
         this.role = "ROLE_USER";
     }
 
-    public void saveRefreshToken(String refreshToken){
+    // ***임시 생성자***
+    public User(String userType, String nickname, int level, int experience, LocalDateTime createdDate, String role) {
+        this.userType = userType;
+        this.nickname = nickname;
+        this.level = level;
+        this.experience = experience;
+        this.createdDate = createdDate;
+        this.role = role;
+    }
+
+    public void saveRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
-    public void deleteRefreshToken(){
+    public void deleteRefreshToken() {
         this.refreshToken = null;
     }
-
 
 
 }

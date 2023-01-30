@@ -78,6 +78,17 @@ public class GameService {
 
         // 해시맵은 멀티 스레드 환경을 반영하여 ConcurrentHashMap을 활용
         gameRooms = new ConcurrentHashMap<>();
+
+        //////////// 유저 더미데이터 ////////////////////
+        userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "b", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "c", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "d", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "e", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "f", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "g", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "h", 1, 1, LocalDateTime.now(), "ROLE"));
+
     }
 
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -112,12 +123,8 @@ public class GameService {
                 .data(userId.toString())
                 .build();
 
-        log.debug("data : {}", connectionProperties.getData());
-
         // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
         connection = availableSession.createConnection(connectionProperties);
-
-        log.debug("connection : {}", connection.toString());
 
         if (connection == null) {
             throw new NoConnectionError();
