@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
+import VideoRoomComponent from "./components/VideoRoomComponent";
 
 function Game() {
-  return <div>게임 화면 입니다.</div>;
+  return <VideoRoomComponent />;
 }
 
 export default Game;
