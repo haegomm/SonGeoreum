@@ -8,12 +8,14 @@ import com.bbb.pjtname.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)  // 트랜잭션 안에서만 데이터 변경하게 설정
 public class UserService {
 
     private final UserRepository userRepository;
@@ -34,6 +36,7 @@ public class UserService {
     }
 
     // 회원가입
+    @Transactional
     public void insertUser(InsertUserReq insertUserReq) {
 
         LocalDateTime createDate = LocalDateTime.now();
@@ -58,6 +61,7 @@ public class UserService {
         return loginUser;
     }
 
+    @Transactional
     public void saveRefreshToken(String email, String refreshToken) throws NotFoundException {
 
         User user = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
@@ -71,11 +75,11 @@ public class UserService {
     }
 
 
+    @Transactional
     public void deleteRefreshToken(String email) throws NotFoundException {
         User member = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
         log.debug("member : {} ", member);
         member.deleteRefreshToken();
     }
-
 
 }
