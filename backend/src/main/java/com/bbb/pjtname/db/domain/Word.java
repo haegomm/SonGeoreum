@@ -28,7 +28,7 @@ public class Word implements Serializable {
     private String contentUrl;
 
     // FK - 카테고리
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
