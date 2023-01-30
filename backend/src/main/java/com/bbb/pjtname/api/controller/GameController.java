@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Map;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class GameController {
 
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
 
 //            resultMap = new HashMap<>();
 //            resultMap.put("message", FAIL);

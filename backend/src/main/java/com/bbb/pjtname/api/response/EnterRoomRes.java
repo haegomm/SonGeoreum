@@ -3,6 +3,8 @@ package com.bbb.pjtname.api.response;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,5 +24,7 @@ public class EnterRoomRes {
     @ApiModelProperty(example = "상태메시지")
     private String message;
 
+    @ApiModelProperty(example = "현재 세션에 연결되어 있는 유저 ID 리스트")
+    private List<Long> playersList;
 
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -111,8 +112,12 @@ public class GameService {
                 .data(userId.toString())
                 .build();
 
+        log.debug("data : {}", connectionProperties.getData());
+
         // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
         connection = availableSession.createConnection(connectionProperties);
+
+        log.debug("connection : {}", connection.toString());
 
         if (connection == null) {
             throw new NoConnectionError();
@@ -139,7 +144,14 @@ public class GameService {
         enterRoomRes.setToken(connection.getToken());
         enterRoomRes.setPlayGame(playGame);
         enterRoomRes.setSessionId(sessionId);
+        // playerList에 추가
+        enterRoomRes.setPlayersList(new ArrayList<>());
+        for (Connection c : availableSession.getConnections()) {
+            Long cId = Long.parseLong(c.getServerData());
+            enterRoomRes.getPlayersList().add(cId);
+        }
 
+        log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
 
         return enterRoomRes;
@@ -176,7 +188,7 @@ public class GameService {
 
             for (Connection c : session.getConnections()) {
                 // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
-                Long userId = Long.parseLong(c.getClientData());
+                Long userId = Long.parseLong(c.getServerData());
                 User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
                 GamelogUser gamelogUser = GamelogUser.builder()
