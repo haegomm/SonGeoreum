@@ -19,7 +19,7 @@ public class User implements Serializable {
     private Long id;
 
     // 사용자 타입(NORMAL:일반,  KAKAO:카카오톡)
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, name = "user_type", length = 15)
     private String userType;
 
     // 일반 회원 아이디
@@ -27,7 +27,7 @@ public class User implements Serializable {
     private String email;
 
     // 카카오톡 회원 아이디
-    @Column(length = 100)
+    @Column(length = 100, name = "kakao_id")
     private String kakaoId;
 
     // 비밀번호
@@ -43,7 +43,7 @@ public class User implements Serializable {
     private String picture;
 
     // refresh토큰
-    @Column(length = 200)
+    @Column(length = 200, name = "refresh_token")
     private String refreshToken;
 
     // 레벨
@@ -55,7 +55,7 @@ public class User implements Serializable {
     private int experience;
 
     // 가입일시
-    @Column(nullable = false)
+    @Column(nullable = false, name = "created_date")
     private LocalDateTime createdDate;
 
     // spring security용 컬럼
