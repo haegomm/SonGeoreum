@@ -96,7 +96,7 @@ public class GameService {
         // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
         Session availableSession = standbyRooms.peek();
         String sessionId = availableSession.getSessionId();
-        int connectedPlayersCnt = availableSession.getActiveConnections().size();
+        int connectedPlayersCnt = availableSession.getConnections().size();
 
         // 비정상적인 코드일때 처리 또는 throw exception
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -118,6 +118,9 @@ public class GameService {
             throw new NoConnectionError();
         }
 
+        connectedPlayersCnt++;
+        log.debug(String.valueOf(connectedPlayersCnt));
+
         // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
             toGameRooms(sessionId);
@@ -136,6 +139,8 @@ public class GameService {
         enterRoomRes.setToken(connection.getToken());
         enterRoomRes.setPlayGame(playGame);
         enterRoomRes.setSessionId(sessionId);
+
+        log.debug("gameRooms : {}", gameRooms.toString());
 
         return enterRoomRes;
     }
