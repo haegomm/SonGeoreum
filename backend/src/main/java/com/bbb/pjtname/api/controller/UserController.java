@@ -30,7 +30,7 @@ public class UserController {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String OK = "OK";
+
     private final UserService userService;
 
     private final JwtService jwtService;
@@ -45,7 +45,7 @@ public class UserController {
 
         try {
             userService.duplicateEmail(email);
-            return new ResponseEntity<String>(OK, HttpStatus.OK);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
@@ -61,7 +61,7 @@ public class UserController {
 
         try {
             userService.duplicateNickname(nickname);
-            return new ResponseEntity<String>(OK, HttpStatus.OK);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
