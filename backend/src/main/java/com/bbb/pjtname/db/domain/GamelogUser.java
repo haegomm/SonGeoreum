@@ -1,15 +1,13 @@
 package com.bbb.pjtname.db.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Getter //getter 생성
+@Builder
 @AllArgsConstructor //모든 필드 값을 파라미터로 받는 생성자를 만듦
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //기본생성자 생성
 @Table(name = "gamelog_user")
