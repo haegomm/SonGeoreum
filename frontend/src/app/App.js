@@ -1,6 +1,7 @@
-import * as React from 'react'
-import { Reset } from 'styled-reset'
+import * as React from "react";
+import { Reset } from "styled-reset";
 
+import Game from "../features/game/openVidu/test";
 
 function App() {
   return (
@@ -9,6 +10,8 @@ function App() {
         <React.Fragment>
           <Reset />
           <div>Hi, I'm an app!</div>
+          <div>open</div>
+          <Game />
         </React.Fragment>
       </header>
     </div>
