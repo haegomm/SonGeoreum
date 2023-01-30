@@ -8,6 +8,7 @@ import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
 import com.bbb.pjtname.db.repository.UserRepository;
+import com.bbb.pjtname.exception.DuplicateUserException;
 import com.bbb.pjtname.exception.NoConnectionError;
 import com.bbb.pjtname.exception.NotFoundException;
 import com.bbb.pjtname.exception.RoomOverflowException;
@@ -81,20 +82,34 @@ public class GameService {
 
         //////////// 유저 더미데이터 ////////////////////
         userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "b", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "c", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "d", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "e", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "f", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "g", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "h", 1, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "b", 2, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "c", 3, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "d", 4, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "e", 5, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "f", 6, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "g", 7, 1, LocalDateTime.now(), "ROLE"));
+        userRepository.save(new User("KAKAO", "h", 8, 1, LocalDateTime.now(), "ROLE"));
 
     }
 
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
+        // 존재하는 유저인지 확인
         if (!userRepository.findById(userId).isPresent()) {
             throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
+        }
+
+        // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
+        Session availableSession = standbyRooms.peek();
+        String sessionId = availableSession.getSessionId();
+        int connectedPlayersCnt = availableSession.getConnections().size();
+
+        // 현재 대기방에 중복되는 유저 있는지 확인
+        for (Connection c : availableSession.getConnections()) {
+            Long cId = Long.parseLong(c.getServerData());
+            if (userId.equals(cId)) {
+                throw new DuplicateUserException();
+            }
         }
 
         Connection connection = null;
@@ -108,11 +123,6 @@ public class GameService {
         if (standbyRooms.size() < POOL_REDZONE_NO) {
             increaseRoomBuffer();
         }
-
-        // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
-        Session availableSession = standbyRooms.peek();
-        String sessionId = availableSession.getSessionId();
-        int connectedPlayersCnt = availableSession.getConnections().size();
 
         // 비정상적인 코드일때 처리 또는 throw exception
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -155,6 +165,7 @@ public class GameService {
         enterRoomRes.setToken(connection.getToken());
         enterRoomRes.setPlayGame(playGame);
         enterRoomRes.setSessionId(sessionId);
+
         // playerList에 추가
         enterRoomRes.setPlayersList(new ArrayList<>());
         for (Connection c : availableSession.getConnections()) {
@@ -164,6 +175,7 @@ public class GameService {
 
         log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
+        log.debug("standbyRooms size : {}", standbyRooms.size());
 
         return enterRoomRes;
     }
