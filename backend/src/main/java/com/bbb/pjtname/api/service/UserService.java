@@ -18,14 +18,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    //이메일 중복 체크
+    // 이메일 중복 체크
     public void duplicateEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicateException("중복된 이메일입니다.");
         }
     }
 
-    //닉네임 중복 체크
+    // 닉네임 중복 체크
     public void duplicateNickname(String nickname) {
         if (userRepository.findByNickname(nickname) != null) {
             throw new DuplicateException("중복된 닉네임입니다.");
@@ -33,24 +33,24 @@ public class UserService {
 
     }
 
-    //회원가입
+    // 회원가입
     public void insertUser(InsertUserReq insertUserReq) {
 
         LocalDateTime createDate = LocalDateTime.now();
 
         User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).build();
 
-        //이메일 중복 체크
+        // 이메일 중복 체크
         duplicateEmail(user.getEmail());
 
-        //닉네임 중복 체크
+        // 닉네임 중복 체크
         duplicateNickname(user.getNickname());
 
         userRepository.save(user);
     }
 
 
-    //로그인
+    // 로그인
     public User loginUser(String email, String password) throws NotFoundException {
 
         User loginUser = userRepository.findByEmailAndPassword(email, password).orElseThrow(NotFoundException::new);

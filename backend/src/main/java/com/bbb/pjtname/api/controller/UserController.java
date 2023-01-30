@@ -25,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Api(tags = {"사용자 API"}) //Swagger에 보여줄 명칭
+@Api(tags = {"사용자 API"}) // Swagger에 보여줄 명칭
 public class UserController {
 
     private static final String SUCCESS = "success";
@@ -36,7 +36,7 @@ public class UserController {
     private final JwtService jwtService;
 
 
-    //이메일 중복체크
+    // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email")
     public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email) throws DuplicateException {
@@ -52,7 +52,7 @@ public class UserController {
         }
     }
 
-    //닉네임 중복체크
+    // 닉네임 중복체크
     @ApiOperation(value = "닉네임 중복체크")
     @GetMapping("/signup/nickname")
     public ResponseEntity<String> duplicateNickname(@RequestParam("nickname") String nickname) throws DuplicateException {
@@ -68,24 +68,26 @@ public class UserController {
         }
     }
 
-    //회원가입
-    @ApiOperation(value = "회원가입") //해당 Api의 설명
+    // 회원가입
+    @ApiOperation(value = "회원가입") // 해당 Api의 설명
     @PostMapping("/signup")
     public ResponseEntity<String> insertUser(@Validated @RequestBody InsertUserReq insertUserReq) {
+
         log.debug("회원가입 정보 = {} ", insertUserReq);
         userService.insertUser(insertUserReq);
         return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
-    //로그인
-    @ApiOperation(value = "로그인") //해당 Api의 설명
+    // 로그인
+    @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginMember(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) throws NotFoundException {
-        log.debug("로그인 요청 들어옴.");
 
+        log.debug("로그인 요청 들어옴.");
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
+
         try {
             User loginUser = userService.loginUser(email, password);
             if (loginUser != null) {
@@ -102,7 +104,7 @@ public class UserController {
             } else {
                 resultMap.put("message", FAIL);
                 status = HttpStatus.ACCEPTED;
-                //model.addAttribute("msg", "로그인 실패 ID 또는 PW를 확인하세요.");
+                // model.addAttribute("msg", "로그인 실패 ID 또는 PW를 확인하세요.");
             }
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e);
@@ -115,11 +117,13 @@ public class UserController {
     }
 
     //로그아웃
-    @ApiOperation(value = "로그아웃") //해당 Api의 설명
+    @ApiOperation(value = "로그아웃") // 해당 Api의 설명
     @GetMapping("/logout")
     public ResponseEntity<Map<String, Object>> logoutUser(@RequestParam("email") String email, HttpSession session) {
+
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
+
         try {
             userService.deleteRefreshToken(email);
             resultMap.put("message", SUCCESS);
@@ -138,10 +142,13 @@ public class UserController {
     @PostMapping("/refresh/{email}")
     public ResponseEntity<?> refreshToken(@PathVariable("email") String email, HttpServletRequest request)
             throws Exception {
+
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         String token = request.getHeader("refresh-token");
+
         log.debug("token : {}, id : {}", token, email);
+
         if (jwtService.checkToken(token)) {
             if (token.equals(userService.getRefreshToken(email).getRefreshToken())) {
                 String accessToken = jwtService.createAccessToken("email", email);
