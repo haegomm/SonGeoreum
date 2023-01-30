@@ -20,7 +20,7 @@ public class Category implements Serializable {
     private Long id;
 
     // 카테고리 이름
-    @Column(length = 20, nullable = false)
+    @Column(length = 20, nullable = false, unique = true)
     private String name;
 
     // 테스트 가능 여부 (Y/N)
