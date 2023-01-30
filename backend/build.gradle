@@ -33,8 +33,6 @@ dependencies {
 //	Spring Security
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    testImplementation 'org.springframework.security:spring-security-test'
-
-//  Kakao Login
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 //	OpenVidu Java Client
