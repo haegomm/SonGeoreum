@@ -1,6 +1,7 @@
 package com.bbb.pjtname.api.service;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
+import com.bbb.pjtname.api.response.EnterRoomRes;
 import com.bbb.pjtname.db.domain.Gamelog;
 import com.bbb.pjtname.db.domain.GamelogUser;
 import com.bbb.pjtname.db.domain.User;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,12 +79,14 @@ public class GameService {
         gameRooms = new ConcurrentHashMap<>();
     }
 
-    public Map<String, Object> enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
         Connection connection = null;
         String token = null;
         boolean playGame = false;
-        Map<String, Object> resultMap = new HashMap<>();
+//        Map<String, Object> resultMap = new HashMap<>();
+        EnterRoomRes enterRoomRes = new EnterRoomRes();
+
 
         // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
         if (standbyRooms.size() < POOL_REDZONE_NO) {
@@ -128,11 +130,14 @@ public class GameService {
         }
 
         // 반환값 세팅
-        resultMap.put("token", connection.getToken());
-        resultMap.put("playGame", playGame);
-        resultMap.put("sessionId", sessionId);
+//        resultMap.put("token", connection.getToken());
+//        resultMap.put("playGame", playGame);
+//        resultMap.put("sessionId", sessionId);
+        enterRoomRes.setToken(connection.getToken());
+        enterRoomRes.setPlayGame(playGame);
+        enterRoomRes.setSessionId(sessionId);
 
-        return resultMap;
+        return enterRoomRes;
     }
 
     public int exitRoom(String id) {
