@@ -20,11 +20,11 @@ public class Word implements Serializable {
     private Long id;
 
     // 카테고리 이름
-    @Column(length = 20, nullable = false)
+    @Column(length = 20, nullable = false, unique = true)
     private String name;
 
     // content url
-    @Column(length = 200, name = "content_url", nullable = false)
+    @Column(length = 200, name = "content_url", nullable = false, unique = true)
     private String contentUrl;
 
     // FK - 카테고리
