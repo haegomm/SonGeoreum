@@ -10,6 +10,7 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
+import SideBar from "./sidebar/sideBar";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -37,6 +38,8 @@ class VideoRoomComponent extends Component {
       chatDisplay: "block",
       currentVideoDevice: undefined,
       playGame: true, // 추후 백에서 받아와 변경되는 변수, 게임 플레이 할건지 알려준다.
+      // myId: , redux에서 id(pk) 가지고 오기
+      playList: [], // 백에서 받아오는 session별 참가자 리스트 // 여기에 선언하는게 맞나..? 
       subToken: undefined,
     };
 
@@ -637,11 +640,7 @@ class VideoRoomComponent extends Component {
               </div>
             ))}
           </div>
-          <div className="sidebar">
-            <div className="box">timer</div>
-            <div className="box">answer</div>
-            <div className="box">answer video</div>
-          </div>
+          <SideBar />
           <div className="chattingBox">
             {localUser !== undefined &&
               localUser.getStreamManager() !== undefined && (
