@@ -2,6 +2,8 @@ package com.bbb.pjtname.api.service;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.db.domain.Gamelog;
+import com.bbb.pjtname.db.domain.GamelogUser;
+import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
 import com.bbb.pjtname.db.repository.UserRepository;
@@ -145,19 +147,6 @@ public class GameService {
                 throw new NotFoundException("세션을 찾을 수 없습니다.");
             }
 
-
-            // 해당 세션에 연결된 모든 connection 퇴출
-            session.close();
-
-            // 위에께 session을 아예 삭제해버리면 아래 코드 사용
-//            for (Connection c : session.getConnections()) {
-//                session.forceDisconnect(c);
-//            }
-
-            // 빈 세션을 HashMap에서 빼고 큐로 넣기
-            gameRooms.remove(id);
-            standbyRooms.add(session);
-
             // DB 저장 //////////////////////////////////////
             // DB에 게임 로그(gamelog) 데이터 저장
 
@@ -175,9 +164,30 @@ public class GameService {
 
             // DB에 로그-회원(gamelog_user) 데이터 저장
 
+            for (Connection c : session.getConnections()) {
+                // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
+                Long userId = Long.parseLong(c.getClientData());
+                User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
-//            User user = userRepository.findById();
+                GamelogUser gamelogUser = GamelogUser.builder()
+                        .user(user)
+                        .gamelog(gamelog)
+                        .build();
 
+                gamelogUserRepository.save(gamelogUser);
+            }
+
+            // 해당 세션에 연결된 모든 connection 퇴출
+            session.close();
+
+            // Plan B : 위에꺼가 session을 아예 삭제해버리면 아래 코드 사용
+//            for (Connection c : session.getConnections()) {
+//                session.forceDisconnect(c);
+//            }
+
+            // 빈 세션을 HashMap에서 빼고 큐로 넣기
+            gameRooms.remove(id);
+            standbyRooms.add(session);
 
             return 0;
         } catch (Exception e) {
