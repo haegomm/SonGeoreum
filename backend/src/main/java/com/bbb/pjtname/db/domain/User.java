@@ -76,6 +76,16 @@ public class User implements Serializable {
         this.role = "ROLE_USER";
     }
 
+    // ***임시 생성자***
+    public User(String userType, String nickname, int level, int experience, LocalDateTime createdDate, String role) {
+        this.userType = userType;
+        this.nickname = nickname;
+        this.level = level;
+        this.experience = experience;
+        this.createdDate = createdDate;
+        this.role = role;
+    }
+
     public void saveRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

@@ -1,6 +1,8 @@
 package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
+import com.bbb.pjtname.api.request.UserIdReq;
+import com.bbb.pjtname.api.response.EnterRoomRes;
 import com.bbb.pjtname.api.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -28,30 +29,34 @@ public class GameController {
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
     @PostMapping("/session")
-    public ResponseEntity<Map<String, Object>> enterRoom() {
+    public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) {
 
         Map<String, Object> resultMap = null;
         HttpStatus httpStatus = null;
+        EnterRoomRes enterRoomRes = null;
 
         // gameService의 큐 맨 앞에 있는 session에 connection 생성하고 반환
         try {
-            resultMap = gameService.enterRoom();
+            enterRoomRes = gameService.enterRoom(userIdReq.getId());
 
             log.debug("Connection 성공");
 
-            resultMap.put("message", SUCCESS);
+//            resultMap.put("message", SUCCESS);
+            enterRoomRes.setMessage(SUCCESS);
 
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
             log.error(e.getMessage());
-            
-            resultMap = new HashMap<>();
-            resultMap.put("message", FAIL);
+
+//            resultMap = new HashMap<>();
+//            resultMap.put("message", FAIL);
+            enterRoomRes = new EnterRoomRes();
+            enterRoomRes.setMessage(FAIL);
 
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
-        return new ResponseEntity<>(resultMap, httpStatus);
+        return new ResponseEntity<>(enterRoomRes, httpStatus);
     }
 
     // 대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제
