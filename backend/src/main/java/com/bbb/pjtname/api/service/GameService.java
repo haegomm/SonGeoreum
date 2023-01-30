@@ -93,6 +93,10 @@ public class GameService {
 
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
+        if (!userRepository.findById(userId).isPresent()) {
+            throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
+        }
+
         Connection connection = null;
         String token = null;
         boolean playGame = false;
