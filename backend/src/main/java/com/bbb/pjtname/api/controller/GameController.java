@@ -1,6 +1,7 @@
 package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
+import com.bbb.pjtname.api.request.UserIdReq;
 import com.bbb.pjtname.api.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,14 +29,14 @@ public class GameController {
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
     @PostMapping("/session")
-    public ResponseEntity<Map<String, Object>> enterRoom() {
+    public ResponseEntity<Map<String, Object>> enterRoom(UserIdReq userIdReq) {
 
         Map<String, Object> resultMap = null;
         HttpStatus httpStatus = null;
 
         // gameService의 큐 맨 앞에 있는 session에 connection 생성하고 반환
         try {
-            resultMap = gameService.enterRoom();
+            resultMap = gameService.enterRoom(userIdReq.getId());
 
             log.debug("Connection 성공");
 
@@ -44,7 +45,7 @@ public class GameController {
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
             log.error(e.getMessage());
-            
+
             resultMap = new HashMap<>();
             resultMap.put("message", FAIL);
 
