@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 @Api(tags = {"사용자 API"}) // Swagger에 보여줄 명칭
 public class UserController {

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GameService {
     private final GamelogRepository gamelogRepository;
@@ -116,7 +118,7 @@ public class GameService {
         String token = null;
         boolean playGame = false;
 //        Map<String, Object> resultMap = new HashMap<>();
-        EnterRoomRes enterRoomRes = new EnterRoomRes();
+        EnterRoomRes enterRoomRes = null;
 
 
         // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
@@ -162,12 +164,13 @@ public class GameService {
 //        resultMap.put("token", connection.getToken());
 //        resultMap.put("playGame", playGame);
 //        resultMap.put("sessionId", sessionId);
-        enterRoomRes.setToken(connection.getToken());
-        enterRoomRes.setPlayGame(playGame);
-        enterRoomRes.setSessionId(sessionId);
 
-        // playerList에 추가
-        enterRoomRes.setPlayersList(new ArrayList<>());
+        enterRoomRes = EnterRoomRes.builder()
+                .token(connection.getToken())
+                .playGame(playGame)
+                .sessionId(sessionId)
+                .playersList(new ArrayList<>()).build();
+        
         for (Connection c : availableSession.getConnections()) {
             Long cId = Long.parseLong(c.getServerData());
             enterRoomRes.getPlayersList().add(cId);

@@ -3,6 +3,8 @@ package com.bbb.pjtname.api.controller;
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
 import com.bbb.pjtname.api.request.UserIdReq;
 import com.bbb.pjtname.api.response.EnterRoomRes;
+import com.bbb.pjtname.api.response.ExitRoomRes;
+import com.bbb.pjtname.api.response.RemoveUserRes;
 import com.bbb.pjtname.api.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("api/game")
+@RequestMapping("/game")
 @RequiredArgsConstructor
 @Api(tags = {"게임 API"}) // Swagger에 보여줄 명칭
 public class GameController {
@@ -41,17 +43,13 @@ public class GameController {
 
             log.debug("Connection 성공");
 
-//            resultMap.put("message", SUCCESS);
             enterRoomRes.setMessage(SUCCESS);
 
             httpStatus = HttpStatus.OK;
         } catch (Exception e) {
             log.error(e.getMessage());
 
-//            resultMap = new HashMap<>();
-//            resultMap.put("message", FAIL);
-            enterRoomRes = new EnterRoomRes();
-            enterRoomRes.setMessage(FAIL);
+            enterRoomRes = EnterRoomRes.builder().message(FAIL).build();
 
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -62,10 +60,10 @@ public class GameController {
     // 대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제
     @ApiOperation(value = "대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제")
     @PutMapping("/session/user")
-    public ResponseEntity<String> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) {
+    public ResponseEntity<RemoveUserRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) {
 
         HttpStatus httpStatus = null;
-        String message = null;
+        RemoveUserRes removeUserRes = null;
 
         log.debug("이건 gameRemoveUserReq == {}", gameRemoveUserReq);
 
@@ -73,33 +71,35 @@ public class GameController {
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            message = SUCCESS;
+            removeUserRes = RemoveUserRes.builder().msg(SUCCESS).build();
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            message = FAIL;
+            removeUserRes = RemoveUserRes.builder().msg(FAIL).build();
         }
 
-        return new ResponseEntity<>(message, httpStatus);
+        return new ResponseEntity<>(removeUserRes, httpStatus);
     }
 
     // 게임 종료 및 게임방 초기화
     @ApiOperation(value = "게임 종료 및 게임방 초기화")
     @DeleteMapping("/session")
-    public ResponseEntity<String> exitRoom(@RequestParam("sessionId") String id) {
+    public ResponseEntity<ExitRoomRes> exitRoom(@RequestParam("sessionId") String id) {
 
         HttpStatus httpStatus = null;
-        String message = null;
+        ExitRoomRes exitRoomRes = null;
 
         int result = gameService.exitRoom(id);
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            message = SUCCESS;
+            exitRoomRes = ExitRoomRes.builder().msg(SUCCESS).build();
+
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            message = FAIL;
+            exitRoomRes = ExitRoomRes.builder().msg(FAIL).build();
+
         }
 
-        return new ResponseEntity<>(message, httpStatus);
+        return new ResponseEntity<>(exitRoomRes, httpStatus);
     }
 }
