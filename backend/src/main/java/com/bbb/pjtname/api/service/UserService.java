@@ -7,6 +7,7 @@ import com.bbb.pjtname.exception.DuplicateException;
 import com.bbb.pjtname.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 이메일 중복 체크
     public void duplicateEmail(String email) {
@@ -41,7 +44,10 @@ public class UserService {
 
         LocalDateTime createDate = LocalDateTime.now();
 
-        User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).build();
+        // password 인코딩
+        String passowrd = bCryptPasswordEncoder.encode(insertUserReq.getPassword());
+
+        User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).password(passowrd).build();
 
         // 이메일 중복 체크
         duplicateEmail(user.getEmail());
