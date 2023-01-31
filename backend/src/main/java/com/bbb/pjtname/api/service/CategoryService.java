@@ -18,8 +18,10 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<CategoryRes> findAllCategory() {
+
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryRes> categoryResList = categoryList.stream().map(category -> CategoryRes.builder().category(category).build()).collect(Collectors.toList());
+
         return categoryResList;
     }
 }
