@@ -1,6 +1,6 @@
 const Timer = () => {
     return (
-        <div></div>
+        <div>Timer</div>
     )
 }
 

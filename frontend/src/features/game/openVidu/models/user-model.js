@@ -3,7 +3,8 @@ class UserModel {
     audioActive;
     videoActive;
     screenShareActive;
-    nickname;
+    nickname; // 우리 nickname으로 바꾸기
+    // id(pk) 추가하기
     streamManager;
     type; // 'remote' | 'local'
 
