@@ -36,3 +36,8 @@ logging:
 OPENVIDU_URL: https://mook-temp.shop:8443
 OPENVIDU_SECRET: BBB
 
+# context path
+server:
+  servlet:
+    context-path: /api
+
