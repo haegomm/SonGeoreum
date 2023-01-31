@@ -38,4 +38,10 @@ public class Favorite implements Serializable {
         this.createdDate = LocalDateTime.now();
     }
 
+    @Builder
+    public Favorite(Word word, User user) {
+        this.word = word;
+        this.user = user;
+    }
+
 }
