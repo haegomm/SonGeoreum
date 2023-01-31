@@ -1,4 +1,4 @@
-import Timer from "./Timer"
+// import Timer from "./Timer"
 import AnswerVideo from "./AnswerVideo"
 import ChatComponent from "./chat/ChatComponent"
 import { useState } from "react"
@@ -22,8 +22,8 @@ const SideBar = ( props ) => {
     
     return (
         <div>
-            <Timer className="box" toNext={toNext}/>
-            <div className="box">answer</div>
+            {/* <Timer className="box" toNext={toNext}/> */}
+            {/* <div className="box">answer</div> */}
             <AnswerVideo className="box" myId={props.myId} presenter={presenter}/>
             <ChatComponent
               user={props.user}
