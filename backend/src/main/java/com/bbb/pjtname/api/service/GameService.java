@@ -117,7 +117,6 @@ public class GameService {
         Connection connection = null;
         String token = null;
         boolean playGame = false;
-//        Map<String, Object> resultMap = new HashMap<>();
         EnterRoomRes enterRoomRes = null;
 
 
@@ -170,7 +169,7 @@ public class GameService {
                 .playGame(playGame)
                 .sessionId(sessionId)
                 .playersList(new ArrayList<>()).build();
-        
+
         for (Connection c : availableSession.getConnections()) {
             Long cId = Long.parseLong(c.getServerData());
             enterRoomRes.getPlayersList().add(cId);
@@ -178,11 +177,14 @@ public class GameService {
 
         log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
-        log.debug("standbyRooms size : {}", standbyRooms.size());
+        log.debug("standbyRooms count : {}", standbyRooms.size());
+        log.debug("connected players count : {}", connectedPlayersCnt);
+
 
         return enterRoomRes;
     }
 
+    @Transactional
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
         try {
@@ -226,16 +228,19 @@ public class GameService {
             }
 
             // 해당 세션에 연결된 모든 connection 퇴출
-            session.close();
+//            session.close();
 
             // Plan B : 위에꺼가 session을 아예 삭제해버리면 아래 코드 사용
-//            for (Connection c : session.getConnections()) {
-//                session.forceDisconnect(c);
-//            }
+            for (Connection c : session.getConnections()) {
+                session.forceDisconnect(c);
+            }
 
             // 빈 세션을 HashMap에서 빼고 큐로 넣기
             gameRooms.remove(id);
             standbyRooms.add(session);
+
+            log.debug("gameRooms : {}", gameRooms.toString());
+            log.debug("standbyRooms size : {}", standbyRooms.size());
 
             return 0;
         } catch (Exception e) {
