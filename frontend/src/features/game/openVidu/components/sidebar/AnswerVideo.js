@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
+import lock from "../../assets/images/lock.jpg"
 
 const AnswerVideo = () => {
-    let [timeOver, setTiemOver] = useState(false)
+    let [showVideo, setShowVideo] = useState(false)
     const [ count, setCount ] = useState(5)
     
+    // Timer
     useEffect(() => {
         const timer = setInterval(() => {
             setCount( count => count - 1)
         }, 1000)
         if (count === 0) {
-            setTiemOver(!timeOver)
+            setShowVideo(!showVideo)
             clearInterval(timer)
         }
         return () => clearInterval(timer)
-        // const timer = setTimeout(() => { setTiemOver(!timeOver) }, 2000);
-        // return () => clearTimeout(timer)
         }, [count])
 
     return (
@@ -23,15 +23,15 @@ const AnswerVideo = () => {
             <div className="box">
                 <h1>{ count }</h1>
             </div>
+            <div>
+                {/* showVideo || presenter === myId */}
+                {showVideo ? (
+                    <video>
+                        <source src="http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"></source>
+                    </video>) : (<img src={ lock }></img>)}
+            </div>
             <div className="box">AnswerVideo</div>
         </div>
-    //     {
-    //         timeOver === true
-    //         ? (<div>
-    //         <p>정답 영상</p>
-    //         </div>)
-    //         : <img></img>
-    //     }
     )
 }
 
