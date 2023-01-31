@@ -24,7 +24,9 @@ public class FavoriteService {
 
         log.debug("favorite list: {}",favorites);
 
-        return favorites != null ? favorites.stream().map(favorite -> FavoriteUserRes.builder().favorite(favorite).build()).collect(Collectors.toList()) : null;
+        List<FavoriteUserRes> findFavorites = favorites.stream().map(favorite -> FavoriteUserRes.builder().favorite(favorite).build()).collect(Collectors.toList());
+
+        return findFavorites;
     }
 
     public Boolean findFavoriteByUserAndWord(String uId, String wId) {
@@ -32,11 +34,11 @@ public class FavoriteService {
         Long userId = Long.parseLong(uId);
         Long wordId = Long.parseLong(wId);
 
-        Favorite findFavortie = favoriteRepository.findByUser_IdAndWord_Id(userId,wordId);
+        Favorite findFavorite = favoriteRepository.findByUser_IdAndWord_Id(userId,wordId);
 
-        log.debug("favorite: {}",findFavortie);
+        log.debug("favorite: {}",findFavorite);
 
-        return findFavortie != null ? true : false;
+        return findFavorite != null ? true : false;
     }
 
 }
