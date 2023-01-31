@@ -5,6 +5,7 @@ import com.bbb.pjtname.api.response.FavoriteToggleRes;
 import com.bbb.pjtname.api.response.FavoriteUserRes;
 import com.bbb.pjtname.api.response.FavoriteUserWordRes;
 import com.bbb.pjtname.api.service.FavoriteService;
+import com.bbb.pjtname.db.domain.Favorite;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,8 @@ public class FavoriteController {
 
         String msg = FAIL;
 
-        if (favoriteService.findFavoriteByUserAndWord(userId,wordId)) msg = SUCCESS;
+        Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId,wordId);
+        if (findFavorite != null) msg = SUCCESS;
 
         FavoriteUserWordRes favoriteUserWordRes = FavoriteUserWordRes.builder().msg(msg).build();
 
@@ -56,17 +58,42 @@ public class FavoriteController {
     @ApiOperation("특정 단어를 나의 단어장에 추가한다.")
     public ResponseEntity<FavoriteToggleRes> saveFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq) {
 
-        log.debug("Fovorite Toggle Request: {} ", favoriteToggleReq);
+        log.debug("Fovorite Save Request: {} ", favoriteToggleReq);
+
+        String msg = SUCCESS;
 
         String userId = favoriteToggleReq.getUserId();
         String wordId = favoriteToggleReq.getWordId();
 
-        boolean saveResult = favoriteService.saveFavorite(userId, wordId);
-
-        String msg = SUCCESS;
+        Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId,wordId);
+        if (findFavorite == null) {
+            favoriteService.saveFavorite(userId, wordId);
+        }
 
         FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().msg(msg).build();
 
         return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
     }
+
+    @DeleteMapping
+    @ApiOperation("특정 단어를 나의 단어장에서 삭제한다.")
+    public ResponseEntity<FavoriteToggleRes> deleteFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq) {
+
+        log.debug("Fovorite Delete Request: {} ", favoriteToggleReq);
+
+        String msg = SUCCESS;
+
+        String userId = favoriteToggleReq.getUserId();
+        String wordId = favoriteToggleReq.getWordId();
+
+        Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId,wordId);
+        if (findFavorite != null) {
+            favoriteService.deleteFavorite(findFavorite);
+        }
+
+        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().msg(msg).build();
+
+        return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
+    }
+
 }
