@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GameService {
     private final GamelogRepository gamelogRepository;
@@ -115,8 +117,7 @@ public class GameService {
         Connection connection = null;
         String token = null;
         boolean playGame = false;
-//        Map<String, Object> resultMap = new HashMap<>();
-        EnterRoomRes enterRoomRes = new EnterRoomRes();
+        EnterRoomRes enterRoomRes = null;
 
 
         // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
@@ -162,12 +163,13 @@ public class GameService {
 //        resultMap.put("token", connection.getToken());
 //        resultMap.put("playGame", playGame);
 //        resultMap.put("sessionId", sessionId);
-        enterRoomRes.setToken(connection.getToken());
-        enterRoomRes.setPlayGame(playGame);
-        enterRoomRes.setSessionId(sessionId);
 
-        // playerList에 추가
-        enterRoomRes.setPlayersList(new ArrayList<>());
+        enterRoomRes = EnterRoomRes.builder()
+                .token(connection.getToken())
+                .playGame(playGame)
+                .sessionId(sessionId)
+                .playersList(new ArrayList<>()).build();
+
         for (Connection c : availableSession.getConnections()) {
             Long cId = Long.parseLong(c.getServerData());
             enterRoomRes.getPlayersList().add(cId);
@@ -175,11 +177,14 @@ public class GameService {
 
         log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
-        log.debug("standbyRooms size : {}", standbyRooms.size());
+        log.debug("standbyRooms count : {}", standbyRooms.size());
+        log.debug("connected players count : {}", connectedPlayersCnt);
+
 
         return enterRoomRes;
     }
 
+    @Transactional
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
         try {
@@ -223,16 +228,19 @@ public class GameService {
             }
 
             // 해당 세션에 연결된 모든 connection 퇴출
-            session.close();
+//            session.close();
 
             // Plan B : 위에꺼가 session을 아예 삭제해버리면 아래 코드 사용
-//            for (Connection c : session.getConnections()) {
-//                session.forceDisconnect(c);
-//            }
+            for (Connection c : session.getConnections()) {
+                session.forceDisconnect(c);
+            }
 
             // 빈 세션을 HashMap에서 빼고 큐로 넣기
             gameRooms.remove(id);
             standbyRooms.add(session);
+
+            log.debug("gameRooms : {}", gameRooms.toString());
+            log.debug("standbyRooms size : {}", standbyRooms.size());
 
             return 0;
         } catch (Exception e) {
