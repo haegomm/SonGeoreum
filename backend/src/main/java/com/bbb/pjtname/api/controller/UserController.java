@@ -35,6 +35,11 @@ public class UserController {
 
     private final JwtService jwtService;
 
+    @GetMapping("/test")
+    public ResponseEntity<String> testMethod() {
+        return new ResponseEntity<>("안녕", HttpStatus.OK);
+    }
+
 
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
