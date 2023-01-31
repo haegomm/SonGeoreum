@@ -1,6 +1,7 @@
 package com.bbb.pjtname.api.controller;
 
 import com.bbb.pjtname.api.request.InsertUserReq;
+import com.bbb.pjtname.api.request.LoginReq;
 import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.api.service.JwtService;
 import com.bbb.pjtname.api.service.UserService;
@@ -86,7 +87,7 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginMember(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) throws NotFoundException {
+    public ResponseEntity<Map<String, Object>> loginMember(@RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
@@ -94,11 +95,11 @@ public class UserController {
         HttpStatus status = null;
 
         try {
-            User loginUser = userService.loginUser(email, password);
+            User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
             if (loginUser != null) {
                 String accessToken = jwtService.createAccessToken("id", loginUser.getId());// key, data
                 String refreshToken = jwtService.createRefreshToken("id", loginUser.getId());// key, data
-                userService.saveRefreshToken(email, refreshToken);
+                userService.saveRefreshToken(loginUser.getId(), refreshToken);
                 log.debug("로그인 accessToken 정보 : {}", accessToken);
                 log.debug("로그인 refreshToken 정보 : {}", refreshToken);
                 resultMap.put("access-token", accessToken);
@@ -112,9 +113,9 @@ public class UserController {
                 // model.addAttribute("msg", "로그인 실패 ID 또는 PW를 확인하세요.");
             }
         } catch (Exception e) {
-            log.error("로그인 실패 : {}", e);
+            log.error("로그인 실패 : {}", e.getMessage());
             resultMap.put("message", e.getMessage());
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -139,8 +140,6 @@ public class UserController {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//		session.invalidate();
-//		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)

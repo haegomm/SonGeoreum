@@ -8,6 +8,7 @@ import com.bbb.pjtname.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     // 이메일 중복 체크
     public void duplicateEmail(String email) {
@@ -62,15 +64,19 @@ public class UserService {
     // 로그인
     public User loginUser(String email, String password) throws NotFoundException {
 
-        User loginUser = userRepository.findByEmailAndPassword(email, password).orElseThrow(NotFoundException::new);
+        User loginUser = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        if (passwordEncoder.matches(password, loginUser.getPassword())) {
+            return loginUser;
+        } else {
+            throw new NotFoundException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+        }
 
-        return loginUser;
     }
 
     @Transactional
-    public void saveRefreshToken(String email, String refreshToken) throws NotFoundException {
+    public void saveRefreshToken(Long id, String refreshToken) throws NotFoundException {
 
-        User user = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         user.saveRefreshToken(refreshToken);
     }
 
