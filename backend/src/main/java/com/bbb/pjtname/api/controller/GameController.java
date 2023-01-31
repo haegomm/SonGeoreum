@@ -80,7 +80,7 @@ public class GameController {
         return new ResponseEntity<>(removeUserRes, httpStatus);
     }
 
-    // 게임 종료 및 게임방 초기화
+    // 게임 종료 및 게임방 초기화 
     @ApiOperation(value = "게임 종료 및 게임방 초기화")
     @DeleteMapping("/session/{sessionId}")
     public ResponseEntity<ExitRoomRes> exitRoom(@PathVariable("sessionId") String id) {
