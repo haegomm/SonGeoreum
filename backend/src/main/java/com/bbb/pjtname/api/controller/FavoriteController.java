@@ -22,7 +22,7 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-    @GetMapping("user/{userId}/words")
+    @GetMapping("/user/{userId}/words")
     @ApiOperation(value = "나의 단어장에 등록된 단어들을 리스트에 담아 응답한다.")
     public ResponseEntity<List<FavoriteUserRes>> findByUser(@PathVariable(name = "userId") String userId) {
 
@@ -31,7 +31,7 @@ public class FavoriteController {
         return new ResponseEntity<List<FavoriteUserRes>>(favoriteWords, HttpStatus.OK);
     }
 
-    @GetMapping("user/{userId}/word/{wordId}")
+    @GetMapping("/user/{userId}/word/{wordId}")
     @ApiOperation(value = "나의 단어장에 있는 단어인지 확인한다.")
     public ResponseEntity<FavoriteUserWordRes> findByUserAndWord(@PathVariable(name = "userId") String userId, @PathVariable(name = "wordId") String wordId) {
 
