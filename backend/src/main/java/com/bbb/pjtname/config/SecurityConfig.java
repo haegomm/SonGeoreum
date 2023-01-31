@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
 
+    // Swagger는 spring security 적용에서 제외
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().mvcMatchers(
@@ -40,8 +41,8 @@ public class SecurityConfig {
                 .formLogin().disable() // jwt를 사용하므로 로그인 폼 필요하지 않음.
                 .httpBasic().disable() // 기본 http 방식 안 씀.
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용 권한 체크
-                .antMatchers("/user/signup", "/user/login").permitAll() // 가입은 누구나 접근 가능
-                .anyRequest().authenticated() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
+                .antMatchers("/game/**", "/user/logout/**", "/user/profile/**", "/user/game/**", "/favorites/**").authenticated() // 가입은 누구나 접근 가능
+                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and().build();
     }
 
