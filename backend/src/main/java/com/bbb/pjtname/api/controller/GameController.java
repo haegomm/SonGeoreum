@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -33,7 +32,6 @@ public class GameController {
     @PostMapping("/session")
     public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) {
 
-        Map<String, Object> resultMap = null;
         HttpStatus httpStatus = null;
         EnterRoomRes enterRoomRes = null;
 
@@ -101,5 +99,29 @@ public class GameController {
         }
 
         return new ResponseEntity<>(exitRoomRes, httpStatus);
+    }
+
+    @ApiOperation(value = "개발용 : 게임 중인 방 모두 초기화")
+    @DeleteMapping("/reset")
+    public ResponseEntity<String> resetRooms() {
+
+        HttpStatus httpStatus = null;
+        String message = null;
+
+        try {
+            gameService.resetRooms();
+
+            message = SUCCESS;
+
+            httpStatus = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            message = FAIL;
+
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<>(message, httpStatus);
     }
 }
