@@ -1,4 +1,4 @@
-package com.bbb.pjtname.config;
+package com.bbb.pjtname.exception;
 
 public class UnAuthorizedException extends RuntimeException {
 	private static final long serialVersionUID = -2238030302650813813L;
