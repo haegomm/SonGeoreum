@@ -23,14 +23,15 @@ const AnswerVideo = () => {
             <div className="box">
                 <h1>{ count }</h1>
             </div>
-            <div>
+            {/* 정답 video(api) */}
+            <div className="box">
                 {/* showVideo || presenter === myId */}
                 {showVideo ? (
-                    <video>
+                    // 나중에 loop속성 넣어서 동영상 반복 재생시키기
+                    <video autoPlay> 
                         <source src="http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"></source>
-                    </video>) : (<img src={ lock }></img>)}
+                    </video>) : (<img className="box" src={ lock }></img>)}
             </div>
-            <div className="box">AnswerVideo</div>
         </div>
     )
 }
