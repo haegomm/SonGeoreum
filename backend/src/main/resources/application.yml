@@ -1,0 +1,52 @@
+# MySQL
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # AWS RDS 정보
+    url: jdbc:mysql://bbb-db.csj8ty7cbmhi.ap-northeast-2.rds.amazonaws.com:3306/bbbdata
+    username: bbb
+    password: SonGeoreum
+
+  #    url: jdbc:mysql://localhost:3306/bbbtest?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+  #    username: ssafy
+  #    password: ssafy
+
+  # JPA
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    # open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+
+  # Swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# log level setting
+logging:
+  level:
+    root: info
+    com:
+      bbb: debug
+
+# openVidu Environmental Variables
+OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
+OPENVIDU_SECRET: BBB
+
+# context path
+server:
+  servlet:
+    context-path: /api
+
+  # application-oauth.yml
+  profiles:
+    include: oauth

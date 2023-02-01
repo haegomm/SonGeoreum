@@ -35,3 +35,11 @@
 - OpenVidu 서버 AWS EC2 배포
 - Spring Boot 기본세팅 및 패키지 구조 확정
 - API 문서 구체화
+
+### 23.01.30
+
+- 배포 관련 작업사항 (mook-temp.shop에 시험적용)
+  - nginx 설치, letsencrypt로 https 적용
+  - gradle 7.6 설치
+  - spring boot 프로젝트 gradle clean build로 빌드해보기 (아직 mooktemp에 적용 안함)
+  - spring book Dockerfile 만들어놓기
