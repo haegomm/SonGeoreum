@@ -19,8 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-// 임시로 /api 해줌 (배포 test 용)
-@RequestMapping("/api/game")
+@RequestMapping("/game")
 @RequiredArgsConstructor
 @Api(tags = {"게임 API"}) // Swagger에 보여줄 명칭
 public class GameController {

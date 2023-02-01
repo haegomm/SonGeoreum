@@ -42,3 +42,8 @@ logging:
 OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
 OPENVIDU_SECRET: BBB
 
+# context path
+server:
+  servlet:
+    context-path: /api
+
