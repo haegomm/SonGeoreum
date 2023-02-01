@@ -31,7 +31,7 @@ public class User implements Serializable {
     private String kakaoId;
 
     // 비밀번호
-    @Column(length = 20)
+    @Column(length = 200)
     private String password;
 
     // 닉네임
@@ -64,10 +64,10 @@ public class User implements Serializable {
 
     // 회원가입
     @Builder
-    public User(InsertUserReq insertUserReq, LocalDateTime createDate) {
+    public User(InsertUserReq insertUserReq, LocalDateTime createDate, String password) {
         this.userType = insertUserReq.getUserType();
         this.email = insertUserReq.getEmail();
-        this.password = insertUserReq.getPassword();
+        this.password = password;
         this.nickname = insertUserReq.getNickname();
         this.picture = insertUserReq.getPicture();
         this.level = 1;

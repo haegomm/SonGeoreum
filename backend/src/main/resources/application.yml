@@ -47,3 +47,6 @@ server:
   servlet:
     context-path: /api
 
+# application-oauth.yml
+  profiles:
+    include: oauth
