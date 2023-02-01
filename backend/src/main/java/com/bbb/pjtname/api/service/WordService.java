@@ -27,4 +27,13 @@ public class WordService {
 
         return words != null ? words.stream().map(word -> WordRes.builder().word(word).build()).collect(Collectors.toList()) : null;
     }
+
+    public List<WordRes> findAllWords() {
+
+        List<Word> words = wordRepository.findAll();
+
+        log.debug("find all words: {}", words);
+
+        return words != null ? words.stream().map(word -> WordRes.builder().word(word).build()).collect(Collectors.toList()) : null;
+    }
 }
