@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,16 +37,11 @@ public class UserController {
 
     private final JwtService jwtService;
 
-    @GetMapping("/test")
-    public ResponseEntity<String> testMethod() {
-        return new ResponseEntity<>("안녕", HttpStatus.OK);
-    }
-
 
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
-    @GetMapping("/signup/email")
-    public ResponseEntity<String> duplicateEmail(@RequestParam("email") String email) throws DuplicateException {
+    @GetMapping("/signup/email/{email}")
+    public ResponseEntity<String> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
 
         log.debug("중복체크 요청 이메일 = {}", email);
 
@@ -60,8 +56,8 @@ public class UserController {
 
     // 닉네임 중복체크
     @ApiOperation(value = "닉네임 중복체크")
-    @GetMapping("/signup/nickname")
-    public ResponseEntity<String> duplicateNickname(@RequestParam("nickname") String nickname) throws DuplicateException {
+    @GetMapping("/signup/nickname/{nickname}")
+    public ResponseEntity<String> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
 
         log.debug("중복체크 요청 닉네임 = {}", nickname);
 
@@ -77,7 +73,7 @@ public class UserController {
     // 회원가입
     @ApiOperation(value = "회원가입") // 해당 Api의 설명
     @PostMapping("/signup")
-    public ResponseEntity<String> insertUser(@Validated @RequestBody InsertUserReq insertUserReq) {
+    public ResponseEntity<String> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) {
 
         log.debug("회원가입 정보 = {} ", insertUserReq);
         userService.insertUser(insertUserReq);
@@ -87,7 +83,7 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginMember(@RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
+    public ResponseEntity<Map<String, Object>> loginMember(@Valid @RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
@@ -124,8 +120,8 @@ public class UserController {
 
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
-    @GetMapping("/logout")
-    public ResponseEntity<Map<String, Object>> logoutUser(@RequestParam("email") String email, HttpSession session) {
+    @GetMapping("/logout/{email}")
+    public ResponseEntity<Map<String, Object>> logoutUser(@PathVariable("email") String email, HttpSession session) {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
