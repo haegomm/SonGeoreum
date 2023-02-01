@@ -47,9 +47,9 @@ public class UserService {
         LocalDateTime createDate = LocalDateTime.now();
 
         // password 인코딩
-        String passowrd = bCryptPasswordEncoder.encode(insertUserReq.getPassword());
+        String password = bCryptPasswordEncoder.encode(insertUserReq.getPassword());
 
-        User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).password(passowrd).build();
+        User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).password(password).build();
 
         // 이메일 중복 체크
         duplicateEmail(user.getEmail());
