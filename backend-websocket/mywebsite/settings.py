@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chat',
+    'handdetection',
 ]
 
 ASGI_APPLICATION = 'mywebsite.asgi.application'
