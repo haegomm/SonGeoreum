@@ -5,7 +5,6 @@ export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      participant: 2, // 연결된 참가자 수
       tipNumber: 0, // 현재 보여주고 있는 tip 번호
       tips: [
         "다같이 정답을 보면서 수어를 따라해 보세요1",
@@ -49,7 +48,6 @@ export default class ChatComponent extends Component {
           />
         </div>
         <div>곧 게임이 시작됩니다.</div>
-        <div>4명 중 {this.state.participant}명이 모였습니다.</div>
         <div>{this.state.tips[this.state.tipNumber]}</div>
       </div>
     );
