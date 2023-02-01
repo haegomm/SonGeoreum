@@ -65,7 +65,7 @@ public class GameService {
     private static final int ROOM_SIZE = 4;
 
     @PostConstruct
-    public void init() throws OpenViduJavaClientException, OpenViduHttpException {
+    public void initialSetup() throws OpenViduJavaClientException, OpenViduHttpException {
         // OpenVidu 객체 초기화 (WAS 띄우고 한번만 실행 (@PostConstruct))
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
