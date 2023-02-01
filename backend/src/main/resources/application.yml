@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     # open-in-view: false
     properties:
       hibernate:
@@ -47,6 +47,6 @@ server:
   servlet:
     context-path: /api
 
-# application-oauth.yml
+  # application-oauth.yml
   profiles:
     include: oauth
