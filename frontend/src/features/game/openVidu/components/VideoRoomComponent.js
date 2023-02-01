@@ -1,7 +1,7 @@
 import axios from "axios";
 import { OpenVidu } from "openvidu-browser";
 import React, { Component } from "react";
-import ChatComponent from "./chat/ChatComponent";
+// import ChatComponent from "./sidebar/chat/ChatComponent";
 import DialogExtensionComponent from "./dialog-extension/DialogExtension";
 import StreamComponent from "./stream/StreamComponent";
 import "./VideoRoomComponent.css";
@@ -10,6 +10,7 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
+import SideBar from "./sidebar/SideBar";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -37,6 +38,8 @@ class VideoRoomComponent extends Component {
       chatDisplay: "block",
       currentVideoDevice: undefined,
       playGame: true, // 추후 백에서 받아와 변경되는 변수, 게임 플레이 할건지 알려준다.
+      myId: '해곰', // UserModel에 nickname을 myId용으로 쓰기
+      playlist: [],
       subToken: undefined,
     };
 
@@ -638,11 +641,30 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            <div className="box">timer</div>
+            {/* <div className="box">timer</div>
             <div className="box">answer</div>
-            <div className="box">answer video</div>
+            <div className="box">answer video</div> */}
+            {localUser !== undefined &&
+              localUser.getStreamManager() !== undefined && (
+                <div style={chatDisplay}>
+                  <SideBar
+                    user={localUser}
+                    chatDisplay={this.state.chatDisplay}
+                    close={this.toggleChat}
+                    messageReceived={this.checkNotification}
+                    playList={this.state.playlist}
+                    myId={this.state.myId}
+                  />
+                  {/* <ChatComponent
+                    user={localUser}
+                    chatDisplay={this.state.chatDisplay}
+                    close={this.toggleChat}
+                    messageReceived={this.checkNotification}
+                  /> */}
+                </div>
+              )}
           </div>
-          <div className="chattingBox">
+          {/* <div className="chattingBox">
             {localUser !== undefined &&
               localUser.getStreamManager() !== undefined && (
                 <div style={chatDisplay}>
@@ -654,7 +676,7 @@ class VideoRoomComponent extends Component {
                   />
                 </div>
               )}
-          </div>
+          </div> */}
         </div>
       );
     }
