@@ -83,14 +83,14 @@ public class GameService {
         gameRooms = new ConcurrentHashMap<>();
 
         //////////// 유저 더미데이터 ////////////////////
-        userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "b", 2, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "c", 3, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "d", 4, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "e", 5, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "f", 6, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "g", 7, 1, LocalDateTime.now(), "ROLE"));
-        userRepository.save(new User("KAKAO", "h", 8, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "b", 2, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "c", 3, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "d", 4, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "e", 5, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "f", 6, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "g", 7, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "h", 8, 1, LocalDateTime.now(), "ROLE"));
 
     }
 
@@ -100,6 +100,8 @@ public class GameService {
         if (!userRepository.findById(userId).isPresent()) {
             throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
         }
+
+        log.debug("HI");
 
         // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
         Session availableSession = standbyRooms.peek();
@@ -286,5 +288,26 @@ public class GameService {
         sessionInfo.put("session", session);
         sessionInfo.put("startDate", startDate);
         gameRooms.put(sessionId, sessionInfo);
+    }
+
+    public void resetRooms() throws OpenViduJavaClientException, OpenViduHttpException {
+        for (String id : gameRooms.keySet()) {
+            Session session = (Session) gameRooms.get(id).get("session");
+            for (Connection c : session.getConnections()) {
+                session.forceDisconnect(c);
+            }
+
+            // 빈 세션을 HashMap에서 빼고 큐로 넣기
+            gameRooms.remove(id);
+        }
+
+        while (!standbyRooms.isEmpty()) {
+            standbyRooms.poll();
+        }
+
+        for (int i = 0; i < INITIAL_ROOM_NO; i++) {
+            Session session = openVidu.createSession();
+            standbyRooms.add(session);
+        }
     }
 }
