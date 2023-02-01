@@ -1,8 +1,14 @@
 package com.bbb.pjtname.api.service;
 
 import com.bbb.pjtname.api.request.GameRemoveUserReq;
+import com.bbb.pjtname.api.response.EnterRoomRes;
+import com.bbb.pjtname.db.domain.Gamelog;
+import com.bbb.pjtname.db.domain.GamelogUser;
+import com.bbb.pjtname.db.domain.User;
 import com.bbb.pjtname.db.repository.GamelogRepository;
 import com.bbb.pjtname.db.repository.GamelogUserRepository;
+import com.bbb.pjtname.db.repository.UserRepository;
+import com.bbb.pjtname.exception.DuplicateUserException;
 import com.bbb.pjtname.exception.NoConnectionError;
 import com.bbb.pjtname.exception.NotFoundException;
 import com.bbb.pjtname.exception.RoomOverflowException;
@@ -11,10 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,10 +29,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GameService {
     private final GamelogRepository gamelogRepository;
     private final GamelogUserRepository gamelogUserRepository;
+    private final UserRepository userRepository;
 
     // OpenVidu 서버 URL 및 암호키(BBB) 설정 (application.properties에서 가져옴)
     @Value("${OPENVIDU_URL}")
@@ -56,7 +65,7 @@ public class GameService {
     private static final int ROOM_SIZE = 4;
 
     @PostConstruct
-    public void init() throws OpenViduJavaClientException, OpenViduHttpException {
+    public void initialSetup() throws OpenViduJavaClientException, OpenViduHttpException {
         // OpenVidu 객체 초기화 (WAS 띄우고 한번만 실행 (@PostConstruct))
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
@@ -72,24 +81,51 @@ public class GameService {
 
         // 해시맵은 멀티 스레드 환경을 반영하여 ConcurrentHashMap을 활용
         gameRooms = new ConcurrentHashMap<>();
+
+        //////////// 유저 더미데이터 ////////////////////
+//        userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "b", 2, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "c", 3, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "d", 4, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "e", 5, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "f", 6, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "g", 7, 1, LocalDateTime.now(), "ROLE"));
+//        userRepository.save(new User("KAKAO", "h", 8, 1, LocalDateTime.now(), "ROLE"));
+
     }
 
-    public Map<String, Object> enterRoom() throws OpenViduJavaClientException, OpenViduHttpException {
+    public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        // 존재하는 유저인지 확인
+        if (!userRepository.findById(userId).isPresent()) {
+            throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
+        }
+
+        log.debug("HI");
+
+        // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
+        Session availableSession = standbyRooms.peek();
+        String sessionId = availableSession.getSessionId();
+        int connectedPlayersCnt = availableSession.getConnections().size();
+
+        // 현재 대기방에 중복되는 유저 있는지 확인
+        for (Connection c : availableSession.getConnections()) {
+            Long cId = Long.parseLong(c.getServerData());
+            if (userId.equals(cId)) {
+                throw new DuplicateUserException();
+            }
+        }
 
         Connection connection = null;
         String token = null;
         boolean playGame = false;
-        Map<String, Object> resultMap = new HashMap<>();
+        EnterRoomRes enterRoomRes = null;
+
 
         // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
         if (standbyRooms.size() < POOL_REDZONE_NO) {
             increaseRoomBuffer();
         }
-
-        // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
-        Session availableSession = standbyRooms.peek();
-        String sessionId = availableSession.getSessionId();
-        int connectedPlayersCnt = availableSession.getActiveConnections().size();
 
         // 비정상적인 코드일때 처리 또는 throw exception
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -99,12 +135,20 @@ public class GameService {
             throw new RoomOverflowException();
         }
 
+        // connection의 params 만들기 : 해당 connection에 연결되는 유저의 ID값 저장
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+                .data(userId.toString())
+                .build();
+
         // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
-        connection = availableSession.createConnection();
+        connection = availableSession.createConnection(connectionProperties);
 
         if (connection == null) {
             throw new NoConnectionError();
         }
+
+        connectedPlayersCnt++;
+        log.debug(String.valueOf(connectedPlayersCnt));
 
         // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -118,39 +162,87 @@ public class GameService {
         }
 
         // 반환값 세팅
-        resultMap.put("token", connection.getToken());
-        resultMap.put("playGame", playGame);
-        resultMap.put("sessionId", sessionId);
+//        resultMap.put("token", connection.getToken());
+//        resultMap.put("playGame", playGame);
+//        resultMap.put("sessionId", sessionId);
 
-        return resultMap;
+        enterRoomRes = EnterRoomRes.builder()
+                .token(connection.getToken())
+                .playGame(playGame)
+                .sessionId(sessionId)
+                .playersList(new ArrayList<>()).build();
+
+        for (Connection c : availableSession.getConnections()) {
+            Long cId = Long.parseLong(c.getServerData());
+            enterRoomRes.getPlayersList().add(cId);
+        }
+
+        log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
+        log.debug("gameRooms : {}", gameRooms.toString());
+        log.debug("standbyRooms count : {}", standbyRooms.size());
+        log.debug("connected players count : {}", connectedPlayersCnt);
+
+
+        return enterRoomRes;
     }
 
+    @Transactional
     public int exitRoom(String id) {
         // 성공 시 0, 실패 시 1 반환
         try {
             Map<String, Object> sessionInfo = gameRooms.get(id);
 
             Session session = (Session) sessionInfo.get("session");
-            LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
+
 
             if (session == null) {
                 throw new NotFoundException("세션을 찾을 수 없습니다.");
             }
 
-            // 해당 세션에 연결된 모든 connection 퇴출
-            session.close();
+            // DB 저장 //////////////////////////////////////
+            // DB에 게임 로그(gamelog) 데이터 저장
 
-            // 위에께 session을 아예 삭제해버리면 아래 코드 사용
-//            for (Connection c : session.getConnections()) {
-//                session.forceDisconnect(c);
-//            }
+            LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
+            LocalDateTime endDate = LocalDateTime.now();
+            String sessionId = session.getSessionId();
+
+            Gamelog gamelog = Gamelog.builder()
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .sessionId(sessionId)
+                    .build();
+
+            gamelogRepository.save(gamelog);
+
+            // DB에 로그-회원(gamelog_user) 데이터 저장
+
+            for (Connection c : session.getConnections()) {
+                // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
+                Long userId = Long.parseLong(c.getServerData());
+                User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+
+                GamelogUser gamelogUser = GamelogUser.builder()
+                        .user(user)
+                        .gamelog(gamelog)
+                        .build();
+
+                gamelogUserRepository.save(gamelogUser);
+            }
+
+            // 해당 세션에 연결된 모든 connection 퇴출
+//            session.close();
+
+            // Plan B : 위에꺼가 session을 아예 삭제해버리면 아래 코드 사용
+            for (Connection c : session.getConnections()) {
+                session.forceDisconnect(c);
+            }
 
             // 빈 세션을 HashMap에서 빼고 큐로 넣기
             gameRooms.remove(id);
             standbyRooms.add(session);
 
-            // DB에 게임 로그 저장*****************
-
+            log.debug("gameRooms : {}", gameRooms.toString());
+            log.debug("standbyRooms size : {}", standbyRooms.size());
 
             return 0;
         } catch (Exception e) {
@@ -196,5 +288,26 @@ public class GameService {
         sessionInfo.put("session", session);
         sessionInfo.put("startDate", startDate);
         gameRooms.put(sessionId, sessionInfo);
+    }
+
+    public void resetRooms() throws OpenViduJavaClientException, OpenViduHttpException {
+        for (String id : gameRooms.keySet()) {
+            Session session = (Session) gameRooms.get(id).get("session");
+            for (Connection c : session.getConnections()) {
+                session.forceDisconnect(c);
+            }
+
+            // 빈 세션을 HashMap에서 빼고 큐로 넣기
+            gameRooms.remove(id);
+        }
+
+        while (!standbyRooms.isEmpty()) {
+            standbyRooms.poll();
+        }
+
+        for (int i = 0; i < INITIAL_ROOM_NO; i++) {
+            Session session = openVidu.createSession();
+            standbyRooms.add(session);
+        }
     }
 }
