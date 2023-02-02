@@ -67,7 +67,16 @@ public class SecurityConfig {
 //                .and()
 //                .userInfoEndpoint()
 //                .userService(oAuth2UserService)
-//                .and()
+//                .and()@Configuration
+//public class JwtConfig {
+//    @Value("${jwt.secret}")
+//    private String secret;
+//
+//    @Bean
+//    public AuthTokenProvider jwtProvider() {
+//        return new AuthTokenProvider(secret);
+//    }
+//}
 //                .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
 //                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
