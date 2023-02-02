@@ -31,6 +31,18 @@ const CustomMuiTheme = createTheme({
     info: {
       main: "#6488e5",
     },
+    blue: {
+      main: "#6488e5",
+    },
+    yellow: {
+      main: "#f9be7d",
+    },
+    green: {
+      main: "#90de8a",
+    },
+    red: {
+      main: "#e56372",
+    },
   },
   typography: {
     fontFamily: ["IBM Plex Sans KR"].join(","),
