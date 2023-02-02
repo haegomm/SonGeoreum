@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
+const defaultTheme = createTheme();
 const CustomMuiTheme = createTheme({
   palette: {
     type: "light",
@@ -31,18 +32,22 @@ const CustomMuiTheme = createTheme({
     info: {
       main: "#6488e5",
     },
-    blue: {
-      main: "#6488e5",
-    },
-    yellow: {
-      main: "#f9be7d",
-    },
-    green: {
-      main: "#90de8a",
-    },
-    red: {
-      main: "#e56372",
-    },
+    blue: defaultTheme.palette.augmentColor({
+      color: { main: "#6488e5" },
+      name: "blue",
+    }),
+    yellow: defaultTheme.palette.augmentColor({
+      color: { main: "#f9be7d" },
+      name: "yellow",
+    }),
+    green: defaultTheme.palette.augmentColor({
+      color: { main: "#90de8a" },
+      name: "green",
+    }),
+    red: defaultTheme.palette.augmentColor({
+      color: { main: "#e56372" },
+      name: "red",
+    }),
   },
   typography: {
     fontFamily: ["IBM Plex Sans KR"].join(","),
