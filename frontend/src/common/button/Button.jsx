@@ -111,10 +111,12 @@ export default function LargeButton({
   backgroundColor,
   disable,
   onclick,
+  margin,
 }) {
   console.log({ text, type, backgroundColor, disable, onclick });
   const disabled = disable ? disable : false;
   const onclickMethod = onclick ? onclick : undefined;
+  const marginSize = margin ? margin : 16;
 
   let selectedType = typeList[0];
   for (let i = 0; i < typeNameList.length; i++) {
@@ -137,6 +139,7 @@ export default function LargeButton({
         fontSize: selectedType.fontSize,
         fontWeight: selectedType.fontWeight,
         color: selectedType.color,
+        margin: marginSize,
       }}
     >
       {text}
