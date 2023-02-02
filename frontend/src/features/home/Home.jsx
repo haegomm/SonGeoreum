@@ -1,5 +1,5 @@
 import axios from "axios";
-import Button from "../../common/button/Button";
+import ButtonTest from "../../common/button/ButtonTest";
 
 const TestApiCall = async () => {
   try {
@@ -17,7 +17,7 @@ export default function Home() {
     <div className="HomePage">
       <button onClick={TestApiCall}>카테고리 요청</button>
       <div>이곳은 홈페이지 입니다.</div>
-      <Button text="test" />
+      <ButtonTest />
     </div>
   );
 }
