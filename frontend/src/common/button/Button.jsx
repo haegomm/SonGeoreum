@@ -1,14 +1,13 @@
 import Button from "@mui/material/Button";
 
 // button customizing
-const typeNameList = ["default", "webcamTest"];
+// 0: default (기본), 1: next (다음), 2:
+const typeNameList = ["default", "next", "webcamTest"];
 const typeList = [
   {
     // default 버튼
     variant: "contained",
     href: "",
-    backgroundColor: "primary",
-    disabled: false,
     width: 200,
     height: 50,
     borderRadius: 20,
@@ -17,11 +16,20 @@ const typeList = [
     color: "white",
   },
   {
+    // next 버튼
+    variant: "contained",
+    href: "",
+    width: 192,
+    height: 72,
+    borderRadius: 10,
+    fontSize: 40,
+    fontWeight: 700,
+    color: "white",
+  },
+  {
     // 웹캠 테스트 버튼
     variant: "contained",
     href: "",
-    backgroundColor: "secondary",
-    disabled: false,
     width: 336,
     height: 88,
     borderRadius: 90,
@@ -31,8 +39,9 @@ const typeList = [
   },
 ];
 
-export default function LargeButton({ text, type }) {
-  console.log({ type });
+export default function LargeButton({ text, type, backgroundColor, disable }) {
+  console.log({ text, type, backgroundColor, disable });
+  const disabled = disable ? disable : false;
 
   let selectedType = typeList[0];
   for (let i = 0; i < typeNameList.length; i++) {
@@ -46,8 +55,8 @@ export default function LargeButton({ text, type }) {
     <Button
       variant={selectedType.variant}
       href={selectedType.href}
-      color={selectedType.backgroundColor}
-      disabled={selectedType.disabled}
+      color={backgroundColor}
+      disabled={disabled}
       style={{
         width: selectedType.width,
         height: selectedType.height,
