@@ -1,8 +1,9 @@
 import Button from "@mui/material/Button";
 
 // button customizing
-// 0: default (기본), 1: next (다음), 2:
-const typeNameList = ["default", "next", "webcamTest"];
+// 0: default (기본), 1: next (다음), 2: testModeSelect (테스트모드선택)
+// 3:
+const typeNameList = ["default", "next", "testModeSelect", "webcamTest"];
 const typeList = [
   {
     // default 버튼
@@ -27,7 +28,18 @@ const typeList = [
     color: "white",
   },
   {
-    // 웹캠 테스트 버튼
+    // testModeSelect 버튼
+    variant: "contained",
+    href: "",
+    width: 256,
+    height: 108,
+    borderRadius: 20,
+    fontSize: 32,
+    fontWeight: 700,
+    color: "white",
+  },
+  {
+    // webcamTest 버튼
     variant: "contained",
     href: "",
     width: 336,
