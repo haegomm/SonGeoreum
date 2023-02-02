@@ -33,11 +33,15 @@ export default class ChatComponent extends Component {
   //   }, 4000);
   // }
 
+  roomOut() {
+    // code
+  }
+
   render() {
     return (
       <div id="LoadingBox">
         로딩화면 테스트
-        <button>나가기버튼</button>
+        <button onClick={this.roomOut}>나가기버튼</button>
         <div>
           <SpinnerCircular
             size={90}
