@@ -1,16 +1,14 @@
 import Button from "@mui/material/Button";
 
 // button customizing
-// 0: default (기본), 1: next (다음), 2: testModeSelect (테스트모드선택)
-// 3: learnToTest (학습하기->테스트), 4: testStart (테스트시작)
-
 const typeNameList = [
-  "default",
-  "next",
-  "testModeSelect",
-  "learnToTest",
-  "testStart",
-  "webcamTest",
+  "default", // 0: default (기본)
+  "next", // 1: next (다음)
+  "testModeSelect", // 2: testModeSelect (테스트모드선택)
+  "learnToTest", // 3: learnToTest (학습하기->테스트)
+  "testStart", // 4: testStart (테스트시작)
+  "gameStart", // 5: gameStart (게임시작)
+  "webcamTest", // 9: webcamTest (웹캠테스트)
 ];
 const typeList = [
   {
@@ -60,6 +58,16 @@ const typeList = [
     height: 72,
     borderRadius: 10,
     fontSize: 40,
+    fontWeight: 500,
+    color: "white",
+  },
+  {
+    // 5: gameStart 버튼
+    variant: "contained",
+    width: 216,
+    height: 64,
+    borderRadius: 20,
+    fontSize: 32,
     fontWeight: 500,
     color: "white",
   },
