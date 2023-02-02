@@ -21,7 +21,7 @@ class VideoRoomComponent extends Component {
     super(props);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    let myId = 3 // redux에서 가지고 오거나 로컬 스토리지에서 유저pk 받아서 넣기
+    let myId = 2 // redux에서 가지고 오거나 로컬 스토리지에서 유저pk 받아서 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SessionA";
@@ -40,7 +40,7 @@ class VideoRoomComponent extends Component {
       chatDisplay: "block",
       currentVideoDevice: undefined,
       playGame: true, // 추후 백에서 받아와 변경되는 변수, 게임 플레이 할건지 알려준다.
-      myId: '해곰', // UserModel에 nickname을 myId용으로 쓰기
+      // myId: '해곰', // UserModel에 nickname을 myId용으로 쓰기
       playlist: [],
       subToken: undefined,
     };
@@ -700,7 +700,7 @@ class VideoRoomComponent extends Component {
    * more about the integration of OpenVidu in your application server.
    */
   async getToken() {
-    const sessionId = await this.createSession(this.state.mySessionId);
+    const sessionId = await this.createSession(this.state.mySessionId)
     return await this.createToken(sessionId);
   }
 
@@ -709,12 +709,15 @@ class VideoRoomComponent extends Component {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + "/api/game/session",
-        // { customSessionId: sessionId },
-          {
-            id: sessionId , // {id :user pk}
+        // {
+        // statusCode: 200,
+        // headers: {
+        //   "Access-Control-Allow-Origin": "*", 
+        //   "Access-Control-Allow-Credentials": true}},
+           {
+            id: sessionId, // {id :user pk}
           }
         );
-      console.log(sessionId)
       console.log("요청성공 >> ", response.data)
       return response.data; // The sessionId
     } catch (err) {
@@ -722,19 +725,18 @@ class VideoRoomComponent extends Component {
     }
   }
 
-  async createToken(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/session/" + sessionId + "/connections",
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    const token = response.data;
-    const tokenData = token.split("=");
-    console.log(tokenData);
-    const tokenID = tokenData[tokenData.length - 1];
-    this.state.subToken = tokenID;
+  async createToken(data) {
+
+    const message = data.message;
+    const playGame = data.playGame;
+    const playList = data.playList;
+    const roomId = data.sessionId;
+    const token = data.token;
+    
+    // const tokenData = token.split("=");
+    // console.log(tokenData);
+    // const tokenID = tokenData[tokenData.length - 1];
+    // this.state.subToken = tokenID;
     console.log("토큰이 저장됐습니까? : ");
     console.log(this.state.subToken);
     // console.log(token.searchParams);
