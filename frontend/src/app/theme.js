@@ -48,6 +48,10 @@ const CustomMuiTheme = createTheme({
       color: { main: "#e56372" },
       name: "red",
     }),
+    white: defaultTheme.palette.augmentColor({
+      color: { main: "#ffffff" },
+      name: "white",
+    }),
   },
   typography: {
     fontFamily: ["IBM Plex Sans KR"].join(","),
