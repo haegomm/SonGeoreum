@@ -9,7 +9,8 @@ const typeNameList = [
   "testStart", // 4: testStart (테스트시작)
   "gameStart", // 5: gameStart (게임시작)
   "pass", // 6: pass (다음문제)
-  "webcamTest", // 9: webcamTest (웹캠테스트)
+  "webcamTest", // 7: webcamTest (웹캠테스트)
+  "exit", // 8: exit (게임매칭 나가기)
 ];
 const typeList = [
   {
@@ -83,7 +84,7 @@ const typeList = [
     color: "white",
   },
   {
-    // 9: webcamTest 버튼
+    // 7: webcamTest 버튼
     variant: "contained",
     width: 336,
     height: 88,
@@ -91,6 +92,16 @@ const typeList = [
     fontSize: 40,
     fontWeight: 700,
     color: "white",
+  },
+  {
+    // 8: eixt 버튼
+    variant: "contained",
+    width: 144,
+    height: 72,
+    borderRadius: 90,
+    fontSize: 32,
+    fontWeight: 500,
+    color: "black",
   },
 ];
 
