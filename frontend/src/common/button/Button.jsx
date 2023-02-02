@@ -8,6 +8,7 @@ const typeNameList = [
   "learnToTest", // 3: learnToTest (학습하기->테스트)
   "testStart", // 4: testStart (테스트시작)
   "gameStart", // 5: gameStart (게임시작)
+  "pass", // 6: pass (다음문제)
   "webcamTest", // 9: webcamTest (웹캠테스트)
 ];
 const typeList = [
@@ -69,6 +70,16 @@ const typeList = [
     borderRadius: 20,
     fontSize: 32,
     fontWeight: 500,
+    color: "white",
+  },
+  {
+    // 6: pass 버튼
+    variant: "contained",
+    width: 168,
+    height: 64,
+    borderRadius: 20,
+    fontSize: 32,
+    fontWeight: 700,
     color: "white",
   },
   {
