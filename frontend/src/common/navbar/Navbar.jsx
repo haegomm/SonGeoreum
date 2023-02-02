@@ -1,4 +1,6 @@
 import * as React from "react";
+import { BrowserRouter as Route, Outlet, Link, NavLink } from "react-router-dom";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,7 +15,9 @@ import "./Navbar.scss";
 
 export default function Navbar(props) {
   const { size } = props;
-  const pages = ["학습하기", "게임하기", "알아보기"]; // 페이지
+  const pages = [{name: "학습하기", path:"/study"},
+                  {name: "게임하기", path:'/game'},
+                  {name: "알아보기", path:'/culture'}]; // 페이지
   const [auth, setAuth] = React.useState(true); // 로그인 유무
 
   // customizing
@@ -58,32 +62,46 @@ export default function Navbar(props) {
           }}
         >
           <Toolbar>
-            <Typography
-              fontSize={sizeList.logo}
-              fontWeight={sizeList.logoWeight}
-              color="secondary"
-              component="a" // anchor
-              href="/" // 이동하는 링크입니다
-              style={{
-                paddingLeft: sizeList.logoPaddingLeft,
-                textDecoration: "none",
-              }}
-              sx={{ flexGrow: 1 }}
+            <NavLink to="/"
+            // fontSize={sizeList.logo}
+            //     fontWeight={sizeList.logoWeight}
+            //     color="secondary"
+            //     // component="a" // anchor
+            //     // href="/" // 이동하는 링크입니다
+                style={{
+                  paddingLeft: sizeList.logoPaddingLeft,
+                  textDecoration: "none",
+                }}
+            //     sx={{ flexGrow: 1 }}>
             >
-              손걸음
-            </Typography>
+              <Typography
+                fontSize={sizeList.logo}
+                fontWeight={sizeList.logoWeight}
+                color="secondary"
+                // component="a" // anchor
+                // href="/" // 이동하는 링크입니다
+                style={{
+                  paddingLeft: sizeList.logoPaddingLeft,
+                  textDecoration: "none",
+                }}
+                sx={{ flexGrow: 1 }}
+              >
+                손걸음
+              </Typography>
+            </NavLink>
             {pages.map((page) => (
-              <MenuItem key={page}>
-                <Typography
-                  textAlign="center"
-                  fontSize={sizeList.menu}
-                  fontWeight={sizeList.menuWeight}
-                >
-                  {page}
-                </Typography>
-              </MenuItem>
+              <NavLink to={page.path}>
+                <MenuItem key={page.name}>
+                  <Typography
+                    textAlign="center"
+                    fontSize={sizeList.menu}
+                    fontWeight={sizeList.menuWeight}
+                  >
+                    {page.name}
+                  </Typography>
+                </MenuItem>
+              </NavLink>
             ))}
-
             {auth ? (
               <div>
                 {/* 추후 IconButton이 아닌 이미지 버튼으로 수정합니다. */}
@@ -104,14 +122,16 @@ export default function Navbar(props) {
               </div>
             ) : (
               <MenuItem>
-                <Typography
-                  textAlign="center"
-                  fontSize={sizeList.menu}
-                  fontWeight={sizeList.menuWeight}
-                >
-                  로그인
-                </Typography>
-              </MenuItem>
+              <Link to="/login">
+                  <Typography
+                    textAlign="center"
+                    fontSize={sizeList.menu}
+                    fontWeight={sizeList.menuWeight}
+                  >
+                    로그인
+                  </Typography>
+              </Link>
+                </MenuItem>
             )}
           </Toolbar>
         </AppBar>
@@ -128,6 +148,7 @@ export default function Navbar(props) {
           />
         </FormGroup>
       </Box>
+      <Outlet />
     </div>
   );
 }
