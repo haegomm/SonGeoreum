@@ -1,5 +1,6 @@
 package com.bbb.pjtname.config;
 
+import com.bbb.pjtname.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -54,6 +56,21 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/") // 메인 페이지로 redirect 한다.
 //                .invalidateHttpSession(true) // 로그아웃 이후 세션 전체 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
 //                .deleteCookies("JSESSIONID") // 로그아웃 이후 쿠키 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
+//                .and()
+//                .oauth2Login() // oauth2로그인 (소셜 로그인 설정을 시작하겠다.)
+//                .authorizationEndpoint() //아래 uri로 접근시 oauth 로그인을 요청한다.
+//                .baseUri("/oauth2/authorization") // https://https://i8b106.p.ssafy.io/oauth2/authorization/kakao 로그인 요청 보내는 주소
+//                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()) // 인가요청을 시작한 시점부터 인가 요청을 받는(콜백) 시점까지 OAuth2AuthorizationRequest를 유지해줌.
+//                .and()
+//                .redirectionEndpoint() // 아래 uri로 접근시 redirect 된다.
+//                .baseUri("/oauth2/code/*") // https://i8b106.p.ssafy.io/api/oauth2/code/kakao redirect 되는 주소
+//                .and()
+//                .userInfoEndpoint()
+//                .userService(oAuth2UserService)
+//                .and()
+//                .successHandler(oAuth2AuthenticationSuccessHandler())
+//                .failureHandler(oAuth2AuthenticationFailureHandler())
+//                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .and().build();
     }
 
@@ -62,5 +79,18 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
+//    // 쿠키 기반 인가 Repository
+//    // 인가 응답을 연계하고 검증할 때 사용
+//    @Bean
+//    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
+//        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
+//    }
+//
+//    // 토큰 필터 설정
+//    @Bean
+//    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+//        return new TokenAuthenticationFilter(tokenProvider);
+//    }
+
 }
