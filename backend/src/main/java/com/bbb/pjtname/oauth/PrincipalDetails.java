@@ -12,18 +12,19 @@ import java.util.Map;
 
 @Data
 @RequiredArgsConstructor
+// Security Session 에서  => Authentication 이걸 꺼내고 => UserDetails(PrincipalDetails) 객체를 꺼내면 user에 접근할 수 있음.
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
     private Map<String, Object> attributes;
 
-    //일반 로그인
-    public PrincipalDetails(User user){
-        this.user=user;
+    // 일반 로그인
+    public PrincipalDetails(User user) {
+        this.user = user;
     }
 
-    //OAuth 로그인
-    public PrincipalDetails(User user, Map<String, Object> attributes){
+    // OAuth 로그인
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
     }
