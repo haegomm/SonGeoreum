@@ -14,9 +14,8 @@ const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, ReduxThunk)
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-      {/* Provider를 이용해 리덕스 적용 */}
-      <Provider
+  <Provider
+    // {/* Provider를 이용해 리덕스 적용 */} 
         store={createStoreWithMiddleware(
           Reducer,
           /*{ 크롬 브라우저에서 디버깅 도구를 이용할 수 있도록 하는 도구 }*/
@@ -25,7 +24,7 @@ root.render(
       >
       <App />
       </Provider>
-  </React.StrictMode>);
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

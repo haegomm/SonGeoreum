@@ -16,22 +16,22 @@ export default class ChatComponent extends Component {
   }
 
   componentDidMount() {
-    this.ChangeTips();
+    // this.ChangeTips();
   }
 
-  ChangeTips() {
-    const nextNumber = 0;
-    setInterval(() => {
-      try {
-        const nowNumber = this.state.tipNumber;
-        this.state.tipNumber = (nowNumber + 1) % this.state.tips.length;
-        console.log(
-          "현재 보여주는 tip 번호는 " + this.state.tipNumber + " 입니다"
-        );
-        this.setState({ tipNumber: this.state.tipNumber });
-      } catch (err) {}
-    }, 4000);
-  }
+  // ChangeTips() {
+  //   const nextNumber = 0;
+  //   setInterval(() => {
+  //     try {
+  //       const nowNumber = this.state.tipNumber;
+  //       this.state.tipNumber = (nowNumber + 1) % this.state.tips.length;
+  //       console.log(
+  //         "현재 보여주는 tip 번호는 " + this.state.tipNumber + " 입니다"
+  //       );
+  //       this.setState({ tipNumber: this.state.tipNumber });
+  //     } catch (err) {}
+  //   }, 4000);
+  // }
 
   render() {
     return (

@@ -14,13 +14,14 @@ import SideBar from "./sidebar/SideBar";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
+  process.env.NODE_ENV === "production" ? "" : "https://i8b106.p.ssafy.io";
 
 class VideoRoomComponent extends Component {
   constructor(props) {
     super(props);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
+    let myId = 3 // redux에서 가지고 오거나 로컬 스토리지에서 유저pk 받아서 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SessionA";
@@ -30,7 +31,8 @@ class VideoRoomComponent extends Component {
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
-      mySessionId: sessionName,
+      // mySessionId: sessionName,
+      mySessionId: myId,
       myUserName: userName,
       session: undefined,
       localUser: undefined,
@@ -278,7 +280,7 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "SessionA",
+      mySessionId: "여기있어요",
       myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
       localUser: undefined,
     });
@@ -702,20 +704,27 @@ class VideoRoomComponent extends Component {
     return await this.createToken(sessionId);
   }
 
+  // key보내기
   async createSession(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The sessionId
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + "/api/game/session",
+        // { customSessionId: sessionId },
+          {
+            id: sessionId , // {id :user pk}
+          }
+        );
+      console.log(sessionId)
+      console.log("요청성공 >> ", response.data)
+      return response.data; // The sessionId
+    } catch (err) {
+      console.log("요청실패 ㅠㅠ", err)
+    }
   }
 
   async createToken(sessionId) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL + "api/session/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
