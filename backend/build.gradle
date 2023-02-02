@@ -37,6 +37,9 @@ dependencies {
 
 //	OpenVidu Java Client
     implementation 'io.openvidu:openvidu-java-client:2.24.0'
+
+//  annotationProcessor
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {
