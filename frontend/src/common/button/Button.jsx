@@ -1,9 +1,10 @@
 import Button from "@mui/material/Button";
 
 // button customizing
-const typeList = {
-  // default 버튼
-  default: {
+const typeNameList = ["default", "webcamTest"];
+const typeList = [
+  {
+    // default 버튼
     variant: "contained",
     href: "",
     backgroundColor: "primary",
@@ -15,9 +16,8 @@ const typeList = {
     fontWeight: 500,
     color: "white",
   },
-
-  // 웹캠 테스트 버튼
-  webcamTest: {
+  {
+    // 웹캠 테스트 버튼
     variant: "contained",
     href: "",
     backgroundColor: "secondary",
@@ -29,11 +29,19 @@ const typeList = {
     fontWeight: 700,
     color: "white",
   },
-};
+];
 
 export default function LargeButton({ text, type }) {
-  const selectedType = type ? typeList.type : typeList.default;
-  // console.log("rendering test");
+  console.log({ type });
+
+  let selectedType = typeList[0];
+  for (let i = 0; i < typeNameList.length; i++) {
+    if (typeNameList[i] === type) {
+      selectedType = typeList[i];
+    }
+  }
+  console.log(selectedType);
+
   return (
     <Button
       variant={selectedType.variant}
