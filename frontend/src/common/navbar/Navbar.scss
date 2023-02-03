@@ -1,0 +1,16 @@
+$blue: #6488e5;
+$navy: #22254c;
+$borderRadiusSize: 20px;
+$animationTime: 2s;
+
+.navBar {
+  background-color: $blue;
+  position: absolute;
+  top: 0;
+  left: 1000;
+  width: 100%;
+  z-index: -100;
+  border-radius: 0 0 $borderRadiusSize $borderRadiusSize;
+  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: all $animationTime;
+}
