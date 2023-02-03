@@ -708,11 +708,6 @@ class VideoRoomComponent extends Component {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + "/api/game/session",
-        // {
-        // statusCode: 200,
-        // headers: {
-        //   "Access-Control-Allow-Origin": "*", 
-        //   "Access-Control-Allow-Credentials": true}},
            {
             id: sessionId, // {id :user pk}
           }
