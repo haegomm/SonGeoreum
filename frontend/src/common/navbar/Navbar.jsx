@@ -1,5 +1,10 @@
 import * as React from "react";
-import { BrowserRouter as Route, Outlet, Link, NavLink } from "react-router-dom";
+import {
+  BrowserRouter as Route,
+  Outlet,
+  Link,
+  NavLink,
+} from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,12 +18,41 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import "./Navbar.scss";
 
-export default function Navbar(props) {
-  const { size } = props;
-  const pages = [{name: "학습하기", path:"/study"},
-                  {name: "게임하기", path:'/game'},
-                  {name: "알아보기", path:'/culture'}]; // 페이지
+export default function Navbar() {
+  const pages = [
+    { name: "학습하기", path: "/study" },
+    { name: "게임하기", path: "/game" },
+    { name: "알아보기", path: "/culture" },
+  ]; // 페이지
   const [auth, setAuth] = React.useState(true); // 로그인 유무
+  const [isShort, setShort] = React.useState(true); // navBar 사이즈 조절
+
+  const handleChange = (event) => {
+    setAuth(event.target.checked);
+  };
+
+  const sizeChange = () => {
+    setShort(!isShort);
+  };
+
+  const sizeLong = () => {
+    setShort(false);
+  };
+
+  const sizeShort = () => {
+    setShort(true);
+  };
+
+  const size = {
+    short: {
+      navHeight: 80,
+      marginBottom: 60,
+    },
+    long: {
+      navHeight: 520,
+      marginBottom: 140,
+    },
+  };
 
   // customizing
   const sizeList = {
@@ -38,13 +72,12 @@ export default function Navbar(props) {
     iconButtonMargin: 24,
   };
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
   return (
     <div>
-      <div className="navBar" style={{ height: sizeList.navHeight }}></div>
+      <div
+        className="navBar"
+        style={{ height: isShort ? size.short.navHeight : size.long.navHeight }}
+      ></div>
       <Box
         sx={{
           flexGrow: 1,
@@ -62,45 +95,38 @@ export default function Navbar(props) {
           }}
         >
           <Toolbar>
-            <NavLink to="/"
-            // fontSize={sizeList.logo}
-            //     fontWeight={sizeList.logoWeight}
-            //     color="secondary"
-            //     // component="a" // anchor
-            //     // href="/" // 이동하는 링크입니다
-                style={{
-                  paddingLeft: sizeList.logoPaddingLeft,
-                  textDecoration: "none",
-                }}
-            //     sx={{ flexGrow: 1 }}>
+            <Typography
+              fontSize={sizeList.logo}
+              fontWeight={sizeList.logoWeight}
+              color="secondary"
+              component={Link} // anchor
+              to="/" // 이동하는 링크입니다
+              onClick={sizeShort}
+              style={{
+                paddingLeft: sizeList.logoPaddingLeft,
+                textDecoration: "none",
+              }}
+              sx={{ flexGrow: 1 }}
             >
-              <Typography
-                fontSize={sizeList.logo}
-                fontWeight={sizeList.logoWeight}
-                color="secondary"
-                // component="a" // anchor
-                // href="/" // 이동하는 링크입니다
-                style={{
-                  paddingLeft: sizeList.logoPaddingLeft,
-                  textDecoration: "none",
-                }}
-                sx={{ flexGrow: 1 }}
-              >
-                손걸음
-              </Typography>
-            </NavLink>
+              손걸음
+            </Typography>
             {pages.map((page) => (
-              <NavLink to={page.path}>
-                <MenuItem key={page.name}>
-                  <Typography
-                    textAlign="center"
-                    fontSize={sizeList.menu}
-                    fontWeight={sizeList.menuWeight}
-                  >
-                    {page.name}
-                  </Typography>
-                </MenuItem>
-              </NavLink>
+              <MenuItem key={page.name}>
+                <Typography
+                  textAlign="center"
+                  fontSize={sizeList.menu}
+                  fontWeight={sizeList.menuWeight}
+                  component={Link} // anchor
+                  to={page.path} // 이동하는 링크입니다
+                  onClick={sizeLong}
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
+                >
+                  {page.name}
+                </Typography>
+              </MenuItem>
             ))}
             {auth ? (
               <div>
@@ -122,16 +148,20 @@ export default function Navbar(props) {
               </div>
             ) : (
               <MenuItem>
-              <Link to="/login">
-                  <Typography
-                    textAlign="center"
-                    fontSize={sizeList.menu}
-                    fontWeight={sizeList.menuWeight}
-                  >
-                    로그인
-                  </Typography>
-              </Link>
-                </MenuItem>
+                <Typography
+                  textAlign="center"
+                  fontSize={sizeList.menu}
+                  fontWeight={sizeList.menuWeight}
+                  component={Link} // anchor
+                  to={"/login"} // 이동하는 링크입니다
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
+                >
+                  로그인
+                </Typography>
+              </MenuItem>
             )}
           </Toolbar>
         </AppBar>
@@ -145,6 +175,18 @@ export default function Navbar(props) {
               />
             }
             label={auth ? "Logout 상태일 때" : "Login 상태일 때"}
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isShort}
+                onChange={sizeChange}
+                aria-label="login switch"
+              />
+            }
+            label={isShort ? "short 상태일 때" : "long 상태일 때"}
           />
         </FormGroup>
       </Box>
