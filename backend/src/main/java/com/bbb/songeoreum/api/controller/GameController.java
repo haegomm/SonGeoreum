@@ -148,4 +148,27 @@ public class GameController {
 
         return new ResponseEntity<>(message, httpStatus);
     }
+
+    @ApiOperation(value = "개발용 : 정보 조회")
+    @GetMapping("/info")
+    public ResponseEntity<String> getInfo() {
+        HttpStatus httpStatus = null;
+        String message = null;
+
+        try {
+            gameService.getInfo();
+
+            message = SUCCESS;
+
+            httpStatus = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            message = FAIL;
+
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<>(message, httpStatus);
+    }
 }

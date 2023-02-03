@@ -373,4 +373,10 @@ public class GameService {
         }
     }
 
+    public void getInfo() {
+        log.debug("gameRooms : {}", gameRooms.toString());
+        log.debug("standbyRooms count : {}", standbyRooms.size());
+        log.debug("connected players count : {}", standbyRooms.peek().getConnections().size());
+        log.debug("total rooms count : {}", roomCnt);
+    }
 }
