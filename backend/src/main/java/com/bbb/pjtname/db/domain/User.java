@@ -62,7 +62,7 @@ public class User implements Serializable {
     @Column(nullable = false, length = 15)
     private String role;
 
-    // 회원가입
+    // 일반 사용자 회원가입
     @Builder
     public User(InsertUserReq insertUserReq, LocalDateTime createDate, String password) {
         this.userType = insertUserReq.getUserType();
@@ -74,6 +74,24 @@ public class User implements Serializable {
         this.experience = 0;
         this.createdDate = createDate;
         this.role = "ROLE_USER";
+    }
+
+    // 카카오 사용자 회원가입
+    public User(String userType, String email, String kakaoId, String nickname, LocalDateTime createdDate) {
+        this.userType = userType;
+        this.email = email;
+        this.kakaoId = kakaoId;
+        this.nickname = nickname;
+        this.picture = "default.jpg";
+        this.level = 1;
+        this.experience = 0;
+        this.createdDate = createdDate;
+        this.role = "ROLE_USER";
+    }
+
+    // 카카오 사용자 이메일 수정
+    public void updateEmail(String email){
+        this.email = email;
     }
 
     // ***임시 생성자***

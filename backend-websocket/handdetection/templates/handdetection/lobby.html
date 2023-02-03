@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
+
+    <!-- MediaPipe Library for Hand Detection -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
@@ -15,6 +17,7 @@
   </head>
 
   <body>
+    <!-- HTML Codes to Show Output -->
     <div class="container">
       <video class="input_video"></video>
       <canvas class="output_canvas" width="1280px" height="720px"></canvas>
@@ -30,17 +33,17 @@
   /*
     Websocket Connect
   */
-  let url = `ws://localhost:8000/ws/socket-server/`;
+  let url = `ws://localhost:8000/ws/socket-server`;
 
-  const chatSocket = new WebSocket(url);
+  const handSocket = new WebSocket(url);
 
-  chatSocket.onmessage = function (e) {
+  handSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
     console.log("Data from server:", data);
   };
 
   function sendMessage(msg) {
-    chatSocket.send(
+    handSocket.send(
       JSON.stringify({
         message: msg,
       })
@@ -48,7 +51,7 @@
   }
 
   /*
-    Mediapipe - callback, configs
+    MediaPipe Hands Detection - Callback, Configs
   */
 
   function onResults(results) {
@@ -56,19 +59,19 @@
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-    // detect number of hands
+    // Hand Detection
     if (results.multiHandLandmarks.length > 0) {
-      // select one hand
+      // Select One Hand
       let oneHandLandMarks = results.multiHandLandmarks[0];
-      // send data to server for prediction
+      // Send Data to Server for Prediction
       sendMessage(oneHandLandMarks);
 
-      // draw detected hand boundary
+      // (Optional) Draw Boundary of Hand
       if (oneHandLandMarks) {
         drawHandBoundary(oneHandLandMarks, canvasCtx, results.image);
       }
 
-      // draw connections and connectors of landmarks
+      // (Optional) Draw Connections and Connectors of Landmarks
       for (const landmarks of results.multiHandLandmarks) {
         drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 5 });
         drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 1 });
@@ -77,6 +80,7 @@
     canvasCtx.restore();
   }
 
+  // Configs
   const hands = new Hands({
     locateFile: (file) => {
       return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;

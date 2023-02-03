@@ -33,4 +33,14 @@ public class WordController {
         return new ResponseEntity<List<WordRes>>(words, HttpStatus.OK);
     }
 
+    @GetMapping
+    @ApiOperation("모든 단어를 리스트에 담아 응답합니다.")
+    public ResponseEntity<List<WordRes>> findWords() {
+
+        List<WordRes> words = wordService.findAllWords();
+
+        return new ResponseEntity<List<WordRes>>(words, HttpStatus.OK);
+
+    }
+
 }
