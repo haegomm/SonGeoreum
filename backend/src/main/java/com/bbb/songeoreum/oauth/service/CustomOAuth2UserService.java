@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -27,7 +27,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 카카오로부터 받은 userRequest 데이터에 대한 후처리되는 함수
     // 함수 종료시 @AuthenticationPrincipal 어노테이션이 만들어짐.
@@ -91,9 +91,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User updateUser(User user, OAuth2UserInfo userInfo) {
 
+        log.debug("카카오 유저 updateUser 호출 ");
+        String email = userInfo.getEmail();
         // 카카오톡 사용자가 원래 이메일이 등록되어 있지 않았는데 이메일 등록한 경우 이메일 추가 해줌.
-        if (userInfo.getEmail() != null && !user.getEmail().equals(userInfo.getEmail())) {
-            user.updateEmail(userInfo.getEmail());
+        if (email != null && !user.getEmail().equals(email)) {
+            user.updateEmail(email);
         }
 
         return user;

@@ -1,51 +1,52 @@
-//package com.bbb.pjtname.jwt;
-//
-//import com.bbb.pjtname.db.repository.UserRepository;
-//import io.jsonwebtoken.security.Keys;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//
-//import java.security.Key;
-//import java.util.Date;
-//
-//@Slf4j
-//@RequiredArgsConstructor
-//public class AuthTokenProvider {
-//    private final Key key;
-//    private static final String AUTHORITIES_KEY = "role";
-//
-//
-//    private static final UserRepository userRepository;
-//
-//    /**
-//     * 객체 초기화
-//     *
-//     * @param secrete: jwt의 secrete
-//     */
-//    public AuthTokenProvider(String secrete) {
-//        this.key = Keys.hmacShaKeyFor(secrete.getBytes());
-//    }
-//
-//    /*
-//    jwt refresh 토큰 생성
-//     */
-//    public AuthToken createAuthToken(String id, Date expiry) {
-//        return new AuthToken(id, expiry, key);
-//    }
-//
-//    /*
-//    jwt access 토큰 생성
-//     */
-//    public AuthToken createAuthToken(String id, String role, Date expiry) {
-//        return new AuthToken(id, role, expiry, key);
-//    }
-//
-//    public AuthToken convertAuthToken(String token) {
-//        return new AuthToken(token, key);
-//    }
-//
+package com.bbb.songeoreum.jwt;
+
+import com.bbb.songeoreum.db.repository.UserRepository;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+
+import java.security.Key;
+import java.util.Date;
+
+@Slf4j
+@RequiredArgsConstructor
+public class AuthTokenProvider {
+    private final Key key;
+    private static final String AUTHORITIES_KEY = "role";
+
+
+//    private final UserRepository userRepository;
+
+    /**
+     * 객체 초기화
+     *
+     * @param secrete: jwt의 secrete
+     */
+    public AuthTokenProvider(String secrete) {
+        this.key = Keys.hmacShaKeyFor(secrete.getBytes());
+    }
+
+    /*
+    jwt refresh 토큰 생성
+     */
+    public AuthToken createAuthToken(String id, Date expiry) {
+        return new AuthToken(id, expiry, key);
+    }
+
+    /*
+    jwt access 토큰 생성
+     */
+    public AuthToken createAuthToken(String id, String role, Date expiry) {
+        return new AuthToken(id, role, expiry, key);
+    }
+
+    public AuthToken convertAuthToken(String token) {
+        return new AuthToken(token, key);
+    }
+
 //    public Authentication getAuthentication(AuthToken authToken) {
-//        // 토큰 검증
+        // 토큰 검증
 //        if (authToken.validate()) {
 //
 //            // claims 가져오기
@@ -64,5 +65,5 @@
 //            throw new TokenValidFailedException();
 //        }
 //    }
-//
-//}
+
+}
