@@ -377,11 +377,12 @@ public class GameService {
 
             // 대기방 리스트 정리 (종료시킨 방 버리고 작동하는 방을 앞에다 두기)
             checkActiveSessionAndUpdate();
-
+            standbyRooms.poll();
             return 0;
 
         } catch (Exception e) {
             log.error(e.getMessage());
+            standbyRooms.poll();
             return 1;
         }
     }
@@ -421,7 +422,11 @@ public class GameService {
             Session session = (Session) gameRooms.get(id).get("session");
 
             // 세션 종료 후 HashMap에서 제거
-            session.close();
+            try {
+                session.close();
+            } catch (OpenViduHttpException e) {
+                log.error(e.getMessage());
+            }
             gameRooms.remove(id);
         }
 
