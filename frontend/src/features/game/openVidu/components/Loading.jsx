@@ -1,7 +1,10 @@
+import axios from "axios";
 import React, { useEffect, } from "react";
 import { SpinnerCircular } from "spinners-react";
 
-const Loading = () => {
+const Loading = (props) => {
+  console.log(props)
+  const myId = 3 // 나중에 유저pk redux에서 가지고 와야함
   let tipNumber = 0
   const tips = [
     "다같이 정답을 보면서 수어를 따라해 보세요1",
@@ -24,10 +27,27 @@ const Loading = () => {
     }
   },[])
 
+  //base.url을 리덕스에 저장하나요?
+  const roomOut = (props) => {
+    const who = props.myId
+    try {
+          const response = axios.post(
+            "https://i8b106.p.ssafy.io/api/game/session/user",
+               {
+                //  sessionId: sessionId,
+                //  connectionId: connectionId // 
+              }
+      );
+      console.log("누가 나갔니 >>", who)
+      return response.data
+    } catch (err) {
+      console.log("못나가^^ >>", err)
+  }}
+  
   return (
     <div id="LoadingBox">
       <h1>로딩화면 테스트</h1>
-      <button>나가기버튼</button>
+      <button onClick={()=>roomOut(myId)}>나가기버튼</button>
       <div>
           <SpinnerCircular
             size={90}
@@ -43,4 +63,4 @@ const Loading = () => {
   )
 }
 
-export default Loading
+  export default Loading

@@ -38,10 +38,12 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      playGame: false, // 추후 백에서 받아와 변경되는 변수, 게임 플레이 할건지 알려준다.
-      // myId: '해곰', // UserModel에 nickname을 myId용으로 쓰기
-      playlist: [],
-      subToken: undefined,
+      message: "",//
+      sessionId: undefined,//
+      token: "",//
+      playGame: false,//
+      playlist: [],//
+      subToken: undefined,//
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -591,7 +593,10 @@ class VideoRoomComponent extends Component {
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
     if (!this.state.playGame) {
-      return <Loading />;
+      return <Loading
+        sessionId={this.state.sessionId}
+        // connectionId={this.state.localUser.connectionId}
+      />;
     } else {
       return (
         <div className="container" id="container">
@@ -599,6 +604,7 @@ class VideoRoomComponent extends Component {
           <ToolbarComponent
             sessionId={mySessionId}
             user={localUser}
+            // user={this.state.localUser}
             showNotification={this.state.messageReceived}
             camStatusChanged={this.camStatusChanged}
             micStatusChanged={this.micStatusChanged}
@@ -721,11 +727,13 @@ class VideoRoomComponent extends Component {
 
   async createToken(data) {
 
-    const message = data.message;
-    const playGame = data.playGame;
-    const playList = data.playList;
-    const roomId = data.sessionId;
-    const token = data.token;
+    this.state.message = data.message;
+    this.state.playGame = data.playGame;
+    this.state.playList = data.playList;
+    this.state.sessionId = data.sessionId;
+    this.state.token = data.token;
+    
+    const token = data.token
     
     // const tokenData = token.split("=");
     // console.log(tokenData);
