@@ -1,10 +1,7 @@
 package com.bbb.songeoreum.api.response;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
@@ -13,12 +10,11 @@ import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class LoginRes {
 
     //pk
-    @ApiModelProperty(value = "유저의 DB상 PK")
+    @ApiModelProperty(example = "유저의 DB상 PK")
     private Long id;
 
     // 사용자 타입(NORMAL:일반,  KAKAO:카카오톡)
@@ -52,5 +48,27 @@ public class LoginRes {
     // access토큰
     @ApiModelProperty(example = "access토큰")
     private String accessToken;
+
+    @ApiModelProperty(example = "로그인 성공시 success 그렇지 않으면 fail")
+    private String msg;
+
+    @Builder
+    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String refreshToken, String accessToken, String msg) {
+        this.id = id;
+        this.userType = userType;
+        this.email = email;
+        this.nickname = nickname;
+        this.picture = picture;
+        this.level = level;
+        this.experience = experience;
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
+        this.msg = msg;
+    }
+
+    @Builder
+    public LoginRes(String msg) {
+        this.msg = msg;
+    }
 
 }

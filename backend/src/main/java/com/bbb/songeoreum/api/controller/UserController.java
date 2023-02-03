@@ -2,6 +2,7 @@ package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
+import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.db.domain.User;
@@ -81,38 +82,44 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginMember(@Valid @RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
+    public ResponseEntity<LoginRes> loginMember(@Valid @RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
-        Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
+        LoginRes loginRes = null; // 리턴값
 
         try {
             User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
-            if (loginUser != null) {
-                String accessToken = jwtService.createAccessToken("id", loginUser.getId());// key, data
-                String refreshToken = jwtService.createRefreshToken("id", loginUser.getId());// key, data
-                userService.saveRefreshToken(loginUser.getId(), refreshToken);
-                log.debug("로그인 accessToken 정보 : {}", accessToken);
-                log.debug("로그인 refreshToken 정보 : {}", refreshToken);
-                resultMap.put("accessToken", accessToken);
-                resultMap.put("refreshToken", refreshToken);
-                resultMap.put("message", SUCCESS);
-                status = HttpStatus.ACCEPTED;
 
-            } else {
-                resultMap.put("message", FAIL);
-                status = HttpStatus.BAD_REQUEST;
-            }
+            String accessToken = jwtService.createAccessToken("id", loginUser.getId());// accessToken 발급
+            String refreshToken = jwtService.createRefreshToken("id", loginUser.getId());// refreshToken 발급
+            userService.saveRefreshToken(loginUser.getId(), refreshToken);
+            log.debug("로그인 accessToken 정보 : {}", accessToken);
+            log.debug("로그인 refreshToken 정보 : {}", refreshToken);
+
+            loginRes = LoginRes.builder()
+                    .id(loginUser.getId())
+                    .userType(loginUser.getUserType())
+                    .email(loginUser.getEmail())
+                    .nickname(loginUser.getNickname())
+                    .picture(loginUser.getPicture())
+                    .level(loginUser.getLevel())
+                    .experience(loginUser.getExperience())
+                    .refreshToken(loginUser.getRefreshToken())
+                    .accessToken(accessToken)
+                    .msg(SUCCESS)
+                    .build();
+
+            status = HttpStatus.ACCEPTED;
+
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e.getMessage());
-            resultMap.put("message", e.getMessage());
+            loginRes = LoginRes.builder().msg(FAIL).build();
             status = HttpStatus.NOT_FOUND;
         }
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-
+        return new ResponseEntity<LoginRes>(loginRes, status);
     }
 
     //로그아웃
