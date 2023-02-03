@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import actions from '../authActions';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Login(props) {
@@ -49,6 +50,9 @@ function Login(props) {
         <br />
         <button type="submit">로그인하기</button>
       </form>
+      아이디가 없으신가요?
+      <br />
+      <Link to="/signup">가입하기</Link>
     </div>
   )
 }
