@@ -103,8 +103,7 @@ public class UserController {
 
             } else {
                 resultMap.put("message", FAIL);
-                status = HttpStatus.ACCEPTED;
-                // model.addAttribute("msg", "로그인 실패 ID 또는 PW를 확인하세요.");
+                status = HttpStatus.BAD_REQUEST;
             }
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e.getMessage());
