@@ -39,7 +39,7 @@ public class User implements Serializable {
     private String nickname;
 
     // 프로필 사진 URL
-    @Column(length = 200)
+    @Column(length = 1000)
     private String picture;
 
     // refresh토큰

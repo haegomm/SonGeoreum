@@ -96,8 +96,8 @@ public class UserController {
                 userService.saveRefreshToken(loginUser.getId(), refreshToken);
                 log.debug("로그인 accessToken 정보 : {}", accessToken);
                 log.debug("로그인 refreshToken 정보 : {}", refreshToken);
-                resultMap.put("access-token", accessToken);
-                resultMap.put("refresh-token", refreshToken);
+                resultMap.put("accessToken", accessToken);
+                resultMap.put("refreshToken", refreshToken);
                 resultMap.put("message", SUCCESS);
                 status = HttpStatus.ACCEPTED;
 
