@@ -287,6 +287,28 @@ public class GameService {
         }
     }
 
+    public int resetStandby(String id) {
+        // 성공 시 0, 실패 시 1 반환
+        try {
+            Session standbySession = standbyRooms.peek();
+
+            if (!id.equals(standbySession.getSessionId())) {
+                throw new NotFoundException("세션이 일치하지 않습니다");
+            }
+
+            // 해당 session의 connections 연결 모두 해제
+            for (Connection c : standbySession.getConnections()) {
+                standbySession.forceDisconnect(c);
+            }
+
+            return 0;
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return 1;
+        }
+    }
+
     public void increaseRoomBuffer() throws OpenViduJavaClientException, OpenViduHttpException {
         for (int i = 0; i < POOL_ADDITION_NO; i++) {
             Session session = openVidu.createSession();
@@ -350,6 +372,5 @@ public class GameService {
             standbyRooms.add(session);
         }
     }
-
 
 }

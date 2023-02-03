@@ -104,25 +104,25 @@ public class GameController {
 
     // 대기방 초기화
     @ApiOperation(value = "대기방 초기화")
-    @DeleteMapping("/session/{sessionId}")
+    @PutMapping("/session/{sessionId}")
     public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) {
 
         HttpStatus httpStatus = null;
-        ExitRoomRes exitRoomRes = null;
+        ResetStandbyRes resetStandbyRes = null;
 
         int result = gameService.resetStandby(id);
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            exitRoomRes = ExitRoomRes.builder().msg(SUCCESS).build();
+            resetStandbyRes = ResetStandbyRes.builder().msg(SUCCESS).build();
 
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            exitRoomRes = ExitRoomRes.builder().msg(FAIL).build();
+            resetStandbyRes = ResetStandbyRes.builder().msg(FAIL).build();
 
         }
 
-        return new ResponseEntity<>(exitRoomRes, httpStatus);
+        return new ResponseEntity<>(resetStandbyRes, httpStatus);
     }
 
     @ApiOperation(value = "개발용 : 게임 중인 방 모두 초기화")
