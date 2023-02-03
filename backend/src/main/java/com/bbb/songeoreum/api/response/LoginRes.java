@@ -3,11 +3,6 @@ package com.bbb.songeoreum.api.response;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 @Getter
 @NoArgsConstructor
 @ToString
