@@ -50,12 +50,16 @@ public class GameService {
     // 대기방 큐
     private Queue<Session> standbyRooms;
 
+    // 세션 총 갯수
+    private int roomCnt;
+
     // 게임중인 방
     private Map<String, Map<String, Object>> gameRooms;
 
     ////////// 방 생성 관련 상수 변수 //////////
     // 최초 생성 방 갯수 (pool)
     private static final int INITIAL_ROOM_NO = 10;
+
     // 현재 대기방이 최초 방 갯수 대비 특정 비율(REDZONE) 하락했을 경우
     // 대기 pool에 방을 추가해준다
     private static final double POOL_REDZONE_RATIO = 0.5;
@@ -86,6 +90,13 @@ public class GameService {
         // 해시맵은 멀티 스레드 환경을 반영하여 ConcurrentHashMap을 활용
         gameRooms = new ConcurrentHashMap<>();
 
+        // 방 갯수 초기화
+//        roomCnt = INITIAL_ROOM_NO;
+        roomCnt = getTotalSessionCnt();
+    }
+
+    public int getTotalSessionCnt() {
+        return standbyRooms.size() + gameRooms.size();
     }
 
     // 주기적으로 자동적으로 호출됨
@@ -100,6 +111,7 @@ public class GameService {
             log.debug("게임 시작 후 지난 시간(분) : {}", duration.toMinutes());
             if (duration.toMinutes() >= MAX_GAME_TIME_MINUTES) {
                 toStandbyRooms(id, (Session) sessionInfo.get("session"));
+                log.debug("세션 {} gameRooms에서 퇴출", id);
             }
         }
     }
@@ -190,6 +202,7 @@ public class GameService {
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("standbyRooms count : {}", standbyRooms.size());
         log.debug("connected players count : {}", connectedPlayersCnt);
+        log.debug("total rooms count : {}", roomCnt);
 
 
         return enterRoomRes;
@@ -279,6 +292,7 @@ public class GameService {
             Session session = openVidu.createSession();
             standbyRooms.add(session);
         }
+        roomCnt = getTotalSessionCnt();
     }
 
     public void toStandbyRooms(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -289,7 +303,22 @@ public class GameService {
 
         // 빈 세션을 HashMap에서 빼고 큐로 넣기
         gameRooms.remove(id);
-        standbyRooms.add(session);
+
+        // 총 방 갯수가 최초 갯수보다 늘어나 있는 상태라면
+        if (roomCnt > INITIAL_ROOM_NO) {
+            // 세션 종료해주고 대기방 큐에 다시 넣어주지 않는다
+            session.close();
+        } else if (roomCnt == INITIAL_ROOM_NO) {
+            // 총 방 갯수가 최초 갯수와 같거나 적으면 (적을 일은 없음)
+            // 대기방 큐에 해당 세션을 다시 넣어준다
+            standbyRooms.add(session);
+        } else {
+            // 만~약 멀티쓰레드 환경으로 인해 roomCnt가 최초 방 갯수 밑으로 떨어진다면
+            // 세션 새로 만들어서 standbyRooms에 추가, roomCnt++
+            Session newSession = openVidu.createSession();
+            standbyRooms.add(newSession);
+        }
+        roomCnt = getTotalSessionCnt();
     }
 
     public void toGameRooms(String sessionId) {
@@ -321,4 +350,6 @@ public class GameService {
             standbyRooms.add(session);
         }
     }
+
+
 }

@@ -5,6 +5,7 @@ import com.bbb.songeoreum.api.request.UserIdReq;
 import com.bbb.songeoreum.api.response.EnterRoomRes;
 import com.bbb.songeoreum.api.response.ExitRoomRes;
 import com.bbb.songeoreum.api.response.RemoveUserRes;
+import com.bbb.songeoreum.api.response.ResetStandbyRes;
 import com.bbb.songeoreum.api.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -87,6 +88,29 @@ public class GameController {
         ExitRoomRes exitRoomRes = null;
 
         int result = gameService.exitRoom(id);
+
+        if (result == 0) {
+            httpStatus = HttpStatus.OK;
+            exitRoomRes = ExitRoomRes.builder().msg(SUCCESS).build();
+
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            exitRoomRes = ExitRoomRes.builder().msg(FAIL).build();
+
+        }
+
+        return new ResponseEntity<>(exitRoomRes, httpStatus);
+    }
+
+    // 대기방 초기화
+    @ApiOperation(value = "대기방 초기화")
+    @DeleteMapping("/session/{sessionId}")
+    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) {
+
+        HttpStatus httpStatus = null;
+        ExitRoomRes exitRoomRes = null;
+
+        int result = gameService.resetStandby(id);
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
