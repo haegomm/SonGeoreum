@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-(4gn6rb8w2b0-dp8=txs72$)n2$#m)w0$0dfdii=8bgpi-sa7m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'i8b106.p.ssafy.io'
+]
 
 
 # Application definition
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chat',
+    'handdetection',
 ]
 
 ASGI_APPLICATION = 'mywebsite.asgi.application'

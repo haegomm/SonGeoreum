@@ -4,7 +4,7 @@ from channels.generic.websocket import WebsocketConsumer
 from . import knn
 
 
-class ChatConsumer(WebsocketConsumer):
+class HanddetectionConsumer(WebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)

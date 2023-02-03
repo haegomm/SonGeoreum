@@ -16,10 +16,12 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -63,6 +65,8 @@ public class GameService {
     private static final double POOL_ADDITION_RATIO = 0.3;
     private static final int POOL_ADDITION_NO = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO);
     private static final int ROOM_SIZE = 4;
+    private static final int MAX_GAME_TIME_MINUTES = 20;
+    private static final int GC_INTERVAL_MINUTES = 5;
 
     @PostConstruct
     public void initialSetup() throws OpenViduJavaClientException, OpenViduHttpException {
@@ -82,26 +86,26 @@ public class GameService {
         // 해시맵은 멀티 스레드 환경을 반영하여 ConcurrentHashMap을 활용
         gameRooms = new ConcurrentHashMap<>();
 
-        //////////// 유저 더미데이터 ////////////////////
-//        userRepository.save(new User("KAKAO", "a", 1, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "b", 2, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "c", 3, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "d", 4, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "e", 5, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "f", 6, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "g", 7, 1, LocalDateTime.now(), "ROLE"));
-//        userRepository.save(new User("KAKAO", "h", 8, 1, LocalDateTime.now(), "ROLE"));
+    }
 
+    // 주기적으로 자동적으로 호출됨
+    // gameRooms 순회하며 비정상적으로 오래 살아있는 게임방 초기화 작업 (예: 20분이 넘어갔는데 안 끝난 게임)
+    @Scheduled(fixedRate = GC_INTERVAL_MINUTES * 60000)
+    public void garbageCollector() throws OpenViduJavaClientException, OpenViduHttpException {
+        log.debug("Session Garbage Collector 출동");
+        for (String id : gameRooms.keySet()) {
+            Map<String, Object> sessionInfo = gameRooms.get(id);
+            LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
+            Duration duration = Duration.between(startDate, LocalDateTime.now());
+            log.debug("게임 시작 후 지난 시간(분) : {}", duration.toMinutes());
+            if (duration.toMinutes() >= MAX_GAME_TIME_MINUTES) {
+                toStandbyRooms(id, (Session) sessionInfo.get("session"));
+            }
+        }
     }
 
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        // 존재하는 유저인지 확인
-        if (!userRepository.findById(userId).isPresent()) {
-            throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
-        }
-
-        log.debug("HI");
 
         // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
         Session availableSession = standbyRooms.peek();
@@ -114,6 +118,11 @@ public class GameService {
             if (userId.equals(cId)) {
                 throw new DuplicateUserException();
             }
+        }
+
+        // 존재하는 유저인지 확인
+        if (!userRepository.findById(userId).isPresent()) {
+            throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
         }
 
         Connection connection = null;
@@ -141,9 +150,9 @@ public class GameService {
                 .build();
 
         // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
-        connection = availableSession.createConnection(connectionProperties);
-
-        if (connection == null) {
+        try {
+            connection = availableSession.createConnection(connectionProperties);
+        } catch (Exception e) {
             throw new NoConnectionError();
         }
 
@@ -229,17 +238,8 @@ public class GameService {
                 gamelogUserRepository.save(gamelogUser);
             }
 
-            // 해당 세션에 연결된 모든 connection 퇴출
-//            session.close();
-
-            // Plan B : 위에꺼가 session을 아예 삭제해버리면 아래 코드 사용
-            for (Connection c : session.getConnections()) {
-                session.forceDisconnect(c);
-            }
-
-            // 빈 세션을 HashMap에서 빼고 큐로 넣기
-            gameRooms.remove(id);
-            standbyRooms.add(session);
+            // 해당 세션에 연결된 모든 connection 퇴출하고 빈 세션을 gameRooms에서 빼고 standbyRooms로 넣기
+            toStandbyRooms(id, session);
 
             log.debug("gameRooms : {}", gameRooms.toString());
             log.debug("standbyRooms size : {}", standbyRooms.size());
@@ -279,6 +279,17 @@ public class GameService {
             Session session = openVidu.createSession();
             standbyRooms.add(session);
         }
+    }
+
+    public void toStandbyRooms(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
+        // 해당 세션에 연결된 모든 connection 퇴출
+        for (Connection c : session.getConnections()) {
+            session.forceDisconnect(c);
+        }
+
+        // 빈 세션을 HashMap에서 빼고 큐로 넣기
+        gameRooms.remove(id);
+        standbyRooms.add(session);
     }
 
     public void toGameRooms(String sessionId) {
