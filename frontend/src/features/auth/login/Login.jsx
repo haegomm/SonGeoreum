@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import actions from '../authActions';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { saveUserInfo } from '../../../common/api/authInfo';
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -27,13 +28,11 @@ function Login(props) {
     };
 
     dispatch(actions.login(body)).then((response) => {
-      console.log(response)
       if (response.payload.loginSuccess) {
-        console.log('로그인성공!');
+        saveUserInfo(response.payload.user)
         navigate('/');
       } else{
-        console.log(response.payload.message)
-        alert('Error');
+        alert('로그인에 실패했습니다. 다시 시도해주세요');
       }
     });
   };

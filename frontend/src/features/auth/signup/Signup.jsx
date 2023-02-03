@@ -16,13 +16,37 @@ function Signup(props) {
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
+    dispatch(actions.emailCheck(e.currentTarget.value)).then((response) => {
+      console.log('어케된거임?')
+      if (response.payload !== 'success') {
+        setEmailError('이미 가입한 이메일입니다')
+      } else{
+        setEmailError('');
+      }
+    });
   };
+
+  // setEmail(e.currentTarget.value);
+  // try {
+  //   dispatch(actions.emailCheck(e.currentTarget.value)).then((response) => response.data)
+  // } catch (err) {
+  //   setEmailError('이미 가입한 이메일입니다')
+  // }
+  //   if (response.payload === 'success') {
+  //     setEmailError('');
+  //   } else{
+  //     alert('이메일이 뭔가 문제가 있다');
+  //   }
+  // }
+
+
   const onNicknameHandler = (e) => {
     setNickname(e.currentTarget.value)
     authValidation(e.currentTarget.value, 'nickname') ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
@@ -52,7 +76,8 @@ function Signup(props) {
     };
 
     dispatch(actions.signup(body)).then((response) => {
-      if (response.payload.Success) {
+      if (response.payload === 'success') {
+        alert('환영합니다~~~');
         navigate('/login');
       } else{
         alert('가입에 실패하였습니다. 다시 시도해주세요');
@@ -69,6 +94,7 @@ function Signup(props) {
           onSubmit={onSubmitHandler}>
           <label>이메일</label>
           <input type="email" value={Email} onChange={onEmailHandler}/>
+          <span>{emailError}</span>
           <br />
           <span>닉네임</span>
           <input type="text" value={Nickname} onChange={onNicknameHandler} />
