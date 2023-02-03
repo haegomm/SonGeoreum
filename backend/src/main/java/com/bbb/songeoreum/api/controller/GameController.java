@@ -5,6 +5,7 @@ import com.bbb.songeoreum.api.request.UserIdReq;
 import com.bbb.songeoreum.api.response.EnterRoomRes;
 import com.bbb.songeoreum.api.response.ExitRoomRes;
 import com.bbb.songeoreum.api.response.RemoveUserRes;
+import com.bbb.songeoreum.api.response.ResetStandbyRes;
 import com.bbb.songeoreum.api.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -99,6 +100,29 @@ public class GameController {
         }
 
         return new ResponseEntity<>(exitRoomRes, httpStatus);
+    }
+
+    // 대기방 초기화
+    @ApiOperation(value = "대기방 초기화")
+    @PutMapping("/session/{sessionId}")
+    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) {
+
+        HttpStatus httpStatus = null;
+        ResetStandbyRes resetStandbyRes = null;
+
+        int result = gameService.resetStandby(id);
+
+        if (result == 0) {
+            httpStatus = HttpStatus.OK;
+            resetStandbyRes = ResetStandbyRes.builder().msg(SUCCESS).build();
+
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            resetStandbyRes = ResetStandbyRes.builder().msg(FAIL).build();
+
+        }
+
+        return new ResponseEntity<>(resetStandbyRes, httpStatus);
     }
 
     @ApiOperation(value = "개발용 : 게임 중인 방 모두 초기화")
