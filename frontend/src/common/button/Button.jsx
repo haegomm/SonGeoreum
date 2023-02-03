@@ -113,7 +113,7 @@ export default function LargeButton({
   onclick,
   margin,
 }) {
-  console.log({ text, type, backgroundColor, disable, onclick });
+  // console.log({ text, type, backgroundColor, disable, onclick });
   const disabled = disable ? disable : false;
   const onclickMethod = onclick ? onclick : undefined;
   const marginSize = margin ? margin : 16;
@@ -124,7 +124,7 @@ export default function LargeButton({
       selectedType = typeList[i];
     }
   }
-  console.log(selectedType);
+  // console.log(selectedType);
 
   return (
     <Button
