@@ -396,8 +396,11 @@ public class GameService {
 
     public void clearRoom(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
         // 세션 종료
-        session.close();
-
+        try {
+            session.close();
+        } catch (OpenViduHttpException e) {
+            log.error(e.getMessage());
+        }
         // 빈 세션을 HashMap에서 제거
         gameRooms.remove(id);
         calculateMultiplierAndUpdate();
