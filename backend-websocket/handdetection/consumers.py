@@ -20,6 +20,8 @@ class HanddetectionConsumer(WebsocketConsumer):
             'message': 'You are now connected!'
         }))
 
+        print(self.scope['url_route']['kwargs']['category'])
+
     def receive(self, text_data=None):
 
         # get json message
