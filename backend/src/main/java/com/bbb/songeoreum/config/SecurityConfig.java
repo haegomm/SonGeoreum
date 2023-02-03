@@ -1,5 +1,6 @@
 package com.bbb.songeoreum.config;
 
+import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
+    
 
     // Swagger는 spring security 적용에서 제외
     @Bean
@@ -61,15 +63,7 @@ public class SecurityConfig {
 //                .userInfoEndpoint()
 //                .userService(oAuth2UserService)
 //                .and()@Configuration
-//public class JwtConfig {
-//    @Value("${jwt.secret}")
-//    private String secret;
-//
-//    @Bean
-//    public AuthTokenProvider jwtProvider() {
-//        return new AuthTokenProvider(secret);
-//    }
-//}
+
 //                .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
 //                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -82,12 +76,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    // 쿠키 기반 인가 Repository
-//    // 인가 응답을 연계하고 검증할 때 사용
-//    @Bean
-//    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
-//        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
-//    }
+    // 쿠키 기반 인가 Repository
+    // 인가 응답을 연계하고 검증할 때 사용
+    @Bean
+    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
+        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
+    }
 //
 //    // 토큰 필터 설정
 //    @Bean
