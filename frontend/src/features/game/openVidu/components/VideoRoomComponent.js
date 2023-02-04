@@ -18,6 +18,7 @@ const APPLICATION_SERVER_URL =
 class VideoRoomComponent extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
     // let myId = Math.floor(Math.random() * 100) // uesrpk 넣기
@@ -27,6 +28,7 @@ class VideoRoomComponent extends Component {
     let userName = this.props.user
       ? this.props.user
       : "SonGeoreum_User" + Math.floor(Math.random() * 100); // 유저 닉네임받아와서 넣기
+    console.log(this.props.user)
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
@@ -37,11 +39,12 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      myId: 1,
+      myId: 1,//
+      connectionId: undefined,
       message: "",//
       sessionId: undefined,//
       token: "",//
-      playGame: true,//
+      playGame: false,//
       playlist: [],//
       subToken: undefined,// ?
     };
@@ -115,13 +118,13 @@ class VideoRoomComponent extends Component {
   }
 
   async connectToSession() {
+    // this.state.token?
     if (this.props.token !== undefined) {
-      console.log("token received: ", this.props.token);
+      console.log("여기!! token received: ", this.props.token);
       this.connect(this.props.token);
     } else {
       try {
         var token = await this.getToken();
-        console.log(token);
         this.connect(token);
       } catch (error) {
         console.error(
@@ -143,6 +146,7 @@ class VideoRoomComponent extends Component {
   }
 
   connect(token) {
+    console.log("세션 잘 담기는지 확인", this.state.session)
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
@@ -162,34 +166,33 @@ class VideoRoomComponent extends Component {
           "There was an error connecting to the session:",
           error.code,
           error.message
-        );
-      });
-  }
-
-  async connectWebCam() {
-    await this.OV.getUserMedia({
-      audioSource: undefined,
-      videoSource: undefined,
-    });
-    var devices = await this.OV.getDevices();
-    var videoDevices = devices.filter((device) => device.kind === "videoinput");
-
-    let publisher = this.OV.initPublisher(undefined, {
-      audioSource: undefined,
-      videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(),
-      publishVideo: localUser.isVideoActive(),
-      resolution: "640x480",
-      frameRate: 30,
-      insertMode: "APPEND",
-    });
-
-    if (this.state.session.capabilities.publish) {
-      publisher.on("accessAllowed", () => {
-        console.log("토큰값을 확인해보자: ");
-        console.log(this.state.localUser);
-        this.state.session.publish(publisher).then(() => {
-          this.updateSubscribers();
+          );
+        });
+      }
+      
+      async connectWebCam() {
+        await this.OV.getUserMedia({
+          audioSource: undefined,
+          videoSource: undefined,
+        });
+        var devices = await this.OV.getDevices();
+        var videoDevices = devices.filter((device) => device.kind === "videoinput");
+        
+        let publisher = this.OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: videoDevices[0].deviceId,
+          publishAudio: localUser.isAudioActive(),
+          publishVideo: localUser.isVideoActive(),
+          resolution: "640x480",
+          frameRate: 30,
+          insertMode: "APPEND",
+        });
+        
+        if (this.state.session.capabilities.publish) {
+          publisher.on("accessAllowed", () => {
+            console.log("토큰값을 확인해보자: ", this.state.localUser);
+            this.state.session.publish(publisher).then(() => {
+              this.updateSubscribers();
           console.log("subscriber를 업데이트 했어요: ");
           console.log(this.state.subscribers);
 
@@ -198,10 +201,9 @@ class VideoRoomComponent extends Component {
             this.leaveSession();
             return;
           } else {
-            console.log("4명이하입니다. 연결합니다. -> ");
-
-            console.log(this.state.subscribers.length);
-          }
+            // if()
+            console.log("4명이하입니다. 연결합니다. -> ", this.state.subscribers.length);
+          } 
 
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
@@ -253,13 +255,30 @@ class VideoRoomComponent extends Component {
       }
     );
   }
-
-  leaveSession() {
+  
+  async leaveSession() {
+    console.log("나갈래~!~!")
     const mySession = this.state.session;
+    const sessionId = this.state.sessionId
 
     if (mySession) {
       mySession.disconnect();
     }
+    
+    try {
+      const response = await axios.delete(
+        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+            {
+            sessionId: sessionId,
+          }
+        );
+      console.log("나가요~ >> ", response.data.message)
+      return response.data;
+    } catch (err) {
+      console.log("못나감~ >>", err)
+    }
+
+  
 
     // axios({
     //   url: "/leavsession/checkdata",
@@ -286,9 +305,11 @@ class VideoRoomComponent extends Component {
       localUser: undefined,
     });
     if (this.props.leaveSession) {
+      console.log("여기!!!!!!!!!!!!!", this.props.leaveSession)
       this.props.leaveSession();
     }
   }
+
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
@@ -596,7 +617,7 @@ class VideoRoomComponent extends Component {
       return <Loading
         myId={this.state.myId}
         sessionId={this.state.sessionId}
-        connectionId={this.state.session.connection.connectionId}
+        // connectionId={this.state.session.connection.connectionId}
         // connectionId={this.state.localUser.connectionId}
       />;
     } else {
@@ -714,7 +735,6 @@ class VideoRoomComponent extends Component {
   // myId(userPk)보내기
   async createSession(myId) {
     try {
-      console.log(myId)
       const response = await axios.post(
         APPLICATION_SERVER_URL + "/api/game/session",
            {
