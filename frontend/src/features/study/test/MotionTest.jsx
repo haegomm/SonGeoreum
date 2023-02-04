@@ -100,7 +100,7 @@ export default function MotionTest() {
 
       const hands = new Hands({
         locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${file}`;
         },
       });
 
