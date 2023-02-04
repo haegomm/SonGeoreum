@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import actions from '../authActions';
+import authAction from '../../../common/api/authAction';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { saveUserInfo } from '../../../common/api/authInfo';
@@ -27,7 +27,7 @@ function Login(props) {
       password: Password,
     };
 
-    dispatch(actions.login(body)).then((response) => {
+    dispatch(authAction.login(body)).then((response) => {
       if (response.payload.loginSuccess) {
         saveUserInfo(response.payload.user)
         navigate('/');
