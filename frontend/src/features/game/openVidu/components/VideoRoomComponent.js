@@ -20,30 +20,29 @@ class VideoRoomComponent extends Component {
     super(props);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    let myId = 2 // redux에서 가지고 오거나 로컬 스토리지에서 유저pk 받아서 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
-      : "SessionA";
+      : "SonGeoreum";
     let userName = this.props.user
       ? this.props.user
-      : "OpenVidu_User" + Math.floor(Math.random() * 100);
+      : "SonGeoreum_User" + Math.floor(Math.random() * 100); // 유저 닉네임받아와서 넣기
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
-      // mySessionId: sessionName,
-      mySessionId: myId,
+      mySessionId: sessionName,
       myUserName: userName,
       session: undefined,
       localUser: undefined,
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
+      myId: 1, // uesrpk 넣기
       message: "",//
       sessionId: undefined,//
       token: "",//
       playGame: false,//
       playlist: [],//
-      subToken: undefined,//
+      subToken: undefined,// ?
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -726,12 +725,13 @@ class VideoRoomComponent extends Component {
   }
 
   async createToken(data) {
-
-    this.state.message = data.message;
-    this.state.playGame = data.playGame;
-    this.state.playList = data.playList;
-    this.state.sessionId = data.sessionId;
-    this.state.token = data.token;
+    this.setState({
+      message: data.message,
+      playGame: data.playGame,
+      playList: data.playList,
+      sessionId: data.sessionId,
+      token: data.token,
+    })
     
     const token = data.token
     
