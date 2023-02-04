@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 
 import ButtonTest from "../../common/button/ButtonTest";
 import MotionTest from "../study/test/MotionTest";
+import CardTest from "../../common/card/CardTest";
 
 const TestApiCall = async () => {
   try {
@@ -24,6 +25,7 @@ export default function Home() {
           <div>이곳은 홈페이지 입니다.</div>
           {/* <MotionTest>use_script</MotionTest> */}
           <ButtonTest />
+          <CardTest />
         </div>
       </Grid>
     </Grid>
