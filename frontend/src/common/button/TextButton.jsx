@@ -1,5 +1,3 @@
-import Button from "@mui/material/Button";
-import { keyframes } from "@mui/system";
 import "./TextButton.scss";
 
 export default function TextButton({ text, onclick }) {
