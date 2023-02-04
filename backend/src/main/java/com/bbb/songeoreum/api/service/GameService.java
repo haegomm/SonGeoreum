@@ -218,7 +218,7 @@ public class GameService {
         }
 
         connectedPlayersCnt++;
-        log.debug(String.valueOf(connectedPlayersCnt));
+//        log.debug(String.valueOf(connectedPlayersCnt));
 
         // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
@@ -260,11 +260,11 @@ public class GameService {
         // 성공 시 0, 실패 시 1 반환
         try {
             Map<String, Object> sessionInfo = gameRooms.get(id);
-
-            Session session = (Session) sessionInfo.get("session");
-
-
-            if (session == null) {
+            Session session;
+            try {
+                session = (Session) sessionInfo.get("session");
+            } catch (Exception e) {
+                log.error(e.getMessage());
                 throw new NotFoundException("세션을 찾을 수 없습니다.");
             }
 
