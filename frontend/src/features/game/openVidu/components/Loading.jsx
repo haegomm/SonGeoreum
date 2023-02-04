@@ -1,10 +1,17 @@
 import axios from "axios";
 import React, { useEffect, } from "react";
+import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
 
 const Loading = (props) => {
+  
+  const navigate = useNavigate()
+
   console.log(props)
-  const myId = 3 // 나중에 유저pk redux에서 가지고 와야함
+  const myId = props.myId
+  const sessionId = props.sessionId
+  const connectionId = props.connectionId
+  
   let tipNumber = 0
   const tips = [
     "다같이 정답을 보면서 수어를 따라해 보세요1",
@@ -18,8 +25,8 @@ const Loading = (props) => {
     try {
       const changeTips = setInterval(() => {
         tipNumber = (tipNumber + 1) % tips.length
-        console.log(tipNumber)
-        console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다")
+        // console.log(tipNumber)
+        // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다")
       }, 3000)
       return () => clearInterval(changeTips)  
     } catch (err) {
@@ -27,18 +34,19 @@ const Loading = (props) => {
     }
   },[])
 
-  //base.url을 리덕스에 저장하나요?
-  const roomOut = (props) => {
-    const who = props.myId
+  // 대기방 나가기 요청 / leaveSession해줘야 할 듯..?
+  const roomOut = () => {
     try {
           const response = axios.post(
             "https://i8b106.p.ssafy.io/api/game/session/user",
                {
-                //  sessionId: sessionId,
-                //  connectionId: connectionId // 
+                 sessionId: sessionId,
+                 connectionId: connectionId
               }
       );
-      console.log("누가 나갔니 >>", who)
+      console.log("나갈게~ >>", myId)
+      navigate('/')
+      console.log(response)
       return response.data
     } catch (err) {
       console.log("못나가^^ >>", err)
@@ -47,7 +55,7 @@ const Loading = (props) => {
   return (
     <div id="LoadingBox">
       <h1>로딩화면 테스트</h1>
-      <button onClick={()=>roomOut(myId)}>나가기버튼</button>
+      <button onClick={()=>roomOut()}>나가기버튼</button>
       <div>
           <SpinnerCircular
             size={90}

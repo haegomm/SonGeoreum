@@ -17,7 +17,7 @@ export default class ToolbarComponent extends Component {
     super(props);
     this.state = { fullscreen: false };
     this.camStatusChanged = this.camStatusChanged.bind(this);
-    this.micStatusChanged = this.micStatusChanged.bind(this);
+    // this.micStatusChanged = this.micStatusChanged.bind(this);
     this.screenShare = this.screenShare.bind(this);
     this.stopScreenShare = this.stopScreenShare.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
@@ -26,9 +26,9 @@ export default class ToolbarComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
   }
 
-  micStatusChanged() {
-    this.props.micStatusChanged();
-  }
+  // micStatusChanged() {
+  //   this.props.micStatusChanged();
+  // }
 
   camStatusChanged() {
     this.props.camStatusChanged();

@@ -20,6 +20,7 @@ class VideoRoomComponent extends Component {
     super(props);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
+    // let myId = Math.floor(Math.random() * 100) // uesrpk 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SonGeoreum";
@@ -36,11 +37,11 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      myId: 1, // uesrpk 넣기
+      myId: 1,
       message: "",//
       sessionId: undefined,//
       token: "",//
-      playGame: false,//
+      playGame: true,//
       playlist: [],//
       subToken: undefined,// ?
     };
@@ -50,7 +51,7 @@ class VideoRoomComponent extends Component {
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.updateLayout = this.updateLayout.bind(this);
     this.camStatusChanged = this.camStatusChanged.bind(this);
-    this.micStatusChanged = this.micStatusChanged.bind(this);
+    // this.micStatusChanged = this.micStatusChanged.bind(this);
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -104,7 +105,7 @@ class VideoRoomComponent extends Component {
 
     this.setState(
       {
-        session: this.OV.initSession(),
+        session: this.OV.initSession(), // 내가 받아온 sessionId를 넣어야 하는거같음
       },
       async () => {
         this.subscribeToStreamCreated();
@@ -295,12 +296,12 @@ class VideoRoomComponent extends Component {
     this.setState({ localUser: localUser });
   }
 
-  micStatusChanged() {
-    localUser.setAudioActive(!localUser.isAudioActive());
-    localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
-    this.setState({ localUser: localUser });
-  }
+  // micStatusChanged() {
+  //   localUser.setAudioActive(!localUser.isAudioActive());
+  //   localUser.getStreamManager().publishAudio(localUser.isAudioActive());
+  //   this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+  //   this.setState({ localUser: localUser });
+  // }
 
   nicknameChanged(nickname) {
     let localUser = this.state.localUser;
@@ -593,7 +594,9 @@ class VideoRoomComponent extends Component {
     var chatDisplay = { display: "block" };
     if (!this.state.playGame) {
       return <Loading
+        myId={this.state.myId}
         sessionId={this.state.sessionId}
+        connectionId={this.state.session.connection.connectionId}
         // connectionId={this.state.localUser.connectionId}
       />;
     } else {
@@ -606,7 +609,7 @@ class VideoRoomComponent extends Component {
             // user={this.state.localUser}
             showNotification={this.state.messageReceived}
             camStatusChanged={this.camStatusChanged}
-            micStatusChanged={this.micStatusChanged}
+            // micStatusChanged={this.micStatusChanged}
             //   screenShare={this.screenShare}
             //   stopScreenShare={this.stopScreenShare}
             //   toggleFullscreen={this.toggleFullscreen}
@@ -704,17 +707,18 @@ class VideoRoomComponent extends Component {
    * more about the integration of OpenVidu in your application server.
    */
   async getToken() {
-    const sessionId = await this.createSession(this.state.mySessionId)
-    return await this.createToken(sessionId);
+    const sessionData = await this.createSession(this.state.myId)
+    return await this.createToken(sessionData);
   }
 
-  // key보내기
-  async createSession(sessionId) {
+  // myId(userPk)보내기
+  async createSession(myId) {
     try {
+      console.log(myId)
       const response = await axios.post(
         APPLICATION_SERVER_URL + "/api/game/session",
            {
-            id: sessionId, // {id :user pk}
+            id: myId, // {id :user pk}
           }
         );
       console.log("요청성공 >> ", response.data)
@@ -724,23 +728,23 @@ class VideoRoomComponent extends Component {
     }
   }
 
-  async createToken(data) {
+  async createToken(sessionData) {
     this.setState({
-      message: data.message,
-      playGame: data.playGame,
-      playList: data.playList,
-      sessionId: data.sessionId,
-      token: data.token,
+      message: sessionData.message,
+      // playGame: sessionData.playGame,
+      playList: sessionData.playList,
+      sessionId: sessionData.sessionId,
+      token: sessionData.token,
     })
     
-    const token = data.token
+    const token = sessionData.token
     
     // const tokenData = token.split("=");
     // console.log(tokenData);
     // const tokenID = tokenData[tokenData.length - 1];
     // this.state.subToken = tokenID;
-    console.log("토큰이 저장됐습니까? : ");
-    console.log(this.state.subToken);
+    console.log("토큰이 저장됐습니까? : ", this.state.subToken);
+    console.log(this.state.sessionId)
     // console.log(token.searchParams);
     return token; // The token
   }
