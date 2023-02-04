@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import actions from '../authActions';
+import authAction from '../../../common/api/authAction';
 import { useNavigate } from "react-router-dom";
 
 import profileImages from '../../../assets/profile/profileImages';
@@ -16,16 +16,32 @@ function Signup(props) {
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
+    dispatch(authAction.checkEmail(e.currentTarget.value)).then((response) => {
+      if (response.payload !== 'success') {
+        setEmailError('이미 가입한 이메일입니다')
+      } else{
+        setEmailError('');
+      }
+    });
   };
+
   const onNicknameHandler = (e) => {
     setNickname(e.currentTarget.value)
     authValidation(e.currentTarget.value, 'nickname') ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
+    dispatch(authAction.checkNickname(e.currentTarget.value)).then((response) => {
+      if (response.payload !== 'success') {
+        setNicknameError('중복 닉네임이 존재합니다')
+      } else{
+        setNicknameError('');
+      }
+    });
   };
   const onPasswordHandler = (e) => {
     setPassword(e.currentTarget.value);
@@ -33,7 +49,7 @@ function Signup(props) {
   };
   const onConfirmPasswordHandler = (e) => {
     setConfirmPassword(e.currentTarget.value);
-    Password === ConfirmPassword ? setConfirmPasswordError('') : setConfirmPasswordError('비밀번호가 일치하지 않습니다')
+    Password === e.currentTarget.value ? setConfirmPasswordError('') : setConfirmPasswordError('비밀번호가 일치하지 않습니다')
   };
 
   const onImageHandler = (e) => {
@@ -51,8 +67,9 @@ function Signup(props) {
       picture: profileImageUrl
     };
 
-    dispatch(actions.signup(body)).then((response) => {
-      if (response.payload.Success) {
+    dispatch(authActions.signup(body)).then((response) => {
+      if (response.payload === 'success') {
+        alert('환영합니다~~~');
         navigate('/login');
       } else{
         alert('가입에 실패하였습니다. 다시 시도해주세요');
@@ -68,10 +85,11 @@ function Signup(props) {
         <form
           onSubmit={onSubmitHandler}>
           <label>이메일</label>
-          <input type="email" value={Email} onChange={onEmailHandler}/>
+          <input type="email" onBlur={onEmailHandler} />
+          <span>{emailError}</span>
           <br />
           <span>닉네임</span>
-          <input type="text" value={Nickname} onChange={onNicknameHandler} />
+          <input type="text" onBlur={onNicknameHandler} />
           <span>{nicknameError}</span>
           <br />
           <span>비밀번호</span>
