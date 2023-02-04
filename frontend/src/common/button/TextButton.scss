@@ -1,0 +1,31 @@
+$yellow: #f9be7d;
+
+.textButton {
+  margin: 16px;
+  background-color: #ffffff00;
+  color: white;
+  font-size: 64px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+  display: inline-block;
+  width: auto;
+  border: none;
+
+  cursor: pointer;
+
+  transition: all 0.5s;
+}
+
+.textButton:active,
+.textButton:hover,
+.textButton:focus {
+  color: $yellow;
+  transition: all 0.5s;
+  transform: translateY(-7px);
+}
+.textButton:disabled {
+  color: white;
+  opacity: 0.5;
+}
