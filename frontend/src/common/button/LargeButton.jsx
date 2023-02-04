@@ -46,9 +46,9 @@ const typeList = [
   {
     // 3: learnToTest 버튼
     variant: "contained",
-    width: 216,
+    width: "100%",
     height: 64,
-    borderRadius: 10,
+    borderRadius: 20,
     fontSize: 40,
     fontWeight: 500,
     color: "white",
