@@ -105,6 +105,7 @@ class VideoRoomComponent extends Component {
 
   joinSession() {
     this.OV = new OpenVidu();
+    this.OV.enableProdMode()
 
     this.setState(
       {
@@ -195,9 +196,9 @@ class VideoRoomComponent extends Component {
               this.updateSubscribers();
           console.log("subscriber를 업데이트 했어요: ");
           console.log(this.state.subscribers);
-
-          if (this.state.subscribers.length < 3) {
-            console.log("4명이하입니다. 게임이 종료됩니다. -> ", this.state.subscribers.length);
+        
+          if (this.state.subscribers.length > 3) {
+            console.log("4명이상입니다. 입장할 수 없습니다. -> ", this.state.subscribers.length);
             this.leaveSession();
             return;
           }
@@ -263,7 +264,7 @@ class VideoRoomComponent extends Component {
     }
     
     try {
-      const response = await axios.delete(
+      const response = await axios.put(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
       console.log("나가요~ >> ", response.data.message)
@@ -299,7 +300,6 @@ class VideoRoomComponent extends Component {
       localUser: undefined,
     });
     if (this.props.leaveSession) {
-      console.log("여기!!!!!!!!!!!!!", this.props.leaveSession)
       this.props.leaveSession();
     }
   }
