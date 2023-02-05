@@ -67,7 +67,7 @@ function Signup(props) {
       picture: profileImageUrl
     };
 
-    dispatch(authActions.signup(body)).then((response) => {
+    dispatch(authAction.signup(body)).then((response) => {
       if (response.payload === 'success') {
         alert('환영합니다~~~');
         navigate('/login');
