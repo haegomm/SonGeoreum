@@ -1,4 +1,4 @@
-package com.bbb.songeoreum.oauth;
+package com.bbb.songeoreum.oauth.entity;
 
 import com.bbb.songeoreum.db.domain.User;
 import lombok.Data;

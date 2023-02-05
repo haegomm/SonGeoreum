@@ -3,7 +3,7 @@ package com.bbb.songeoreum.oauth.service;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.OAuthProviderMissMatchException;
-import com.bbb.songeoreum.oauth.PrincipalDetails;
+import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
 import com.bbb.songeoreum.oauth.info.KakaoOauth2UserInfo;
 import com.bbb.songeoreum.oauth.info.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;

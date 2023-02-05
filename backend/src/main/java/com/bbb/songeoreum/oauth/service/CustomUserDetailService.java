@@ -3,7 +3,7 @@ package com.bbb.songeoreum.oauth.service;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.UserNotFoundException;
-import com.bbb.songeoreum.oauth.PrincipalDetails;
+import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
