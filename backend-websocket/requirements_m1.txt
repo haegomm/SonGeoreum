@@ -28,7 +28,6 @@ hyperlink==21.0.0
 idna==3.4
 importlib-metadata==6.0.0
 incremental==22.10.0
-keras==2.11.0
 kiwisolver==1.4.4
 libclang==15.0.6.1
 Markdown==3.4.1
@@ -58,7 +57,6 @@ sqlparse==0.4.3
 tensorboard==2.11.0
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.1
-tensorflow==2.11.0
 tensorflow-estimator==2.11.0
 tensorflow-io-gcs-filesystem==0.29.0
 termcolor==2.2.0
