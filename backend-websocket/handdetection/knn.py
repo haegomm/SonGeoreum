@@ -13,7 +13,7 @@ class Knn:
                             11: 'ㅍ', 12: 'ㅎ', 13: "ㄱ"}
         elif category == 'vowel':
             file = np.genfromtxt('knn_dataset_vowel.txt', delimiter=",")
-            self.gesture = {0: 'ㅏ', 1: 'ㅑ', 2: 'ㅓ', 3: 'ㅕ', 4: 'ㅗ', 5: '', 6: 'ㅜ', 7: 'ㅠ', 8: 'ㅡ', 9: 'ㅣ', 10: "ㅐ",
+            self.gesture = {0: 'ㅏ', 1: 'ㅑ', 2: 'ㅓ', 3: 'ㅕ', 4: 'ㅗ', 5: 'ㅛ', 6: 'ㅜ', 7: 'ㅠ', 8: 'ㅡ', 9: 'ㅣ', 10: "ㅐ",
                             11: 'ㅒ', 12: 'ㅔ', 13: "ㅖ"}
         elif category == 'number':
             file = np.genfromtxt('knn_dataset_number.txt', delimiter=",")
