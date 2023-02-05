@@ -58,6 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.debug("kakao가 넘겨준 accessToken : {}", userRequest.getAccessToken().getTokenValue());
         log.debug("providerType : {}", providerType);
 
+        // 카카오 사용자는 최초 로그인 시 닉네임이 guest + 숫자로 지정
         String nickname = "guest" + (userRepository.count() + 1);
 
         log.debug("카카오 사용자 nickname : {}", nickname);
