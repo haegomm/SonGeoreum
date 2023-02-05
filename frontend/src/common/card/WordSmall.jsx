@@ -5,9 +5,7 @@ import StarIcon from "@mui/icons-material/Star";
 export default function WordSmall({ text, star, isLogin }) {
   const isStar = star ? (
     <StarIcon color="yellow" sx={{ fontSize: 28 }} />
-  ) : (
-    <StarIcon color="disabled" sx={{ fontSize: 28 }} />
-  );
+  ) : null;
 
   return (
     <div className="smallWordBox">
