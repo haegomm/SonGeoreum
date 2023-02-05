@@ -15,6 +15,15 @@ $yellow: #f9be7d;
   max-width: 324px;
   height: 180px;
   border: none;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.smallWordBox:active,
+.smallWordBox:hover,
+.smallWordBox:focus {
+  transition: all 0.5s;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-7px);
 }
 
 .smallStarBox {
