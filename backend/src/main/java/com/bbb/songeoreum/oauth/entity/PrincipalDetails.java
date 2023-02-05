@@ -39,12 +39,14 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
                 Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
         );
     }
+
     public static PrincipalDetails create(User user, Map<String, Object> attributes) {
         PrincipalDetails userPrincipal = create(user);
         userPrincipal.setAttributes(attributes);
 
         return userPrincipal;
     }
+
     // 일반 로그인
     public PrincipalDetails(User user) {
         this.user = user;

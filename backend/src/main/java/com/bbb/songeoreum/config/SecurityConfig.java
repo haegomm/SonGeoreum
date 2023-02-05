@@ -24,7 +24,7 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
-//    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    //    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
     private final UserRepository userRepository;
