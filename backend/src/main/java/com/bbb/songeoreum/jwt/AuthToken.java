@@ -19,7 +19,7 @@ public class AuthToken { // JwtUtil
     private static final String AUTHORITIES_KEY = "role";
 
     // refresh token
-    public AuthToken(Long id, Date expiry, Key key) {
+    public AuthToken(String id, Date expiry, Key key) {
         this.key = key;
         this.token = createAuthToken(id, expiry);
     }
@@ -38,14 +38,14 @@ public class AuthToken { // JwtUtil
      * jwt 토큰의 구성 : header+payload+signature
      */
     // jwt refresh token 생성
-    private String createAuthToken(Long id, Date expiry) {
+    private String createAuthToken(String id, Date expiry) {
         return Jwts.builder()
                 // Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
                 .setHeaderParam("type", "JWT")
                 .setHeaderParam("createdDate", System.currentTimeMillis()) // 생성 시간
                 // Payload 설정 : 유효기간(Expiration), 토큰 제목 (Subject), 데이터 (Claim) 등 정보 세팅.
                 .setSubject("refreshToken") // 토큰 제목 설정 ex) accessToken, refreshToken
-                .claim("id", id) // user table PK
+//                .claim("id", id) // user table PK
                 // Signature 설정 : secret key를 활용한 암호화.
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)

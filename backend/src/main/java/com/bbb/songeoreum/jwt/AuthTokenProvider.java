@@ -39,7 +39,7 @@ public class AuthTokenProvider {
     /*
     jwt refresh 토큰 생성
      */
-    public AuthToken createAuthToken(Long id, Date expiry) {
+    public AuthToken createAuthToken(String id, Date expiry) {
         return new AuthToken(id, expiry, key);
     }
 
@@ -66,7 +66,7 @@ public class AuthTokenProvider {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
-            log.debug("claims subject := [{}]", claims.getSubject()); // user table pk 반환
+            log.debug("claims subject := [{}]", claims.getSubject()); // user table pk 반환 아마도..?
             // 시큐리티 인증 객체 가져오기
             PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findByEmail(claims.getSubject()).get());
             return new UsernamePasswordAuthenticationToken(principalDetails, authToken, authorities);

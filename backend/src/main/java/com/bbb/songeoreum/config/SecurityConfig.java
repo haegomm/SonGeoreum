@@ -2,6 +2,9 @@ package com.bbb.songeoreum.config;
 
 import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 //import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.db.repository.UserRepository;
+import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.bbb.songeoreum.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +25,9 @@ public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
 //    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-//    private final AppProperties appProperties;
-//    private final AuthTokenProvider tokenProvider;
+    private final AppProperties appProperties;
+    private final AuthTokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
 
     // Swagger는 spring security 적용에서 제외
@@ -69,6 +73,7 @@ public class SecurityConfig {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
 //                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .and().build();
@@ -89,15 +94,15 @@ public class SecurityConfig {
 
 
     // OAUTH 인증 성공 핸들러
-//    @Bean
-//    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
-//        return new OAuth2AuthenticationSuccessHandler(
-//                tokenProvider,
-//                appProperties,
-////                userRefreshTokenRepository,
-//                oAuth2AuthorizationRequestBasedOnCookieRepository()
-//        );
-//    }
+    @Bean
+    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
+        return new OAuth2AuthenticationSuccessHandler(
+                userRepository,
+                tokenProvider,
+                appProperties,
+                oAuth2AuthorizationRequestBasedOnCookieRepository()
+        );
+    }
 
 //
 //    // 토큰 필터 설정
