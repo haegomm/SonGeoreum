@@ -196,14 +196,11 @@ class VideoRoomComponent extends Component {
           console.log("subscriber를 업데이트 했어요: ");
           console.log(this.state.subscribers);
 
-          if (this.state.subscribers.length > 3) {
-            console.log("4명이상입니다. 연결하지 않습니다.");
+          if (this.state.subscribers.length < 3) {
+            console.log("4명이하입니다. 게임이 종료됩니다. -> ", this.state.subscribers.length);
             this.leaveSession();
             return;
-          } else {
-            // if()
-            console.log("4명이하입니다. 연결합니다. -> ", this.state.subscribers.length);
-          } 
+          }
 
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
