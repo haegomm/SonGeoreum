@@ -4,8 +4,10 @@ import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.OAuthProviderMissMatchException;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
+import com.bbb.songeoreum.oauth.entity.ProviderType;
 import com.bbb.songeoreum.oauth.info.KakaoOauth2UserInfo;
 import com.bbb.songeoreum.oauth.info.OAuth2UserInfo;
+import com.bbb.songeoreum.oauth.info.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -51,40 +53,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User user) {
 
-        String provider = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
+        ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
 
-        log.debug("provider : {}", provider);
+        log.debug("kakao가 넘겨준 accessToken : {}", userRequest.getAccessToken().getTokenValue());
+        log.debug("providerType : {}", providerType);
 
         String nickname = "guest" + (userRepository.count() + 1);
 
         log.debug("카카오 사용자 nickname : {}", nickname);
 
-        OAuth2UserInfo userInfo = new KakaoOauth2UserInfo(user.getAttributes());
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
         User savedUser = userRepository.findByKakaoId(userInfo.getProviderId());
 
         if (savedUser != null) {
             log.debug("카카오로 로그인을 한 적이 있는 user입니다.");
 
-            if (!provider.equals(savedUser.getUserType())) {
+            if (!providerType.toString().equals(savedUser.getUserType())) {
                 log.debug("당신이 가입한 userType : {}", savedUser.getUserType());
                 throw new OAuthProviderMissMatchException(
-                        "Looks like you're signed up with " + provider +
+                        "Looks like you're signed up with " + providerType +
                                 " account. Please use your " + savedUser.getUserType() + " account to login."
                 );
             }
             updateUser(savedUser, userInfo);
         } else {
             log.debug("카카오 로그인 최초입니다.");
-            savedUser = createUser(userInfo, provider, nickname);
+            savedUser = createUser(userInfo, providerType, nickname);
         }
 
         return new PrincipalDetails(savedUser, user.getAttributes());
     }
 
-    private User createUser(OAuth2UserInfo userInfo, String userType, String nickname) {
+    private User createUser(OAuth2UserInfo userInfo, ProviderType providerType, String nickname) {
         LocalDateTime createdDate = LocalDateTime.now();
 
-        User user = new User(userType, userInfo.getEmail(), userInfo.getProviderId(), nickname, createdDate);
+        User user = new User(providerType.toString(), userInfo.getEmail(), userInfo.getProviderId(), nickname, createdDate);
 
         return userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
     }
