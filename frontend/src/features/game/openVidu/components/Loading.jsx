@@ -41,7 +41,7 @@ const Loading = (props) => {
             "https://i8b106.p.ssafy.io/api/game/session/user",
                {
                  sessionId: sessionId,
-                 connectionId: connectionId
+                 connectionId: connectionId // 대기방에서는 커넥션이 안된 상태라서 id 값을 못넘겨줌...
               }
       );
       console.log("나갈게~ >>", myId)

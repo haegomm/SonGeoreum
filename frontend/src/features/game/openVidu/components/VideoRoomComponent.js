@@ -668,9 +668,6 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            {/* <div className="box">timer</div>
-            <div className="box">answer</div>
-            <div className="box">answer video</div> */}
             {localUser !== undefined &&
               localUser.getStreamManager() !== undefined && (
                 <div style={chatDisplay}>
