@@ -8,8 +8,10 @@ spring:
     username: bbb
     password: SonGeoreum
 
+# import application-oauth.yml
   profiles:
     include: oauth
+
   #    url: jdbc:mysql://localhost:3306/bbbtest?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
   #    username: ssafy
   #    password: ssafy
