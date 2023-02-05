@@ -265,9 +265,6 @@ class VideoRoomComponent extends Component {
     try {
       const response = await axios.delete(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
-            {
-            sessionId: sessionId,
-          }
         );
       console.log("나가요~ >> ", response.data.message)
       return response.data;
