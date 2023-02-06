@@ -2,10 +2,14 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
- # import application-oauth.yml
+    url:
+    username:
+    password:
+
+  # import application-oauth.yml
   profiles:
     include: oauth
+
   # JPA
   jpa:
     database: mysql
@@ -34,10 +38,11 @@ logging:
 
 # openVidu Environmental Variables
 OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
-OPENVIDU_SECRET: BBB
+OPENVIDU_SECRET:
 
 # context path
 server:
   servlet:
     context-path: /api
+
 
