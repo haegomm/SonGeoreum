@@ -1,0 +1,43 @@
+$red: #e56372;
+$yellow: #f9be7d;
+$green: #90de8a;
+
+.answerBox {
+  background-color: white;
+  text-decoration: none;
+
+  border-radius: 8px;
+  margin: 16px;
+  width: 40%;
+  max-width: 416px;
+  height: 48px;
+  border: none;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.tag {
+  text-align: center;
+  width: 20%;
+  line-height: 48px;
+  height: 48px;
+  display: inline-block;
+
+  color: white;
+  border-radius: 8px 0px 0px 8px;
+}
+
+.wrong {
+  background-color: $yellow;
+}
+.answer {
+  background-color: $green;
+}
+
+.value {
+  padding-left: 16px;
+  line-height: 48px;
+  display: inline-block;
+}
