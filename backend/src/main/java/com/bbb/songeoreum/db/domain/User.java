@@ -78,26 +78,11 @@ public class User implements Serializable {
     }
 
     // 카카오 사용자 회원가입
-    public User(String userType, String email, String kakaoId, String nickname, LocalDateTime createdDate) {
+    public User(String userType, String kakaoId, String nickname, LocalDateTime createdDate) {
         this.userType = userType;
-        this.email = email;
         this.kakaoId = kakaoId;
         this.nickname = nickname;
         this.picture = "default.jpg";
-        this.level = 1;
-        this.experience = 0;
-        this.createdDate = createdDate;
-        this.role = "ROLE_USER";
-    }
-
-    // 카카오 사용자 회원가입 + 로그인 하여 refresh token 저장
-    public User(String userType, String email, String kakaoId, String nickname, String refreshToken, LocalDateTime createdDate) {
-        this.userType = userType;
-        this.email = email;
-        this.kakaoId = kakaoId;
-        this.nickname = nickname;
-        this.picture = "default.jpg";
-        this.refreshToken = refreshToken;
         this.level = 1;
         this.experience = 0;
         this.createdDate = createdDate;

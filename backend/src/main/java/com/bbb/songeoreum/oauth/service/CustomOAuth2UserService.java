@@ -76,7 +76,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                                 " account. Please use your " + savedUser.getUserType() + " account to login."
                 );
             }
-            updateUser(savedUser, userInfo);
+//            updateUser(savedUser, userInfo);
         } else {
             log.debug("카카오 로그인 최초입니다.");
             savedUser = createUser(userInfo, providerType, nickname);
@@ -88,7 +88,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType, String nickname) {
         LocalDateTime createdDate = LocalDateTime.now();
 
-        User user = new User(providerType.toString(), userInfo.getEmail(), userInfo.getProviderId(), nickname, createdDate);
+        User user = new User(providerType.toString(), userInfo.getProviderId(), nickname, createdDate);
 
         return userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
     }
