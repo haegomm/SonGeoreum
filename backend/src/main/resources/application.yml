@@ -2,7 +2,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-      
+    
+ # import application-oauth.yml
+  profiles:
+    include: oauth
   # JPA
   jpa:
     database: mysql
@@ -38,6 +41,3 @@ server:
   servlet:
     context-path: /api
 
-  # application-oauth.yml
-  profiles:
-    include: oauth

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@ToString
 @Entity
 @Getter // getter 생성
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
@@ -39,7 +40,7 @@ public class User implements Serializable {
     private String nickname;
 
     // 프로필 사진 URL
-    @Column(length = 200)
+    @Column(length = 1000)
     private String picture;
 
     // refresh토큰
@@ -77,9 +78,8 @@ public class User implements Serializable {
     }
 
     // 카카오 사용자 회원가입
-    public User(String userType, String email, String kakaoId, String nickname, LocalDateTime createdDate) {
+    public User(String userType, String kakaoId, String nickname, LocalDateTime createdDate) {
         this.userType = userType;
-        this.email = email;
         this.kakaoId = kakaoId;
         this.nickname = nickname;
         this.picture = "default.jpg";
