@@ -35,12 +35,7 @@ public class UserController {
     private final UserService userService;
 
     private final JwtService jwtService;
-
-    @GetMapping("/login/oauth2/kakao")
-    public void test(@RequestParam("token") String token) {
-        log.debug("access 토큰 넘어옴. {}", token);
-    }
-
+    
 
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
