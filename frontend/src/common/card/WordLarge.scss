@@ -120,3 +120,10 @@ $yellow: #f9be7d;
     object-fit: contain;
   }
 }
+
+.handImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
