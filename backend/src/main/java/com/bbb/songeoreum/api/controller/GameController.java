@@ -7,6 +7,8 @@ import com.bbb.songeoreum.api.response.ExitRoomRes;
 import com.bbb.songeoreum.api.response.RemoveUserRes;
 import com.bbb.songeoreum.api.response.ResetStandbyRes;
 import com.bbb.songeoreum.api.service.GameService;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -105,7 +107,7 @@ public class GameController {
     // 대기방 초기화
     @ApiOperation(value = "대기방 초기화")
     @PutMapping("/session/{sessionId}")
-    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) {
+    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
         HttpStatus httpStatus = null;
         ResetStandbyRes resetStandbyRes = null;

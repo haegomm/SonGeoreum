@@ -8,7 +8,10 @@ import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.GamelogRepository;
 import com.bbb.songeoreum.db.repository.GamelogUserRepository;
 import com.bbb.songeoreum.db.repository.UserRepository;
-import com.bbb.songeoreum.exception.*;
+import com.bbb.songeoreum.exception.DuplicateUserException;
+import com.bbb.songeoreum.exception.NoConnectionError;
+import com.bbb.songeoreum.exception.NotFoundException;
+import com.bbb.songeoreum.exception.RoomOverflowException;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -316,7 +319,7 @@ public class GameService {
         // 성공 시 0, 실패 시 1 반환
         try {
             String sessionId = gameRemoveUserReq.getSessionId();
-            String connectionId = gameRemoveUserReq.getConnectionId();
+//            String connectionId = gameRemoveUserReq.getConnectionId();
             Session standbySession = standbyRooms.peek();
 
             if (!sessionId.equals(standbySession.getSessionId())) {
@@ -324,46 +327,47 @@ public class GameService {
             }
 
             // 유저가 대기방에 있는지 확인
-            boolean flag = false;
+//            boolean flag = false;
+//
+//            for (Connection c : standbySession.getActiveConnections()) {
+//                if (c.getConnectionId().equals(connectionId)) {
+//                    flag = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!flag) {
+//                throw new UserNotFoundException("해당 유저는 대기방에 없습니다.");
+//            }
 
-            for (Connection c : standbySession.getActiveConnections()) {
-                if (c.getConnectionId().equals(connectionId)) {
-                    flag = true;
-                    break;
-                }
-            }
-
-            if (!flag) {
-                throw new UserNotFoundException("해당 유저는 대기방에 없습니다.");
-            }
-
-            int noOfActiveConnectionsBeforeDisconnect = standbySession.getActiveConnections().size();
+//            int noOfActiveConnectionsBeforeDisconnect = standbySession.getActiveConnections().size();
 
             // 해당 connection의 연결 해제
-            standbySession.forceDisconnect(connectionId);
+//            standbySession.forceDisconnect(connectionId);
 
             int noOfActiveConnectionsAfterDisconnect = standbySession.getActiveConnections().size();
 
             // 유저 퇴출 전 active connections가 1 이상이었고 지금 active connections 가 없을때
             // 어차피 세션 자동으로 닫히니까 버리겠소 (OpenVidu가 마지막 active connection 닫히는 순간 세션 종료시켜 버리기 때문)
-            if (noOfActiveConnectionsBeforeDisconnect > 0 && noOfActiveConnectionsAfterDisconnect == 0) {
+            if (noOfActiveConnectionsAfterDisconnect == 0) {
                 standbyRooms.poll();
             }
 
             return 0;
 
-        } catch (OpenViduHttpException e) {
-            log.error(e.getMessage());
-            // 여기 왔다는 거는 forceDisconnect에서 에러났다는 소리고 세션 닫혔다는 소리니까 버리겠소
-            standbyRooms.poll();
-            return 0;
+//        } catch (OpenViduHttpException e) {
+//            log.error(e.getMessage());
+//            // 여기 왔다는 거는 forceDisconnect에서 에러났다는 소리고 세션 닫혔다는 소리니까 버리겠소
+//            standbyRooms.poll();
+//            return 0;
+
         } catch (Exception e) {
             log.error(e.getMessage());
             return 1;
         }
     }
 
-    public int resetStandby(String id) {
+    public int resetStandby(String id) throws OpenViduJavaClientException, OpenViduHttpException {
         // 성공 시 0, 실패 시 1 반환
         try {
             Session standbySession = standbyRooms.peek();
@@ -377,12 +381,17 @@ public class GameService {
 
             // 대기방 리스트 정리 (종료시킨 방 버리고 작동하는 방을 앞에다 두기)
             checkActiveSessionAndUpdate();
-            standbyRooms.poll();
+//            standbyRooms.poll();
+            return 0;
+
+        } catch (OpenViduHttpException e) {
+            log.error(e.getMessage());
+            checkActiveSessionAndUpdate();
+//            standbyRooms.poll();
             return 0;
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            standbyRooms.poll();
             return 1;
         }
     }
