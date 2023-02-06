@@ -2,7 +2,7 @@
 
 ### 소개
 
-손동작 인식을 위한 비동기 websocket Django 서버입니다.
+손동작 인식을 위한 websocket Django 서버입니다.
 
 사람의 손동작을 인식해 사전에 학습된 모델을 사용해 분류합니다.
 
@@ -46,4 +46,8 @@
 ### 웹소켓 경로
     
     자음
-    ws://localhost:8000/ws/socket-server
+    ws://localhost:8000/ws/socket-server/1
+    모음
+    ws://localhost:8000/ws/socket-server/2
+    숫자
+    ws://localhost:8000/ws/socket-server/3
