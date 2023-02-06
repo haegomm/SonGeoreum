@@ -23,7 +23,7 @@ spring:
 
   # jwt secret key
   jwt:
-    secret: 4f7bef3a1c993e191bc51fd532c309aa3d0c0686657fc832113fc8ff726ce63bc0f190e2fcb7db3a8cd373e3e63c81449f44f08ebe5fed3a0d365443a6ee38eb
+    secret:
 
   # auth : for normal user | oauth2 : for kakao user
   app:
