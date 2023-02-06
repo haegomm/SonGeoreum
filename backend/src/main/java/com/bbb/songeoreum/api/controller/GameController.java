@@ -7,6 +7,8 @@ import com.bbb.songeoreum.api.response.ExitRoomRes;
 import com.bbb.songeoreum.api.response.RemoveUserRes;
 import com.bbb.songeoreum.api.response.ResetStandbyRes;
 import com.bbb.songeoreum.api.service.GameService;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -105,7 +107,7 @@ public class GameController {
     // 대기방 초기화
     @ApiOperation(value = "대기방 초기화")
     @PutMapping("/session/{sessionId}")
-    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) {
+    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
         HttpStatus httpStatus = null;
         ResetStandbyRes resetStandbyRes = null;
@@ -134,6 +136,29 @@ public class GameController {
 
         try {
             gameService.resetRooms();
+
+            message = SUCCESS;
+
+            httpStatus = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            message = FAIL;
+
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<>(message, httpStatus);
+    }
+
+    @ApiOperation(value = "개발용 : 정보 조회")
+    @GetMapping("/info")
+    public ResponseEntity<String> getInfo() {
+        HttpStatus httpStatus = null;
+        String message = null;
+
+        try {
+            gameService.getInfo();
 
             message = SUCCESS;
 
