@@ -322,6 +322,8 @@ public class GameService {
 //            String connectionId = gameRemoveUserReq.getConnectionId();
             Session standbySession = standbyRooms.peek();
 
+            standbySession.fetch();
+
             if (!sessionId.equals(standbySession.getSessionId())) {
                 throw new NotFoundException("세션이 일치하지 않습니다");
             }
@@ -350,7 +352,8 @@ public class GameService {
             // 유저 퇴출 전 active connections가 1 이상이었고 지금 active connections 가 없을때
             // 어차피 세션 자동으로 닫히니까 버리겠소 (OpenVidu가 마지막 active connection 닫히는 순간 세션 종료시켜 버리기 때문)
             if (noOfActiveConnectionsAfterDisconnect == 0) {
-                standbyRooms.poll();
+//                standbyRooms.poll();
+                checkActiveSessionAndUpdate();
             }
 
             return 0;
