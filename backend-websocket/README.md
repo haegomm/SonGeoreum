@@ -46,4 +46,8 @@
 ### 웹소켓 경로
     
     자음
-    ws://localhost:8000/ws/socket-server
+    ws://localhost:8000/ws/socket-server/1
+    모음
+    ws://localhost:8000/ws/socket-server/2
+    숫자
+    ws://localhost:8000/ws/socket-server/3
