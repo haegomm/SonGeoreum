@@ -44,7 +44,7 @@ class VideoRoomComponent extends Component {
       message: "",//
       sessionId: undefined,//
       token: "",//
-      playGame: false,//
+      playGame: true,//
       goGame: false,
       playlist: [],//
       subToken: undefined,// ?
@@ -290,22 +290,26 @@ class VideoRoomComponent extends Component {
   }
   
   async leaveSession() {
-    console.log("나갈래~!~!")
+    console.log("이곳을...떠나겠습니다...")
     const mySession = this.state.session;
     const sessionId = this.state.sessionId
 
-    if (mySession) {
-      mySession.disconnect();
-    }
+    mySession.disconnect();
+
+    // if (mySession) {
+    //   mySession.disconnect();
+    // }
     
-    try {
-      const response = await axios.delete(
-        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
-        );
-      console.log("나가요~ >> ", response.data.message)
-      return response.data;
-    } catch (err) {
-      console.log("못나감~ >>", err)
+    if ((this.state.playGame || this.state.goGame)){
+      try {
+        const response = await axios.delete(
+          APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+          );
+        console.log("나가요~ >> ", response.data.message)
+        return response.data;
+      } catch (err) {
+        console.log("못나감~ >>", err)
+      }
     }
 
   
@@ -348,9 +352,10 @@ class VideoRoomComponent extends Component {
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
       console.log("모두 나가주세요~ >> ", response.data.message)
+      // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
       return response.data;
       } catch (err) {
-        console.log("안나가지는데요~ >>", err)
+        console.log("안나가지는데요.. >>", err)
       }
     }
   }
@@ -651,12 +656,10 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame) {
+    if (!this.state.goGame && !this.state.playGame) {
       return <Loading
         myId={this.state.myId}
         sessionId={this.state.sessionId}
-        // connectionId={this.state.session.connection.connectionId}
-        // connectionId={this.state.localUser.connectionId}
       />;
     } else {
       return (

@@ -1,24 +1,59 @@
 // import Timer from "./Timer"
+import { useState } from "react"
 import AnswerVideo from "./AnswerVideo"
 import ChatComponent from "./chat/ChatComponent"
-import { useState } from "react"
+// import { useState } from "react"
 
 const SideBar = ( props ) => {
 
-    let [gameCnt, setGameCnt] = useState(0)
-    
-    const toNext = () => {
-      setGameCnt(gameCnt += 1)
-      console.log("다음 턴이야 >>", gameCnt)
+    let gameCnt = 0
+    const questionList = [] // api로 받아오기 / random 12문제 // 
+    const [answerWord, setAnswerWord] = useState('')
+    const [answerApi, setAnswerApi] = useState('')
+    const playList = props.playList // props로 받아오기
+    let scoreList = [0, 0, 0, 0]
+    // const [whoGetScore, setWhoGetScore] = useState('')
+    const [showAnswer, setShowAnswer] = useState(false)
+
+    const onShowAnswer = () => {
+      setShowAnswer(!showAnswer)
     }
+
+    const whoGetScore = (who) => {
+      let Idx = playList.indexOf(who)
+      scoreList[Idx] += 1
+    }
+
+    const changeAnswer = () => {
+      setAnswerWord(questionList[gameCnt].name) // 단어 이름
+      setAnswerApi(questionList[gameCnt].api)
+    }
+
+    const toNext = () => {
+        gameCnt ++
+        changeAnswer()
+        onShowAnswer()
+        console.log("다음 턴이야 >>", gameCnt)
+      }
+    
+    // let [gameCnt, setGameCnt] = useState(0)
+    
+    // const toNext = () => {
+    //   setGameCnt(gameCnt += 1)
+    //   console.log("다음 턴이야 >>", gameCnt)
+    // }
     
     return (
         <div>
+          {/* <Timer /> */}
           <AnswerVideo
             className="box"
             myId={props.myId}
-            playList={props.playList}
-            turn={gameCnt % 4}
+            answerWord={answerWord}
+            answerApi={answerApi}
+            presenter={playList[gameCnt % 4]} // gameCnt % 4 정수로 담기나?
+            showAnswer={showAnswer} // 
+            setShowAnswer={setShowAnswer}
             toNext={toNext}
           />
           <ChatComponent
@@ -27,6 +62,7 @@ const SideBar = ( props ) => {
             close={props.close}
             messageReceived={props.messageReceived}
             gameCnt={gameCnt}
+            whoGetScore={whoGetScore}
             toNext={toNext}
           />
             {/* <ChatComponent

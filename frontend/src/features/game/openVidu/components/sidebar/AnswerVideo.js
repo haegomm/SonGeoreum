@@ -18,18 +18,36 @@ const AnswerVideo = (props) => {
         props.toNext()
     }
     
-    // Timer
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimerCount( timerCount => timerCount - 1)
-        }, 1000)
-        if (timerCount === 0) {
-            setShowVideo(!showVideo)
-            handleToNext()
-            clearInterval(timer)
+      startTimer()
+    }, [])
+    
+    // Timer
+    const startTimer = () => {
+        if(!showVideo){
+            const timer = setInterval(() => {
+                setTimerCount( timerCount => timerCount - 1)
+            }, 1000)
+            if (timerCount === 0) {
+                setShowVideo(!showVideo)
+                handleToNext()
+                clearInterval(timer)
+            }
+            return () => clearInterval(timer)
         }
-        return () => clearInterval(timer)
-        }, [timerCount])
+    }
+
+    // useEffect(() => {
+    //     const timer = setInterval(() => {
+    //         setTimerCount( timerCount => timerCount - 1)
+    //     }, 1000)
+    //     if (timerCount === 0) {
+    //         setShowVideo(!showVideo)
+    //         handleToNext()
+    //         clearInterval(timer)
+    //     }
+    //     return () => clearInterval(timer)
+    //     }, [timerCount])
 
     return (
         <div>
