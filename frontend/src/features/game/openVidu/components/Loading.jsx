@@ -3,14 +3,13 @@ import React, { useEffect, } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
 
-const Loading = (loadingOut) => {
+const Loading = (props) => {
   
   const navigate = useNavigate()
 
-  // console.log(props)
-  // const myId = props.myId
-  // const sessionId = props.sessionId
-  // const connectionId = props.connectionId
+  console.log(props)
+  const myId = props.myId
+  const sessionId = props.sessionId
   
   let tipNumber = 0
   const tips = [
@@ -34,33 +33,28 @@ const Loading = (loadingOut) => {
     }
   },[])
   
-  const handleLoadingOut = () => {
-    loadingOut()
-  }
-  
   // 대기방 나가기 요청 / room으로 빼내서 leaveSession해줘야 함
-  // const roomOut = () => {
-  //   try {
-  //         const response = axios.post(
-  //           "https://i8b106.p.ssafy.io/api/game/session/user",
-  //              {
-  //                sessionId: sessionId,
-  //                connectionId: connectionId // 대기방에서는 커넥션이 안된 상태라서 id 값을 못넘겨줌...
-  //             }
-  //     );
-  //     console.log("나갈게~ >>", myId)
-  //     navigate('/')
-  //     console.log(response)
-  //     return response.data
-  //   } catch (err) {
-  //     console.log("못나가^^ >>", err)
-  // }}
+  const roomOut = () => {
+    try {
+          const response = axios.post(
+            "https://i8b106.p.ssafy.io/api/game/session/user",
+               {
+                 sessionId: sessionId,
+              }
+      );
+      console.log("나갈게~ >>", myId)
+      navigate('/')
+      console.log(response)
+      return response.data
+    } catch (err) {
+      console.log("못나가^^ >>", err)
+  }}
 
   
   return (
     <div id="LoadingBox">
       <h1>로딩화면 테스트</h1>
-      <button onClick={()=>handleLoadingOut()}>나가기버튼</button>
+      <button onClick={()=>roomOut()}>나가기버튼</button>
       <div>
           <SpinnerCircular
             size={90}

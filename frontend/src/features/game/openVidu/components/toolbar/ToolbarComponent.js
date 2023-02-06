@@ -3,8 +3,8 @@ import "./ToolbarComponent.css";
 
 import { AppBar } from "@mui/material";
 import { Toolbar } from "@mui/material";
-import Mic from "@mui/icons-material/Mic";
-import MicOff from "@mui/icons-material/MicOff";
+// import Mic from "@mui/icons-material/Mic";
+// import MicOff from "@mui/icons-material/MicOff";
 import Videocam from "@mui/icons-material/Videocam";
 import VideocamOff from "@mui/icons-material/VideocamOff";
 import StopScreenShare from "@mui/icons-material/StopScreenShare";
@@ -82,11 +82,11 @@ export default class ToolbarComponent extends Component {
               id="navMicButton"
               onClick={this.micStatusChanged}
             >
-              {localUser !== undefined && localUser.isAudioActive() ? (
+              {/* {localUser !== undefined && localUser.isAudioActive() ? (
                 <Mic />
               ) : (
                 <MicOff color="secondary" />
-              )}
+              )} */}
             </IconButton>
 
             <IconButton

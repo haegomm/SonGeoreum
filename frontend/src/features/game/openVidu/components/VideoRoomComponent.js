@@ -39,13 +39,13 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      myId: 1,//
+      myId: 3,//
       connectionId: undefined,
       message: "",//
       sessionId: undefined,//
       token: "",//
       playGame: false,//
-      playlist: [],//
+      playlist: [1, 2, 3, 4],//
       subToken: undefined,// ?
     };
 
@@ -54,7 +54,6 @@ class VideoRoomComponent extends Component {
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.updateLayout = this.updateLayout.bind(this);
     this.camStatusChanged = this.camStatusChanged.bind(this);
-    // this.micStatusChanged = this.micStatusChanged.bind(this);
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -197,11 +196,11 @@ class VideoRoomComponent extends Component {
           console.log("subscriber를 업데이트 했어요: ");
           console.log(this.state.subscribers);
         
-          if (this.state.subscribers.length > 3) {
-            console.log("4명이상입니다. 입장할 수 없습니다. -> ", this.state.subscribers.length);
-            this.leaveSession();
-            return;
-          }
+          // if (this.state.subscribers.length > 3) {
+          //   console.log("4명이상입니다. 입장할 수 없습니다. -> ", this.state.subscribers.length);
+          //   this.leaveSession();
+          //   return;
+          // } // 백에서 해주고 있는 듯
 
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
@@ -264,7 +263,7 @@ class VideoRoomComponent extends Component {
     }
     
     try {
-      const response = await axios.put(
+      const response = await axios.delete(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
       console.log("나가요~ >> ", response.data.message)
@@ -310,13 +309,6 @@ class VideoRoomComponent extends Component {
     this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
     this.setState({ localUser: localUser });
   }
-
-  // micStatusChanged() {
-  //   localUser.setAudioActive(!localUser.isAudioActive());
-  //   localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-  //   this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
-  //   this.setState({ localUser: localUser });
-  // }
 
   nicknameChanged(nickname) {
     let localUser = this.state.localUser;
@@ -743,7 +735,7 @@ class VideoRoomComponent extends Component {
     this.setState({
       message: sessionData.message,
       // playGame: sessionData.playGame,
-      playList: sessionData.playList,
+      // playList: sessionData.playList,
       sessionId: sessionData.sessionId,
       token: sessionData.token,
     })
