@@ -17,24 +17,28 @@ function Signup(props) {
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [emailFormError, setEmailFormError] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
+    console.log('중복체크', authValidation(e.currentTarget.value, 'email') === false)
+    console.log('공백체크', Email !== '')
+    authValidation(e.currentTarget.value, 'email') === false && Email !== ''? setEmailFormError('') : setEmailFormError('올바르지 않은 이메일 형식입니다')
     dispatch(authAction.checkEmail(e.currentTarget.value)).then((response) => {
-      if (response.payload !== 'success') {
-        setEmailError('이미 가입한 이메일입니다')
+      if (response.payload === 'success' && Email !== '') {
+        setEmailError('')
       } else{
-        setEmailError('');
+        setEmailError('이미 가입한 이메일입니다');
       }
     });
   };
 
   const onNicknameHandler = (e) => {
     setNickname(e.currentTarget.value)
-    authValidation(e.currentTarget.value, 'nickname') ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
+    authValidation(e.currentTarget.value, 'nickname') && Nickname !== '' ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
     dispatch(authAction.checkNickname(e.currentTarget.value)).then((response) => {
       if (response.payload !== 'success') {
         setNicknameError('중복 닉네임이 존재합니다')
@@ -45,7 +49,7 @@ function Signup(props) {
   };
   const onPasswordHandler = (e) => {
     setPassword(e.currentTarget.value);
-    authValidation(e.currentTarget.value, 'pwd') ? setPasswordError('') : setPasswordError('8자 이상 20자 이하의 문자열을 입력해주세요')
+    authValidation(e.currentTarget.value, 'password') ? setPasswordError('') : setPasswordError('8자 이상 20자 이하의 문자열을 입력해주세요')
   };
   const onConfirmPasswordHandler = (e) => {
     setConfirmPassword(e.currentTarget.value);
@@ -67,7 +71,7 @@ function Signup(props) {
       picture: profileImageUrl
     };
 
-    dispatch(authActions.signup(body)).then((response) => {
+    dispatch(authAction.signup(body)).then((response) => {
       if (response.payload === 'success') {
         alert('환영합니다~~~');
         navigate('/login');
@@ -87,6 +91,7 @@ function Signup(props) {
           <label>이메일</label>
           <input type="email" onBlur={onEmailHandler} />
           <span>{emailError}</span>
+          <span>{emailFormError}</span>
           <br />
           <span>닉네임</span>
           <input type="text" onBlur={onNicknameHandler} />

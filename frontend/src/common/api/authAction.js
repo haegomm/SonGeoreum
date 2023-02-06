@@ -1,5 +1,5 @@
 import {axios} from './https'
-import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, MODIFYPROFILE, CHECKNICKNAME, ENQUIREPROFILE, ISSUEACCESSTOKEN } from '../../features/auth/authTypes';
+import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, MODIFYPROFILE, CHECKNICKNAME, ENQUIREPROFILE, ISSUEACCESSTOKEN, KAKAOLOGIN } from '../../features/auth/authTypes';
 
 function login(data) {
   const request = axios.post('/api/user/login', data).then((response) => response.data)
@@ -46,9 +46,14 @@ function logout(data) {
   }
 }
 
-// function kakakoLogin() {
-//   const request = axios.
-// }
+function kakakoLogin() {
+  const request = axios.get('/api/oauth2/authorization/kakao').then((response) => response.data)
+  .catch((err) => err)
+  return {
+    type: KAKAOLOGIN,
+    payload: request,
+  }
+}
 
 const authAction = { 
   login, 
@@ -56,6 +61,7 @@ const authAction = {
   checkEmail,
   checkNickname,
   logout,
+  kakakoLogin,
 }
 
 export default authAction;
