@@ -11,10 +11,10 @@ function Login(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const KAKAO_API = process.env.REACT_APP_KAKAO_API
+  const KAKAO_API = process.env.REACT_APP_KAKAO_API
   const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID
   const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
-  const KAKAO_REQUEST = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
+  const KAKAO_REQUEST = `${KAKAO_API}/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
 

@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
+import authAction from "../../../common/api/authAction";
 
-const kakaoLogin = (props) => {
+const KakaoLogin = (props) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const href = window.location.href
   let params = new URL(document.URL).searchParams
   let code = params.get("code")
+  console.log(code)
 
   useEffect(
     dispatch(authAction.kakaoLogin(code)).then((response) => {
@@ -20,21 +24,20 @@ const kakaoLogin = (props) => {
       }
     })
   )
-
   return(
     <div>
       <div>
-          <SpinnerCircular
-            size={90}
-            thickness={180}
-            speed={100}
-            color="rgba(57, 82, 172, 1)"
-            secondaryColor="rgba(57, 78, 172, 0.22)"
-          />
-        </div>
+        <SpinnerCircular
+          size={90}
+          thickness={180}
+          speed={100}
+          color="rgba(57, 82, 172, 1)"
+          secondaryColor="rgba(57, 78, 172, 0.22)"
+        />
+      </div>
       카카오 로그인 중...
     </div>
   )
 }  
 
-export default
+export default KakaoLogin;
