@@ -17,6 +17,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import "./Navbar.scss";
+import { getUserInfo } from "../api/authInfo";
+import profileImages from "../../assets/profile/profileImages";
+import Sidebar from "./Sidebar";
+
 
 export default function Navbar() {
   const pages = [
@@ -129,8 +133,14 @@ export default function Navbar() {
               </MenuItem>
             ))}
             {auth ? (
-              <div>
-                {/* 추후 IconButton이 아닌 이미지 버튼으로 수정합니다. */}
+              <div
+              className="profileCircle"
+              // imgUrl={window.localStorage.getItem('picture')}
+              // background= "url({window.localStorage.getItem('picture')}) center 100%;"
+              >
+                <img src={profileImages.profile2} />
+                {/* <img src={getUserInfo.picture} /> */}
+                {/* 추후 IconButton이 아닌 이미지 버튼으로 수정합니다.
                 <IconButton
                   style={{
                     marginLeft: sizeList.iconButtonMargin,
@@ -140,11 +150,11 @@ export default function Navbar() {
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
-                  // onClick={handleMenu} 이부분에는 사이드바를 여는 함수가 들어갑니다
+                  onClick={handleMenu} 이부분에는 사이드바를 여는 함수가 들어갑니다
                   color="inherit"
                 >
                   <AccountCircle />
-                </IconButton>
+                </IconButton> */}
               </div>
             ) : (
               <MenuItem>
@@ -163,6 +173,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             )}
+            <Sidebar />
           </Toolbar>
         </AppBar>
         <FormGroup>
