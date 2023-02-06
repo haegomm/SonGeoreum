@@ -45,7 +45,8 @@ class VideoRoomComponent extends Component {
       sessionId: undefined,//
       token: "",//
       playGame: false,//
-      playlist: [1, 2, 3, 4],//
+      goGame: false,
+      playlist: [],//
       subToken: undefined,// ?
     };
 
@@ -108,7 +109,7 @@ class VideoRoomComponent extends Component {
 
     this.setState(
       {
-        session: this.OV.initSession(), // 내가 받아온 sessionId를 넣어야 하는거같음
+        session: this.OV.initSession(),
       },
       async () => {
         this.subscribeToStreamCreated();
@@ -191,6 +192,7 @@ class VideoRoomComponent extends Component {
         if (this.state.session.capabilities.publish) {
           publisher.on("accessAllowed", () => {
             console.log("토큰값을 확인해보자: ", this.state.localUser);
+            //이때 커넥션 아이디 생김
             this.state.session.publish(publisher).then(() => {
               this.updateSubscribers();
           console.log("subscriber를 업데이트 했어요: ");
@@ -205,7 +207,26 @@ class VideoRoomComponent extends Component {
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
             this.props.joinSession();
-          }
+              }
+
+          // 마지막 사람이 playGame이 true라는 것을 알려주기\
+              if (this.state.goGame === false) {
+                if (this.state.subscribers > 2 && this.state.playGame === true) {
+                  session.signal({
+                    data: {
+                      playGame: this.state.playGame,
+                      playList: this.state.subscribers // 리스트임 여기에 어떻게 publisher를 더해서 넣냐 // 문자열로 보내짐
+                    },
+                    to: [],
+                    type: "play-game"
+                  }).then(() => {
+                console.log("얘들아 게임 시작한다~~!",)
+                  })
+                    .catch(error => {
+                    console.error()
+                  })
+            }
+            }
         });
       });
     }
@@ -375,7 +396,7 @@ class VideoRoomComponent extends Component {
       remoteUsers.forEach((user) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
-          console.log("EVENTO REMOTE: ", event.data);
+          console.log("여기다 여기 EVENTO REMOTE: ", event.data);
           if (data.isAudioActive !== undefined) {
             user.setAudioActive(data.isAudioActive);
           }
@@ -599,7 +620,7 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.playGame) {
+    if (!this.state.goGame) {
       return <Loading
         myId={this.state.myId}
         sessionId={this.state.sessionId}
