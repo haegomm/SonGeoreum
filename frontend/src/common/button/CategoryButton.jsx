@@ -2,12 +2,12 @@ import "./CategoryButton.scss";
 
 export default function CategoryButton({
   text,
-  onclick,
+  index,
+  selectedCategory,
   link,
   color,
   disable,
 }) {
-  const onclickMethod = onclick ? onclick : undefined;
   const disabled = disable ? disable : false;
   let customColor = "#f9be7d";
   if (color === "yellow") customColor = "#f9be7d";
@@ -16,10 +16,15 @@ export default function CategoryButton({
   else if ((color = "red")) customColor = "#e56372";
   else customColor = "gray";
 
+  const onClick = () => {
+    console.log(index);
+    selectedCategory(index);
+  };
+
   return (
     <button
       className="categoryButton"
-      onClick={onclickMethod}
+      onClick={onClick}
       style={{ backgroundColor: customColor, disabled: disabled }}
     >
       <div className="imageBox">
