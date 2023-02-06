@@ -1,0 +1,35 @@
+$yellow: #f9be7d;
+
+.categoryButton {
+  margin: 16px;
+  color: white;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 40px;
+  width: 256px;
+  height: 232px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.image {
+  width: 200px;
+  height: 104px;
+  object-fit: contain;
+}
+
+.categoryButton:active,
+.categoryButton:hover,
+.categoryButton:focus {
+  transition: all 0.5s;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-7px);
+}
+.categoryButton:disabled {
+  color: white;
+  opacity: 0.5;
+}
