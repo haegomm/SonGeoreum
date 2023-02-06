@@ -1,0 +1,35 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id:
+            client-secret:
+            client-name:
+            authorization-grant-type:
+            redirect-uri:
+            client-authentication-method:
+            scopt:
+              -
+              -
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+  # jwt secret key
+  jwt:
+    secret: 4f7bef3a1c993e191bc51fd532c309aa3d0c0686657fc832113fc8ff726ce63bc0f190e2fcb7db3a8cd373e3e63c81449f44f08ebe5fed3a0d365443a6ee38eb
+
+  # auth : for normal user | oauth2 : for kakao user
+  app:
+    auth:
+      token-secret:
+      token-expiry:
+      refresh-token-expiry:
+    oauth2:
+      authorized-redirect-uris:
