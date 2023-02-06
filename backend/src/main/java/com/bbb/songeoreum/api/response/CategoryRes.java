@@ -18,14 +18,14 @@ public class CategoryRes {
     @ApiModelProperty(example = "Category Name")
     private String name;
 
-    @ApiModelProperty(example = "테스트 가능 여부 Y/N")
-    private Character isTestable;
+    @ApiModelProperty(example = "테스트 가능 여부 true/false")
+    private String isTestable;
 
     // Entity to Dto
     @Builder
     public CategoryRes(Category category) {
         this.id = category.getId();
         this.name = category.getName();
-        this.isTestable = category.getIsTestable();
+        this.isTestable = (category.getIsTestable() == 'T') ? "true" : "false";
     }
 }
