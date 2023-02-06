@@ -2,8 +2,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
- # import application-oauth.yml
+    url: jdbc:mysql://bbb-db.csj8ty7cbmhi.ap-northeast-2.rds.amazonaws.com:3306/bbbdata
+    username:
+    password:
+
+  # import application-oauth.yml
   profiles:
     include: oauth
   # JPA
@@ -34,7 +37,7 @@ logging:
 
 # openVidu Environmental Variables
 OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
-OPENVIDU_SECRET: BBB
+OPENVIDU_SECRET:
 
 # context path
 server:
