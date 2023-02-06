@@ -2,13 +2,14 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://bbb-db.csj8ty7cbmhi.ap-northeast-2.rds.amazonaws.com:3306/bbbdata
-    username:
-    password:
+    #    url:
+    #    username:
+    #    password:
 
-  # import application-oauth.yml
-  profiles:
-    include: oauth
+    # import application-oauth.yml
+    #  profiles:
+    #    include: oauth
+
   # JPA
   jpa:
     database: mysql
@@ -37,10 +38,20 @@ logging:
 
 # openVidu Environmental Variables
 OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
-OPENVIDU_SECRET:
+#OPENVIDU_SECRET:
 
 # context path
 server:
   servlet:
     context-path: /api
 
+  # OAuth - Kakao Login
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
