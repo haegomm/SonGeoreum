@@ -49,6 +49,7 @@ class VideoRoomComponent extends Component {
       playlist: [],//
       subToken: undefined,// ?
     };
+    let timer
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
@@ -90,12 +91,15 @@ class VideoRoomComponent extends Component {
     console.log("join 하기 전 DidMount");
 
     this.joinSession();
+
+    this.timer = setTimeout(() => this.byeBye(), 10000) // 10분의 대기시간 후 나가세요 호출
   }
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
+    clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
 
@@ -338,17 +342,19 @@ class VideoRoomComponent extends Component {
   // 대기가 길어질 경우, 모두 나가주세요~!
   async byeBye() {
     const sessionId = this.state.sessionId
-    try {
+    if(this.state.subscribers < 3){
+      try {
       const response = await axios.put(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
       console.log("모두 나가주세요~ >> ", response.data.message)
       return response.data;
-    } catch (err) {
-      console.log("안나가지는데요~ >>", err)
+      } catch (err) {
+        console.log("안나가지는데요~ >>", err)
+      }
     }
   }
-
+  
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
