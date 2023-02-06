@@ -67,11 +67,11 @@ export default class ChatComponent extends Component {
       const word = item.message;
       const nickname = item.nickname;
       console.log("입력한 단어: " + word);
-      if (word == "정답") {
+      if (word === "정답") {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
         // 여기에 정답 count 함수 호출해서 state 바꾸기
-        this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다.
+        this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다. //setState?
       } else {
         console.log("틀렸습니다.");
       }

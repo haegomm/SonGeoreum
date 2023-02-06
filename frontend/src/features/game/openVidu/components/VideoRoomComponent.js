@@ -209,22 +209,33 @@ class VideoRoomComponent extends Component {
             this.props.joinSession();
               }
 
-          // 마지막 사람이 playGame이 true라는 것을 알려주기\
+          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
               if (this.state.goGame === false) {
                 if (this.state.subscribers > 2 && this.state.playGame === true) {
-                  session.signal({
+                  this.state.localUser.getStreamManager().signal({
                     data: {
                       playGame: this.state.playGame,
-                      playList: this.state.subscribers // 리스트임 여기에 어떻게 publisher를 더해서 넣냐 // 문자열로 보내짐
-                    },
+                      playList: this.state.subscribers // 리스트임 여기에 어떻게 publisher를 더해서 넣냐
+                    }, // 문자열로 보내짐 // json.parse() 해주기
                     to: [],
-                    type: "play-game"
+                    type: 'play-game'
                   }).then(() => {
                 console.log("얘들아 게임 시작한다~~!",)
                   })
                     .catch(error => {
                     console.error()
                   })
+            } else if(this.state.subscribers > 2) {
+              this.state.localUser.getStreamManager().on('signal:play-game', (event) => {
+                console.log("오케이 가보자고")
+                console.log(event.data)
+                console.log(event.from)
+                const data = JSON.parse(event.data);
+                this.setState({
+                  goGame: data.goGame,
+                  playList: data.playList
+                })
+              })
             }
             }
         });
