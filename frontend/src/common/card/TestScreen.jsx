@@ -19,7 +19,6 @@ export default function TestScreen({ link, isLogin }) {
 
   return (
     <div className="testScreen">
-      {isLogin ? <div className="starBox">{isStar}</div> : null}
       <div className="videoBox">
         <video
           src={link}
