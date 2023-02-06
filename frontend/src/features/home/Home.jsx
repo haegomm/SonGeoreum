@@ -8,7 +8,7 @@ import CardTest from "../../common/card/CardTest";
 const TestApiCall = async () => {
   try {
     const response = await axios.get(
-      "https://i8b106.p.ssafy.io/api/categories/"
+      "https://i8b106.p.ssafy.io/api/categories"
     );
     console.log("response >>", response);
   } catch (err) {
@@ -25,7 +25,7 @@ export default function Home() {
           <div>이곳은 홈페이지 입니다.</div>
           {/* <MotionTest>use_script</MotionTest> */}
           <ButtonTest />
-          <CardTest />
+          {/* <CardTest /> */}
         </div>
       </Grid>
     </Grid>
