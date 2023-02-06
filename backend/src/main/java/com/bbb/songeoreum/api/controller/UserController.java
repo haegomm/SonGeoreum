@@ -5,9 +5,13 @@ import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
+import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
+import com.bbb.songeoreum.jwt.AuthToken;
+import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.util.CookieUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +21,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
 
 @Slf4j
 @RestController
@@ -35,7 +43,10 @@ public class UserController {
     private final UserService userService;
 
     private final JwtService jwtService;
-    
+
+    private final AuthTokenProvider tokenProvider;
+    private final AppProperties appProperties;
+
 
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
@@ -82,7 +93,7 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<LoginRes> loginMember(@Valid @RequestBody LoginReq loginReq, HttpSession session) throws NotFoundException {
+    public ResponseEntity<LoginRes> loginUser(@Valid @RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
@@ -92,11 +103,29 @@ public class UserController {
         try {
             User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
 
-            String accessToken = jwtService.createAccessToken("id", loginUser.getId());// accessToken 발급
-            String refreshToken = jwtService.createRefreshToken("id", loginUser.getId());// refreshToken 발급
-            userService.saveRefreshToken(loginUser.getId(), refreshToken);
-            log.debug("로그인 accessToken 정보 : {}", accessToken);
-            log.debug("로그인 refreshToken 정보 : {}", refreshToken);
+            Date now = new Date();
+
+            // access 토큰 발급
+            AuthToken accessToken = tokenProvider.createAuthToken(
+                    loginUser.getId(), // access 토큰에 user pk 저장
+                    "ROLE_USER",
+                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+            );
+
+            // refreshToken 기한
+            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+
+            // refresh 토큰 발급
+            AuthToken refreshToken = tokenProvider.createAuthToken(
+                    appProperties.getAuth().getTokenSecret(),
+                    new Date(now.getTime() + refreshTokenExpiry)
+            );
+
+            log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
+            log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
+
+            // refresh token DB에 저장
+            userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
             loginRes = LoginRes.builder()
                     .id(loginUser.getId())
@@ -107,11 +136,20 @@ public class UserController {
                     .level(loginUser.getLevel())
                     .experience(loginUser.getExperience())
                     .refreshToken(loginUser.getRefreshToken())
-                    .accessToken(accessToken)
+                    .accessToken(accessToken.getToken())
                     .msg(SUCCESS)
                     .build();
 
+            // 쿠키 기한
+            int cookieMaxAge = (int) refreshTokenExpiry / 60;
+
+            // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
+            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            // response에 쿠키 담아줌.
+            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+
             status = HttpStatus.ACCEPTED;
+
 
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e.getMessage());
