@@ -335,6 +335,20 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // 대기가 길어질 경우, 모두 나가주세요~!
+  async byeBye() {
+    const sessionId = this.state.sessionId
+    try {
+      const response = await axios.put(
+        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+        );
+      console.log("모두 나가주세요~ >> ", response.data.message)
+      return response.data;
+    } catch (err) {
+      console.log("안나가지는데요~ >>", err)
+    }
+  }
+
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
