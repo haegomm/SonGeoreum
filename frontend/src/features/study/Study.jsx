@@ -1,16 +1,15 @@
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-import Grid from "@mui/material/Grid";
-import "./Study.scss";
-import ST01_1 from "./learn/ST01_1";
 import WordLarge from "../../common/card/WordLarge";
-
-import { useState, useEffect } from "react";
-import "../../common/button/TextButton.scss";
 import TextButton from "../../common/button/TextButton";
 import CategoryButton from "../../common/button/CategoryButton";
 import MotionTest from "./test/MotionTest";
-import LargeButton from "../../common/button/LargeButton";
+
+import "./Study.scss";
+import "../../common/button/TextButton.scss";
+
+import Grid from "@mui/material/Grid";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 export default function Study() {
