@@ -17,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.bbb.pjtname"))
+                .apis(RequestHandlerSelectors.basePackage("com.bbb.songeoreum"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

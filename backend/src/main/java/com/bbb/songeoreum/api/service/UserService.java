@@ -24,6 +24,7 @@ public class UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     // 이메일 중복 체크
     public void duplicateEmail(String email) {
@@ -34,7 +35,7 @@ public class UserService {
 
     // 닉네임 중복 체크
     public void duplicateNickname(String nickname) {
-        if (userRepository.findByNickname(nickname) != null) {
+        if (userRepository.findByNickname(nickname).isPresent()) {
             throw new DuplicateException("중복된 닉네임입니다.");
         }
 
