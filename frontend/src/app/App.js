@@ -10,6 +10,7 @@ import Navbar from "../common/navbar/Navbar";
 import Home from "../features/home/Home";
 import Login from "../features/auth/login/Login";
 import Signup from "../features/auth/signup/Signup";
+import KakaoLogin from "../features/auth/login/KakaoLogin";
 
 function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
@@ -29,6 +30,7 @@ function App() {
               <Route path="signup" element={<Signup />} />
               <Route path="game" element={<Game />} />
               <Route path="*" element={<Home />} />
+              <Route path="/api/oauth2/code/kakao" element={<KakaoLogin />} />
             </Route>
           </Routes>
         </Router>
