@@ -1,5 +1,5 @@
 # docker container run
-cd /home/ubuntu
+cd /
 docker compose up -d
 
 # delete dangling images
