@@ -4,6 +4,7 @@ import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieR
 //import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.jwt.filter.TokenAuthenticationFilter;
 import com.bbb.songeoreum.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.bbb.songeoreum.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -75,8 +77,10 @@ public class SecurityConfig {
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
-//                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .and().build();
+                .and()
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .and().build();
+                .build();
     }
 
     // password 인코딩 해줌.
@@ -104,11 +108,10 @@ public class SecurityConfig {
         );
     }
 
-//
-//    // 토큰 필터 설정
-//    @Bean
-//    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-//        return new TokenAuthenticationFilter(tokenProvider);
-//    }
+    // 토큰 필터 설정
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter(tokenProvider);
+    }
 
 }
