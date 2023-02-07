@@ -55,6 +55,8 @@ public class AuthTokenProvider {
     }
 
     public Authentication getAuthentication(AuthToken authToken) {
+
+        log.debug("getAuthentication 메서드로 들어왔당");
 //         토큰 검증
         if (authToken.validate()) {
 
@@ -67,9 +69,11 @@ public class AuthTokenProvider {
                             .collect(Collectors.toList());
 
             log.debug("claims subject := [{}]", claims.getSubject()); // user table pk 반환 아마도..?
+            log.debug("claims에 들어있는 user pk 값이길 바라는 값 : {}", (Long) claims.get("id"));
             // 시큐리티 인증 객체 가져오기
-            PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findByEmail(claims.getSubject()).get());
+            PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findById((Long) claims.get("id")).get());
             return new UsernamePasswordAuthenticationToken(principalDetails, authToken, authorities);
+            //
         } else {
             throw new TokenValidFailedException();
         }

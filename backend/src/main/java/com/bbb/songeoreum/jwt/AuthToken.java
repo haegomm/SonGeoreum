@@ -69,7 +69,7 @@ public class AuthToken { // JwtUtil
     }
 
     public boolean validate() {
-        log.debug("validate");
+        log.debug("validate() 호출됨.");
         return this.getTokenClaims() != null;
     }
 
