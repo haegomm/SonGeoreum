@@ -7,7 +7,7 @@ npm run build
 
 # backend build
 cd /var/jenkins_home/workspace/bbb-pipeline/backend
-gradle clean build +x test
+gradle clean build -x test
 
 # docker container build
 cd /var/jenkins_home/workspace/bbb-pipeline/
