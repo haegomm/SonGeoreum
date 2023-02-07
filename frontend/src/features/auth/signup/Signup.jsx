@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import authAction from '../../../common/api/authAction';
 import { useNavigate } from "react-router-dom";
 
+import authAction from '../../../common/api/authAction';
 import profileImages from '../../../assets/profile/profileImages';
 import "./Signup.scss";
 import authValidation from '../authValidation';

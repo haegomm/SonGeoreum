@@ -1,66 +1,60 @@
-import React, {useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import profileImages from "../../assets/profile/profileImages";
-// import styles from "./sidebar.module.css";
+import authAction from "../api/authAction";
+import { deleteUserInfo, getUserInfo } from "../api/authInfo";
+import './Sidebar.scss'
+
+function Sidebar(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const userId = getUserInfo().userId
+  const nickname = getUserInfo().nickname
+  const picture = getUserInfo().picture
+
+  // const []
+
+  const onLogoutHandler = (e) => {
+    e.preventDefault();
 
 
-const Sidebar = ({ width=280, children }) => {
-  const [isOpen, setOpen] = useState(false);
-  const [xPosition, setX] = useState(-width);
-  const side = useRef();
-  
-  // button 클릭 시 토글
-  const toggleMenu = () => {
-    if (xPosition < 0) {
-      setX(0);
-      setOpen(true);
-    } else {
-      setX(-width);
-      setOpen(false);
-    }
-  };
-  
-  // 사이드바 외부 클릭시 닫히는 함수
-  const handleClose = async e => {
-    let sideArea = side.current;
-    let sideCildren = side.current.contains(e.target);
-    if (isOpen && (!sideArea || !sideCildren)) {
-      await setX(-width); 
-      await setOpen(false);
-    }
+    dispatch(authAction.logout(userId)).then((response) => {
+      console.log('로갓눌럿다')
+      deleteUserInfo()
+      navigate('/');
+      // useEffect(() => {},[Location])
+      // if (response.payload === 'success') {
+      //   alert('로그아웃이 완료되었습니다');
+      //   navigate('/');
+      //   deleteUserInfo()
+      // } else{
+      //   alert('로그아웃에 실패하였습니다. 다시 시도해주세요');
+      // }
+    })
   }
 
-  useEffect(()=> {
-    window.addEventListener('click', handleClose);
-    return () => {
-      window.removeEventListener('click', handleClose);
-    };
-  })
-
-
-  return (
-    <div>
-      <div ref={side} style={{ width: `${width}px`, height: '100%',  transform: `translatex(${-xPosition}px)`}}>
-          <button onClick={() => toggleMenu()}>
-            {isOpen ? 
-            <span>X</span> : <img src={profileImages.profile2} alr="contact open button" />
-            }
-          </button>
-        <div>{children}
-          {/* <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div>
-          <div>하이하이</div> */}
-        </div>
+  return(
+  <div class="container">
+    <div className="shadowDiv"></div>  
+    <div class="sidebarContainer">
+      <div>
+        <img src={picture} alt="profileImage" />
       </div>
+      <div>
+        <span>{nickname}</span>
+        <span>님</span>
+      </div>
+      <ul>
+        <li><p>나의 단어장</p></li>
+        <li><p>프로필 수정</p></li>
+        <li><span onClick={onLogoutHandler} >로그아웃</span></li>
+      </ul>
     </div>
-  );
-};
-
+  </div>
+)
+}
 
 export default Sidebar;

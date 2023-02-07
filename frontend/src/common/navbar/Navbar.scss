@@ -13,6 +13,7 @@ $animationTime: 2s;
   border-radius: 0 0 $borderRadiusSize $borderRadiusSize;
   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   transition: all $animationTime;
+  overflow: hidden;
 }
 
 // .profileCircle {
@@ -24,3 +25,21 @@ $animationTime: 2s;
 //   // background-color: #22254c;
 //   // background: url({window.localStorage.getItem('picture')}) center 100%;
 // }
+
+.showSidebar{
+  width: 320px;
+  height: 500px;
+  position: absolute;
+  // right: 0px;
+  top: 0;
+  transition: 1s;
+  }
+  
+.hideSidebar{
+width: 320px;
+height: 500px;
+position: absolute;
+// right: -320px;
+// 여기 완성 후에 -320px로 변경할 것
+transition: 1s;
+}

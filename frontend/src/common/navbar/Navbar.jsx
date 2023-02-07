@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Route,
   Outlet,
@@ -20,16 +20,21 @@ import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
 import profileImages from "../../assets/profile/profileImages";
 import Sidebar from "./Sidebar";
+import { useIsFocusVisible } from '@mui/material';
+import { isFocusable } from '@testing-library/user-event/dist/utils';
 
 
 export default function Navbar() {
+  const isFocused = useIsFocusVisible
+
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
     { name: "알아보기", path: "/culture" },
   ]; // 페이지
-  const [auth, setAuth] = React.useState(true); // 로그인 유무
-  const [isShort, setShort] = React.useState(true); // navBar 사이즈 조절
+  const [auth, setAuth] = useState(true); // 로그인 유무
+  const [isShort, setShort] = useState(true); // navBar 사이즈 조절
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (event) => {
     setAuth(event.target.checked);
@@ -46,6 +51,10 @@ export default function Navbar() {
   const sizeShort = () => {
     setShort(true);
   };
+
+  const onToggleHandler = () => {
+    setIsOpen(isOpen => !isOpen);
+  }
 
   const size = {
     short: {
@@ -74,8 +83,11 @@ export default function Navbar() {
     menuWeight: 500,
     // iconButton
     iconButtonMargin: 24,
-  };
 
+  };
+  
+  useEffect(() => {
+    return () => {}}, [isFocusable]);
   return (
     <div>
       <div
@@ -132,13 +144,14 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            {auth ? (
+            {getUserInfo().userId ? (
               <div
               className="profileCircle"
+              onClick={onToggleHandler}
               // imgUrl={window.localStorage.getItem('picture')}
               // background= "url({window.localStorage.getItem('picture')}) center 100%;"
               >
-                <img src={profileImages.profile2} />
+                <img src={profileImages.profile2} alt='profileImage' />
                 {/* <img src={getUserInfo.picture} /> */}
                 {/* 추후 IconButton이 아닌 이미지 버튼으로 수정합니다.
                 <IconButton
@@ -173,7 +186,9 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             )}
-            <Sidebar />
+            <div className={isOpen && getUserInfo().userId ? "showSidebar" : "hideSidebar"}>
+              <Sidebar />
+            </div>
           </Toolbar>
         </AppBar>
         <FormGroup>
