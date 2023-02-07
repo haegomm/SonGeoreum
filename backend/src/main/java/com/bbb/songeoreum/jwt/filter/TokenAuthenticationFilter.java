@@ -29,7 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         log.debug("헤더로 넘어온 토큰 : {}", headerToken);
         AuthToken token = tokenProvider.convertAuthToken(headerToken);
 
-        if(token.validate()){
+        if (token.validate()) {
             log.debug("헤더로 넘어온 토큰이 null이 아니네!!!!");
             // Authentication이란 사용자의 아이디, 비번이 일치하는지 확인하는 과정인데 타입도 되는 것 같음.
 

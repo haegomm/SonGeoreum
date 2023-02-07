@@ -1,8 +1,6 @@
 package com.bbb.songeoreum.jwt;
 
-import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
-import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.exception.TokenValidFailedException;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
 import io.jsonwebtoken.Claims;
@@ -32,7 +30,7 @@ public class AuthTokenProvider {
     /**
      * 객체 초기화
      *
-     * @param secret : jwt의 secret
+     * @param secret         : jwt의 secret
      * @param userRepository
      */
     public AuthTokenProvider(String secret, UserRepository userRepository) {
@@ -77,7 +75,7 @@ public class AuthTokenProvider {
             // claims.get("id") => return type : Object
             // 따라서 Long 타입으로 바꿔주기 위해 String으로 변환한 후 Long으로 타입 변환함.
             PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findById(Long.valueOf(String.valueOf(claims.get("id")))).get());
-            log.debug("principalDetails 타입 : {}",principalDetails.getUser().toString());
+            log.debug("principalDetails 타입 : {}", principalDetails.getUser().toString());
             return new UsernamePasswordAuthenticationToken(principalDetails, authToken, authorities);
         } else {
             throw new TokenValidFailedException();

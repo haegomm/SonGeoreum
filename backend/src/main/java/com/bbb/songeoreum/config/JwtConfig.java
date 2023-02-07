@@ -1,6 +1,5 @@
 package com.bbb.songeoreum.config;
 
-import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
