@@ -11,5 +11,5 @@ import lombok.*;
 public class FavoriteToggleRes {
 
     @ApiModelProperty(example = "결과 메시지")
-    private String msg;
+    private String message;
 }
