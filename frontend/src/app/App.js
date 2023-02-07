@@ -11,6 +11,7 @@ import Home from "../features/home/Home";
 import Login from "../features/auth/login/Login";
 import Signup from "../features/auth/signup/Signup";
 import KakaoLogin from "../features/auth/login/KakaoLogin";
+import Result from "../features/game/openVidu/components/result";
 
 function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
@@ -29,6 +30,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
               <Route path="game" element={<Game />} />
+              <Route path="result" element={<Result />} />
               <Route path="*" element={<Home />} />
               <Route path="/api/oauth2/code/kakao" element={<KakaoLogin />} />
             </Route>

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import AnswerVideo from "./AnswerVideo"
 import ChatComponent from "./chat/ChatComponent"
 // import { useState } from "react"
@@ -10,18 +11,23 @@ const SideBar = ( props ) => {
     const questionList = [] // api로 받아오기 / random 12문제 // 
     const [answerWord, setAnswerWord] = useState('')
     const [answerApi, setAnswerApi] = useState('')
-    const playList = props.playList // props로 받아오기
+    const playerList = props.playerList // props로 받아오기
     let scoreList = [0, 0, 0, 0]
     const [showAnswer, setShowAnswer] = useState(false)
   
+  const navigate = useNavigate()
   const handletheEndGame = () => {
     props.theEndGame()
+    navigate('result', {state: {    
+      playerList: playerList,
+      scoreList: scoreList
+    }})
   }
 
-    const changeAnswer = () => {
-      setAnswerWord(questionList[gameCnt].name)
-      setAnswerApi(questionList[gameCnt].api)
-    }  
+  const changeAnswer = () => {
+    setAnswerWord(questionList[gameCnt].name)
+    setAnswerApi(questionList[gameCnt].api)
+  }  
 
   const toNext = () => {
       console.log("다음 문제로 넘어갑니다.")
@@ -42,7 +48,7 @@ const SideBar = ( props ) => {
 
   const whoGetScore = (who) => {
     if (who) {  
-      let Idx = playList.indexOf(who)
+      let Idx = playerList.indexOf(who)
       scoreList[Idx] += 1
       }
       onShowAnswer() // true
@@ -57,7 +63,7 @@ const SideBar = ( props ) => {
             myNicname={myNicname}
             answerWord={answerWord}
             answerApi={answerApi}
-            presenter={playList[gameCnt % 4]}
+            presenter={playerList[gameCnt % 4]}
             showAnswer={showAnswer} // 
             whoGetScore={whoGetScore}
             toNext={toNext}

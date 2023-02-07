@@ -735,7 +735,7 @@ class VideoRoomComponent extends Component {
               )}
           </div>
           </div>
-              )};
+       )};
     }
   
 
