@@ -7,14 +7,14 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    ./jenkins/build/build.sh
+                    ./pipeline/jenkins/build/build.sh
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                sh './jenkins/deploy/deploy.sh'
+                sh './pipeline/jenkins/deploy/deploy.sh'
             }
         }
     }
