@@ -108,6 +108,7 @@ public class UserController {
             // access 토큰 발급
             AuthToken accessToken = tokenProvider.createAuthToken(
                     loginUser.getId(), // access 토큰에 user pk 저장
+                    loginUser.getNickname(),
                     "ROLE_USER",
                     new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
             );

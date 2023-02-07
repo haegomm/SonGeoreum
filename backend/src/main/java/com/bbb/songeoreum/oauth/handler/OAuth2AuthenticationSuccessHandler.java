@@ -97,6 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // access 토큰 설정
         AuthToken accessToken = tokenProvider.createAuthToken(
                 user.getId(), // access 토큰에 user pk 저장
+                user.getNickname(),
                 roleType.getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );

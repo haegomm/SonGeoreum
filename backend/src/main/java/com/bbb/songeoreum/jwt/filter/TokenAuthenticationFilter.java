@@ -25,6 +25,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String headerToken = HeaderUtil.getAccessToken(request);
+        log.debug("헤더야 : {}", request.getAttribute("accessToken"));
         log.debug("헤더로 넘어온 토큰 : {}", headerToken);
         AuthToken token = tokenProvider.convertAuthToken(headerToken);
 

@@ -1,6 +1,8 @@
 package com.bbb.songeoreum.jwt;
 
+import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
+import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.exception.TokenValidFailedException;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
 import io.jsonwebtoken.Claims;
@@ -25,33 +27,35 @@ public class AuthTokenProvider {
     private static final String AUTHORITIES_KEY = "role";
 
     // 보통 private final을 붙여야 하는데 이건 왜 final을 지워야 에러가 안 나는건지 이해가 안 됨.
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * 객체 초기화
      *
-     * @param secret: jwt의 secret
+     * @param secret : jwt의 secret
+     * @param userRepository
      */
-    public AuthTokenProvider(String secret) {
+    public AuthTokenProvider(String secret, UserRepository userRepository) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.userRepository = userRepository;
     }
 
     /*
     jwt refresh 토큰 생성
      */
     public AuthToken createAuthToken(String id, Date expiry) {
-        return new AuthToken(id, expiry, key);
+        return new AuthToken(id, expiry, key, userRepository);
     }
 
     /*
     jwt access 토큰 생성
      */
-    public AuthToken createAuthToken(Long id, String role, Date expiry) {
-        return new AuthToken(id, role, expiry, key);
+    public AuthToken createAuthToken(Long id, String nickname, String role, Date expiry) {
+        return new AuthToken(id, nickname, role, expiry, key, userRepository);
     }
 
     public AuthToken convertAuthToken(String token) {
-        return new AuthToken(token, key);
+        return new AuthToken(token, key, userRepository);
     }
 
     public Authentication getAuthentication(AuthToken authToken) {
@@ -68,12 +72,13 @@ public class AuthTokenProvider {
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
 
-            log.debug("claims subject := [{}]", claims.getSubject()); // user table pk 반환 아마도..?
-            log.debug("claims에 들어있는 user pk 값이길 바라는 값 : {}", (Long) claims.get("id"));
+            log.debug("claims subject := [{}]", claims.getSubject()); // accessToken 이라는 문자열 반환
             // 시큐리티 인증 객체 가져오기
-            PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findById((Long) claims.get("id")).get());
+            // claims.get("id") => return type : Object
+            // 따라서 Long 타입으로 바꿔주기 위해 String으로 변환한 후 Long으로 타입 변환함.
+            PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findById(Long.valueOf(String.valueOf(claims.get("id")))).get());
+            log.debug("principalDetails 타입 : {}",principalDetails.getUser().toString());
             return new UsernamePasswordAuthenticationToken(principalDetails, authToken, authorities);
-            //
         } else {
             throw new TokenValidFailedException();
         }

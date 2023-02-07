@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .httpBasic().disable() // 기본 http 방식 안 씀.
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용 권한 체크
                 .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
-//                .antMatchers("/game/**", "/user/logout/**", "/user/profile/**", "/user/game/**", "/favorites/**").authenticated()
+//                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
 //                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
                 .logout() // 로그아웃을 하면
@@ -78,7 +78,7 @@ public class SecurityConfig {
                 .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
                 .and()
-                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // OAuth2를 이용한 인증이 아닌 username, password를 쓰는 form 기반 인증을 처리하는 필터로 자세한 내용은 노션 지식 공유 참고
 //                .and().build();
                 .build();
     }
