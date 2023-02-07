@@ -1,5 +1,5 @@
 # docker container run
-cd /
+cd /var/jenkins_home/workspace/bbb-pipeline/
 docker compose up -d
 
 # delete dangling images
