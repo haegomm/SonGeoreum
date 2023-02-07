@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import WordLarge from "../../common/card/WordLarge";
+import WordLarge from "./learn/WordLarge";
 import TextButton from "../../common/button/TextButton";
 import CategoryButton from "../../common/button/CategoryButton";
-import MotionTest from "./test/MotionTest";
+import Test from "./test/SelectTestMode";
 
 import "./Study.scss";
 import "../../common/button/TextButton.scss";
@@ -48,7 +48,7 @@ export default function Study() {
   };
 
   const selectModeScreen = mode ? (
-    <div className="ST">
+    <div className="studyBox">
       <div className="modeText">
         <div>{mode}</div>
       </div>
@@ -64,14 +64,14 @@ export default function Study() {
             index={category.id}
             link="https://picsum.photos/70/30"
             color={colors[category.id % 3]}
-            disable={category.isTesttable}
+            disable={category.isTestable}
             selectedCategory={selectedCategory}
           />
         ))}
       </div>
     </div>
   ) : (
-    <div className="ST">
+    <div className="studyBox">
       <div className="guideText">학습모드를 선택해주세요</div>
       <div>
         <TextButton text={"배움모드"} selectedMode={selectedMode} />
@@ -81,16 +81,28 @@ export default function Study() {
   );
 
   const modeScreen =
-    mode === "배움모드" ? (
-      <div className="">
+    mode === "실전모드" && categoryList[categoryNum - 1] ? (
+      <div className="studyBox">
+        <button className="reselectButton" onClick={() => resetCategory()}>
+          <ArrowBackRoundedIcon fontSize="large" />
+        </button>
+        <div className="modeText">
+          <div>{categoryList[categoryNum - 1].name}</div>
+        </div>
+        <div className="guideText">실전 방법을 선택해주세요</div>
+        <div className="studyBox">
+          <Test
+            num={categoryNum}
+            able={categoryList[categoryNum - 1].isTestable}
+          />
+        </div>
+      </div>
+    ) : (
+      <div className="marginTopBox">
         <button className="reselectButton" onClick={() => resetCategory()}>
           <ArrowBackRoundedIcon fontSize="large" />
         </button>
         <WordLarge isLogin={true} categoryNum={categoryNum} />
-      </div>
-    ) : (
-      <div className="ST">
-        <MotionTest />
       </div>
     );
 
@@ -99,9 +111,7 @@ export default function Study() {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={8} sx={{ marginTop: 0 }}>
-        <div className="StudyPage">
-          <div className="studyBox">{modeStart}</div>
-        </div>
+        <div className="StudyPage">{modeStart}</div>
       </Grid>
     </Grid>
   );
