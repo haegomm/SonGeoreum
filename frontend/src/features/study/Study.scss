@@ -2,12 +2,12 @@ $yellow: #f9be7d;
 $blue: #6488e5;
 
 .studyBox {
-  margin-top: 80px;
+  margin-top: 24px;
   margin-bottom: 80px;
 }
 
 .ST {
-  margin-top: 180px;
+  margin-top: 64px;
   text-align: center;
 }
 
@@ -15,14 +15,14 @@ $blue: #6488e5;
   font-size: 40px;
   font-weight: 700;
   color: white;
-  margin: 16px;
+  margin-top: 32px;
 }
 
 .modeText {
   font-size: 64px;
   font-weight: 700;
   color: $yellow;
-  margin: 64px;
+  margin: 32px;
   text-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
 }
 
@@ -58,4 +58,8 @@ $blue: #6488e5;
 .reselectButton:disabled {
   color: white;
   opacity: 0.5;
+}
+
+.categoryList {
+  margin: 64px;
 }

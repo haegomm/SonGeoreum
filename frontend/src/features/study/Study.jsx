@@ -56,7 +56,7 @@ export default function Study() {
       <button className="reselectButton" onClick={() => resetMode()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <div>
+      <div className="categoryList">
         {categoryList.map((category) => (
           <CategoryButton
             key={category.id}
@@ -82,7 +82,7 @@ export default function Study() {
 
   const modeScreen =
     mode === "배움모드" ? (
-      <div className="ST">
+      <div className="">
         <button className="reselectButton" onClick={() => resetCategory()}>
           <ArrowBackRoundedIcon fontSize="large" />
         </button>
@@ -98,7 +98,7 @@ export default function Study() {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={8}>
+      <Grid item xs={8} sx={{ marginTop: 0 }}>
         <div className="StudyPage">
           <div className="studyBox">{modeStart}</div>
         </div>
