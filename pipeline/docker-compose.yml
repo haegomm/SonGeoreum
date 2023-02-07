@@ -4,7 +4,7 @@ services:
     container_name: sgr-back
     image: sgr-backend:0.1
     build:
-      context: ./S08P12B106/backend
+      context: ../backend
     ports:
       - "8080:8080"
     env_file:
@@ -14,7 +14,7 @@ services:
     container_name: sgr-front
     image: sgr-frontend:0.1
     build:
-      context: ./S08P12B106/frontend
+      context: ../frontend
     ports:
       - "3000:80"
 
@@ -22,6 +22,6 @@ services:
     container_name: sgr-dj
     image: sgr-django:0.1
     build:
-      context: ./S08P12B106/backend-websocket
+      context: ../backend-websocket
     ports:
       - "8000:8000"
