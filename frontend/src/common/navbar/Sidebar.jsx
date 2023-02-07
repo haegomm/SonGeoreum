@@ -38,8 +38,6 @@ function Sidebar(props) {
 
   return(
   <div class="container">
-    <div className="shadowDiv"></div>  
-    <div class="sidebarContainer">
       <div>
         <img src={picture} alt="profileImage" />
       </div>
@@ -52,7 +50,7 @@ function Sidebar(props) {
         <li><p>프로필 수정</p></li>
         <li><span onClick={onLogoutHandler} >로그아웃</span></li>
       </ul>
-    </div>
+
   </div>
 )
 }

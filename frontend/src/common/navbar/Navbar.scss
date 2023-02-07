@@ -30,7 +30,7 @@ $animationTime: 2s;
   width: 320px;
   height: 500px;
   position: absolute;
-  // right: 0px;
+  // left: 0px;
   top: 0;
   transition: 1s;
   }
@@ -39,7 +39,7 @@ $animationTime: 2s;
 width: 320px;
 height: 500px;
 position: absolute;
-// right: -320px;
+right: -320px;
 // 여기 완성 후에 -320px로 변경할 것
 transition: 1s;
 }
