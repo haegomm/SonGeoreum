@@ -161,7 +161,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
         <img
           className="handImage"
           src={wordList[wordNumber].contentUrl}
-          referrerpolicy="no-referrer"
+          referrerPolicy="no-referrer"
         />
       );
     if (blockListMode) {
@@ -236,7 +236,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
                     >
                       <ListItemButton
                         selected={wordNumber === word.id - startNumber}
-                        onClick={(event) => handleListItemClick(event, word.id)}
+                        onClick={(event) => handleListItemClick(word.id)}
                       >
                         <ListItemText
                           primary={word.name}
