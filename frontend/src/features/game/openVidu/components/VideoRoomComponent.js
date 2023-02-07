@@ -351,7 +351,8 @@ class VideoRoomComponent extends Component {
       const response = await axios.put(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
-      console.log("모두 나가주세요~ >> ")
+        console.log("모두 나가주세요~ >> ")
+        this.leaveSession()
       // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
       return response.data;
       } catch (err) {
