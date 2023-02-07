@@ -10,5 +10,5 @@ cd /var/jenkins_home/workspace/bbb-pipeline/backend
 gradle clean build -x test
 
 # docker container build
-cd /var/jenkins_home/workspace/bbb-pipeline/
+cd /var/jenkins_home/workspace/bbb-pipeline/pipeline
 docker compose build --no-cache
