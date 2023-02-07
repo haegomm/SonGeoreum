@@ -60,7 +60,7 @@ public class GameController {
 
     // 대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제
     @ApiOperation(value = "대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제")
-    @PutMapping("/session/user")
+    @PostMapping("/session/user")
     public ResponseEntity<RemoveUserRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) {
 
         HttpStatus httpStatus = null;
