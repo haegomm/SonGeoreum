@@ -162,14 +162,14 @@ public class UserController {
 
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
-    @GetMapping("/logout/{email}")
-    public ResponseEntity<Map<String, Object>> logoutUser(@PathVariable("email") String email, HttpSession session) {
+    @GetMapping("/logout/{id}")
+    public ResponseEntity<Map<String, Object>> logoutUser(@PathVariable("id") Long id, HttpSession session) {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
 
         try {
-            userService.deleteRefreshToken(email);
+            userService.deleteRefreshToken(id);
             resultMap.put("message", SUCCESS);
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
@@ -181,19 +181,19 @@ public class UserController {
     }
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
-    @PostMapping("/refresh/{email}")
-    public ResponseEntity<?> refreshToken(@PathVariable("email") String email, HttpServletRequest request)
+    @PostMapping("/refresh/{id}")
+    public ResponseEntity<?> refreshToken(@PathVariable("id") Long id, HttpServletRequest request)
             throws Exception {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         String token = request.getHeader("refresh-token");
 
-        log.debug("token : {}, id : {}", token, email);
+        log.debug("token : {}, id : {}", token, id);
 
         if (jwtService.checkToken(token)) {
-            if (token.equals(userService.getRefreshToken(email).getRefreshToken())) {
-                String accessToken = jwtService.createAccessToken("email", email);
+            if (token.equals(userService.getRefreshToken(id).getRefreshToken())) {
+                String accessToken = jwtService.createAccessToken("email", id);
                 log.debug("utoken : {}", accessToken);
                 log.debug("정상적으로 액세스토큰 재발급!!!");
                 resultMap.put("access-token", accessToken);
