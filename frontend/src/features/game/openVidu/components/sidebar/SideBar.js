@@ -1,4 +1,3 @@
-// import Timer from "./Timer"
 import { useState } from "react"
 import AnswerVideo from "./AnswerVideo"
 import ChatComponent from "./chat/ChatComponent"
@@ -15,17 +14,25 @@ const SideBar = ( props ) => {
     let scoreList = [0, 0, 0, 0]
     const [showAnswer, setShowAnswer] = useState(false)
   
+  const handletheEndGame = () => {
+    props.theEndGame()
+  }
+
     const changeAnswer = () => {
-      setAnswerWord(questionList[gameCnt].name) // 단어 이름
+      setAnswerWord(questionList[gameCnt].name)
       setAnswerApi(questionList[gameCnt].api)
     }  
 
   const toNext = () => {
       console.log("다음 문제로 넘어갑니다.")
       gameCnt++
-      onShowAnswer() // false 
-      changeAnswer()
-      console.log("다음 게임 시작 >>", gameCnt)
+      if (gameCnt === 12) {
+        handletheEndGame()
+      } else {
+        onShowAnswer() // false 
+        changeAnswer()
+        console.log("다음 게임 시작 >>", gameCnt)
+      }
   }
   
     const onShowAnswer = () => {
@@ -45,7 +52,6 @@ const SideBar = ( props ) => {
     
     return (
         <div>
-          {/* <Timer /> */}
           <AnswerVideo
             className="box"
             myNicname={myNicname}
@@ -64,35 +70,8 @@ const SideBar = ( props ) => {
             answerWord={answerWord}
             whoGetScore={whoGetScore}
           />
-            {/* <ChatComponent
-              user={localUser}
-              chatDisplay={ `display: "block"` }
-              close={close}
-              messageReceived={this.checkNotification}
-            /> */}
         </div>
     )
 }
 
 export default SideBar
-
-// export default class Sidebar extends Component {
-//     constructor(props) {
-//       super(props);
-//     }
-  
-//     render() {
-//       return (
-//         <div className="Sidebar">
-//         <Timer />
-//         <AnswerVideo />
-//           <ChatComponent
-//             user={this.props.user}
-//             chatDisplay={this.props.chatDisplay}
-//             close={this.props.close}
-//             messageReceived={this.props.messageReceived}
-//           />
-//         </div>
-//       );
-//     }
-//   }

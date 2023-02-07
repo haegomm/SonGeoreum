@@ -34,7 +34,6 @@ const Loading = (props) => {
     }
   },[])
   
-  // 대기방 나가기 요청 / room으로 빼내서 leaveSession해줘야 함 / 안해줘도 leaveSession 되네
   const roomOut = async() => {
     try {
           const response = await axios.post(

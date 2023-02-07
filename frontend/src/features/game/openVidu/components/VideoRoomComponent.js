@@ -65,6 +65,7 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
+    this.theEndGame = this.theEndGame.bind(this)
   }
 
   componentDidMount() {
@@ -92,7 +93,7 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
-    this.timer = setTimeout(() => this.byeBye(), 10000) // 10분의 대기시간 후 나가세요 호출
+    this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
   componentWillUnmount() {
@@ -653,6 +654,11 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // 게임이 끝났을 때 결과창으로 보내주기
+  theEndGame() {
+    this.leaveSession()
+  }
+
   render() {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
@@ -723,33 +729,15 @@ class VideoRoomComponent extends Component {
                     messageReceived={this.checkNotification}
                     playList={this.state.playlist}
                     myNickname={this.state.userName}
+                    theEndGame={this.theEndGame}
                   />
-                  {/* <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  /> */}
                 </div>
               )}
           </div>
-          {/* <div className="chattingBox">
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
-                <div style={chatDisplay}>
-                  <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  />
-                </div>
-              )}
-          </div> */}
-        </div>
-      );
+          </div>
+              )};
     }
-  }
+  
 
   /**
    * --------------------------------------------
