@@ -135,7 +135,6 @@ public class UserController {
                     .picture(loginUser.getPicture())
                     .level(loginUser.getLevel())
                     .experience(loginUser.getExperience())
-                    .refreshToken(loginUser.getRefreshToken())
                     .accessToken(accessToken.getToken())
                     .message(SUCCESS)
                     .build();
