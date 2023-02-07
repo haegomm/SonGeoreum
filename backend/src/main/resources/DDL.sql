@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `kakao_id` VARCHAR(100) NULL UNIQUE COMMENT '카카오톡 회원 아이디',
   `password` VARCHAR(200) NULL COMMENT '비밀번호',
   `nickname` VARCHAR(15) NOT NULL UNIQUE COMMENT '닉네임',
-  `picture` VARCHAR(1000) NULL COMMENT '프로필 사진URL',
+  `picture` VARCHAR(3000) NULL COMMENT '프로필 사진URL',
   `refresh_token` VARCHAR(200) NULL COMMENT 'refresh토큰',
   `level` INT NOT NULL DEFAULT 1 COMMENT '레벨',
   `experience` INT NOT NULL DEFAULT 0 COMMENT '경험치',
