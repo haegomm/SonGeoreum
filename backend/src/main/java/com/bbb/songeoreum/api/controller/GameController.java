@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/game")
+@RequestMapping("/api/game")
 @RequiredArgsConstructor
 @Api(tags = {"게임 API"}) // Swagger에 보여줄 명칭
 public class GameController {
@@ -32,7 +32,7 @@ public class GameController {
 
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
-    @PostMapping("/api/session")
+    @PostMapping("/session")
     public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) {
 
         HttpStatus httpStatus = null;
