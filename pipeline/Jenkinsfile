@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -7,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "chmod +x -R ${env.WORKSPACE}"
-                sh './jenkins/build/build.sh'
+                sh './pipeline/jenkins/build/build.sh'
 
             }
         }
@@ -15,7 +14,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh "chmod +x -R ${env.WORKSPACE}"
-                sh './jenkins/deploy/deploy.sh'
+                sh './pipeline/jenkins/deploy/deploy.sh'
             }
         }
     }
