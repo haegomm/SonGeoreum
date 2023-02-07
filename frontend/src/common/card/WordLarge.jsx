@@ -1,6 +1,9 @@
 import * as React from "react";
 import LargeButton from "../button/LargeButton";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
+import WordSmall from "./WordSmall";
 import "./WordLarge.scss";
 import "./flip.scss";
 
@@ -17,13 +20,31 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
-export default function WordLarge({ isLogin, link }) {
-  const [star, setStar] = React.useState(false); // 즐겨찾기 유무
-  const [wordNumber, setWordNumber] = React.useState(0); // 현재 단어 번호
+export default function WordLarge({ isLogin, categoryNum }) {
+  const [star, setStar] = useState(false); // 즐겨찾기 유무
+  const [wordNumber, setWordNumber] = useState(); // 현재 단어 번호
+  const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
+  const [endNumber, setEndNumber] = useState(); // 현재 단어 번호
+  const [wordList, setWordList] = useState(); // 단어 목록
+  const [blockListMode, setBlockListMode] = useState(false); // 작은 단어장 리스트
 
-  const handleListItemClick = (event, index) => {
-    console.log(index);
-    setWordNumber(index);
+  useEffect(() => {
+    async function getInfo() {
+      const data = await axios.get(
+        `https://i8b106.p.ssafy.io/api/words/category/${categoryNum}`
+      );
+      setWordList(data.data);
+      console.log(data.data);
+      setWordNumber(0);
+      setStartNumber(data.data[0].id);
+      setEndNumber(data.data.length - 1);
+    }
+    getInfo();
+  }, []);
+
+  const handleListItemClick = (index) => {
+    console.log("index 확인중..", index);
+    setWordNumber(index - startNumber);
     console.log(wordNumber);
   };
 
@@ -39,25 +60,6 @@ export default function WordLarge({ isLogin, link }) {
     console.log(wordNumber);
   };
 
-  const words = [
-    { no: 0, voca: "학습하기0", video: "/study" },
-    { no: 1, voca: "학습하기1", video: "/study" },
-    { no: 2, voca: "게임하기2", video: "/game" },
-    { no: 3, voca: "알아보기3", video: "/culture" },
-    { no: 4, voca: "학습하기4", video: "/study" },
-    { no: 5, voca: "게임하기5", video: "/game" },
-    { no: 6, voca: "알아보기6", video: "/culture" },
-    { no: 7, voca: "학습하기7", video: "/study" },
-    { no: 8, voca: "게임하기8", video: "/game" },
-    { no: 9, voca: "알아보기9", video: "/culture" },
-    { no: 10, voca: "학습하기", video: "/study" },
-    { no: 11, voca: "게임하기", video: "/game" },
-    { no: 12, voca: "알아보기", video: "/culture" },
-    { no: 13, voca: "학습하기", video: "/study" },
-    { no: 14, voca: "게임하기", video: "/game" },
-    { no: 15, voca: "알아보기", video: "/culture" },
-  ];
-
   const up =
     wordNumber === 0 ? (
       <ArrowDropUpRoundedIcon
@@ -72,7 +74,7 @@ export default function WordLarge({ isLogin, link }) {
     );
 
   const down =
-    wordNumber === words.length - 1 ? (
+    wordNumber === endNumber ? (
       <ArrowDropDownRoundedIcon
         color="disabled"
         sx={{ fontSize: 40 }}
@@ -104,7 +106,7 @@ export default function WordLarge({ isLogin, link }) {
     );
 
   const next =
-    wordNumber === words.length - 1 ? (
+    wordNumber === endNumber ? (
       <div className="arrowForwardBox">
         <ArrowForwardIosRoundedIcon color="disabled" sx={{ fontSize: 45 }} />
       </div>
@@ -136,80 +138,129 @@ export default function WordLarge({ isLogin, link }) {
     document.getElementById("flip-container").className = "flip-container";
   };
 
-  return (
-    <div className="container">
-      <div className="bigWordCard">
-        <div id="flip-container" className="flip-container">
-          <div className="flipper">
-            <div className="front">
-              {isLogin ? <div className="starBox">{isStar}</div> : null}
-              <div className="shuffleBox">
-                <ShuffleRoundedIcon
-                  color="blue"
-                  sx={{ fontSize: 45 }}
-                  onClick={undefined}
-                />
-              </div>
-              <div className="menuBox">
-                <MenuRoundedIcon
-                  color="blue"
-                  sx={{ fontSize: 45 }}
-                  onClick={undefined}
-                />
-              </div>
-              {previous}
-              {next}
-              <div onClick={flip}>
-                <div className="word">{words[wordNumber].voca}</div>
-              </div>
-            </div>
-            <div className="back" onClick={flipAgain}>
-              {isLogin ? <div className="starBox">{isStar}</div> : null}
-              <div className="wordVideoBox">
-                <video
-                  src={link}
-                  autoPlay
-                  poster=""
-                  //   control
-                  loop
-                ></video>
-              </div>
-            </div>
-          </div>
+  const listMode = () => {
+    setBlockListMode(!blockListMode);
+  };
+
+  if (wordList && wordList.length > 0) {
+    console.log("나와라..", wordList);
+
+    console.log("번호는?", wordNumber);
+    console.log("이것도..", wordList[wordNumber].name);
+
+    const media =
+      categoryNum > 3 && wordList && wordList.length > 0 ? (
+        <video
+          src={wordList[wordNumber].contentUrl}
+          autoPlay
+          poster=""
+          //   control
+          loop
+        ></video>
+      ) : (
+        <img
+          className="handImage"
+          src={wordList[wordNumber].contentUrl}
+          referrerPolicy="no-referrer"
+        />
+      );
+    if (blockListMode) {
+      return (
+        <div className="">
+          {wordList.map((word) => (
+            <WordSmall
+              key={word.id}
+              text={word.name}
+              star={true}
+              isLogin={isLogin}
+              index={word.id}
+              handleListItemClick={handleListItemClick}
+              listMode={listMode}
+            />
+          ))}
         </div>
-      </div>
-      <div className="wordList">
-        <div className="wordListCard">
-          <div className="arrowBox ">{up}</div>
-          <div className="listBox scroll-container">
-            <List
-              sx={{ width: "100%", maxWidth: 360 }}
-              style={{ color: "black", padding: 0 }}
-              aria-label="contacts"
-            >
-              {words.map((word) => (
-                <ListItem disablePadding id={"section" + word.no} key={word.no}>
-                  <ListItemButton
-                    selected={wordNumber === word.no}
-                    onClick={(event) => handleListItemClick(event, word.no)}
-                  >
-                    <ListItemText
-                      primary={word.voca}
-                      primaryTypographyProps={{
-                        fontSize: 20,
-                        fontWeight: "medium",
-                        letterSpacing: 0,
-                      }}
+      );
+    } else {
+      return (
+        <div className="container">
+          <div className="bigWordCard">
+            <div id="flip-container" className="flip-container">
+              <div className="flipper">
+                <div className="front">
+                  <div className="starBox">{isStar}</div>
+                  <div className="shuffleBox">
+                    <ShuffleRoundedIcon
+                      color="blue"
+                      sx={{ fontSize: 45 }}
+                      onClick={undefined}
                     />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+                  </div>
+                  <div className="menuBox">
+                    <MenuRoundedIcon
+                      color="blue"
+                      sx={{ fontSize: 45 }}
+                      onClick={() => listMode()}
+                    />
+                  </div>
+                  {previous}
+                  {next}
+                  <div onClick={flip}>
+                    <div className="word">{wordList[wordNumber].name}</div>
+                  </div>
+                </div>
+                <div className="back">
+                  <div className="starBox">{isStar}</div>
+                  {previous}
+                  {next}
+                  <div onClick={flipAgain}>
+                    <div className="wordVideoBox">{media}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="arrowBox">{down}</div>
+          <div className="wordList">
+            <div className="wordListCard">
+              <div className="arrowBox ">{up}</div>
+              <div className="listBox scroll-container">
+                <List
+                  sx={{ width: "100%", maxWidth: 360 }}
+                  style={{ color: "black", padding: 0 }}
+                  aria-label="contacts"
+                >
+                  {wordList.map((word) => (
+                    <ListItem
+                      disablePadding
+                      id={"section" + word.id}
+                      key={"id" + word.id}
+                    >
+                      <ListItemButton
+                        selected={wordNumber === word.id - startNumber}
+                        onClick={(event) => handleListItemClick(word.id)}
+                      >
+                        <ListItemText
+                          primary={word.name}
+                          primaryTypographyProps={{
+                            fontSize: 20,
+                            fontWeight: "medium",
+                            letterSpacing: 0,
+                          }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+              <div className="arrowBox">{down}</div>
+            </div>
+            <LargeButton
+              text="TEST"
+              type="learnToTest"
+              backgroundColor="blue"
+            />
+          </div>
         </div>
-        <LargeButton text="TEST" type="learnToTest" backgroundColor="blue" />
-      </div>
-    </div>
-  );
+      );
+    }
+  }
 }

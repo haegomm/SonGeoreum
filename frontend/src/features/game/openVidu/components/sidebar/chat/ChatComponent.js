@@ -12,6 +12,8 @@ export default class ChatComponent extends Component {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
+      playerList: [1, 2, 3, 4], // 참가자들
+      answerCount: [0,0,0,0], // 참가지들 정답 횟수
     };
     this.chatScroll = React.createRef();
 

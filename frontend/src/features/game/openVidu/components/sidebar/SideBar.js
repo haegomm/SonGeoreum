@@ -4,33 +4,31 @@ import ChatComponent from "./chat/ChatComponent"
 import { useState } from "react"
 
 const SideBar = ( props ) => {
-    
-    const playList = props.playList
 
-    const [ presenter, setPresenter ] = useState(0)
-    const [ showAnswer, setShowAnswer ] = useState(false)
-    let gameCnt = 0
+    let [gameCnt, setGameCnt] = useState(0)
     
-    // toNext 호출 => 정답 or 타입아웃 때 // !show, gamecnt + 1, presenter change 되야함
-    // 문제도 다음 문제로 넘어가야함(단어, API)
     const toNext = () => {
-        gameCnt += 1
-        const idx = gameCnt % 4
-        setPresenter(playList(idx))
-        setShowAnswer(!showAnswer)
+      setGameCnt(gameCnt += 1)
+      console.log("다음 턴이야 >>", gameCnt)
     }
     
     return (
         <div>
-            {/* <Timer className="box" toNext={toNext}/> */}
-            {/* <div className="box">answer</div> */}
-            <AnswerVideo className="box" myId={props.myId} presenter={presenter}/>
-            <ChatComponent
-              user={props.user}
-              chatDisplay={props.chatDisplay}
-              close={props.close}
-              messageReceived={props.messageReceived}
-            />
+          <AnswerVideo
+            className="box"
+            myId={props.myId}
+            playList={props.playList}
+            turn={gameCnt % 4}
+            toNext={toNext}
+          />
+          <ChatComponent
+            user={props.user}
+            chatDisplay={props.chatDisplay}
+            close={props.close}
+            messageReceived={props.messageReceived}
+            gameCnt={gameCnt}
+            toNext={toNext}
+          />
             {/* <ChatComponent
               user={localUser}
               chatDisplay={ `display: "block"` }
@@ -39,7 +37,6 @@ const SideBar = ( props ) => {
             /> */}
         </div>
     )
-
 }
 
 export default SideBar
