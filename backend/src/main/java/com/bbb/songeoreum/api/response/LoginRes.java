@@ -45,10 +45,10 @@ public class LoginRes {
     private String accessToken;
 
     @ApiModelProperty(example = "로그인 성공시 success 그렇지 않으면 fail")
-    private String msg;
+    private String message;
 
     @Builder
-    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String refreshToken, String accessToken, String msg) {
+    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String refreshToken, String accessToken, String message) {
         this.id = id;
         this.userType = userType;
         this.email = email;
@@ -58,12 +58,12 @@ public class LoginRes {
         this.experience = experience;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
-        this.msg = msg;
+        this.message = message;
     }
 
     @Builder
     public LoginRes(String msg) {
-        this.msg = msg;
+        this.message = message;
     }
 
 }

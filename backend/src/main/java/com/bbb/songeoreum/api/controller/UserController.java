@@ -137,7 +137,7 @@ public class UserController {
                     .experience(loginUser.getExperience())
                     .refreshToken(loginUser.getRefreshToken())
                     .accessToken(accessToken.getToken())
-                    .msg(SUCCESS)
+                    .message(SUCCESS)
                     .build();
 
             // 쿠키 기한
@@ -153,7 +153,7 @@ public class UserController {
 
         } catch (Exception e) {
             log.error("로그인 실패 : {}", e.getMessage());
-            loginRes = LoginRes.builder().msg(FAIL).build();
+            loginRes = LoginRes.builder().message(FAIL).build();
             status = HttpStatus.NOT_FOUND;
         }
 
