@@ -187,14 +187,14 @@ public class UserController {
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
-        String token = request.getHeader("refresh-token");
+        String token = request.getHeader("refreshToken");
 
         log.debug("token : {}, id : {}", token, id);
 
         if (jwtService.checkToken(token)) {
             if (token.equals(userService.getRefreshToken(id).getRefreshToken())) {
                 String accessToken = jwtService.createAccessToken("email", id);
-                log.debug("utoken : {}", accessToken);
+                log.debug("accessToken : {}", accessToken);
                 log.debug("정상적으로 액세스토큰 재발급!!!");
                 resultMap.put("access-token", accessToken);
                 resultMap.put("message", SUCCESS);
