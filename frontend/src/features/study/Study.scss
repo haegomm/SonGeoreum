@@ -2,24 +2,24 @@ $yellow: #f9be7d;
 $blue: #6488e5;
 
 .studyBox {
-  margin-top: 24px;
+  margin-top: 100px;
   margin-bottom: 80px;
-}
-
-.ST {
-  margin-top: 64px;
   text-align: center;
 }
 
+.marginTopBox {
+  margin-top: 100px;
+}
+
 .guideText {
-  font-size: 40px;
+  font-size: 26px;
   font-weight: 700;
   color: white;
   margin-top: 32px;
 }
 
 .modeText {
-  font-size: 64px;
+  font-size: 48px;
   font-weight: 700;
   color: $yellow;
   margin: 32px;
