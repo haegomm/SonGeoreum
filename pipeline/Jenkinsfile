@@ -7,14 +7,16 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    ./pipeline/jenkins/build/build.sh
+                    chmod +x -R ${env.WORKSPACE}
+                    ./jenkins/build/build.sh
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                sh './pipeline/jenkins/deploy/deploy.sh'
+                sh "chmod +x -R ${env.WORKSPACE}"
+                sh './jenkins/deploy/deploy.sh'
             }
         }
     }
