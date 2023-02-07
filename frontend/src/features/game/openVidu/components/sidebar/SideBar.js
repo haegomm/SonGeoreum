@@ -15,46 +15,54 @@ const SideBar = ( props ) => {
     let scoreList = [0, 0, 0, 0]
     const [showAnswer, setShowAnswer] = useState(false)
   
-  const navigate = useNavigate()
-  const handletheEndGame = () => {
-    props.theEndGame()
-    navigate('result', {state: {    
-      playerList: playerList,
-      scoreList: scoreList
-    }})
-  }
+    const navigate = useNavigate()
+    const handletheEndGame = (result) => {
+      props.theEndGame()
+      navigate('result', {state: result})
+    }
 
-  const changeAnswer = () => {
-    setAnswerWord(questionList[gameCnt].name)
-    setAnswerApi(questionList[gameCnt].api)
-  }  
-
-  const toNext = () => {
-      console.log("다음 문제로 넘어갑니다.")
-      gameCnt++
-      if (gameCnt === 12) {
-        handletheEndGame()
-      } else {
-        onShowAnswer() // false 
-        changeAnswer()
-        console.log("다음 게임 시작 >>", gameCnt)
+    const resultScore = () => {
+      const result = []
+      for (let i = 0; i < 4; i++){
+        result.push({
+          nickname: playerList[i],
+          score: scoreList[i]
+        })
+      return result
       }
-  }
+    }
+
+    const changeAnswer = () => {
+      setAnswerWord(questionList[gameCnt].name)
+      setAnswerApi(questionList[gameCnt].api)
+    }  
+
+    const toNext = () => {
+        console.log("다음 문제로 넘어갑니다.")
+        gameCnt++
+        if (gameCnt === 12) {
+          handletheEndGame(resultScore())
+        } else {
+          onShowAnswer() // false 
+          changeAnswer()
+          console.log("다음 게임 시작 >>", gameCnt)
+        }
+    }
   
     const onShowAnswer = () => {
       setShowAnswer(!showAnswer)
       console.log("지금은 영상을 볼 수",showAnswer)
     }
 
-  const whoGetScore = (who) => {
-    if (who) {  
-      let Idx = playerList.indexOf(who)
-      scoreList[Idx] += 1
+    const whoGetScore = (who) => {
+      if (who) {  
+        let Idx = playerList.indexOf(who)
+        scoreList[Idx] += 1
+        }
+        onShowAnswer() // true
+        console.log("정답 영상을 보여줍니다")
+        setTimeout(() => { toNext() }, 5000)
       }
-      onShowAnswer() // true
-      console.log("정답 영상을 보여줍니다")
-      setTimeout(() => { toNext() }, 5000)
-    }
     
     return (
         <div>
