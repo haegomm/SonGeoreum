@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import AnswerVideo from "./AnswerVideo"
 import ChatComponent from "./chat/ChatComponent"
@@ -20,7 +21,22 @@ const SideBar = ( props ) => {
       props.theEndGame()
       navigate('result', {state: result})
     }
-
+    
+    // useEffect(() => {
+    //   getWordList()
+    // }, [])
+    
+    const getWordList = async() => {
+      try {
+            const response = await axios.get(
+              "https://i8b106.p.ssafy.io/api/words",
+        );
+        console.log("단어리스트를 가지고 왔어요", response.data)
+        return response.data
+      } catch (err) {
+        console.log("단어리스트를 못 가져왔는뎅ㅜ!!!", err)
+    }}
+    
     const resultScore = () => {
       const result = []
       for (let i = 0; i < 4; i++){

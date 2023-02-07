@@ -220,7 +220,7 @@ class VideoRoomComponent extends Component {
                   this.state.localUser.getStreamManager().signal({
                     data: {
                       playGame: this.state.playGame,
-                      playList: this.state.subscribers // 리스트임 여기에 어떻게 publisher를 더해서 넣냐
+                      playList: this.state.playList
                     }, // 문자열로 보내짐 // json.parse() 해주기
                     to: [],
                     type: 'play-game'
@@ -235,7 +235,7 @@ class VideoRoomComponent extends Component {
                 console.log("오케이 가보자고")
                 console.log(event.data)
                 console.log(event.from)
-                const data = JSON.parse(event.data);
+                const data = JSON.parse(event.data); // 했음
                 this.setState({
                   goGame: data.goGame,
                   playList: data.playList
@@ -778,8 +778,8 @@ class VideoRoomComponent extends Component {
   async createToken(sessionData) {
     this.setState({
       message: sessionData.message,
-      // playGame: sessionData.playGame,
-      // playList: sessionData.playList,
+      playGame: sessionData.playGame,
+      playList: sessionData.playList,
       sessionId: sessionData.sessionId,
       token: sessionData.token,
     })
