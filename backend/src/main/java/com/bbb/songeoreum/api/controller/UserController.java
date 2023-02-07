@@ -32,7 +32,7 @@ import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOn
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Api(tags = {"사용자 API"}) // Swagger에 보여줄 명칭
 public class UserController {

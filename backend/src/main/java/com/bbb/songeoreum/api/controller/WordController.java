@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/words")
+@RequestMapping("/api/words")
 @RequiredArgsConstructor
 @Api(tags = {"단어 API"}) // Swagger에 보여줄 명칭
 public class WordController {

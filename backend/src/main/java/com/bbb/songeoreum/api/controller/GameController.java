@@ -32,7 +32,7 @@ public class GameController {
 
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
-    @PostMapping("/session")
+    @PostMapping("/api/session")
     public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) {
 
         HttpStatus httpStatus = null;

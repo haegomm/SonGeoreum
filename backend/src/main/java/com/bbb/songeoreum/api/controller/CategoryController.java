@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Api(tags = {"카테고리 API"}) // Swagger에 보여줄 명칭
 public class CategoryController {

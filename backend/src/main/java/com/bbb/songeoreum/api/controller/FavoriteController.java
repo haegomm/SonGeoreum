@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/favorites")
+@RequestMapping("/api/favorites")
 @RequiredArgsConstructor
 @Api(tags = {"나의 단어장 API"}) // Swagger에 보여줄 명칭
 public class FavoriteController {
