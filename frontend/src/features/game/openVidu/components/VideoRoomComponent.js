@@ -44,12 +44,12 @@ class VideoRoomComponent extends Component {
       message: "",//
       sessionId: undefined,//
       token: "",//
-      playGame: true,//
+      playGame: false,//
       goGame: false,
       playlist: [],//
       subToken: undefined,// ?
     };
-    let timer
+    // this.timer // timer component를 갖고온다면
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
@@ -351,7 +351,7 @@ class VideoRoomComponent extends Component {
       const response = await axios.put(
         APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
         );
-      console.log("모두 나가주세요~ >> ", response.data.message)
+      console.log("모두 나가주세요~ >> ")
       // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
       return response.data;
       } catch (err) {
@@ -721,7 +721,7 @@ class VideoRoomComponent extends Component {
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
                     playList={this.state.playlist}
-                    myId={this.state.myId}
+                    myNickname={this.state.userName}
                   />
                   {/* <ChatComponent
                     user={localUser}

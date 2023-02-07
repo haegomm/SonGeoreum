@@ -6,13 +6,13 @@ import ChatComponent from "./chat/ChatComponent"
 
 const SideBar = ( props ) => {
 
+    const myNicname  = props.myNicname
     let gameCnt = 0
     const questionList = [] // api로 받아오기 / random 12문제 // 
     const [answerWord, setAnswerWord] = useState('')
     const [answerApi, setAnswerApi] = useState('')
     const playList = props.playList // props로 받아오기
     let scoreList = [0, 0, 0, 0]
-    // const [whoGetScore, setWhoGetScore] = useState('')
     const [showAnswer, setShowAnswer] = useState(false)
   
     const changeAnswer = () => {
@@ -20,43 +20,40 @@ const SideBar = ( props ) => {
       setAnswerApi(questionList[gameCnt].api)
     }  
 
-    const toNext = () => {
+  const toNext = () => {
+      console.log("다음 문제로 넘어갑니다.")
       gameCnt++
-      onShowAnswer()
+      onShowAnswer() // false 
       changeAnswer()
-      console.log("다음 턴이야 >>", gameCnt)
+      console.log("다음 게임 시작 >>", gameCnt)
   }
   
     const onShowAnswer = () => {
       setShowAnswer(!showAnswer)
+      console.log("지금은 영상을 볼 수",showAnswer)
     }
 
-    const whoGetScore = (who) => {
+  const whoGetScore = (who) => {
+    if (who) {  
       let Idx = playList.indexOf(who)
       scoreList[Idx] += 1
-      onShowAnswer() // 5초 뒤에 toNext실행
-      toNext() 
+      }
+      onShowAnswer() // true
+      console.log("정답 영상을 보여줍니다")
+      setTimeout(() => { toNext() }, 5000)
     }
-
-
-    // let [gameCnt, setGameCnt] = useState(0)
-    
-    // const toNext = () => {
-    //   setGameCnt(gameCnt += 1)
-    //   console.log("다음 턴이야 >>", gameCnt)
-    // }
     
     return (
         <div>
           {/* <Timer /> */}
           <AnswerVideo
             className="box"
-            myId={props.myId}
+            myNicname={myNicname}
             answerWord={answerWord}
             answerApi={answerApi}
-            presenter={playList[gameCnt % 4]} // gameCnt % 4 정수로 담기나?
+            presenter={playList[gameCnt % 4]}
             showAnswer={showAnswer} // 
-            onShowAnswer={onShowAnswer}
+            whoGetScore={whoGetScore}
             toNext={toNext}
           />
           <ChatComponent
@@ -64,7 +61,7 @@ const SideBar = ( props ) => {
             chatDisplay={props.chatDisplay}
             close={props.close}
             messageReceived={props.messageReceived}
-            gameCnt={gameCnt}
+            answerWord={answerWord}
             whoGetScore={whoGetScore}
           />
             {/* <ChatComponent
