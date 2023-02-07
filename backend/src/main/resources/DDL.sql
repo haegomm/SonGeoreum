@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'PK',
   `user_type` VARCHAR(15) NOT NULL COMMENT 'NORMAL:일반,  KAKAO:카카오톡',
   `email` VARCHAR(100) NULL UNIQUE COMMENT '일반 회원 아이디',
-  `kakao_id` VARCHAR(100) NULL COMMENT '카카오톡 회원 아이디',
+  `kakao_id` VARCHAR(100) NULL UNIQUE COMMENT '카카오톡 회원 아이디',
   `password` VARCHAR(200) NULL COMMENT '비밀번호',
   `nickname` VARCHAR(15) NOT NULL UNIQUE COMMENT '닉네임',
   `picture` VARCHAR(1000) NULL COMMENT '프로필 사진URL',
