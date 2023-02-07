@@ -14,7 +14,19 @@ const SideBar = ( props ) => {
     let scoreList = [0, 0, 0, 0]
     // const [whoGetScore, setWhoGetScore] = useState('')
     const [showAnswer, setShowAnswer] = useState(false)
+  
+    const changeAnswer = () => {
+      setAnswerWord(questionList[gameCnt].name) // 단어 이름
+      setAnswerApi(questionList[gameCnt].api)
+    }  
 
+    const toNext = () => {
+      gameCnt++
+      onShowAnswer()
+      changeAnswer()
+      console.log("다음 턴이야 >>", gameCnt)
+  }
+  
     const onShowAnswer = () => {
       setShowAnswer(!showAnswer)
     }
@@ -22,20 +34,11 @@ const SideBar = ( props ) => {
     const whoGetScore = (who) => {
       let Idx = playList.indexOf(who)
       scoreList[Idx] += 1
+      onShowAnswer() // 5초 뒤에 toNext실행
+      toNext() 
     }
 
-    const changeAnswer = () => {
-      setAnswerWord(questionList[gameCnt].name) // 단어 이름
-      setAnswerApi(questionList[gameCnt].api)
-    }
 
-    const toNext = () => {
-        gameCnt ++
-        changeAnswer()
-        onShowAnswer()
-        console.log("다음 턴이야 >>", gameCnt)
-      }
-    
     // let [gameCnt, setGameCnt] = useState(0)
     
     // const toNext = () => {
@@ -53,7 +56,7 @@ const SideBar = ( props ) => {
             answerApi={answerApi}
             presenter={playList[gameCnt % 4]} // gameCnt % 4 정수로 담기나?
             showAnswer={showAnswer} // 
-            setShowAnswer={setShowAnswer}
+            onShowAnswer={onShowAnswer}
             toNext={toNext}
           />
           <ChatComponent
@@ -63,7 +66,6 @@ const SideBar = ( props ) => {
             messageReceived={props.messageReceived}
             gameCnt={gameCnt}
             whoGetScore={whoGetScore}
-            toNext={toNext}
           />
             {/* <ChatComponent
               user={localUser}
