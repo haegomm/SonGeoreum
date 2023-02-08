@@ -57,7 +57,7 @@ public class LoginRes {
     }
 
     @Builder
-    public LoginRes(String msg) {
+    public LoginRes(String message) {
         this.message = message;
     }
 
