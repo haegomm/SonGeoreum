@@ -22,7 +22,7 @@ export default function HandToWord({ categoryNum, resetTestMode }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words?category=${categoryNum}&isRandom=true`
+        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
       );
       setWordList(data.data);
       // 이 리스트 중에서 랜덤한 10개를 뽑는 로직 필요합니다.
