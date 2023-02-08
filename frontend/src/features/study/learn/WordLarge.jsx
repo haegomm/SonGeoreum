@@ -31,7 +31,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words/category/${categoryNum}`
+        `https://i8b106.p.ssafy.io/api/words?category=${categoryNum}`
       );
       setWordList(data.data);
       console.log(data.data);
