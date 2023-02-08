@@ -7,12 +7,14 @@ import ChatComponent from "./chat/ChatComponent"
 
 const SideBar = ( props ) => {
 
+  console.log("여기!!!!!!!!!!!!!!!!",props.playerList)
+  const [playerList, setPlayerList] = useState(props.playerList)
+    // const playerList = props.playerList // props로 받아오기
     const myNicname  = props.myNicname
-    let gameCnt = 0
-    const questionList = [] // api로 받아오기 / random 12문제 // 
+    let [gameCnt, setGameCnt] =useState(0)
+    const questionList = [{name: '농담', contentUrl:"http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"}] // api로 받아오기 / random 12문제 // 
     const [answerWord, setAnswerWord] = useState('')
     const [answerApi, setAnswerApi] = useState('')
-    const playerList = props.playerList // props로 받아오기
     let scoreList = [0, 0, 0, 0]
     const [showAnswer, setShowAnswer] = useState(false)
   
@@ -50,12 +52,12 @@ const SideBar = ( props ) => {
 
     const changeAnswer = () => {
       setAnswerWord(questionList[gameCnt].name)
-      setAnswerApi(questionList[gameCnt].api)
+      setAnswerApi(questionList[gameCnt].contentUrl)
     }  
 
     const toNext = () => {
         console.log("다음 문제로 넘어갑니다.")
-        gameCnt++
+        setGameCnt(gameCnt++)
         if (gameCnt === 12) {
           handletheEndGame(resultScore())
         } else {
@@ -79,9 +81,10 @@ const SideBar = ( props ) => {
         console.log("정답 영상을 보여줍니다")
         setTimeout(() => { toNext() }, 5000)
       }
-    
+  if (playerList && playerList.length > 0) {
+      
     return (
-        <div>
+      <div>
           <AnswerVideo
             className="box"
             myNicname={myNicname}
@@ -91,7 +94,7 @@ const SideBar = ( props ) => {
             showAnswer={showAnswer} // 
             whoGetScore={whoGetScore}
             toNext={toNext}
-          />
+            />
           <ChatComponent
             user={props.user}
             chatDisplay={props.chatDisplay}
@@ -99,9 +102,10 @@ const SideBar = ( props ) => {
             messageReceived={props.messageReceived}
             answerWord={answerWord}
             whoGetScore={whoGetScore}
-          />
+            />
         </div>
     )
+  }
 }
-
-export default SideBar
+  
+  export default SideBar

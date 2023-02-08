@@ -12,31 +12,32 @@ const AnswerVideo = (props) => {
     // const toNext = props.toNext
 
     
-    let [ timerCount, setTimerCount ] = useState(5)
+    const [sec, setSec] = useState
     
     const handleToNext = () => {
         console.log("다음 턴으로 넘어가보자")
         props.toNext()
     }
     
-    useEffect(() => {
-      startTimer()
-    }, [])
+    // useEffect(() => {
+    //   startTimer()
+    // }, [])
     
-    // Timer
-    const startTimer = () => {
-        if(!showAnswer){
-            const timer = setInterval(() => {
-                setTimerCount( timerCount => timerCount - 1)
-            }, 1000)
-            if (timerCount === 0) {
-                props.whoGetScore('')
-                handleToNext()
-                clearInterval(timer)
-            }
-            return () => clearInterval(timer)
-        }
-    }
+    // // Timer
+    // const startTimer = () => {
+    //     if(!showAnswer){
+    //         const timer = setInterval(() => {
+    //             setTimerCount( timerCount => timerCount - 1)
+    //         }, 1000)
+    //         if (timerCount === 0) {
+    //             props.whoGetScore('')
+    //             handleToNext()
+    //             setTimerCount(5)
+    //             clearInterval(timer)
+    //         }
+    //         return () => clearInterval(timer)
+    //     }
+    // }
 
     // useEffect(() => {
     //     const timer = setInterval(() => {

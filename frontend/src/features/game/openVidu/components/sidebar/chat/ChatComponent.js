@@ -87,8 +87,8 @@ export default class ChatComponent extends Component {
 
   // 정답자 올려주기 // nickname let에 담아서 보내줘야하나? / this.props.nickname
   handleWhoGetScore(nickname) {
-    console.log("얘가 정답자야!!", nickname)
-    this.props.whoGetScore(nickname)
+    console.log("얘가 정답자야!!", nickname.props.user.nickname)
+    this.props.whoGetScore(nickname.props.user.nickname)
   }
 
   handleChange(event) {

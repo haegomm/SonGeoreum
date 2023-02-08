@@ -33,7 +33,8 @@ class VideoRoomComponent extends Component {
     this.localUserAccessAllowed = false;
     this.state = {
       mySessionId: sessionName,
-      myUserName: userName,
+      // myUserName: userName,
+      myUserName: "큐티가은",
       session: undefined,
       localUser: undefined,
       subscribers: [],
@@ -45,8 +46,8 @@ class VideoRoomComponent extends Component {
       sessionId: undefined,//
       token: "",//
       playGame: false,//
-      goGame: false,
-      playlist: [],//
+      goGame: true,
+      playerlist: ["가은", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
       subToken: undefined,// ?
     };
     // this.timer // timer component를 갖고온다면
@@ -93,7 +94,7 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
-    this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
+    // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
   componentWillUnmount() {
@@ -220,7 +221,7 @@ class VideoRoomComponent extends Component {
                   this.state.localUser.getStreamManager().signal({
                     data: {
                       playGame: this.state.playGame,
-                      playList: this.state.playList
+                      playerList: this.state.playerList
                     }, // 문자열로 보내짐 // json.parse() 해주기
                     to: [],
                     type: 'play-game'
@@ -238,7 +239,7 @@ class VideoRoomComponent extends Component {
                 const data = JSON.parse(event.data); // 했음
                 this.setState({
                   goGame: data.goGame,
-                  playList: data.playList
+                  playerList: data.playerList
                 })
               })
             }
@@ -663,7 +664,7 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame && !this.state.playGame) {
+    if (!this.state.goGame) {
       return <Loading
         myId={this.state.myId}
         sessionId={this.state.sessionId}
@@ -727,7 +728,7 @@ class VideoRoomComponent extends Component {
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
-                    playList={this.state.playlist}
+                    playerList={this.state.playerlist}
                     myNickname={this.state.userName}
                     theEndGame={this.theEndGame}
                   />
@@ -779,7 +780,7 @@ class VideoRoomComponent extends Component {
     this.setState({
       message: sessionData.message,
       playGame: sessionData.playGame,
-      playList: sessionData.playList,
+      playerList: sessionData.playerList,
       sessionId: sessionData.sessionId,
       token: sessionData.token,
     })
