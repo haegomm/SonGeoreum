@@ -2,6 +2,7 @@ package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
+import com.bbb.songeoreum.api.response.GetUserRes;
 import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.api.response.LogoutRes;
 import com.bbb.songeoreum.api.response.RefreshTokenRes;
@@ -69,7 +70,7 @@ public class UserController {
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
         }
     }
 
@@ -85,7 +86,7 @@ public class UserController {
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
         }
     }
 
@@ -231,7 +232,7 @@ public class UserController {
 
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
-        if(!authRefreshToken.validate() || user.getRefreshToken() == null){
+        if (!authRefreshToken.validate() || user.getRefreshToken() == null) {
             log.debug("유효하지 않은 refresh token 입니다.");
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
 //            refreshTokenRes = RefreshTokenRes.builder().message("유효하지 않은 refresh token 입니다.").build();
@@ -259,5 +260,17 @@ public class UserController {
 
 //        return ApiResponse.success("token", newAccessToken.getToken());
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
+    }
+
+    // 회원 정보 조회
+    // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
+    @ApiOperation(value = "회원 조회") // 해당 Api의 설명
+    @GetMapping
+    public ResponseEntity<GetUserRes> getUser(HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getAttribute("user");
+
+        GetUserRes getUserRes = userService.getUser(user.getId());
+
+        return new ResponseEntity<GetUserRes>(getUserRes, HttpStatus.OK);
     }
 }

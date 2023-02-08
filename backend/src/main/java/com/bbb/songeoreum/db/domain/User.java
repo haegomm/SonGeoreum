@@ -1,6 +1,7 @@
 package com.bbb.songeoreum.db.domain;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
+import com.bbb.songeoreum.api.response.GetUserRes;
 import lombok.*;
 
 import javax.persistence.*;
@@ -112,5 +113,9 @@ public class User implements Serializable {
         this.refreshToken = null;
     }
 
+    // 회원 정보 조회
+    public GetUserRes toDTO(){
+        return new GetUserRes(id, userType, email, kakaoId, nickname, picture, level, experience);
+    }
 
 }
