@@ -1,0 +1,27 @@
+version: "3"
+services:
+  sgr-back:
+    container_name: sgr-back
+    image: sgr-backend:0.1
+    build:
+      context: ../backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./env-files/env-back.env
+
+  sgr-front:
+    container_name: sgr-front
+    image: sgr-frontend:0.1
+    build:
+      context: ../frontend
+    ports:
+      - "3000:80"
+
+  sgr-dj:
+    container_name: sgr-dj
+    image: sgr-django:0.1
+    build:
+      context: ../backend-websocket
+    ports:
+      - "8000:8000"
