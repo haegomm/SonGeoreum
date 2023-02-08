@@ -1,6 +1,5 @@
 package com.bbb.songeoreum.oauth.handler;
 
-import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
@@ -8,34 +7,22 @@ import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
-import com.bbb.songeoreum.oauth.entity.ProviderType;
 import com.bbb.songeoreum.oauth.entity.RoleType;
-import com.bbb.songeoreum.oauth.info.OAuth2UserInfo;
-import com.bbb.songeoreum.oauth.info.OAuth2UserInfoFactory;
 import com.bbb.songeoreum.util.CookieUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
@@ -97,6 +84,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // access 토큰 설정
         AuthToken accessToken = tokenProvider.createAuthToken(
                 user.getId(), // access 토큰에 user pk 저장
+                user.getNickname(),
                 roleType.getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );

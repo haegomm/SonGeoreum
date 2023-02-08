@@ -4,6 +4,7 @@ import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieR
 //import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.jwt.filter.TokenAuthenticationFilter;
 import com.bbb.songeoreum.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.bbb.songeoreum.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -54,7 +56,7 @@ public class SecurityConfig {
                 .httpBasic().disable() // 기본 http 방식 안 씀.
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용 권한 체크
                 .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
-//                .antMatchers("/game/**", "/user/logout/**", "/user/profile/**", "/user/game/**", "/favorites/**").authenticated()
+//                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
 //                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
                 .logout() // 로그아웃을 하면
@@ -75,8 +77,10 @@ public class SecurityConfig {
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
-//                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .and().build();
+                .and()
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // OAuth2를 이용한 인증이 아닌 username, password를 쓰는 form 기반 인증을 처리하는 필터로 자세한 내용은 노션 지식 공유 참고
+//                .and().build();
+                .build();
     }
 
     // password 인코딩 해줌.
@@ -104,11 +108,10 @@ public class SecurityConfig {
         );
     }
 
-//
-//    // 토큰 필터 설정
-//    @Bean
-//    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-//        return new TokenAuthenticationFilter(tokenProvider);
-//    }
+    // 토큰 필터 설정
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter(tokenProvider);
+    }
 
 }
