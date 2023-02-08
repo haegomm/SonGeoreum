@@ -11,6 +11,6 @@ import lombok.*;
 public class ExitRoomRes {
 
     @ApiModelProperty(example = "게임 종료, 모든 유저 퇴출, 게임로그 DB저장이 성공이면 success, 그렇지 않다면 fail")
-    private String msg;
+    private String message;
 
 }

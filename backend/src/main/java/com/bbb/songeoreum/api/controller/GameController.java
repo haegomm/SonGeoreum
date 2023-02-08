@@ -72,10 +72,10 @@ public class GameController {
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            removeUserRes = RemoveUserRes.builder().msg(SUCCESS).build();
+            removeUserRes = RemoveUserRes.builder().message(SUCCESS).build();
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            removeUserRes = RemoveUserRes.builder().msg(FAIL).build();
+            removeUserRes = RemoveUserRes.builder().message(FAIL).build();
         }
 
         return new ResponseEntity<>(removeUserRes, httpStatus);
@@ -93,11 +93,11 @@ public class GameController {
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            exitRoomRes = ExitRoomRes.builder().msg(SUCCESS).build();
+            exitRoomRes = ExitRoomRes.builder().message(SUCCESS).build();
 
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            exitRoomRes = ExitRoomRes.builder().msg(FAIL).build();
+            exitRoomRes = ExitRoomRes.builder().message(FAIL).build();
 
         }
 
@@ -116,11 +116,11 @@ public class GameController {
 
         if (result == 0) {
             httpStatus = HttpStatus.OK;
-            resetStandbyRes = ResetStandbyRes.builder().msg(SUCCESS).build();
+            resetStandbyRes = ResetStandbyRes.builder().message(SUCCESS).build();
 
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            resetStandbyRes = ResetStandbyRes.builder().msg(FAIL).build();
+            resetStandbyRes = ResetStandbyRes.builder().message(FAIL).build();
 
         }
 
