@@ -33,7 +33,8 @@ class VideoRoomComponent extends Component {
     this.localUserAccessAllowed = false;
     this.state = {
       mySessionId: sessionName,
-      myUserName: userName,
+      // myUserName: userName,
+      myUserName: "큐티가은",
       session: undefined,
       localUser: undefined,
       subscribers: [],
@@ -45,9 +46,11 @@ class VideoRoomComponent extends Component {
       sessionId: undefined,//
       token: "",//
       playGame: false,//
-      playlist: [1, 2, 3, 4],//
+      goGame: true,
+      playerlist: ["가은", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
       subToken: undefined,// ?
     };
+    // this.timer // timer component를 갖고온다면
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
@@ -63,6 +66,7 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
+    this.theEndGame = this.theEndGame.bind(this)
   }
 
   componentDidMount() {
@@ -89,12 +93,15 @@ class VideoRoomComponent extends Component {
     console.log("join 하기 전 DidMount");
 
     this.joinSession();
+
+    // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
+    clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
 
@@ -108,7 +115,7 @@ class VideoRoomComponent extends Component {
 
     this.setState(
       {
-        session: this.OV.initSession(), // 내가 받아온 sessionId를 넣어야 하는거같음
+        session: this.OV.initSession(),
       },
       async () => {
         this.subscribeToStreamCreated();
@@ -191,6 +198,7 @@ class VideoRoomComponent extends Component {
         if (this.state.session.capabilities.publish) {
           publisher.on("accessAllowed", () => {
             console.log("토큰값을 확인해보자: ", this.state.localUser);
+            //이때 커넥션 아이디 생김
             this.state.session.publish(publisher).then(() => {
               this.updateSubscribers();
           console.log("subscriber를 업데이트 했어요: ");
@@ -205,7 +213,37 @@ class VideoRoomComponent extends Component {
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
             this.props.joinSession();
-          }
+              }
+
+          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+              if (this.state.goGame === false) {
+                if (this.state.subscribers > 2 && this.state.playGame === true) {
+                  this.state.localUser.getStreamManager().signal({
+                    data: {
+                      playGame: this.state.playGame,
+                      playerList: this.state.playerList
+                    }, // 문자열로 보내짐 // json.parse() 해주기
+                    to: [],
+                    type: 'play-game'
+                  }).then(() => {
+                console.log("얘들아 게임 시작한다~~!",)
+                  })
+                    .catch(error => {
+                    console.error()
+                  })
+            } else if(this.state.subscribers > 2) {
+              this.state.localUser.getStreamManager().on('signal:play-game', (event) => {
+                console.log("오케이 가보자고")
+                console.log(event.data)
+                console.log(event.from)
+                const data = JSON.parse(event.data); // 했음
+                this.setState({
+                  goGame: data.goGame,
+                  playerList: data.playerList
+                })
+              })
+            }
+            }
         });
       });
     }
@@ -254,22 +292,26 @@ class VideoRoomComponent extends Component {
   }
   
   async leaveSession() {
-    console.log("나갈래~!~!")
+    console.log("이곳을...떠나겠습니다...")
     const mySession = this.state.session;
     const sessionId = this.state.sessionId
 
-    if (mySession) {
-      mySession.disconnect();
-    }
+    mySession.disconnect();
+
+    // if (mySession) {
+    //   mySession.disconnect();
+    // }
     
-    try {
-      const response = await axios.delete(
-        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
-        );
-      console.log("나가요~ >> ", response.data.message)
-      return response.data;
-    } catch (err) {
-      console.log("못나감~ >>", err)
+    if ((this.state.playGame || this.state.goGame)){
+      try {
+        const response = await axios.delete(
+          APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+          );
+        console.log("나가요~ >> ", response.data.message)
+        return response.data;
+      } catch (err) {
+        console.log("못나감~ >>", err)
+      }
     }
 
   
@@ -303,6 +345,24 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // 대기가 길어질 경우, 모두 나가주세요~!
+  async byeBye() {
+    const sessionId = this.state.sessionId
+    if(this.state.subscribers < 3){
+      try {
+      const response = await axios.put(
+        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+        );
+        console.log("모두 나가주세요~ >> ")
+        this.leaveSession()
+      // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
+      return response.data;
+      } catch (err) {
+        console.log("안나가지는데요.. >>", err)
+      }
+    }
+  }
+  
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
@@ -375,7 +435,7 @@ class VideoRoomComponent extends Component {
       remoteUsers.forEach((user) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
-          console.log("EVENTO REMOTE: ", event.data);
+          console.log("여기다 여기 EVENTO REMOTE: ", event.data);
           if (data.isAudioActive !== undefined) {
             user.setAudioActive(data.isAudioActive);
           }
@@ -595,16 +655,19 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // 게임이 끝났을 때 결과창으로 보내주기
+  theEndGame() {
+    this.leaveSession()
+  }
+
   render() {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.playGame) {
+    if (!this.state.goGame) {
       return <Loading
         myId={this.state.myId}
         sessionId={this.state.sessionId}
-        // connectionId={this.state.session.connection.connectionId}
-        // connectionId={this.state.localUser.connectionId}
       />;
     } else {
       return (
@@ -665,35 +728,17 @@ class VideoRoomComponent extends Component {
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
-                    playList={this.state.playlist}
-                    myId={this.state.myId}
+                    playerList={this.state.playerlist}
+                    myNickname={this.state.userName}
+                    theEndGame={this.theEndGame}
                   />
-                  {/* <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  /> */}
                 </div>
               )}
           </div>
-          {/* <div className="chattingBox">
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
-                <div style={chatDisplay}>
-                  <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  />
-                </div>
-              )}
-          </div> */}
-        </div>
-      );
+          </div>
+       )};
     }
-  }
+  
 
   /**
    * --------------------------------------------
@@ -734,8 +779,8 @@ class VideoRoomComponent extends Component {
   async createToken(sessionData) {
     this.setState({
       message: sessionData.message,
-      // playGame: sessionData.playGame,
-      // playList: sessionData.playList,
+      playGame: sessionData.playGame,
+      playerList: sessionData.playerList,
       sessionId: sessionData.sessionId,
       token: sessionData.token,
     })

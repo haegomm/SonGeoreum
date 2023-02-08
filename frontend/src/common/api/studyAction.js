@@ -65,7 +65,7 @@ function deleteFavorites(data) {
 }
 
 
-const authAction = { 
+const studyAction = { 
   enquireCategories,
   enquireWords,
   allWords,
