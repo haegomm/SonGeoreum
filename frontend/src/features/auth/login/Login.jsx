@@ -35,7 +35,7 @@ function Login(props) {
     };
 
     dispatch(authAction.login(body)).then((response) => {
-      if (response.payload.msg) {
+      if (response.payload.message) {
         setIsLogin(true)
         saveUserInfo(response.payload)
         alert('로그인 성공!')

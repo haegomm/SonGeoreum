@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
+import setIsLogin from './Navbar'
+import ModifyProfile from './ModifyProfile';
+import './NavbarSide.scss'
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -14,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-export default function TemporaryDrawer() {
+export default function NavbarSide({onLoginHandler}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -72,13 +75,11 @@ export default function TemporaryDrawer() {
       >
       <List>
         <ListItem key='profileBlock' disablePadding>
-        <div>
         <img src={picture} alt="profileImage" />
-      </div>
-      <div>
+      </ListItem>
+      <ListItem key='ProfileInfo' disablePadding>
         <span>{nickname}</span>
         <span>님</span>
-      </div>
         </ListItem>
       </List>
       <Divider />
@@ -90,7 +91,10 @@ export default function TemporaryDrawer() {
           <ListItemButton>
             <ListItemText
               primary='로그아웃'
-              onClick={onLogoutHandler} />
+              onClick={() => {
+                onLoginHandler(getUserInfo().userId)
+                onLogoutHandler()
+              } }/>
           </ListItemButton>
         </ListItem>
         <ListItem key='myVocaButton' disablePadding>
@@ -108,13 +112,22 @@ export default function TemporaryDrawer() {
           </ListItemButton>
         </ListItem>
       </List>
+      <List>
+        <ListItem key='modifyProfileButton' disablePadding>
+          <ListItemButton>
+            <ModifyProfile />
+          </ListItemButton>
+        </ListItem>
+      </List>
     </Box>
   );
 
   return (
     <div>
         <React.Fragment key='right'>
-          <Button onClick={toggleDrawer('right', true)}>right</Button>
+          <Button onClick={toggleDrawer('right', true)}>
+            <img className="drawerButton" src={picture} alt="profileImage" />
+            </Button>
           <Drawer
             anchor='right'
             open={state['right']}
