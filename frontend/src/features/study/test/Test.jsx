@@ -4,6 +4,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SelectCategory from "../SelectCategory";
 import SelectTestMode from "./SelectTestMode";
 import HandToWord from "./HandToWord";
+import WordToHand from "./WordToHand";
 
 import { Grid } from "@mui/material";
 
@@ -68,7 +69,9 @@ export default function Test() {
   const testScreen =
     testMode && testMode === "handToWord" ? (
       <HandToWord categoryNum={categoryNum} resetTestMode={resetTestMode} />
-    ) : null; // 이곳에 모션인식 테스트가 들어갑니다
+    ) : (
+      <WordToHand categoryNum={categoryNum} resetTestMode={resetTestMode} />
+    );
 
   const testStart = testMode ? testScreen : testModeSelect;
 
