@@ -210,6 +210,7 @@ public class UserController {
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
 //            return ApiResponse.invalidAccessToken();
+            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
         }
 
         // expired access token 인지 확인
@@ -219,6 +220,7 @@ public class UserController {
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
 //            return ApiResponse.notExpiredTokenYet();
+            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
         }
         ///////////////////////// 이 부분까지 tokenAccessDeniedHandler를 넣어줄거라 필요한 부분인지 정확히 모르겠어요..
 
@@ -229,12 +231,13 @@ public class UserController {
 
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
-        if(authRefreshToken.validate() || user.getRefreshToken() == null){
+        if(!authRefreshToken.validate() || user.getRefreshToken() == null){
             log.debug("유효하지 않은 refresh token 입니다.");
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
 //            refreshTokenRes = RefreshTokenRes.builder().message("유효하지 않은 refresh token 입니다.").build();
             status = HttpStatus.UNAUTHORIZED;
 //            return ApiResponse.invalidRefreshToken();
+            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
         }
 
         //
