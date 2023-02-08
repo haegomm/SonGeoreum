@@ -3,7 +3,7 @@ import "./TestAnswer.scss";
 
 export default function TestAnswer({ myInput, answer }) {
   return (
-    <div>
+    <div className="center">
       <div className="answerBox">
         <div className="tag wrong">오답</div>
         <div className="value">{myInput}</div>
