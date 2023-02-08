@@ -265,7 +265,7 @@ public class UserController {
     // 회원 정보 조회
     // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
     @ApiOperation(value = "회원 조회") // 해당 Api의 설명
-    @GetMapping
+    @GetMapping("/profile")
     public ResponseEntity<GetUserRes> getUser(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getAttribute("user");
 
