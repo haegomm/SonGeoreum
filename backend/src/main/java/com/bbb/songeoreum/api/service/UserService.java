@@ -1,6 +1,7 @@
 package com.bbb.songeoreum.api.service;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
+import com.bbb.songeoreum.api.request.UpdateUserReq;
 import com.bbb.songeoreum.api.response.GetUserRes;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
@@ -95,10 +96,16 @@ public class UserService {
         log.debug("deleteRefreshToken 요청한 user : {} ", user);
         user.deleteRefreshToken();
     }
-    
+
     // 회원 정보 조회
     public GetUserRes getUser(Long id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(NotFoundException::new).toDTO();
+    }
+
+    // 프로필 수정
+    @Transactional
+    public void updateUser(UpdateUserReq updateUserReq, User user) throws NotFoundException {
+        user.updateUser(updateUserReq);
     }
 
 }

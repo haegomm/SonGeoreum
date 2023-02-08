@@ -1,13 +1,16 @@
 package com.bbb.songeoreum.db.domain;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
+import com.bbb.songeoreum.api.request.UpdateUserReq;
 import com.bbb.songeoreum.api.response.GetUserRes;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Slf4j
 @ToString
 @Entity
 @Getter // getter 생성
@@ -116,6 +119,12 @@ public class User implements Serializable {
     // 회원 정보 조회
     public GetUserRes toDTO(){
         return new GetUserRes(id, userType, email, kakaoId, nickname, picture, level, experience);
+    }
+
+    // 프로필 수정
+    public void updateUser(UpdateUserReq updateUserReq){
+        this.nickname = updateUserReq.getNickname();
+        this.picture = updateUserReq.getPicture();
     }
 
 }
