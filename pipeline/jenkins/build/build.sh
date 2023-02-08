@@ -1,14 +1,26 @@
 #!/bin/bash
 
+echo "*******************************"
+echo "*******Building FRONTEND*******"
+echo "*******************************"
+
 # frontend build
-cd /home/ubuntu/S08P12B106/frontend
+cd /var/jenkins_home/workspace/bbb-pipeline/frontend
 npm install
 npm run build
 
+echo "********************************"
+echo "********Building BACKEND********"
+echo "********************************"
+
 # backend build
-cd /home/ubuntu/S08P12B106/backend
-gradle clean build +x test
+cd /var/jenkins_home/workspace/bbb-pipeline/backend
+gradle clean build -x test
+
+echo "********************************"
+echo "***Building DOCKER CONTAINERS***"
+echo "********************************"
 
 # docker container build
-cd /home/ubuntu
+cd /var/jenkins_home/workspace/bbb-pipeline/pipeline
 docker compose build --no-cache
