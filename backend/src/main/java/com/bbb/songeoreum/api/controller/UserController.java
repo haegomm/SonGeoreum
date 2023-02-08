@@ -4,6 +4,7 @@ import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.api.response.LogoutRes;
+import com.bbb.songeoreum.api.response.RefreshTokenRes;
 import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
@@ -12,9 +13,14 @@ import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
+import com.bbb.songeoreum.jwt.common.ApiResponse;
+import com.bbb.songeoreum.oauth.entity.RoleType;
 import com.bbb.songeoreum.util.CookieUtil;
+import com.bbb.songeoreum.util.HeaderUtil;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -22,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -186,29 +193,68 @@ public class UserController {
     }
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
-    @PostMapping("/refresh/{id}")
-    public ResponseEntity<?> refreshToken(@PathVariable("id") Long id, HttpServletRequest request)
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
 
-        Map<String, Object> resultMap = new HashMap<>();
+        RefreshTokenRes refreshTokenRes = null; // 리턴 값
         HttpStatus status = HttpStatus.ACCEPTED;
-        String token = request.getHeader("refreshToken");
 
-        log.debug("token : {}, id : {}", token, id);
-
-        if (jwtService.checkToken(token)) {
-            if (token.equals(userService.getRefreshToken(id).getRefreshToken())) {
-                String accessToken = jwtService.createAccessToken("email", id);
-                log.debug("accessToken : {}", accessToken);
-                log.debug("정상적으로 액세스토큰 재발급!!!");
-                resultMap.put("access-token", accessToken);
-                resultMap.put("message", SUCCESS);
-                status = HttpStatus.ACCEPTED;
-            }
-        } else {
-            log.debug("리프레쉬토큰도 사용불!!!!!!!");
+        //////////////////////// 이 부분부터
+        // access token 확인
+        String accessTokenCheck = HeaderUtil.getAccessToken(request);
+        AuthToken authToken = tokenProvider.convertAuthToken(accessTokenCheck);
+        if (!authToken.validate()) {
+            log.debug("유효하지 않은 access token 입니다.");
+            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
+//            return ApiResponse.invalidAccessToken();
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+
+        // expired access token 인지 확인
+        Claims claims = authToken.getExpiredTokenClaims();
+        if (claims == null) {
+            log.debug("만료되지 않은 access token 입니다.");
+            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
+            status = HttpStatus.UNAUTHORIZED;
+//            return ApiResponse.notExpiredTokenYet();
+        }
+        ///////////////////////// 이 부분까지 tokenAccessDeniedHandler를 넣어줄거라 필요한 부분인지 정확히 모르겠어요..
+
+        // refresh token
+        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
+                .map(Cookie::getValue)
+                .orElse(null);
+
+        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
+
+        if(authRefreshToken.validate() || user.getRefreshToken() == null){
+            log.debug("유효하지 않은 refresh token 입니다.");
+            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
+//            refreshTokenRes = RefreshTokenRes.builder().message("유효하지 않은 refresh token 입니다.").build();
+            status = HttpStatus.UNAUTHORIZED;
+//            return ApiResponse.invalidRefreshToken();
+        }
+
+        //
+
+        Date now = new Date();
+
+        // access 토큰 발급
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                user.getId(), // access 토큰에 user pk 저장
+                user.getNickname(),
+                "ROLE_USER",
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+
+        log.debug("정상적으로 액세스토큰 재발급!!!");
+        refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
+        status = HttpStatus.ACCEPTED;
+
+
+//        return ApiResponse.success("token", newAccessToken.getToken());
+        return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
     }
 }
