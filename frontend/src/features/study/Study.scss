@@ -1,0 +1,65 @@
+$yellow: #f9be7d;
+$blue: #6488e5;
+
+.studyBox {
+  margin-top: 100px;
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.marginTopBox {
+  margin-top: 100px;
+}
+
+.guideText {
+  font-size: 26px;
+  font-weight: 500;
+  color: white;
+  margin-top: 32px;
+}
+
+.modeText {
+  font-size: 48px;
+  font-weight: 700;
+  color: $yellow;
+  margin: 32px;
+  text-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+}
+
+.reselectButton {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  margin: 16px;
+  background-color: $blue;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 75px;
+  height: 50px;
+  border-radius: 25px 25px 25px 25px;
+  border: none;
+  box-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+
+  cursor: pointer;
+
+  transition: all 0.5s;
+}
+.reselectButton:active,
+.reselectButton:hover,
+.reselectButton:focus {
+  background-color: $yellow;
+  transition: all 0.5s;
+  transform: translateY(-7px);
+}
+.reselectButton:disabled {
+  color: white;
+  opacity: 0.5;
+}
+
+.categoryList {
+  margin: 64px;
+}

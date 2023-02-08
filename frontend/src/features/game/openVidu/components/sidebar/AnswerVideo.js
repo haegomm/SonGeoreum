@@ -1,39 +1,74 @@
 import React, { useEffect, useState } from "react";
-import lock from "../../assets/images/lock.jpg"
+import lock from "../../assets/images/lock.jpg";
 
-const AnswerVideo = () => {
-    let [showVideo, setShowVideo] = useState(false)
-    const [ count, setCount ] = useState(5)
-    
-    // Timer
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCount( count => count - 1)
-        }, 1000)
-        if (count === 0) {
-            setShowVideo(!showVideo)
-            clearInterval(timer)
-        }
-        return () => clearInterval(timer)
-        }, [count])
+const AnswerVideo = (props) => {
+  const myNicname = props.myNicname;
+  const answerWord = props.answerWord;
+  const answerApi = props.answerApi;
+  const presenter = props.presenter;
+  const showAnswer = props.showAnswer;
+  // const whoGetScore = props.whoGetScore
+  // const toNext = props.toNext
 
-    return (
-        <div>
+  const [sec, setSec] = useState;
+
+  const handleToNext = () => {
+    console.log("다음 턴으로 넘어가보자");
+    props.toNext();
+  };
+
+  // useEffect(() => {
+  //   startTimer()
+  // }, [])
+
+  // // Timer
+  // const startTimer = () => {
+  //     if(!showAnswer){
+  //         const timer = setInterval(() => {
+  //             setTimerCount( timerCount => timerCount - 1)
+  //         }, 1000)
+  //         if (timerCount === 0) {
+  //             props.whoGetScore('')
+  //             handleToNext()
+  //             setTimerCount(5)
+  //             clearInterval(timer)
+  //         }
+  //         return () => clearInterval(timer)
+  //     }
+  // }
+
+  // useEffect(() => {
+  //     const timer = setInterval(() => {
+  //         setTimerCount( timerCount => timerCount - 1)
+  //     }, 1000)
+  //     if (timerCount === 0) {
+  //         setShowVideo(!showVideo)
+  //         handleToNext()
+  //         clearInterval(timer)
+  //     }
+  //     return () => clearInterval(timer)
+  //     }, [timerCount])
+
+  return (
+    <div>
+      <div className="box">{/* <h1>{ timerCount }</h1> */}</div>
+      <div className="box">
+        {showAnswer || presenter === myNicname ? (
+          <div className="box">
             <div className="box">answer</div>
-            <div className="box">
-                <h1>{ count }</h1>
-            </div>
-            {/* 정답 video(api) */}
-            <div className="box">
-                {/* showVideo || presenter === myId */}
-                {showVideo ? (
-                    // 나중에 loop속성 넣어서 동영상 반복 재생시키기
-                    <video autoPlay> 
-                        <source src="http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"></source>
-                    </video>) : (<img className="box" src={ lock }></img>)}
-            </div>
-        </div>
-    )
-}
+            <video autoPlay loop>
+              <source src="http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"></source>
+            </video>
+          </div>
+        ) : (
+          <div className="box">
+            <div className="box">answer</div>
+            <img className="box" src={lock}></img>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-export default AnswerVideo
+export default AnswerVideo;

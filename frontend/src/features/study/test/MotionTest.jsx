@@ -39,7 +39,8 @@ export default function MotionTest() {
       /*
     Websocket Connect
   */
-      let url = `wss://i8b106.p.ssafy.io/ws/socket-server`;
+
+      let url = `wss://i8b106.p.ssafy.io/ws/socket-server/1`;
 
       const handSocket = new WebSocket(url);
 
@@ -100,7 +101,7 @@ export default function MotionTest() {
 
       const hands = new Hands({
         locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${file}`;
         },
       });
 

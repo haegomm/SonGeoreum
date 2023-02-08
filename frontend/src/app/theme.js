@@ -32,6 +32,10 @@ const CustomMuiTheme = createTheme({
     info: {
       main: "#6488e5",
     },
+    disabled: defaultTheme.palette.augmentColor({
+      color: { main: "#C6C6C6" },
+      name: "disabled",
+    }),
     blue: defaultTheme.palette.augmentColor({
       color: { main: "#6488e5" },
       name: "blue",

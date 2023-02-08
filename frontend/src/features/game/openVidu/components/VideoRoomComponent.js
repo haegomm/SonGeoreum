@@ -18,38 +18,45 @@ const APPLICATION_SERVER_URL =
 class VideoRoomComponent extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    let myId = 2 // redux에서 가지고 오거나 로컬 스토리지에서 유저pk 받아서 넣기
+    // let myId = Math.floor(Math.random() * 100) // uesrpk 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
-      : "SessionA";
+      : "SonGeoreum";
     let userName = this.props.user
       ? this.props.user
-      : "OpenVidu_User" + Math.floor(Math.random() * 100);
+      : "SonGeoreum_User" + Math.floor(Math.random() * 100); // 유저 닉네임받아와서 넣기
+    console.log(this.props.user)
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
-      // mySessionId: sessionName,
-      mySessionId: myId,
-      myUserName: userName,
+      mySessionId: sessionName,
+      // myUserName: userName,
+      myUserName: "큐티가은",
       session: undefined,
       localUser: undefined,
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      playGame: false, // 추후 백에서 받아와 변경되는 변수, 게임 플레이 할건지 알려준다.
-      // myId: '해곰', // UserModel에 nickname을 myId용으로 쓰기
-      playlist: [],
-      subToken: undefined,
+      myId: 3,//
+      connectionId: undefined,
+      message: "",//
+      sessionId: undefined,//
+      token: "",//
+      playGame: false,//
+      goGame: true,
+      playerlist: ["가은", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
+      subToken: undefined,// ?
     };
+    // this.timer // timer component를 갖고온다면
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.updateLayout = this.updateLayout.bind(this);
     this.camStatusChanged = this.camStatusChanged.bind(this);
-    this.micStatusChanged = this.micStatusChanged.bind(this);
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -59,6 +66,7 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
+    this.theEndGame = this.theEndGame.bind(this)
   }
 
   componentDidMount() {
@@ -85,12 +93,15 @@ class VideoRoomComponent extends Component {
     console.log("join 하기 전 DidMount");
 
     this.joinSession();
+
+    // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
+    clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
 
@@ -100,6 +111,7 @@ class VideoRoomComponent extends Component {
 
   joinSession() {
     this.OV = new OpenVidu();
+    this.OV.enableProdMode()
 
     this.setState(
       {
@@ -113,13 +125,13 @@ class VideoRoomComponent extends Component {
   }
 
   async connectToSession() {
+    // this.state.token?
     if (this.props.token !== undefined) {
-      console.log("token received: ", this.props.token);
+      console.log("여기!! token received: ", this.props.token);
       this.connect(this.props.token);
     } else {
       try {
         var token = await this.getToken();
-        console.log(token);
         this.connect(token);
       } catch (error) {
         console.error(
@@ -141,6 +153,7 @@ class VideoRoomComponent extends Component {
   }
 
   connect(token) {
+    console.log("세션 잘 담기는지 확인", this.state.session)
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
@@ -160,51 +173,77 @@ class VideoRoomComponent extends Component {
           "There was an error connecting to the session:",
           error.code,
           error.message
-        );
-      });
-  }
-
-  async connectWebCam() {
-    await this.OV.getUserMedia({
-      audioSource: undefined,
-      videoSource: undefined,
-    });
-    var devices = await this.OV.getDevices();
-    var videoDevices = devices.filter((device) => device.kind === "videoinput");
-
-    let publisher = this.OV.initPublisher(undefined, {
-      audioSource: undefined,
-      videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(),
-      publishVideo: localUser.isVideoActive(),
-      resolution: "640x480",
-      frameRate: 30,
-      insertMode: "APPEND",
-    });
-
-    if (this.state.session.capabilities.publish) {
-      publisher.on("accessAllowed", () => {
-        console.log("토큰값을 확인해보자: ");
-        console.log(this.state.localUser);
-        this.state.session.publish(publisher).then(() => {
-          this.updateSubscribers();
+          );
+        });
+      }
+      
+      async connectWebCam() {
+        await this.OV.getUserMedia({
+          audioSource: undefined,
+          videoSource: undefined,
+        });
+        var devices = await this.OV.getDevices();
+        var videoDevices = devices.filter((device) => device.kind === "videoinput");
+        
+        let publisher = this.OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: videoDevices[0].deviceId,
+          publishAudio: localUser.isAudioActive(),
+          publishVideo: localUser.isVideoActive(),
+          resolution: "640x480",
+          frameRate: 30,
+          insertMode: "APPEND",
+        });
+        
+        if (this.state.session.capabilities.publish) {
+          publisher.on("accessAllowed", () => {
+            console.log("토큰값을 확인해보자: ", this.state.localUser);
+            //이때 커넥션 아이디 생김
+            this.state.session.publish(publisher).then(() => {
+              this.updateSubscribers();
           console.log("subscriber를 업데이트 했어요: ");
           console.log(this.state.subscribers);
-
-          if (this.state.subscribers.length > 3) {
-            console.log("4명이상입니다. 연결하지 않습니다.");
-            this.leaveSession();
-            return;
-          } else {
-            console.log("4명이하입니다. 연결합니다. -> ");
-
-            console.log(this.state.subscribers.length);
-          }
+        
+          // if (this.state.subscribers.length > 3) {
+          //   console.log("4명이상입니다. 입장할 수 없습니다. -> ", this.state.subscribers.length);
+          //   this.leaveSession();
+          //   return;
+          // } // 백에서 해주고 있는 듯
 
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
             this.props.joinSession();
-          }
+              }
+
+          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+              if (this.state.goGame === false) {
+                if (this.state.subscribers > 2 && this.state.playGame === true) {
+                  this.state.localUser.getStreamManager().signal({
+                    data: {
+                      playGame: this.state.playGame,
+                      playerList: this.state.playerList
+                    }, // 문자열로 보내짐 // json.parse() 해주기
+                    to: [],
+                    type: 'play-game'
+                  }).then(() => {
+                console.log("얘들아 게임 시작한다~~!",)
+                  })
+                    .catch(error => {
+                    console.error()
+                  })
+            } else if(this.state.subscribers > 2) {
+              this.state.localUser.getStreamManager().on('signal:play-game', (event) => {
+                console.log("오케이 가보자고")
+                console.log(event.data)
+                console.log(event.from)
+                const data = JSON.parse(event.data); // 했음
+                this.setState({
+                  goGame: data.goGame,
+                  playerList: data.playerList
+                })
+              })
+            }
+            }
         });
       });
     }
@@ -251,13 +290,31 @@ class VideoRoomComponent extends Component {
       }
     );
   }
-
-  leaveSession() {
+  
+  async leaveSession() {
+    console.log("이곳을...떠나겠습니다...")
     const mySession = this.state.session;
+    const sessionId = this.state.sessionId
 
-    if (mySession) {
-      mySession.disconnect();
+    mySession.disconnect();
+
+    // if (mySession) {
+    //   mySession.disconnect();
+    // }
+    
+    if ((this.state.playGame || this.state.goGame)){
+      try {
+        const response = await axios.delete(
+          APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+          );
+        console.log("나가요~ >> ", response.data.message)
+        return response.data;
+      } catch (err) {
+        console.log("못나감~ >>", err)
+      }
     }
+
+  
 
     // axios({
     //   url: "/leavsession/checkdata",
@@ -287,17 +344,29 @@ class VideoRoomComponent extends Component {
       this.props.leaveSession();
     }
   }
+
+  // 대기가 길어질 경우, 모두 나가주세요~!
+  async byeBye() {
+    const sessionId = this.state.sessionId
+    if(this.state.subscribers < 3){
+      try {
+      const response = await axios.put(
+        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+        );
+        console.log("모두 나가주세요~ >> ")
+        this.leaveSession()
+      // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
+      return response.data;
+      } catch (err) {
+        console.log("안나가지는데요.. >>", err)
+      }
+    }
+  }
+  
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());
     this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
-    this.setState({ localUser: localUser });
-  }
-
-  micStatusChanged() {
-    localUser.setAudioActive(!localUser.isAudioActive());
-    localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
     this.setState({ localUser: localUser });
   }
 
@@ -366,7 +435,7 @@ class VideoRoomComponent extends Component {
       remoteUsers.forEach((user) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
-          console.log("EVENTO REMOTE: ", event.data);
+          console.log("여기다 여기 EVENTO REMOTE: ", event.data);
           if (data.isAudioActive !== undefined) {
             user.setAudioActive(data.isAudioActive);
           }
@@ -586,12 +655,20 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // 게임이 끝났을 때 결과창으로 보내주기
+  theEndGame() {
+    this.leaveSession()
+  }
+
   render() {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.playGame) {
-      return <Loading />;
+    if (!this.state.goGame) {
+      return <Loading
+        myId={this.state.myId}
+        sessionId={this.state.sessionId}
+      />;
     } else {
       return (
         <div className="container" id="container">
@@ -599,9 +676,10 @@ class VideoRoomComponent extends Component {
           <ToolbarComponent
             sessionId={mySessionId}
             user={localUser}
+            // user={this.state.localUser}
             showNotification={this.state.messageReceived}
             camStatusChanged={this.camStatusChanged}
-            micStatusChanged={this.micStatusChanged}
+            // micStatusChanged={this.micStatusChanged}
             //   screenShare={this.screenShare}
             //   stopScreenShare={this.stopScreenShare}
             //   toggleFullscreen={this.toggleFullscreen}
@@ -642,9 +720,6 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            {/* <div className="box">timer</div>
-            <div className="box">answer</div>
-            <div className="box">answer video</div> */}
             {localUser !== undefined &&
               localUser.getStreamManager() !== undefined && (
                 <div style={chatDisplay}>
@@ -653,35 +728,17 @@ class VideoRoomComponent extends Component {
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
-                    playList={this.state.playlist}
-                    myId={this.state.myId}
+                    playerList={this.state.playerlist}
+                    myNickname={this.state.userName}
+                    theEndGame={this.theEndGame}
                   />
-                  {/* <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  /> */}
                 </div>
               )}
           </div>
-          {/* <div className="chattingBox">
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
-                <div style={chatDisplay}>
-                  <ChatComponent
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                  />
-                </div>
-              )}
-          </div> */}
-        </div>
-      );
+          </div>
+       )};
     }
-  }
+  
 
   /**
    * --------------------------------------------
@@ -699,22 +756,17 @@ class VideoRoomComponent extends Component {
    * more about the integration of OpenVidu in your application server.
    */
   async getToken() {
-    const sessionId = await this.createSession(this.state.mySessionId)
-    return await this.createToken(sessionId);
+    const sessionData = await this.createSession(this.state.myId)
+    return await this.createToken(sessionData);
   }
 
-  // key보내기
-  async createSession(sessionId) {
+  // myId(userPk)보내기
+  async createSession(myId) {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL + "/api/game/session",
-        // {
-        // statusCode: 200,
-        // headers: {
-        //   "Access-Control-Allow-Origin": "*", 
-        //   "Access-Control-Allow-Credentials": true}},
            {
-            id: sessionId, // {id :user pk}
+            id: myId, // {id :user pk}
           }
         );
       console.log("요청성공 >> ", response.data)
@@ -724,20 +776,23 @@ class VideoRoomComponent extends Component {
     }
   }
 
-  async createToken(data) {
-
-    const message = data.message;
-    const playGame = data.playGame;
-    const playList = data.playList;
-    const roomId = data.sessionId;
-    const token = data.token;
+  async createToken(sessionData) {
+    this.setState({
+      message: sessionData.message,
+      playGame: sessionData.playGame,
+      playerList: sessionData.playerList,
+      sessionId: sessionData.sessionId,
+      token: sessionData.token,
+    })
+    
+    const token = sessionData.token
     
     // const tokenData = token.split("=");
     // console.log(tokenData);
     // const tokenID = tokenData[tokenData.length - 1];
     // this.state.subToken = tokenID;
-    console.log("토큰이 저장됐습니까? : ");
-    console.log(this.state.subToken);
+    console.log("토큰이 저장됐습니까? : ", this.state.subToken);
+    console.log(this.state.sessionId)
     // console.log(token.searchParams);
     return token; // The token
   }

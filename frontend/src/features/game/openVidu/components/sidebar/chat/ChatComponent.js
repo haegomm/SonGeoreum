@@ -8,17 +8,21 @@ import { Tooltip } from "@mui/material";
 export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
+      answerWord: props.answerWord,
     };
+    
     this.chatScroll = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePressKey = this.handlePressKey.bind(this);
     this.close = this.close.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.handleWhoGetScore = this.handleWhoGetScore(this)
   }
 
   componentDidMount() {
@@ -65,11 +69,12 @@ export default class ChatComponent extends Component {
       const word = item.message;
       const nickname = item.nickname;
       console.log("입력한 단어: " + word);
-      if (word == "정답") {
+      if (word === "정답") {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
-        // 여기에 정답 count 함수 호출해서 state 바꾸기
-        this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다.
+        // 정답자 올려주기
+        this.handleWhoGetScore(nickname)
+        this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다. //setState?
       } else {
         console.log("틀렸습니다.");
       }
@@ -78,6 +83,12 @@ export default class ChatComponent extends Component {
           this.state.checkMessageList.length
       );
     });
+  }
+
+  // 정답자 올려주기 // nickname let에 담아서 보내줘야하나? / this.props.nickname
+  handleWhoGetScore(nickname) {
+    console.log("얘가 정답자야!!", nickname.props.user.nickname)
+    this.props.whoGetScore(nickname.props.user.nickname)
   }
 
   handleChange(event) {
