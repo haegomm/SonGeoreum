@@ -1,5 +1,6 @@
 package com.bbb.songeoreum.jwt;
 
+import com.bbb.songeoreum.db.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
@@ -18,16 +19,20 @@ public class AuthToken { // JwtUtil
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
 
+    private final UserRepository userRepository;
+
     // refresh token
-    public AuthToken(String id, Date expiry, Key key) {
+    public AuthToken(String id, Date expiry, Key key, UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.key = key;
         this.token = createAuthToken(id, expiry);
     }
 
     // access token
-    public AuthToken(Long id, String role, Date expiry, Key key) {
+    public AuthToken(Long id, String nickname, String role, Date expiry, Key key, UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.key = key;
-        this.token = createAuthToken(id, role, expiry);
+        this.token = createAuthToken(id, nickname, role, expiry);
     }
 
     /**
@@ -53,7 +58,7 @@ public class AuthToken { // JwtUtil
     }
 
     // jwt access token 생성
-    private String createAuthToken(Long id, String role, Date expiry) {
+    private String createAuthToken(Long id, String nickname, String role, Date expiry) {
         return Jwts.builder()
                 // Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
                 .setHeaderParam("type", "JWT")
@@ -62,6 +67,7 @@ public class AuthToken { // JwtUtil
                 .setSubject("accessToken")
                 .claim(AUTHORITIES_KEY, role)
                 .claim("id", id) // user table PK
+                .claim("nickname", nickname)
                 // Signature 설정 : secret key를 활용한 암호화.
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)
@@ -69,7 +75,7 @@ public class AuthToken { // JwtUtil
     }
 
     public boolean validate() {
-        log.debug("validate");
+        log.debug("validate() 호출됨.");
         return this.getTokenClaims() != null;
     }
 

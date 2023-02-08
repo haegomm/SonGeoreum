@@ -82,17 +82,17 @@ public class UserService {
     }
 
 
-    public User getRefreshToken(String email) throws NotFoundException {
+    public User getRefreshToken(Long id) throws NotFoundException {
 
-        return userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
 
     @Transactional
-    public void deleteRefreshToken(String email) throws NotFoundException {
-        User member = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
-        log.debug("member : {} ", member);
-        member.deleteRefreshToken();
+    public void deleteRefreshToken(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        log.debug("deleteRefreshToken 요청한 user : {} ", user);
+        user.deleteRefreshToken();
     }
 
 }

@@ -36,19 +36,15 @@ public class LoginRes {
     @ApiModelProperty(example = "경험치")
     private int experience;
 
-    // refresh토큰
-    @ApiModelProperty(example = "refresh토큰")
-    private String refreshToken;
-
     // access토큰
     @ApiModelProperty(example = "access토큰")
     private String accessToken;
 
     @ApiModelProperty(example = "로그인 성공시 success 그렇지 않으면 fail")
-    private String msg;
+    private String message;
 
     @Builder
-    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String refreshToken, String accessToken, String msg) {
+    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String accessToken, String message) {
         this.id = id;
         this.userType = userType;
         this.email = email;
@@ -56,14 +52,13 @@ public class LoginRes {
         this.picture = picture;
         this.level = level;
         this.experience = experience;
-        this.refreshToken = refreshToken;
         this.accessToken = accessToken;
-        this.msg = msg;
+        this.message = message;
     }
 
     @Builder
-    public LoginRes(String msg) {
-        this.msg = msg;
+    public LoginRes(String message) {
+        this.message = message;
     }
 
 }
