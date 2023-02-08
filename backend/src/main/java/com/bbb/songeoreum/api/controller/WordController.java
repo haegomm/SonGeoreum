@@ -22,17 +22,6 @@ public class WordController {
 
     private final WordService wordService;
 
-//    @GetMapping("/category/{categoryId}")
-//    @ApiOperation(value = "특정 카테고리에 속하는 단어를 조회합니다.")
-//    public ResponseEntity<List<WordRes>> findWordsByCategory(@PathVariable(name = "categoryId") String categoryId) {
-//
-//        log.debug("Category Id: {}", categoryId);
-//
-//        List<WordRes> words = wordService.findByCategoryId(categoryId);
-//
-//        return new ResponseEntity<List<WordRes>>(words, HttpStatus.OK);
-//    }
-
     @GetMapping
     @ApiOperation("특정 조건을 만족하는 모든 단어를 리스트에 담아 응답한다.")
     public ResponseEntity<List<WordRes>> findWords(
