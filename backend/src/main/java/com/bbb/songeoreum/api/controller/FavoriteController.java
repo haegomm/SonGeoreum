@@ -49,7 +49,7 @@ public class FavoriteController {
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
         if (findFavorite != null) msg = SUCCESS;
 
-        FavoriteUserWordRes favoriteUserWordRes = FavoriteUserWordRes.builder().msg(msg).build();
+        FavoriteUserWordRes favoriteUserWordRes = FavoriteUserWordRes.builder().message(msg).build();
 
         return new ResponseEntity<FavoriteUserWordRes>(favoriteUserWordRes, HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class FavoriteController {
             favoriteService.saveFavorite(userId, wordId);
         }
 
-        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().msg(msg).build();
+        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().message(msg).build();
 
         return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class FavoriteController {
             favoriteService.deleteFavorite(findFavorite);
         }
 
-        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().msg(msg).build();
+        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().message(msg).build();
 
         return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
     }

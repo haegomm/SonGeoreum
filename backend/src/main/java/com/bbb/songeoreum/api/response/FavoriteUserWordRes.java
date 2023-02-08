@@ -11,6 +11,6 @@ import lombok.*;
 public class FavoriteUserWordRes {
 
     @ApiModelProperty(example = "나의 단어장에 있다면 success, 그렇지 않다면 fail")
-    private String msg;
+    private String message;
 
 }
