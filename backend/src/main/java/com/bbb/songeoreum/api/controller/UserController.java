@@ -3,10 +3,7 @@ package com.bbb.songeoreum.api.controller;
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
-import com.bbb.songeoreum.api.response.GetUserRes;
-import com.bbb.songeoreum.api.response.LoginRes;
-import com.bbb.songeoreum.api.response.LogoutRes;
-import com.bbb.songeoreum.api.response.RefreshTokenRes;
+import com.bbb.songeoreum.api.response.*;
 import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
@@ -287,4 +284,17 @@ public class UserController {
         return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 
     }
+
+    // 게임 결과 경험치 반영
+    @ApiOperation(value = "게임 결과 경험치 반영")
+    @PutMapping("/game/{experience}")
+    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getAttribute("user");
+
+        UpdateExperienceRes updateExperienceRes = userService.updateExperience(user, experience);
+
+        return new ResponseEntity<UpdateExperienceRes>(updateExperienceRes, HttpStatus.OK);
+
+    }
+
 }

@@ -127,4 +127,10 @@ public class User implements Serializable {
         this.picture = updateUserReq.getPicture();
     }
 
+    // 게임 결과 경험치 반영
+    public void updateExperience(int level, int experience){
+        this.level = level;
+        this.experience = experience;
+    }
+
 }

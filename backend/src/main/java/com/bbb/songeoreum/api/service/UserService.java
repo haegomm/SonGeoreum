@@ -3,6 +3,7 @@ package com.bbb.songeoreum.api.service;
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
 import com.bbb.songeoreum.api.response.GetUserRes;
+import com.bbb.songeoreum.api.response.UpdateExperienceRes;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.DuplicateException;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)  // 트랜잭션 안에서만 데이터 변경하게 설정
+//@Transactional(readOnly = true)  // 트랜잭션 안에서만 데이터 변경하게 설정
 public class UserService {
 
     private final UserRepository userRepository;
@@ -106,6 +107,33 @@ public class UserService {
     @Transactional
     public void updateUser(UpdateUserReq updateUserReq, User user) throws NotFoundException {
         user.updateUser(updateUserReq);
+    }
+
+    // 게임 결과 경험치 반영
+    @Transactional
+    public UpdateExperienceRes updateExperience(User user, int experience) {
+
+        int level = 1;
+
+        switch (experience/10) {
+            case 0: break;
+            case 1: level = 2; break;
+            case 2: level = 3; break;
+            case 3: level = 4; break;
+            case 4: level = 5; break;
+            case 5: level = 6; break;
+            case 6: level = 7; break;
+            case 7: level = 8; break;
+            case 8: level = 9; break;
+            default: level = 10; break;
+        }
+
+        user.updateExperience(level, experience);
+
+        UpdateExperienceRes updateExperienceRes = UpdateExperienceRes.builder().level(level).experience(experience).build();
+
+        return updateExperienceRes;
+
     }
 
 }
