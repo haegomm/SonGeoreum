@@ -61,14 +61,15 @@ public class SecurityConfig {
                 .formLogin().disable() // jwt를 사용하므로 로그인 폼 필요하지 않음.
                 .httpBasic().disable() // 기본 http 방식 안 씀.
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용 권한 체크
-//                .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
-                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
-                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
+                .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
+//                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
+//                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
                 .logout() // 로그아웃을 하면
                 .logoutSuccessUrl("/") // 메인 페이지로 redirect 한다.
 //                .invalidateHttpSession(true) // 로그아웃 이후 세션 전체 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
 //                .deleteCookies("JSESSIONID") // 로그아웃 이후 쿠키 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
+//                .clearAuthentication(true) // 로그아웃 이후 인증 초기화
                 .and()
                 .oauth2Login() // oauth2로그인 (소셜 로그인 설정을 시작하겠다.)
                 .authorizationEndpoint() //아래 uri로 접근시 oauth 로그인을 요청한다.
