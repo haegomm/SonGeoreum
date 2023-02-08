@@ -10,6 +10,7 @@ const Loading = (props) => {
   console.log(props)
   const myId = props.myId
   const sessionId = props.sessionId
+  console.log(sessionId)
   
   let tipNumber = 0
   const tips = [
@@ -33,18 +34,17 @@ const Loading = (props) => {
     }
   },[])
   
-  // 대기방 나가기 요청 / room으로 빼내서 leaveSession해줘야 함
-  const roomOut = () => {
+  const roomOut = async() => {
     try {
-          const response = axios.post(
+          const response = await axios.post(
             "https://i8b106.p.ssafy.io/api/game/session/user",
                {
                  sessionId: sessionId,
               }
       );
-      console.log("나갈게~ >>", myId)
+      console.log("나갈게~ >>", sessionId)
       navigate('/')
-      console.log(response)
+      console.log(response.data)
       return response.data
     } catch (err) {
       console.log("못나가^^ >>", err)
