@@ -11,7 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
 export default function HandToWord({ categoryNum, resetTestMode }) {
-  const [wordList, setWordList] = useState([]); // 단어 목록
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
   const [number, setNumber] = useState(0); // 현재 문제 번호
   const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
@@ -22,10 +21,8 @@ export default function HandToWord({ categoryNum, resetTestMode }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words/category/${categoryNum}`
+        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
       );
-      setWordList(data.data);
-      // 이 리스트 중에서 랜덤한 10개를 뽑는 로직 필요합니다.
       setTestList(data.data);
       console.log("data >> ", data.data);
     }
@@ -47,7 +44,7 @@ export default function HandToWord({ categoryNum, resetTestMode }) {
       console.log("틀렸습니다", num);
       setShowAnswer(true);
     }
-    if (num === testList.length && !showAnswer && !showCorrect) {
+    if (num === 10 && !showAnswer && !showCorrect) {
       setTimeout(exitTest, 2000); // 결과 페이지로 넘어가야 합니다
     }
   };
