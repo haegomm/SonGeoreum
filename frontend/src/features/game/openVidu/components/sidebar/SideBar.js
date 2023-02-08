@@ -12,7 +12,7 @@ const SideBar = ( props ) => {
     // const playerList = props.playerList // props로 받아오기
     const myNicname  = props.myNicname
     let [gameCnt, setGameCnt] =useState(0)
-    const questionList = [{name: '농담', contentUrl:"http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20200824/735073/MOV000259232_700X466.mp4"}] // api로 받아오기 / random 12문제 // 
+    const [questionList, setQuestionList] = useState([]) // api로 받아오기 / random 12문제 // 
     const [answerWord, setAnswerWord] = useState('')
     const [answerApi, setAnswerApi] = useState('')
     let scoreList = [0, 0, 0, 0]
@@ -24,16 +24,17 @@ const SideBar = ( props ) => {
       navigate('result', {state: result})
     }
     
-    // useEffect(() => {
-    //   getWordList()
-    // }, [])
+    useEffect(() => {
+      getWordList()
+    }, [])
     
     const getWordList = async() => {
       try {
             const response = await axios.get(
-              "https://i8b106.p.ssafy.io/api/words",
+              "https://i8b106.p.ssafy.io/api/words?isRandom=true&isTestable=false&num=12",
         );
         console.log("단어리스트를 가지고 왔어요", response.data)
+        setQuestionList(response.data)
         return response.data
       } catch (err) {
         console.log("단어리스트를 못 가져왔는뎅ㅜ!!!", err)
@@ -62,7 +63,7 @@ const SideBar = ( props ) => {
           handletheEndGame(resultScore())
         } else {
           onShowAnswer() // false 
-          changeAnswer()
+          // changeAnswer()
           console.log("다음 게임 시작 >>", gameCnt)
         }
     }

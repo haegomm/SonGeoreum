@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+// import axios from "../../../../../common/api/https";
+import axios from "axios";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
 
@@ -18,10 +20,17 @@ const AnswerVideo = (props) => {
 //     props.toNext();
 //     };
     
-    const renderTime = ({ remainingTime }) => {
+    // useEffect(() => {
+    //     getWordsList()
+    // }, [])
+    
+    
+    const renderTime = ({ remainingTime, showAnswer }) => {
         if (remainingTime === 0) {
             props.whoGetScore('')
             return <div className="timer">!!시간초과!!</div>;
+        } else if (!showAnswer){
+            return <div className="timer">정답 단어</div>;
         }
       
         return (
@@ -30,7 +39,16 @@ const AnswerVideo = (props) => {
           </div>
         );
     };
-    
+
+    // async function getWordsList() {
+    //     try {
+    //       const response = await axios.get('https://i8b106.p.ssafy.io/api/words?isRandom=true&isTestable=false&num=12'); // Backtick(`)을 이용해 이렇게 요청할 수도 있다.
+    //       console.log(response);
+    //     } catch (e) {
+    //       console.error(e);
+    //     }
+    //   }
+
   // useEffect(() => {
   //   startTimer()
   // }, [])
