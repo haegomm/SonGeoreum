@@ -1,6 +1,10 @@
+echo "*********************************"
+echo "***DEPLOYING DOCKER CONTAINERS***"
+echo "*********************************"
+
 # docker container run
-cd /home/ubuntu
+cd /var/jenkins_home/workspace/bbb-pipeline/pipeline
 docker compose up -d
 
 # delete dangling images
-docker image prune
+docker image prune -f
