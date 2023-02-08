@@ -3,6 +3,7 @@ package com.bbb.songeoreum.api.controller;
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.response.LoginRes;
+import com.bbb.songeoreum.api.response.LogoutRes;
 import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
@@ -16,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -162,22 +164,25 @@ public class UserController {
 
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
-    @GetMapping("/logout/{id}")
-    public ResponseEntity<Map<String, Object>> logoutUser(@PathVariable("id") Long id, HttpSession session) {
+    @GetMapping("/logout")
+    public ResponseEntity<LogoutRes> logoutUser(HttpServletRequest request, HttpServletResponse response) {
 
-        Map<String, Object> resultMap = new HashMap<>();
+        User user = (User) request.getAttribute("user"); // 로그아웃 요청한 user
+
         HttpStatus status = HttpStatus.ACCEPTED;
+        LogoutRes logoutRes = null; // 리턴값
 
         try {
-            userService.deleteRefreshToken(id);
-            resultMap.put("message", SUCCESS);
+            userService.deleteRefreshToken(user.getId());
+            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            logoutRes = LogoutRes.builder().message(SUCCESS).build();
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             log.error("로그아웃 실패 : {}", e);
-            resultMap.put("message", e.getMessage());
+            logoutRes = LogoutRes.builder().message(FAIL).build();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<LogoutRes>(logoutRes, status);
     }
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
