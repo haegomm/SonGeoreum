@@ -3,6 +3,7 @@ $yellow: #f9be7d;
 .container {
   display: grid;
   grid-template-columns: 1fr 240px;
+  margin-top: -80px;
 }
 
 .bigWordCard {
@@ -42,13 +43,13 @@ $yellow: #f9be7d;
 .arrowBackBox {
   position: absolute;
   padding: 16px;
-  top: 200px;
+  top: 198px;
   cursor: pointer;
 }
 .arrowForwardBox {
   position: absolute;
   padding: 16px;
-  top: 200px;
+  top: 198px;
   right: 16px;
   cursor: pointer;
 }
@@ -110,7 +111,7 @@ $yellow: #f9be7d;
   box-shadow: rgba(0, 0, 0, 0.04) 0px -3px 5px;
 }
 .word {
-  line-height: 416px;
+  padding: 184px 0;
   font-size: 64px;
 }
 .wordVideoBox {

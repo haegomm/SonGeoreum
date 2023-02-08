@@ -1,0 +1,60 @@
+$red: #e56372;
+$green: #90de8a;
+
+.testGuideText {
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+}
+
+.testBox {
+  margin-top: 32px;
+  // margin-bottom: 80px;
+  text-align: center;
+}
+
+.flexBox {
+  display: flex;
+  justify-content: center;
+}
+
+.fixedBox {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+.fixedButton {
+  margin: 16px;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 120px;
+  height: 48px;
+  border-radius: 25px 25px 25px 25px;
+  border: none;
+  box-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+
+  cursor: pointer;
+
+  transition: all 0.5s;
+}
+.green {
+  background-color: $green;
+}
+.red {
+  background-color: $red;
+}
+.fixedButton:active,
+.fixedButton:hover,
+.fixedButton:focus {
+  transition: all 0.5s;
+  transform: translateY(-7px);
+}
+.fixedButton:disabled {
+  color: white;
+  opacity: 0.5;
+}

@@ -1,11 +1,11 @@
 import * as React from "react";
-import LargeButton from "../button/LargeButton";
+import LargeButton from "../../../common/button/LargeButton";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import WordSmall from "./WordSmall";
+import WordSmall from "../../../common/card/WordSmall";
 import "./WordLarge.scss";
-import "./flip.scss";
+import "../../../common/card/flip.scss";
 
 import StarIcon from "@mui/icons-material/Star";
 import ShuffleRoundedIcon from "@mui/icons-material/ShuffleRounded";

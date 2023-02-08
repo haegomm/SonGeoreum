@@ -1,45 +1,36 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import WordLarge from "../../common/card/WordLarge";
+import WordLarge from "./learn/WordLarge";
 import TextButton from "../../common/button/TextButton";
-import CategoryButton from "../../common/button/CategoryButton";
-import MotionTest from "./test/MotionTest";
 
 import "./Study.scss";
 import "../../common/button/TextButton.scss";
 
 import Grid from "@mui/material/Grid";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import SelectCategory from "./SelectCategory";
 
 export default function Study() {
   const [mode, setMode] = useState(); // 학습 모드 저장
-  const [categoryList, setCategoryList] = useState([]); // 카테고리 리스트 저장
   const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
-  const colors = ["yellow", "green", "red"]; // 색깔 목록
 
-  useEffect(() => {
-    async function getInfo() {
-      const data = await axios.get(`https://i8b106.p.ssafy.io/api/categories`);
-      setCategoryList(data.data);
-      console.log(data.data);
-    }
-    getInfo();
-  }, []);
+  const navigate = useNavigate();
 
   const selectedMode = (mode) => {
     console.log("switch", mode);
     setMode(mode);
+    if (mode == "실전모드") navigate("/test");
   };
 
-  const resetMode = () => {
-    console.log("모드를 초기화합니다.");
-    setMode(null);
-  };
-
-  const selectedCategory = (num) => {
+  const selectedCategoryNum = (num) => {
     console.log("category", num);
     setCategoryNum(num);
+  };
+
+  const resetModeSelect = () => {
+    console.log("study에서 모드를 초기화합니다.");
+    setMode(null);
   };
 
   const resetCategory = () => {
@@ -47,31 +38,19 @@ export default function Study() {
     setCategoryNum(null);
   };
 
+  const selectedCategoryInfo = (name, isTestable) => {
+    console.log(name, isTestable);
+  };
+
   const selectModeScreen = mode ? (
-    <div className="ST">
-      <div className="modeText">
-        <div>{mode}</div>
-      </div>
-      <div className="guideText">카테고리를 선택해주세요</div>
-      <button className="reselectButton" onClick={() => resetMode()}>
-        <ArrowBackRoundedIcon fontSize="large" />
-      </button>
-      <div>
-        {categoryList.map((category) => (
-          <CategoryButton
-            key={category.id}
-            text={category.name}
-            index={category.id}
-            link="https://picsum.photos/70/30"
-            color={colors[category.id % 3]}
-            disable={category.isTesttable}
-            selectedCategory={selectedCategory}
-          />
-        ))}
-      </div>
-    </div>
+    <SelectCategory
+      mode={"배움모드"}
+      selectedCategoryNum={selectedCategoryNum}
+      resetModeSelect={resetModeSelect}
+      selectedCategoryInfo={selectedCategoryInfo}
+    />
   ) : (
-    <div className="ST">
+    <div className="studyBox">
       <div className="guideText">학습모드를 선택해주세요</div>
       <div>
         <TextButton text={"배움모드"} selectedMode={selectedMode} />
@@ -80,28 +59,47 @@ export default function Study() {
     </div>
   );
 
-  const modeScreen =
-    mode === "배움모드" ? (
-      <div className="ST">
-        <button className="reselectButton" onClick={() => resetCategory()}>
-          <ArrowBackRoundedIcon fontSize="large" />
-        </button>
-        <WordLarge isLogin={true} categoryNum={categoryNum} />
-      </div>
-    ) : (
-      <div className="ST">
-        <MotionTest />
-      </div>
-    );
+  const modeScreen = (
+    <div className="marginTopBox">
+      <button className="reselectButton" onClick={() => resetCategory()}>
+        <ArrowBackRoundedIcon fontSize="large" />
+      </button>
+      <WordLarge isLogin={true} categoryNum={categoryNum} />
+    </div>
+  );
+
+  // const modeScreen =
+  //   mode === "실전모드" && categoryList[categoryNum - 1] ? (
+  //     <div className="studyBox">
+  //       <button className="reselectButton" onClick={() => resetCategory()}>
+  //         <ArrowBackRoundedIcon fontSize="large" />
+  //       </button>
+  //       <div className="modeText">
+  //         <div>{categoryList[categoryNum - 1].name}</div>
+  //       </div>
+  //       <div className="guideText">실전 방법을 선택해주세요</div>
+  //       <div className="studyBox">
+  //         <Test
+  //           num={categoryNum}
+  //           able={categoryList[categoryNum - 1].isTestable}
+  //         />
+  //       </div>
+  //     </div>
+  //   ) : (
+  //     <div className="marginTopBox">
+  //       <button className="reselectButton" onClick={() => resetCategory()}>
+  //         <ArrowBackRoundedIcon fontSize="large" />
+  //       </button>
+  //       <WordLarge isLogin={true} categoryNum={categoryNum} />
+  //     </div>
+  //   );
 
   const modeStart = categoryNum ? modeScreen : selectModeScreen;
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={8}>
-        <div className="StudyPage">
-          <div className="studyBox">{modeStart}</div>
-        </div>
+      <Grid item xs={8} sx={{ marginTop: 0 }}>
+        <div className="StudyPage">{modeStart}</div>
       </Grid>
     </Grid>
   );
