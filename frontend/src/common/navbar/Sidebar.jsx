@@ -1,25 +1,28 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import profileImages from "../../assets/profile/profileImages";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
 import './Sidebar.scss'
+import onLoginHandler from './Navbar'
+import setIsOpen from './Navbar'
 
 function Sidebar(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   
   const userId = getUserInfo().userId
   const nickname = getUserInfo().nickname
   const picture = getUserInfo().picture
 
   // const []
-
+  let state = useSelector((state)=>{ return state })
+  console.log(state)
+  
+  const onToggleHandler = () => {
+    setIsOpen(isOpen => !isOpen);
+  }
   const onLogoutHandler = (e) => {
     e.preventDefault();
-
 
     dispatch(authAction.logout(userId)).then((response) => {
       console.log('로갓눌럿다')
@@ -44,6 +47,7 @@ function Sidebar(props) {
       <div>
         <span>{nickname}</span>
         <span>님</span>
+    <div onClick={onToggleHandler}>X</div>
       </div>
       <ul>
         <li><p>나의 단어장</p></li>

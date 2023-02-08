@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Route,
   Outlet,
@@ -20,29 +20,23 @@ import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
 import profileImages from "../../assets/profile/profileImages";
 import Sidebar from "./Sidebar";
-import { useIsFocusVisible } from '@mui/material';
-import { isFocusable } from '@testing-library/user-event/dist/utils';
+import SidebarMui from './SidebarMui'
 
 
 export default function Navbar() {
-  const isFocused = useIsFocusVisible
 
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
     { name: "알아보기", path: "/culture" },
   ]; // 페이지
-  const [auth, setAuth] = useState(true); // 로그인 유무
+
+  // const [auth, setAuth] = useState(true); // 로그인 유무
   const [isShort, setShort] = useState(true); // navBar 사이즈 조절
   const [isOpen, setIsOpen] = useState(false);
+  // const [isLogin, setIsLogin] = useState(getUserInfo().userId)
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
-  const sizeChange = () => {
-    setShort(!isShort);
-  };
+  const picture = getUserInfo().picture
 
   const sizeLong = () => {
     setShort(false);
@@ -54,7 +48,13 @@ export default function Navbar() {
 
   const onToggleHandler = () => {
     setIsOpen(isOpen => !isOpen);
+    console.log('프사눌럿어요', isOpen)
   }
+
+  // const onLoginHandler = () => {
+  //   setIsLogin(getUserInfo().userId)
+  //   console.log('로그인상태바뀜', isLogin)
+  // }
 
   const size = {
     short: {
@@ -62,7 +62,7 @@ export default function Navbar() {
       marginBottom: 60,
     },
     long: {
-      navHeight: 520,
+      navHeight: 330,
       marginBottom: 140,
     },
   };
@@ -75,19 +75,20 @@ export default function Navbar() {
     borderRadiusSize: 20, // 전체 nav 모서리는 scss에서 수정
     appBarMarginBottom: size.marginBottom,
     // logo
-    logo: "36px",
+    logo: "30px",
     logoWeight: 700,
     logoPaddingLeft: 60,
     // menu
-    menu: "24px",
+    menu: "18px",
     menuWeight: 500,
     // iconButton
     iconButtonMargin: 24,
 
   };
   
-  useEffect(() => {
-    return () => {}}, [isFocusable]);
+  // useEffect(()=>{
+
+  // })
   return (
     <div>
       <div
@@ -151,7 +152,7 @@ export default function Navbar() {
               // imgUrl={window.localStorage.getItem('picture')}
               // background= "url({window.localStorage.getItem('picture')}) center 100%;"
               >
-                <img src={profileImages.profile2} alt='profileImage' />
+                <img src={picture} alt='profileImage' />
                 {/* <img src={getUserInfo.picture} /> */}
                 {/* 추후 IconButton이 아닌 이미지 버튼으로 수정합니다.
                 <IconButton
@@ -186,35 +187,11 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             )}
-            <div className={isOpen && getUserInfo().userId ? "showSidebar" : "hideSidebar"}>
-              <Sidebar />
+            <div>
+            <SidebarMui />
             </div>
           </Toolbar>
         </AppBar>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={auth}
-                onChange={handleChange}
-                aria-label="login switch"
-              />
-            }
-            label={auth ? "Logout 상태일 때" : "Login 상태일 때"}
-          />
-        </FormGroup>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isShort}
-                onChange={sizeChange}
-                aria-label="login switch"
-              />
-            }
-            label={isShort ? "short 상태일 때" : "long 상태일 때"}
-          />
-        </FormGroup>
       </Box>
       <Outlet />
     </div>

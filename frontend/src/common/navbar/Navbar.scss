@@ -28,7 +28,7 @@ $animationTime: 2s;
 
 .showSidebar{
   width: 320px;
-  height: 500px;
+  // height: 500px;
   position: absolute;
   // left: 0px;
   top: 0;
@@ -37,9 +37,9 @@ $animationTime: 2s;
   
 .hideSidebar{
 width: 320px;
-height: 500px;
+// height: 500px;
 position: absolute;
-right: -320px;
+right: 0px;
 // 여기 완성 후에 -320px로 변경할 것
 transition: 1s;
 }
