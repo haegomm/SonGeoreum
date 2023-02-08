@@ -3,13 +3,17 @@ package com.bbb.songeoreum.config;
 import com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 //import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.db.repository.UserRepository;
+import com.bbb.songeoreum.exception.RestAuthenticationEntryPoint;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.jwt.filter.TokenAuthenticationFilter;
 import com.bbb.songeoreum.oauth.handler.OAuth2AuthenticationSuccessHandler;
+import com.bbb.songeoreum.oauth.handler.TokenAccessDeniedHandler;
 import com.bbb.songeoreum.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -30,6 +34,8 @@ public class SecurityConfig {
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
     private final UserRepository userRepository;
+
+    private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
 
 
     // Swagger는 spring security 적용에서 제외
@@ -55,9 +61,9 @@ public class SecurityConfig {
                 .formLogin().disable() // jwt를 사용하므로 로그인 폼 필요하지 않음.
                 .httpBasic().disable() // 기본 http 방식 안 씀.
                 .authorizeRequests() // 다음 리퀘스트에 대한 사용 권한 체크
-                .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
-//                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
-//                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
+//                .antMatchers("/**").permitAll() // 테스트용으로 모든 접근 허용해줌.
+                .antMatchers("/api/game/**", "/api/user/logout/**", "/api/user/profile/**", "/api/user/game/**", "/api/favorites/**").authenticated()
+                .anyRequest().permitAll() // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
                 .logout() // 로그아웃을 하면
                 .logoutSuccessUrl("/") // 메인 페이지로 redirect 한다.
@@ -79,6 +85,10 @@ public class SecurityConfig {
 //                .failureHandler(oAuth2AuthenticationFailureHandler())
                 .and()
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // OAuth2를 이용한 인증이 아닌 username, password를 쓰는 form 기반 인증을 처리하는 필터로 자세한 내용은 노션 지식 공유 참고
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint()) // 인증 실패 시 처리
+                .accessDeniedHandler(tokenAccessDeniedHandler) // 인가 실패 시 처리
+                .and()
 //                .and().build();
                 .build();
     }
