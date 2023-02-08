@@ -19,7 +19,7 @@ export const getUserInfo = () => {
     picture:window.localStorage.getItem('picture'),
     level:window.localStorage.getItem('level'),
     experience:window.localStorage.getItem('experience'),
-    token:window.localStorage.getItem('token'),
+    accessToken:window.localStorage.getItem('accessToken'),
   }
 };
 export const deleteUserInfo = () => {
@@ -30,5 +30,5 @@ export const deleteUserInfo = () => {
   window.localStorage.removeItem('picture');
   window.localStorage.removeItem('level')
   window.localStorage.removeItem('experience')
-  window.localStorage.removeItem('token')
+  window.localStorage.removeItem('accessToken')
 };

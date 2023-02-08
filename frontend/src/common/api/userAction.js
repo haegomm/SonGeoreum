@@ -29,7 +29,9 @@ function enquireProfile(data) {
 //   }
 // }
 
-const userActions = { 
+const userAction = { 
   modifyprofile,
   enquireProfile,
 }
+
+export default userAction;

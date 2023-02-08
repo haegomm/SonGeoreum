@@ -15,8 +15,10 @@ function Login(props) {
   const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID
   const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI
   const KAKAO_REQUEST = `${KAKAO_API}/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`
+  
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(false);
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
@@ -33,8 +35,10 @@ function Login(props) {
     };
 
     dispatch(authAction.login(body)).then((response) => {
-      if (response.payload.loginSuccess) {
-        saveUserInfo(response.payload.user)
+      if (response.payload.msg) {
+        setIsLogin(true)
+        saveUserInfo(response.payload)
+        alert('로그인 성공!')
         navigate('/');
       } else{
         alert('로그인에 실패했습니다. 다시 시도해주세요');
@@ -48,9 +52,9 @@ function Login(props) {
       <form
         onSubmit={onSubmitHandler}>
         <label>이메일</label>
-        <input type="email" value={Email} onChange={onEmailHandler} />
+        <input type="email" onChange={onEmailHandler} />
         <label>비밀번호</label>
-        <input type="password" value={Password} onChange={onPasswordHandler} />
+        <input type="password" onChange={onPasswordHandler} />
         <br />
         <button type="submit">로그인하기</button>
       </form>

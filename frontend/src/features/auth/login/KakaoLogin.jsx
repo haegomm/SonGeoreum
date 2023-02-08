@@ -8,7 +8,7 @@ const KakaoLogin = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const href = window.location.href
+  // const href = window.location.href
   let params = new URL(document.URL).searchParams
   let code = params.get("code")
   console.log(code)
