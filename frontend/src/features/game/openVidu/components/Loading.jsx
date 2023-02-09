@@ -7,9 +7,8 @@ const Loading = (props) => {
   
   const navigate = useNavigate()
 
-  console.log(props)
   const sessionId = props.sessionId
-  console.log(sessionId)
+  const subscribers = props.subscribers
   
   let tipNumber = 0
   const tips = [
@@ -64,6 +63,7 @@ const Loading = (props) => {
           />
         </div>
         <div>곧 게임이 시작됩니다.</div>
+        <div>`4명 중 ${subscribers.length}명이 모였습니다.`</div>
         <div>{tips[tipNumber]}</div>
     </div>
   )
