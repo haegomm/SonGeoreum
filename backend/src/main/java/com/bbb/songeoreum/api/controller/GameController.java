@@ -1,10 +1,10 @@
 package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.GameRemoveUserReq;
-import com.bbb.songeoreum.api.request.UserIdReq;
 import com.bbb.songeoreum.api.response.EnterRoomRes;
 import com.bbb.songeoreum.api.response.SuccessRes;
 import com.bbb.songeoreum.api.service.GameService;
+import com.bbb.songeoreum.db.domain.User;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
@@ -15,13 +15,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/game")
 @RequiredArgsConstructor
-@Api(tags = {"게임 API"}) // Swagger에 보여줄 명칭
+@Api(tags = {"게임 API"})
 public class GameController {
 
     private static final String SUCCESS = "success";
@@ -31,13 +32,15 @@ public class GameController {
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
     @PostMapping("/session")
-    public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<EnterRoomRes> enterRoom(HttpServletRequest httpServletRequest) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        User user = (User) httpServletRequest.getAttribute("user");
 
         HttpStatus httpStatus = null;
         EnterRoomRes enterRoomRes = null;
 
         // gameService의 큐 맨 앞에 있는 session에 connection 생성하고 반환
-        enterRoomRes = gameService.enterRoom(userIdReq.getId());
+        enterRoomRes = gameService.enterRoom(user.getId());
 
         log.debug("Connection 성공");
 
