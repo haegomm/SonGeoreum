@@ -1,4 +1,5 @@
-import axios from "axios";
+// import axios from "axios";
+import {axios} from '../../../../common/api/https'
 import { OpenVidu } from "openvidu-browser";
 import React, { Component } from "react";
 import DialogExtensionComponent from "./dialog-extension/DialogExtension";
@@ -762,8 +763,7 @@ class VideoRoomComponent extends Component {
   // myId(userPk)보내기
   async createSession(myId) {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + "/api/game/session",
+      const response = await axios.post("/api/game/session",
            {
             id: myId, // {id :user pk}
           }
