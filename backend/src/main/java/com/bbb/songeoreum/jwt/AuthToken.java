@@ -98,7 +98,6 @@ public class AuthToken { // JwtUtil
             log.info("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
-//            throw new NotFoundException("만료된 토큰입니다."); // 이렇게 예외를 던져버린다면?
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token.");
         } catch (IllegalArgumentException e) {

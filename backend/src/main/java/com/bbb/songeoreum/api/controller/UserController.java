@@ -4,7 +4,6 @@ import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
 import com.bbb.songeoreum.api.response.*;
-import com.bbb.songeoreum.api.service.JwtService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
@@ -12,17 +11,11 @@ import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
-import com.bbb.songeoreum.jwt.common.ApiResponse;
-import com.bbb.songeoreum.oauth.entity.RoleType;
 import com.bbb.songeoreum.util.CookieUtil;
-import com.bbb.songeoreum.util.HeaderUtil;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
@@ -49,8 +40,6 @@ public class UserController {
     private static final String FAIL = "fail";
 
     private final UserService userService;
-
-    private final JwtService jwtService;
 
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
@@ -260,6 +249,7 @@ public class UserController {
     public ResponseEntity<String> updateUser(@Valid @RequestBody UpdateUserReq updateUserReq, HttpServletRequest request, HttpServletResponse response) {
 
         User user = (User) request.getAttribute("user");
+        // 닉네임 중복체크 로직 추가
 
         userService.updateUser(updateUserReq, user.getId());
 
