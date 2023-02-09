@@ -142,7 +142,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            {!isLogin ? (
+            {!getUserInfo.nickname ? (
               <NavbarSide onLoginHandler={onLoginHandler}/>
             ) : (
               <MenuItem>

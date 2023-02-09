@@ -52,11 +52,6 @@ export default function NavbarSide({onLoginHandler}) {
     console.log('단어장으로 이동해용~')
     // navigate('/'); 나의단어장 생기면 그쪽으로 이동
   }
-
-  const onModifingHandler = (e) => {
-    console.log('플필수정')
-    // 프로필수정 추가
-  }
   
   const [state, setState] = useState({right: false});
 
@@ -102,13 +97,6 @@ export default function NavbarSide({onLoginHandler}) {
             <ListItemText
               primary='나의 단어장'
               onClick={onMyVocaaHandler} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key='modifyProfileButton' disablePadding>
-          <ListItemButton>
-            <ListItemText
-              primary='프로필 수정'
-              onClick={onModifingHandler} />
           </ListItemButton>
         </ListItem>
       </List>

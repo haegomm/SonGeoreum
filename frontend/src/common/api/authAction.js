@@ -1,4 +1,4 @@
-import {axios} from './https'
+import axios from './https'
 import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, MODIFYPROFILE, CHECKNICKNAME, ENQUIREPROFILE, ISSUEACCESSTOKEN, KAKAOLOGIN } from '../../features/auth/authTypes';
 
 function login(data) {
@@ -37,8 +37,8 @@ function checkNickname(data) {
   }
 }
 
-function logout(data) {
-  const request = axios.get(`/api/user/logout/${data}`).then((response) => response.data)
+function logout() {
+  const request = axios.get(`/api/user/logout`).then((response) => response.data)
   .catch((err) => err)
   return {
     type: LOGOUT,
