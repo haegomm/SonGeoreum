@@ -133,8 +133,6 @@ public class UserController {
             userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
             loginRes = LoginRes.builder()
-                    .id(loginUser.getId())
-                    .userType(loginUser.getUserType())
                     .email(loginUser.getEmail())
                     .nickname(loginUser.getNickname())
                     .picture(loginUser.getPicture())
