@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * {@code FavoriteController}는 카테고리 API를 처리하는 컨트롤러입니다.
+ *
+ * @author sonmh79
+ * @version 1.0
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/categories")
@@ -23,6 +29,10 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    /**
+     * 카테고리의 목록을 조회합니다.
+     * @return 카테고리 리스트를 담은 {@code ResponseEntity}
+     */
     @GetMapping
     @ApiOperation(value = "카테고리의 목록을 조회합니다.")
     public ResponseEntity<List<CategoryRes>> findCategoryList() {
