@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Routes, Route, Navigate } from 'react-router-dom';
-import isLogin from './isAuth';
+import isLogin from '../api/authAction'
 
 function PublicRoute({
   element: Element,
