@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from '../../../../common/api/https'
 import React, { useEffect, } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
@@ -35,7 +35,7 @@ const Loading = (props) => {
   const roomOut = async() => {
     try {
           const response = await axios.post(
-            "https://i8b106.p.ssafy.io/api/game/session/user",
+            "/api/game/session/user",
                {
                  sessionId: sessionId,
               }
@@ -63,7 +63,7 @@ const Loading = (props) => {
           />
         </div>
         <div>곧 게임이 시작됩니다.</div>
-        <div>`4명 중 ${subscribers.length}명이 모였습니다.`</div>
+        <div>4 명 중 {(subscribers.length)+ 1} 명이 모였습니다.</div>
         <div>{tips[tipNumber]}</div>
     </div>
   )

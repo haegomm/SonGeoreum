@@ -1,5 +1,5 @@
 // import axios from "axios";
-import {axios} from '../../../../common/api/https'
+import axios from '../../../../common/api/https'
 import { OpenVidu } from "openvidu-browser";
 import React, { Component, useLocalStorage } from "react";
 import DialogExtensionComponent from "./dialog-extension/DialogExtension";
@@ -25,7 +25,7 @@ class VideoRoomComponent extends Component {
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SonGeoreum";
-    let userName = localStorage.getItem(nickname)
+    let userName = localStorage.getItem('nickname')
     console.log(this.props.user)
     this.remotes = [];
     this.localUserAccessAllowed = false;
@@ -47,7 +47,7 @@ class VideoRoomComponent extends Component {
       subToken: undefined,// ?
     };
     // this.timer // timer component를 갖고온다면
-
+    
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
@@ -64,7 +64,7 @@ class VideoRoomComponent extends Component {
     this.checkSize = this.checkSize.bind(this);
     this.theEndGame = this.theEndGame.bind(this)
   }
-
+  
   componentDidMount() {
     const openViduLayoutOptions = {
       maxRatio: 3 / 2, // The narrowest ratio that will be used (default 2x3)
@@ -78,7 +78,8 @@ class VideoRoomComponent extends Component {
       bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
       animate: true, // Whether you want to animate the transitions
     };
-
+    
+    console.log("내 닉네임이야: ", this.state.myUserName)
     this.layout.initLayoutContainer(
       document.getElementById("layout"),
       openViduLayoutOptions
@@ -87,12 +88,12 @@ class VideoRoomComponent extends Component {
     window.addEventListener("resize", this.updateLayout);
     window.addEventListener("resize", this.checkSize);
     console.log("join 하기 전 DidMount");
-
+    
     this.joinSession();
-
+    
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
-
+  
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
@@ -100,7 +101,7 @@ class VideoRoomComponent extends Component {
     clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
-
+  
   onbeforeunload(event) {
     this.leaveSession();
   }
@@ -654,10 +655,12 @@ class VideoRoomComponent extends Component {
   }
 
   render() {
+    // console.log("여기야", localUser)
+    console.log(localUser.getStreamManager())
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame || !this.state.playGame) {
+    if (!this.state.goGame) {
       return <Loading
         subscribers={this.state.subscribers}
         sessionId={this.state.sessionId}
