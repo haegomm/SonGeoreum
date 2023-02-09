@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
-// import Timer from "./Timer";
 
 const renderTime = ({ remainingTime }) => {
   if (remainingTime === 0) {
@@ -45,7 +44,6 @@ const AnswerVideo = (props) => {
           {renderTime}
         </CountdownCircleTimer>
       </div>
-      {/* <Timer /> */}
       <div className="box">
         {props.showAnswer || presenter === myNickname ? (
           <div className="box">
