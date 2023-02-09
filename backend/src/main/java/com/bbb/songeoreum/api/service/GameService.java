@@ -132,13 +132,13 @@ public class GameService {
         String sessionId = availableSession.getSessionId();
 
         // 실제 사용용
-//        int connectedPlayersCnt = availableSession.getActiveConnections().size();
+        int connectedPlayersCnt = availableSession.getActiveConnections().size();
 
         // POSTMAN 테스트 용 : 실제로 사용할때는 프론트가 연결을 해주면서 active connection이 생성되고
         // active connection 기준으로 모든걸 계산해야 하는게 맞지만
         // POSTMAN으로 테스트 할 시 프론트가 연결을 해주는게 아니므로 active connection이 아닌 것들까지 포함한
         // getConnections()를 활용하여 로직 테스트
-        int connectedPlayersCnt = availableSession.getConnections().size();
+//        int connectedPlayersCnt = availableSession.getConnections().size();
 
         // 현재 대기방에 중복되는 유저 있는지 확인
         for (Connection c : availableSession.getActiveConnections()) {
@@ -344,7 +344,7 @@ public class GameService {
     }
 
     // Helper Methods
-    
+
     public void increaseRoomBuffer() throws OpenViduJavaClientException, OpenViduHttpException {
         calculateMultiplierAndUpdate();
         for (int i = 0; i < poolAdditionNo; i++) {
