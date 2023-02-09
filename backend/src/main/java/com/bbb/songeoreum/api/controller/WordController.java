@@ -29,11 +29,11 @@ public class WordController {
 
     /**
      * 특정 조건을 만족하는 단어들을 반환합니다
-     * @param categoryId 카테고리의 PK.
-     * @param isRandom 랜덤으로 순서를 섞을지 여부 (true/false).
-     * @param isTestable 테스트 가능한지 여부 (true/false).
-     * @param num 응답 시 원하는 단어의 개수.
-     * @return 단어 리스트를 {@code ResponseEntity}로 반환합니다.
+     * @param categoryId 카테고리의 PK
+     * @param isRandom 랜덤으로 순서를 섞을지 여부 (true/false)
+     * @param isTestable 테스트 가능한지 여부 (true/false)
+     * @param num 응답 시 원하는 단어의 개수
+     * @return 단어 리스트를 {@code ResponseEntity}로 반환합니다
      */
     @GetMapping
     @ApiOperation("특정 조건을 만족하는 모든 단어를 리스트에 담아 응답한다.")
