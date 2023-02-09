@@ -4,6 +4,7 @@ import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
 import com.bbb.songeoreum.api.response.*;
+import com.bbb.songeoreum.api.service.AuthService;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
@@ -40,6 +41,7 @@ public class UserController {
     private static final String FAIL = "fail";
 
     private final UserService userService;
+    private final AuthService authService;
 
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
@@ -48,7 +50,11 @@ public class UserController {
     @ApiOperation(value = "카카오 테스트")
     @GetMapping("/oauth2/kakao")
     public void kakaoTest(@RequestParam("code") String code) {
+
         log.debug("카카오에서 인가 코드 받아옴.!!!!!! : {}", code);
+
+        String kakaoAccessToken = authService.getKakaoAccessToken(code);
+        log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);
     }
 
 

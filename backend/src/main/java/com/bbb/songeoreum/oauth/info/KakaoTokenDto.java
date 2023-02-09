@@ -10,5 +10,5 @@ import lombok.ToString;
 public class KakaoTokenDto {
 
     // 카카오가 넘겨주는 access token
-    String accessToken;
+    String access_token;
 }
