@@ -1,27 +1,11 @@
 /*global drawConnectors, HAND_CONNECTIONS, drawLandmarks, Hands, Camera*/
 /*eslint no-undef: "error"*/
-
-// import { useEffect } from "react";
-// import useScript from "./useScript";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import $script from "scriptjs";
-// import { useState } from "react";
+import "./MotionTest.scss";
 
-// export default function MotionTest({ children }) {
-//   const [loading, error] = useScript("https://unpkg.com/lodash");
-
-//   if (error) {
-//     console.log(error);
-//     return <p>Error!</p>;
-//   }
-//   if (loading) {
-//     console.log(loading);
-//     return <p>Loading...</p>;
-//   } else {
-//     return <p>{_.camelCase(children)}</p>;
-//   }
-// }
-
-export default function MotionTest() {
+export default function MotionTest({ word, categoryNum, startCorrect }) {
   $script(
     [
       "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js",
@@ -39,14 +23,25 @@ export default function MotionTest() {
       /*
     Websocket Connect
   */
-
-      let url = `wss://i8b106.p.ssafy.io/ws/socket-server/1`;
+      let url = `wss://i8b106.p.ssafy.io/ws/socket-server/${categoryNum}`;
 
       const handSocket = new WebSocket(url);
 
+      let count = 0;
       handSocket.onmessage = function (e) {
-        let data = JSON.parse(e.data);
-        console.log("Data from server:", data);
+        let data = JSON.parse(e.data).response;
+        if (word !== data) {
+          //console.log("다르다", data, word);
+          count = 0;
+        } else {
+          console.log("같다");
+          count = count + 1;
+          if (count > 20) {
+            console.log("정답입니다");
+            count = 0;
+            startCorrect();
+          }
+        }
       };
 
       function sendMessage(msg) {
@@ -60,9 +55,10 @@ export default function MotionTest() {
       /*
     Mediapipe - callback, configs
   */
-
       function onResults(results) {
         canvasCtx.save();
+        canvasCtx.scale(-1, 1);
+        canvasCtx.translate(-473, 0);
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
         canvasCtx.drawImage(
           results.image,
@@ -157,15 +153,10 @@ export default function MotionTest() {
   );
 
   return (
-    <div className="">
-      <div>이곳은 손동작 테스트 페이지 입니다.</div>
-      <div className="container">
+    <div className="canvasBox">
+      <canvas className="output_canvas" width="473px" height="320px"></canvas>
+      <div>
         <video className="input_video"></video>
-        <canvas
-          className="output_canvas"
-          width="1280px"
-          height="720px"
-        ></canvas>
       </div>
     </div>
   );

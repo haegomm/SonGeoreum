@@ -1,5 +1,7 @@
 $red: #e56372;
 $green: #90de8a;
+$yellow: #f9be7d;
+$blue: #6488e5;
 
 .testGuideText {
   font-size: 26px;
@@ -7,9 +9,19 @@ $green: #90de8a;
   color: white;
 }
 
+.motionGuideText {
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+
 .testBox {
   margin-top: 32px;
   // margin-bottom: 80px;
+  text-align: center;
+}
+
+.motionTestBox {
   text-align: center;
 }
 
@@ -43,12 +55,32 @@ $green: #90de8a;
   transition: all 0.5s;
 }
 .green {
+  margin: 16px;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 120px;
+  height: 48px;
+  border-radius: 25px 25px 25px 25px;
+  border: none;
+  box-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+
+  cursor: pointer;
+
+  transition: all 0.5s;
   background-color: $green;
+  position: absolute;
+  bottom: 0;
 }
 .red {
   background-color: $red;
 }
-.fixedButton:active,
+.yellow {
+  background-color: $yellow;
+}
 .fixedButton:hover,
 .fixedButton:focus {
   transition: all 0.5s;
@@ -57,4 +89,17 @@ $green: #90de8a;
 .fixedButton:disabled {
   color: white;
   opacity: 0.5;
+}
+
+.answerImage {
+  display: block;
+  margin-top: 100px;
+  transform: scale(1.5);
+}
+
+.canvasText {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

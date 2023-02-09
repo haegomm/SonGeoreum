@@ -212,7 +212,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
                   <div className="starBox">{isStar}</div>
                   {previous}
                   {next}
-                  <div onClick={flipAgain}>
+                  <div className="wordBackBox" onClick={flipAgain}>
                     <div className="wordVideoBox">{media}</div>
                   </div>
                 </div>
