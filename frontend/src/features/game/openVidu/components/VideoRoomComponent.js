@@ -304,8 +304,7 @@ class VideoRoomComponent extends Component {
     
     if ((this.state.playGame || this.state.goGame)){
       try {
-        const response = await axios.delete(
-          APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+        const response = await axios.delete(`/api/game/session/${sessionId}`,
           );
         console.log("나가요~ >> ", response.data.message)
         return response.data;
@@ -350,8 +349,7 @@ class VideoRoomComponent extends Component {
     const sessionId = this.state.sessionId
     if(this.state.subscribers < 3){
       try {
-      const response = await axios.put(
-        APPLICATION_SERVER_URL + `/api/game/session/${sessionId}`,
+      const response = await axios.put(`/api/game/session/${sessionId}`,
         );
         console.log("모두 나가주세요~ >> ")
         this.leaveSession()
