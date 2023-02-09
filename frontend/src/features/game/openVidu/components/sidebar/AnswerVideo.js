@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
+import Timer from "./Timer";
 
-const renderTime = ({ remainingTime }) => {
+// const renderTime = ({ remainingTime }) => {
 
-  return (
-    <div className="timer">
-      <div className="value">{remainingTime}</div>
-    </div>
-  );
-};
+//   return (
+//     <div className="timer">
+//       <div className="value">{remainingTime}</div>
+//     </div>
+//   );
+// };
 
 const AnswerVideo = (props) => {
   console.log("리렌더링!!!", props.showAnswer)
@@ -33,7 +34,7 @@ const AnswerVideo = (props) => {
   const check = presenter === myNickname ? "내가 출제자야" : (`다음 출제자: ${presenter}`);
   return (
     <div>
-      <div className="timer-wrapper">
+      {/* <div className="timer-wrapper">
         <CountdownCircleTimer
           isPlaying
           duration={5}
@@ -42,7 +43,8 @@ const AnswerVideo = (props) => {
         >
           {renderTime}
         </CountdownCircleTimer>
-      </div>
+      </div> */}
+      <Timer />
       <div className="box">
         {props.showAnswer || presenter === myNickname ? (
           <div className="box">
