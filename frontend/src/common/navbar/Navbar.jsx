@@ -40,18 +40,6 @@ export default function Navbar() {
   const sizeShort = () => {
     setShort(true);
   };
-  useEffect(()=>{
-    setIsLogin(getUserInfo().userId === true)
-    console.log('나는유즈이펙트야')
-    console.log('이 정보로 isLogin을 바꿨어',getUserInfo().userId)
-    console.log('로그인상태바뀜', isLogin)
-  }, [getUserInfo().userId])
-
-  const onLoginHandler = (data) => {
-    console.log(data, '데이터는 ')
-    setIsLogin(data)
-    console.log('로그인상태바뀜', isLogin)
-  }
 
   const size = {
     short: {
@@ -142,7 +130,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            <NavbarSide onLoginHandler={onLoginHandler}/>
+            <NavbarSide />
             <MenuItem>
                 <Typography
                   textAlign="center"

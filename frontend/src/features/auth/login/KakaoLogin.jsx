@@ -1,29 +1,41 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
-import authAction from "../../../common/api/authAction";
+// import authAction from "../../../common/api/authAction";
+import axios from '../../../common/api/https';
 
 const KakaoLogin = (props) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate();
+  // const dispatch = useDispatch()
+  // const navigate = useNavigate();
 
   // const href = window.location.href
   let params = new URL(document.URL).searchParams
   let code = params.get("code")
   console.log(code)
 
-  useEffect(
-    dispatch(authAction.kakaoLogin(code)).then((response) => {
-      if (response.payload.kakakoSuccess) {
-        console.log('카카오 성공!')
-        // saveUserInfo(response.payload.user)
-        navigate('/');
-      } else{
-        alert('카카오 로그인에 실패했습니다. 다시 시도해주세요');
-      }
-    })
-  )
+  useEffect(() => {
+    async function kakakoLogin() {
+      const data = await axios.get(
+        `api/user/oauth2/kakao?code=${code}`
+        );
+      console.log('백한테 보내줬다!', data)
+    }
+    kakakoLogin()}
+  ,[])
+
+
+  // useEffect(
+  //   dispatch(authAction.kakaoLogin(code)).then((response) => {
+  //     if (response.payload.kakakoSuccess) {
+  //       console.log('카카오 성공!')
+  //       // saveUserInfo(response.payload.user)
+  //       navigate('/');
+  //     } else{
+  //       alert('카카오 로그인에 실패했습니다. 다시 시도해주세요');
+  //     }
+  //   })
+  // )
   return(
     <div>
       <div>

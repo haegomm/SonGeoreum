@@ -18,7 +18,7 @@ function Login(props) {
   
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
@@ -36,7 +36,7 @@ function Login(props) {
 
     dispatch(authAction.login(body)).then((response) => {
       if (response.payload.message) {
-        setIsLogin(true)
+        // setIsLogin(true)
         saveUserInfo(response.payload)
         alert('로그인 성공!')
         navigate('/');
