@@ -46,11 +46,11 @@ export default function Test() {
       <button className="reselectButton" onClick={() => resetCategory()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <div className="modeText">
+      <div className="modeText  fade-in-box">
         <div>{categoryName}</div>
       </div>
-      <div className="guideText">실전 방법을 선택해주세요</div>
-      <div className="studyBox">
+      <div className="guideText  fade-in-box">실전 방법을 선택해주세요</div>
+      <div className="studyBox  fade-in-up">
         <SelectTestMode
           num={categoryNum}
           able={categoryTestable}

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import CategoryButton from "../../common/button/CategoryButton";
+// import "./FadeIn.scss";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-
-import axios from "axios";
 
 export default function SelectCategory({
   mode,
@@ -48,14 +47,14 @@ export default function SelectCategory({
 
   return (
     <div className="studyBox">
-      <div className="modeText">
+      <div className="modeText fade-in-box">
         <div>{mode}</div>
       </div>
-      <div className="guideText">카테고리를 선택해주세요</div>
+      <div className="guideText fade-in-box">카테고리를 선택해주세요</div>
       <button className="reselectButton" onClick={() => resetMode()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <div className="categoryList">
+      <div className="categoryList fade-in-up">
         {categoryList.map((category) => (
           <CategoryButton
             key={category.id}

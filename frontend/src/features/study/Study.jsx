@@ -5,6 +5,7 @@ import WordLarge from "./learn/WordLarge";
 import TextButton from "../../common/button/TextButton";
 
 import "./Study.scss";
+import "./FadeIn.scss";
 import "../../common/button/TextButton.scss";
 
 import Grid from "@mui/material/Grid";
@@ -50,7 +51,7 @@ export default function Study() {
       selectedCategoryInfo={selectedCategoryInfo}
     />
   ) : (
-    <div className="studyBox    fade-in-box">
+    <div className="studyBox fade-in-box">
       <div className="guideText">학습모드를 선택해주세요</div>
       <div>
         <TextButton text={"배움모드"} selectedMode={selectedMode} />
@@ -67,32 +68,6 @@ export default function Study() {
       <WordLarge isLogin={true} categoryNum={categoryNum} />
     </div>
   );
-
-  // const modeScreen =
-  //   mode === "실전모드" && categoryList[categoryNum - 1] ? (
-  //     <div className="studyBox">
-  //       <button className="reselectButton" onClick={() => resetCategory()}>
-  //         <ArrowBackRoundedIcon fontSize="large" />
-  //       </button>
-  //       <div className="modeText">
-  //         <div>{categoryList[categoryNum - 1].name}</div>
-  //       </div>
-  //       <div className="guideText">실전 방법을 선택해주세요</div>
-  //       <div className="studyBox">
-  //         <Test
-  //           num={categoryNum}
-  //           able={categoryList[categoryNum - 1].isTestable}
-  //         />
-  //       </div>
-  //     </div>
-  //   ) : (
-  //     <div className="marginTopBox">
-  //       <button className="reselectButton" onClick={() => resetCategory()}>
-  //         <ArrowBackRoundedIcon fontSize="large" />
-  //       </button>
-  //       <WordLarge isLogin={true} categoryNum={categoryNum} />
-  //     </div>
-  //   );
 
   const modeStart = categoryNum ? modeScreen : selectModeScreen;
 

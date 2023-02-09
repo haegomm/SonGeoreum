@@ -5,6 +5,7 @@ import axios from "axios";
 
 import WordSmall from "../../../common/card/WordSmall";
 import "./WordLarge.scss";
+import "../FadeIn.scss";
 import "../../../common/card/flip.scss";
 
 import StarIcon from "@mui/icons-material/Star";
@@ -142,6 +143,20 @@ export default function WordLarge({ isLogin, categoryNum }) {
     setBlockListMode(!blockListMode);
   };
 
+  const shuffle = () => {
+    async function shuffleInfo() {
+      const data = await axios.get(
+        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
+      );
+      setWordList(data.data);
+      console.log(data.data);
+      setWordNumber(0);
+      setStartNumber(data.data[0].id);
+      setEndNumber(data.data.length - 1);
+    }
+    shuffleInfo();
+  };
+
   if (wordList && wordList.length > 0) {
     console.log("나와라..", wordList);
 
@@ -166,23 +181,25 @@ export default function WordLarge({ isLogin, categoryNum }) {
       );
     if (blockListMode) {
       return (
-        <div className="">
-          {wordList.map((word) => (
-            <WordSmall
-              key={word.id}
-              text={word.name}
-              star={true}
-              isLogin={isLogin}
-              index={word.id}
-              handleListItemClick={handleListItemClick}
-              listMode={listMode}
-            />
-          ))}
+        <div>
+          <div className="fade-up">
+            {wordList.map((word) => (
+              <WordSmall
+                key={word.id}
+                text={word.name}
+                star={true}
+                isLogin={isLogin}
+                index={word.id}
+                handleListItemClick={handleListItemClick}
+                listMode={listMode}
+              />
+            ))}
+          </div>
         </div>
       );
     } else {
       return (
-        <div className="container">
+        <div className="container  fade-up">
           <div className="bigWordCard">
             <div id="flip-container" className="flip-container">
               <div className="flipper">
@@ -192,7 +209,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
                     <ShuffleRoundedIcon
                       color="blue"
                       sx={{ fontSize: 45 }}
-                      onClick={undefined}
+                      onClick={() => shuffle()}
                     />
                   </div>
                   <div className="menuBox">
