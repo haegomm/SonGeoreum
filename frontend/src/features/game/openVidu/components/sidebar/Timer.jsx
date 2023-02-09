@@ -1,24 +1,25 @@
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 const renderTime = ({ remainingTime }) => {
-    return (
-      <div className="timer">
-        <div className="value">{remainingTime}</div>
-      </div>
-    );
-  };
+  return (
+    <div className="timer">
+      <div className="value">{remainingTime}</div>
+    </div>
+  );
+};
 
 const Timer = () => {
-    <div className="timer-wrapper">
+  <div className="timer-wrapper">
     <CountdownCircleTimer
       isPlaying
       duration={5}
-      colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+      colors={["#0ea5e9", "#34d399", "#d9f99d"]}
+      colorsTime={[5, 3, 0]}
       onComplete={() => [true, 1000]}
     >
       {renderTime}
     </CountdownCircleTimer>
-  </div>
-}
+  </div>;
+};
 
-export default Timer
+export default Timer;

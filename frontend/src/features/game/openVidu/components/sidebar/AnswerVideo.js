@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
+import "./Timer.scss"
 
 const renderTime = ({ remainingTime }) => {
   if (remainingTime === 0) {
