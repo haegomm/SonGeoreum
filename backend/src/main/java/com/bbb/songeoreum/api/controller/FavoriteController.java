@@ -2,10 +2,11 @@ package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.FavoriteToggleReq;
 import com.bbb.songeoreum.api.response.FavoriteToggleRes;
-import com.bbb.songeoreum.api.response.FavoriteUserRes;
-import com.bbb.songeoreum.api.response.FavoriteUserWordRes;
+import com.bbb.songeoreum.api.response.FavoriteRes;
+import com.bbb.songeoreum.api.response.FavoriteWordRes;
 import com.bbb.songeoreum.api.service.FavoriteService;
 import com.bbb.songeoreum.db.domain.Favorite;
+import com.bbb.songeoreum.db.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -37,39 +39,41 @@ public class FavoriteController {
 
     /**
      * 나의 단어장에 등록된 단어들을 리스트에 담아 응답한다
-     * @param userId 유저의 PK
+     * @param isRandom 셔플 여부 (true/false)
      * @return 나의 단어장에 있는 단어 리스트를 담은 {@code ResponseEntity}
      */
-    @GetMapping("/user/{userId}/words")
+    @GetMapping
     @ApiOperation(value = "나의 단어장에 등록된 단어들을 리스트에 담아 응답한다.")
-    public ResponseEntity<List<FavoriteUserRes>> findByUser(@PathVariable(name = "userId") String userId) {
+    public ResponseEntity<List<FavoriteRes>> findByUser(@RequestParam(required = false) Boolean isRandom, HttpServletRequest httpServletRequest) {
 
-        List<FavoriteUserRes> favoriteWords = favoriteService.findByUser(userId);
+        User user = (User) httpServletRequest.getAttribute("user");
+        Long userId = user.getId();
 
-        return new ResponseEntity<List<FavoriteUserRes>>(favoriteWords, HttpStatus.OK);
+        List<FavoriteRes> favoriteWords = favoriteService.findByUser(userId, isRandom);
+
+        return new ResponseEntity<List<FavoriteRes>>(favoriteWords, HttpStatus.OK);
     }
 
     /**
      * 나의 단어장에 있는 단어인지 확인합니다.
-     * @param userId 사용자의 PK
      * @param wordId 단어 PK
      * @return 요청에 대한 응답 성공 여부 메시지를 담은 {@code ResponseEntity}
      */
-    @GetMapping("/user/{userId}/word/{wordId}")
+    @GetMapping("/word/{wordId}")
     @ApiOperation(value = "나의 단어장에 있는 단어인지 확인한다.")
-    public ResponseEntity<FavoriteUserWordRes> findByUserAndWord(@PathVariable(name = "userId") String userId, @PathVariable(name = "wordId") String wordId) {
-
-        log.debug("USER ID: {}", userId);
-        log.debug("WORD ID: {}", wordId);
+    public ResponseEntity<FavoriteWordRes> findByUserAndWord(@RequestParam(name = "wordId") Long wordId, HttpServletRequest httpServletRequest) {
 
         String msg = FAIL;
+
+        User user = (User) httpServletRequest.getAttribute("user");
+        Long userId = user.getId();
 
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
         if (findFavorite != null) msg = SUCCESS;
 
-        FavoriteUserWordRes favoriteUserWordRes = FavoriteUserWordRes.builder().message(msg).build();
+        FavoriteWordRes favoriteUserWordRes = FavoriteWordRes.builder().message(msg).build();
 
-        return new ResponseEntity<FavoriteUserWordRes>(favoriteUserWordRes, HttpStatus.OK);
+        return new ResponseEntity<FavoriteWordRes>(favoriteUserWordRes, HttpStatus.OK);
     }
 
     /**
@@ -79,16 +83,18 @@ public class FavoriteController {
      */
     @PostMapping
     @ApiOperation("특정 단어를 나의 단어장에 추가한다.")
-    public ResponseEntity<FavoriteToggleRes> saveFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq) {
+    public ResponseEntity<FavoriteToggleRes> saveFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
 
         log.debug("Fovorite Save Request: {} ", favoriteToggleReq);
 
+        User user = (User) httpServletRequest.getAttribute("user");
+        Long userId = user.getId();
+        Long wordId = favoriteToggleReq.getWordId();
+
         String msg = SUCCESS;
 
-        String userId = favoriteToggleReq.getUserId();
-        String wordId = favoriteToggleReq.getWordId();
-
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
+
         if (findFavorite == null) {
             favoriteService.saveFavorite(userId, wordId);
         }
@@ -105,14 +111,15 @@ public class FavoriteController {
      */
     @DeleteMapping
     @ApiOperation("특정 단어를 나의 단어장에서 삭제한다.")
-    public ResponseEntity<FavoriteToggleRes> deleteFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq) {
+    public ResponseEntity<FavoriteToggleRes> deleteFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
 
         log.debug("Fovorite Delete Request: {} ", favoriteToggleReq);
 
         String msg = SUCCESS;
 
-        String userId = favoriteToggleReq.getUserId();
-        String wordId = favoriteToggleReq.getWordId();
+        User user = (User) httpServletRequest.getAttribute("user");
+        Long userId = user.getId();
+        Long wordId = favoriteToggleReq.getWordId();
 
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
         if (findFavorite != null) {
