@@ -2,15 +2,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
+    password:
 
-    # AWS RDS 정보
-    url: jdbc:mysql://bbb-db.csj8ty7cbmhi.ap-northeast-2.rds.amazonaws.com:3306/bbbdata
-    username: bbb
-    password: SonGeoreum
-
-  #    url: jdbc:mysql://localhost:3306/bbbtest?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
-  #    username: ssafy
-  #    password: ssafy
+  # import application-oauth.yml
+  profiles:
+    include: oauth
 
   # JPA
   jpa:
@@ -40,13 +38,7 @@ logging:
 
 # openVidu Environmental Variables
 OPENVIDU_URL: https://i8b106.p.ssafy.io:8443
-OPENVIDU_SECRET: BBB
+OPENVIDU_SECRET:
 
-# context path
-server:
-  servlet:
-    context-path: /api
 
-  # application-oauth.yml
-  profiles:
-    include: oauth
+
