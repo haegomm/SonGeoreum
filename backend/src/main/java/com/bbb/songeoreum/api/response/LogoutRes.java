@@ -4,11 +4,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @ToString
 @Builder
 @AllArgsConstructor
-public class RemoveUserRes {
-    @ApiModelProperty(example = "나간 유저의 connection이 성공적으로 해제되었으면 success, 그렇지 않다면 fail")
+@NoArgsConstructor
+public class LogoutRes {
+
+    @ApiModelProperty(example = "로그아웃 성공했으면 success, 실패했으면 fail")
     private String message;
 }

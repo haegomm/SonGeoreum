@@ -1,5 +1,5 @@
 import axios from './https'
-import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, MODIFYPROFILE, CHECKNICKNAME, ENQUIREPROFILE, ISSUEACCESSTOKEN, KAKAOLOGIN } from '../../features/auth/authTypes';
+import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, CHECKNICKNAME, KAKAOLOGIN } from '../../features/auth/authTypes';
 
 function login(data) {
   const request = axios.post('/api/user/login', data).then((response) => response.data)
