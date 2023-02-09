@@ -2,7 +2,7 @@ import React from 'react'
 import baseAxios from 'axios';
 import { getUserInfo } from './authInfo';
 
-export const axios = baseAxios.create({
+const axios = baseAxios.create({
   baseURL: process.env.REACT_APP_API,     // 환경변수 세팅
   headers: {
     'Content-Type': 'application/json',
@@ -14,3 +14,5 @@ axios.interceptors.request.use((config) => {
   config.headers.Authorization = `Bearer ${getUserInfo().accessToken}`;
   return config;
 });
+
+export default axios;

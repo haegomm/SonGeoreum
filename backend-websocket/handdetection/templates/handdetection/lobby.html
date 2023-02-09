@@ -33,7 +33,7 @@
   /*
     Websocket Connect
   */
-  let url = `ws://localhost:8000/ws/socket-server`;
+  let url = `ws://localhost:8000/ws/socket-server/1`;
 
   const handSocket = new WebSocket(url);
 
@@ -83,7 +83,7 @@
   // Configs
   const hands = new Hands({
     locateFile: (file) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4/${file}`;
     },
   });
 
