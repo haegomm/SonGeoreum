@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-export default function NavbarSide({onLoginHandler}) {
+export default function NavbarSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -31,9 +31,8 @@ export default function NavbarSide({onLoginHandler}) {
   //   setIsOpen(isOpen => !isOpen);
   // }
   const onLogoutHandler = (e) => {
-    e.preventDefault();
-
     dispatch(authAction.logout()).then((response) => {
+      console.log(response)
       console.log('로갓눌럿다')
       deleteUserInfo()
       navigate('/');
@@ -87,7 +86,6 @@ export default function NavbarSide({onLoginHandler}) {
             <ListItemText
               primary='로그아웃'
               onClick={() => {
-                onLoginHandler(getUserInfo().userId)
                 onLogoutHandler()
               } }/>
           </ListItemButton>
