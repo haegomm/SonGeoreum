@@ -191,6 +191,7 @@ public class UserController {
         return new ResponseEntity<LogoutRes>(logoutRes, status);
     }
 
+
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request, HttpServletResponse response)
@@ -198,30 +199,7 @@ public class UserController {
         User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
 
         RefreshTokenRes refreshTokenRes = null; // 리턴 값
-        HttpStatus status = HttpStatus.ACCEPTED;
-
-        //////////////////////// 이 부분부터
-        // access token 확인
-        String accessTokenCheck = HeaderUtil.getAccessToken(request);
-        AuthToken authToken = tokenProvider.convertAuthToken(accessTokenCheck);
-        if (!authToken.validate()) {
-            log.debug("유효하지 않은 access token 입니다.");
-            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
-            status = HttpStatus.UNAUTHORIZED;
-//            return ApiResponse.invalidAccessToken();
-            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
-        }
-
-        // expired access token 인지 확인
-        Claims claims = authToken.getExpiredTokenClaims();
-        if (claims == null) {
-            log.debug("만료되지 않은 access token 입니다.");
-            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
-            status = HttpStatus.UNAUTHORIZED;
-//            return ApiResponse.notExpiredTokenYet();
-            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
-        }
-        ///////////////////////// 이 부분까지 tokenAccessDeniedHandler를 넣어줄거라 필요한 부분인지 정확히 모르겠어요..
+        HttpStatus status = null;
 
         // refresh token
         String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
@@ -233,9 +211,7 @@ public class UserController {
         if (!authRefreshToken.validate() || user.getRefreshToken() == null) {
             log.debug("유효하지 않은 refresh token 입니다.");
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
-//            refreshTokenRes = RefreshTokenRes.builder().message("유효하지 않은 refresh token 입니다.").build();
             status = HttpStatus.UNAUTHORIZED;
-//            return ApiResponse.invalidRefreshToken();
             return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
         }
 
@@ -253,10 +229,9 @@ public class UserController {
 
         log.debug("정상적으로 액세스토큰 재발급!!!");
         refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
-        status = HttpStatus.ACCEPTED;
+        status = HttpStatus.OK;
 
 
-//        return ApiResponse.success("token", newAccessToken.getToken());
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
     }
 
@@ -279,7 +254,7 @@ public class UserController {
 
         User user = (User) request.getAttribute("user");
 
-        userService.updateUser(updateUserReq, user);
+        userService.updateUser(updateUserReq, user.getId());
 
         return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 
@@ -291,7 +266,7 @@ public class UserController {
     public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getAttribute("user");
 
-        UpdateExperienceRes updateExperienceRes = userService.updateExperience(user, experience);
+        UpdateExperienceRes updateExperienceRes = userService.updateExperience(user.getId(), experience);
 
         return new ResponseEntity<UpdateExperienceRes>(updateExperienceRes, HttpStatus.OK);
 

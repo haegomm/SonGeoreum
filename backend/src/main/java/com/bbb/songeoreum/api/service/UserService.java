@@ -105,30 +105,56 @@ public class UserService {
 
     // 프로필 수정
     @Transactional
-    public void updateUser(UpdateUserReq updateUserReq, User user) throws NotFoundException {
-        user.updateUser(updateUserReq);
+    public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException {
+        // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
+        User realUser = userRepository.findById(id).get();
+        realUser.updateUser(updateUserReq);
     }
 
     // 게임 결과 경험치 반영
     @Transactional
-    public UpdateExperienceRes updateExperience(User user, int experience) {
+    public UpdateExperienceRes updateExperience(Long id, int experience) {
+
+        User realUser = userRepository.findById(id).get();
 
         int level = 1;
 
-        switch (experience/10) {
-            case 0: break;
-            case 1: level = 2; break;
-            case 2: level = 3; break;
-            case 3: level = 4; break;
-            case 4: level = 5; break;
-            case 5: level = 6; break;
-            case 6: level = 7; break;
-            case 7: level = 8; break;
-            case 8: level = 9; break;
-            default: level = 10; break;
+        switch (experience / 10) {
+            case 0:
+                break;
+            case 1:
+                level = 2;
+                break;
+            case 2:
+                level = 3;
+                break;
+            case 3:
+                level = 4;
+                break;
+            case 4:
+                level = 5;
+                break;
+            case 5:
+                level = 6;
+                break;
+            case 6:
+                level = 7;
+                break;
+            case 7:
+                level = 8;
+                break;
+            case 8:
+                level = 9;
+                break;
+            default:
+                level = 10;
+                break;
         }
 
-        user.updateExperience(level, experience);
+        // 기존 경험치에 넘어온 경험치를 더해줌.
+        int calculatedExperience = experience + realUser.getExperience();
+
+        realUser.updateExperience(level, calculatedExperience);
 
         UpdateExperienceRes updateExperienceRes = UpdateExperienceRes.builder().level(level).experience(experience).build();
 

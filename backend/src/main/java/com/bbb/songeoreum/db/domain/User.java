@@ -117,18 +117,18 @@ public class User implements Serializable {
     }
 
     // 회원 정보 조회
-    public GetUserRes toDTO(){
+    public GetUserRes toDTO() {
         return new GetUserRes(id, userType, email, kakaoId, nickname, picture, level, experience);
     }
 
     // 프로필 수정
-    public void updateUser(UpdateUserReq updateUserReq){
+    public void updateUser(UpdateUserReq updateUserReq) {
         this.nickname = updateUserReq.getNickname();
         this.picture = updateUserReq.getPicture();
     }
 
     // 게임 결과 경험치 반영
-    public void updateExperience(int level, int experience){
+    public void updateExperience(int level, int experience) {
         this.level = level;
         this.experience = experience;
     }
