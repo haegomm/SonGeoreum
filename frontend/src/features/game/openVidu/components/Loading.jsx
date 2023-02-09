@@ -8,7 +8,6 @@ const Loading = (props) => {
   const navigate = useNavigate()
 
   console.log(props)
-  const myId = props.myId
   const sessionId = props.sessionId
   console.log(sessionId)
   

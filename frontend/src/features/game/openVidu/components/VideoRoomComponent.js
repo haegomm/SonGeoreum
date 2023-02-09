@@ -1,7 +1,7 @@
 // import axios from "axios";
 import {axios} from '../../../../common/api/https'
 import { OpenVidu } from "openvidu-browser";
-import React, { Component } from "react";
+import React, { Component, useLocalStorage } from "react";
 import DialogExtensionComponent from "./dialog-extension/DialogExtension";
 import StreamComponent from "./stream/StreamComponent";
 import "./VideoRoomComponent.css";
@@ -22,33 +22,28 @@ class VideoRoomComponent extends Component {
     console.log(props)
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    // let myId = Math.floor(Math.random() * 100) // uesrpk 넣기
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SonGeoreum";
-    let userName = this.props.user
-      ? this.props.user
-      : "SonGeoreum_User" + Math.floor(Math.random() * 100); // 유저 닉네임받아와서 넣기
+    let userName = localStorage.getItem(nickname)
     console.log(this.props.user)
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
       mySessionId: sessionName,
-      // myUserName: userName,
-      myUserName: "큐티가은",
+      myUserName: userName,
       session: undefined,
       localUser: undefined,
       subscribers: [],
       chatDisplay: "block",
       currentVideoDevice: undefined,
-      myId: 3,//
       connectionId: undefined,
       message: "",//
       sessionId: undefined,//
       token: "",//
       playGame: false,//
       goGame: true,
-      playerlist: ["현경", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
+      playerlist: [],//
       subToken: undefined,// ?
     };
     // this.timer // timer component를 갖고온다면
@@ -662,9 +657,9 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame) {
+    if (!this.state.goGame || !this.state.playGame) {
       return <Loading
-        myId={this.state.myId}
+        subscribers={this.state.subscribers}
         sessionId={this.state.sessionId}
       />;
     } else {
@@ -754,18 +749,13 @@ class VideoRoomComponent extends Component {
    * more about the integration of OpenVidu in your application server.
    */
   async getToken() {
-    const sessionData = await this.createSession(this.state.myId)
+    const sessionData = await this.createSession()
     return await this.createToken(sessionData);
   }
 
-  // myId(userPk)보내기
-  async createSession(myId) {
+  async createSession() {
     try {
-      const response = await axios.post("/api/game/session",
-           {
-            id: myId, // {id :user pk}
-          }
-        );
+      const response = await axios.post("/api/game/session",);
       console.log("요청성공 >> ", response.data)
       return response.data; // The sessionId
     } catch (err) {
