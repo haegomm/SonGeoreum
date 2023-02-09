@@ -320,7 +320,7 @@ public class GameService {
     /**
      * 대기방에 있는 모든 유저들을 퇴출시키고 대기방을 초기화합니다
      *
-     * @param id
+     * @param id session의 sessionId
      * @throws OpenViduJavaClientException
      * @throws OpenViduHttpException
      */
