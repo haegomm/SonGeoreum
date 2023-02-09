@@ -1,11 +1,11 @@
 import { useState } from "react";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 import SelectCategory from "../SelectCategory";
 import SelectTestMode from "./SelectTestMode";
 import HandToWord from "./HandToWord";
 import WordToHand from "./WordToHand";
 
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { Grid } from "@mui/material";
 
 export default function Test() {

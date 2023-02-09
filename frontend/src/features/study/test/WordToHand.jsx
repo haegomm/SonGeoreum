@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
-import TestScreen from "../../../common/card/TestScreen";
-import TestAnswer from "../../../common/card/TestAnswer";
+import axios from "../../../common/api/https";
 import MotionTest from "./MotionTest";
 import TopCard from "../../../common/card/TopCard";
+
 import "./HandToWord.scss";
 import "../../../common/card/TestScreen.scss";
-
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
-import SendIcon from "@mui/icons-material/Send";
 
 export default function WordToHand({ categoryNum, resetTestMode }) {
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
@@ -24,7 +18,7 @@ export default function WordToHand({ categoryNum, resetTestMode }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
+        `/api/words?categoryId=${categoryNum}&isRandom=true`
       );
       setTestList(data.data);
       console.log("data >> ", data.data);

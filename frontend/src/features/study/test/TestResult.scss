@@ -1,0 +1,17 @@
+$yellow: #f9be7d;
+
+.testScreen {
+  background-color: white;
+  color: $yellow;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+
+  border-radius: 40px;
+  margin: 16px;
+  padding: 16px;
+  width: calc(100% - 32px);
+  max-width: 640px;
+  height: 400px;
+  border: none;
+}

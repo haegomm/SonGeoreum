@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../common/api/https";
 
 import TestScreen from "../../../common/card/TestScreen";
 import TestAnswer from "../../../common/card/TestAnswer";
@@ -21,7 +21,7 @@ export default function HandToWord({ categoryNum, resetTestMode }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
+        `/api/words?categoryId=${categoryNum}&isRandom=true`
       );
       setTestList(data.data);
       console.log("data >> ", data.data);

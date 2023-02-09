@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
+import axios from "../../common/api/https";
 import CategoryButton from "../../common/button/CategoryButton";
-// import "./FadeIn.scss";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
@@ -20,7 +19,7 @@ export default function SelectCategory({
 
   useEffect(() => {
     async function getInfo() {
-      const data = await axios.get(`https://i8b106.p.ssafy.io/api/categories`);
+      const data = await axios.get(`/api/categories`);
       setCategoryList(data.data);
       console.log(data.data);
     }

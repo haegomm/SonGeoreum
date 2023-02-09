@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import "./TestScreen.scss";
+import "./TestResult.scss";
 
-export default function TestScreen({ link, categoryNum }) {
+export default function TestResult({ link, categoryNum }) {
   const media =
     categoryNum > 3 ? (
       <video

@@ -1,7 +1,6 @@
 /*global drawConnectors, HAND_CONNECTIONS, drawLandmarks, Hands, Camera*/
 /*eslint no-undef: "error"*/
-import { useState, useEffect } from "react";
-import axios from "axios";
+
 import $script from "scriptjs";
 import "./MotionTest.scss";
 
