@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping("/oauth2/kakao")
     public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
 
-        log.debug("카카오에서 인가 코드 받아옴.!!!!!! : {}", code);
+        log.debug("카카오톡 user 로그인");
 
         String kakaoAccessToken = authService.getKakaoAccessToken(code);
         log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);

@@ -93,7 +93,6 @@ public class UserService {
     @Transactional
     public void deleteRefreshToken(Long id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
-        log.debug("deleteRefreshToken 요청한 user : {} ", user);
         user.deleteRefreshToken();
     }
 
