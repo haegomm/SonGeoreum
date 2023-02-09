@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
 import NavbarSide from './NavbarSide'
+import authAction from '../api/authAction';
 
 
 export default function Navbar() {
@@ -29,9 +30,7 @@ export default function Navbar() {
     { name: "알아보기", path: "/culture" },
   ]; // 페이지
 
-  // const [auth, setAuth] = useState(true); // 로그인 유무
   const [isShort, setShort] = useState(true); // navBar 사이즈 조절
-  const [isLogin, setIsLogin] = useState(false)
 
   const sizeLong = () => {
     setShort(false);
@@ -71,9 +70,6 @@ export default function Navbar() {
 
   };
   
-  // useEffect(()=>{
-
-  // })
   return (
     <div>
       <div
@@ -148,8 +144,8 @@ export default function Navbar() {
               </MenuItem>
 
             {/* 나중에 아래 주석 풀기 : 로그인 상태에 따라 로그인 버튼과 프로필 버튼 다르게 */}
-            {/* {!getUserInfo.nickname ? (
-              <NavbarSide onLoginHandler={onLoginHandler}/>
+            {authAction.isLogin() ? (
+              <NavbarSide />
             ) : (
               <MenuItem>
                 <Typography
@@ -166,7 +162,7 @@ export default function Navbar() {
                   로그인
                 </Typography>
               </MenuItem>
-            )} */}
+            )}
 
           </Toolbar>
         </AppBar>

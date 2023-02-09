@@ -14,7 +14,7 @@ import KakaoLogin from "../features/auth/login/KakaoLogin";
 import Result from "../features/game/openVidu/components/Result";
 import Study from "../features/study/Study";
 import Test from "../features/study/test/Test";
-// import PublicRoute from "../common/routes/PublicRoute";
+import PublicRoute from "../common/routes/PublicRoute";
 
 function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
@@ -34,17 +34,19 @@ function App() {
               <Route path="test" element={<Test />} />
               <Route path="*" element={<Home />} />
               <Route path="/game" element={<Game />} />
-              <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
+              {/* <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
               <Route path="result" element={<Result />} />
               <Route path="signup" element={<Signup />} />
-              <Route path="login" element={<Login />} />
+              <Route path="login" element={<Login />} /> */}
+              <Route element={<PublicRoute restricted={true} />}>
+                <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="login" element={<Login />} />
+                {/* <PublicRoute restricted={false} path="result" element={<Result />} /> */}
+            </Route>
             </Route>
           </Routes>
         </Router>
-              {/* <PublicRoute restricted={true} path="api/oauth2/code/kakao" element={<KakaoLogin />} />
-              <PublicRoute restricted={false} path="result" element={<Result />} />
-              <PublicRoute restricted={true} path="signup" element={<Signup />} />
-              <PublicRoute restricted={true} path="login" element={<Login />} /> */}
       </ThemeProvider>
     </div>
   );

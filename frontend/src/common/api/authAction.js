@@ -56,7 +56,7 @@ function kakakoLogin() {
   }
 }
 
-const isLogin = () => !!getUserInfo();
+const isLogin = () => !!getUserInfo().accessToken;
 
 const authAction = { 
   login, 

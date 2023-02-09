@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
-import setIsLogin from './Navbar'
 import ModifyProfile from './ModifyProfile';
 import './NavbarSide.scss'
 
@@ -21,29 +20,19 @@ export default function NavbarSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const userId = getUserInfo().userId
   const nickname = getUserInfo().nickname
   const picture = getUserInfo().picture
 
-  // const []
-  
-  // const onToggleHandler = () => {
-  //   setIsOpen(isOpen => !isOpen);
-  // }
   const onLogoutHandler = (e) => {
     dispatch(authAction.logout()).then((response) => {
-      console.log(response)
-      console.log('로갓눌럿다')
-      deleteUserInfo()
-      navigate('/');
-      // useEffect(() => {},[Location])
-      // if (response.payload === 'success') {
-      //   alert('로그아웃이 완료되었습니다');
-      //   navigate('/');
-      //   deleteUserInfo()
-      // } else{
-      //   alert('로그아웃에 실패하였습니다. 다시 시도해주세요');
-      // }
+      console.log(response.payload)
+      if (response.payload.message === 'success') {
+        alert('로그아웃이 완료되었습니다');
+        window.location.replace("/")
+        deleteUserInfo()
+      } else{
+        alert('로그아웃에 실패하였습니다. 다시 시도해주세요');
+      }
     })
   }
 
@@ -55,6 +44,7 @@ export default function NavbarSide() {
   const [state, setState] = useState({right: false});
 
   const toggleDrawer = (anchor, open) => (event) => {
+    console.log(authAction.isLogin())
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
