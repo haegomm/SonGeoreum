@@ -93,5 +93,23 @@ public class AuthService {
         return kakaoAccessToken;
     }
 
+    /* login 요청 보내는 회원가입 유무 판단해 분기 처리 */
+//    public ResponseEntity<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
+//        // kakaoAccessToken 으로 회원정보 받아오기
+//        User kakaoUser = getKakaoInfo(kakaoAccessToken);
+//        LoginResponseDto loginResponseDto = new LoginResponseDto();
+//        try {
+//            TokenDto tokenDto = securityService.login(kakaoUser);
+//            loginResponseDto.setUser(userRepository.findByUserId(kakaoUser.getUserId()));
+//            loginResponseDto.setLoginSuccess(true);
+//            HttpHeaders headers = setTokenHeaders(tokenDto);
+//            return ResponseEntity.ok().headers(headers).body(loginResponseDto);
+//        } catch (CUserIdLoginFailedException e) {
+//            loginResponseDto.setUser(kakaoUser);
+//            loginResponseDto.setLoginSuccess(false);
+//            return ResponseEntity.ok(loginResponseDto);
+//        }
+//    }
+
 
 }
