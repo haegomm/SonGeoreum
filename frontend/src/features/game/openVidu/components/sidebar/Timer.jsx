@@ -1,22 +1,24 @@
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
-const Timer = () => {
+const renderTime = ({ remainingTime }) => {
     return (
-        <div>
-            {/* <CountdownCircleTimer
-                isPlaying
-                duration={7}
-                colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                colorsTime={[7, 5, 2, 0]}
-                onComplete = { ( )  =>  { 
-                    // 여기서 할 일 
-                    return  {  shouldRepeat : true ,  delay : 1.5  }  // 반복 애니메이션 1.5초 후 
-                  } }
-            >
-                {({ remainingTime }) => remainingTime}
-            </CountdownCircleTimer> */}
-        </div>
-    )
+      <div className="timer">
+        <div className="value">{remainingTime}</div>
+      </div>
+    );
+  };
+
+const Timer = () => {
+    <div className="timer-wrapper">
+    <CountdownCircleTimer
+      isPlaying
+      duration={5}
+      colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+      onComplete={() => [true, 1000]}
+    >
+      {renderTime}
+    </CountdownCircleTimer>
+  </div>
 }
 
 export default Timer
