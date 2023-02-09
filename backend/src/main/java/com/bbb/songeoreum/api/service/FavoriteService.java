@@ -1,6 +1,6 @@
 package com.bbb.songeoreum.api.service;
 
-import com.bbb.songeoreum.api.response.FavoriteUserRes;
+import com.bbb.songeoreum.api.response.FavoriteRes;
 import com.bbb.songeoreum.db.domain.Favorite;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.domain.Word;
@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,31 +36,32 @@ public class FavoriteService {
 
     /**
      * DB에서 사용자 PK에 해당하는 나의 단어장 결과를 조회합니다.
-     * @param id 사용자 PK
+     * @param userId 사용자 PK
+     * @param isRandom 셔플 여부 (true/false)
      * @return 나의 단어장 DTO 리스트
      */
-    public List<FavoriteUserRes> findByUser(String id) {
+    public List<FavoriteRes> findByUser(Long userId, Boolean isRandom) {
 
-        Long userId = Long.parseLong(id);
         List<Favorite> favorites = favoriteRepository.findByUser_Id(userId);
+
+        if (isRandom != null && isRandom) {
+            Collections.shuffle(favorites);
+        }
 
         log.debug("favorite list: {}", favorites);
 
-        List<FavoriteUserRes> findFavorites = favorites.stream().map(favorite -> FavoriteUserRes.builder().favorite(favorite).build()).collect(Collectors.toList());
+        List<FavoriteRes> findFavorites = favorites.stream().map(favorite -> FavoriteRes.builder().favorite(favorite).categoryId(favorite.getWord().getCategory().getId()).build()).collect(Collectors.toList());
 
         return findFavorites;
     }
 
     /**
      * DB에서 사용자 PK와 단어 PK에 해당하는 나의 단어장 결과를 조회합니다.
-     * @param uId 사용자 PK
-     * @param wId 단어 PK
+     * @param userId 사용자 PK
+     * @param wordId 단어 PK
      * @return 나의 단어장 리스트
      */
-    public Favorite findFavoriteByUserAndWord(String uId, String wId) {
-
-        Long userId = Long.parseLong(uId);
-        Long wordId = Long.parseLong(wId);
+    public Favorite findFavoriteByUserAndWord(Long userId, Long wordId) {
 
         Favorite findFavorite = favoriteRepository.findByUser_IdAndWord_Id(userId, wordId);
 
@@ -68,13 +70,10 @@ public class FavoriteService {
 
     /**
      * DB에 나의 단어장 데이터를 저장한다.
-     * @param uId 사용자 PK
-     * @param wId 단어 PK
+     * @param userId 사용자 PK
+     * @param wordId 단어 PK
      */
-    public void saveFavorite(String uId, String wId) {
-
-        Long userId = Long.parseLong(uId);
-        Long wordId = Long.parseLong(wId);
+    public void saveFavorite(Long userId, Long wordId) {
 
         User findUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
         Word findWord = wordRepository.findById(wordId).orElseThrow(() -> new WordNotFoundException());
