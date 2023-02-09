@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-// import axios from "../../../../../common/api/https";
-import axios from "axios";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
-import Timer from "./Timer";
+// import Timer from "./Timer";
 
-// const renderTime = ({ remainingTime }) => {
+const renderTime = ({ remainingTime }) => {
+  if (remainingTime === 0) {
+    return <div className="timer">정답을 시청해주세요</div>
+  }
 
-//   return (
-//     <div className="timer">
-//       <div className="value">{remainingTime}</div>
-//     </div>
-//   );
-// };
+  return (
+    <div className="timer">
+      <div className="value">{remainingTime}</div>
+    </div>
+  );
+};
 
 const AnswerVideo = (props) => {
   console.log("리렌더링!!!", props.showAnswer)
@@ -34,17 +35,17 @@ const AnswerVideo = (props) => {
   const check = presenter === myNickname ? "내가 출제자야" : (`다음 출제자: ${presenter}`);
   return (
     <div>
-      {/* <div className="timer-wrapper">
+      <div className="timer-wrapper">
         <CountdownCircleTimer
           isPlaying
           duration={5}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-          onComplete={() => [true, 1000]}
+          onComplete={() => ({ shouldRepeat: true, delay: 5 })}
         >
           {renderTime}
         </CountdownCircleTimer>
-      </div> */}
-      <Timer />
+      </div>
+      {/* <Timer /> */}
       <div className="box">
         {props.showAnswer || presenter === myNickname ? (
           <div className="box">
