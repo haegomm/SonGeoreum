@@ -49,13 +49,13 @@ public class UserController {
     // 카카오 테스트
     @ApiOperation(value = "카카오 테스트")
     @GetMapping("/oauth2/kakao")
-    public void kakaoTest(@RequestParam("code") String code) {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
 
         log.debug("카카오에서 인가 코드 받아옴.!!!!!! : {}", code);
 
         String kakaoAccessToken = authService.getKakaoAccessToken(code);
         log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);
-        authService.kakaoLogin(kakaoAccessToken);
+        return authService.kakaoLogin(kakaoAccessToken, request, response);
     }
 
 

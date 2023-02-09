@@ -70,20 +70,20 @@ public class SecurityConfig {
 //                .invalidateHttpSession(true) // 로그아웃 이후 세션 전체 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
 //                .deleteCookies("JSESSIONID") // 로그아웃 이후 쿠키 삭제하기, 필요성을 아직 잘 모르겠지만 나중에 필요할까봐 넣어둠.
 //                .clearAuthentication(true) // 로그아웃 이후 인증 초기화
-                .and()
-                .oauth2Login() // oauth2로그인 (소셜 로그인 설정을 시작하겠다.)
-//                .authorizationEndpoint() //아래 uri로 접근시 oauth 로그인을 요청한다.
-//                .baseUri("/oauth2/authorization") // https://i8b106.p.ssafy.io/api/oauth2/authorization/kakao 로그인 요청 보내는 주소
-//                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()) // 인가요청을 시작한 시점부터 인가 요청을 받는(콜백) 시점까지 OAuth2AuthorizationRequest를 유지해줌.
 //                .and()
-                .redirectionEndpoint() // 아래 uri로 접근시 redirect 된다.
-                .baseUri("/*/login/oauth2/code/*") // https://i8b106.p.ssafy.io/oauth2/code/kakao 프론트로 redirect 되는 주소
-                .and()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler())
-//                .failureHandler(oAuth2AuthenticationFailureHandler())
+//                .oauth2Login() // oauth2로그인 (소셜 로그인 설정을 시작하겠다.)
+////                .authorizationEndpoint() //아래 uri로 접근시 oauth 로그인을 요청한다.
+////                .baseUri("/oauth2/authorization") // https://i8b106.p.ssafy.io/api/oauth2/authorization/kakao 로그인 요청 보내는 주소
+////                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()) // 인가요청을 시작한 시점부터 인가 요청을 받는(콜백) 시점까지 OAuth2AuthorizationRequest를 유지해줌.
+////                .and()
+//                .redirectionEndpoint() // 아래 uri로 접근시 redirect 된다.
+//                .baseUri("/*/login/oauth2/code/*") // https://i8b106.p.ssafy.io/oauth2/code/kakao 프론트로 redirect 되는 주소
+//                .and()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                .and()
+//                .successHandler(oAuth2AuthenticationSuccessHandler())
+////                .failureHandler(oAuth2AuthenticationFailureHandler())
                 .and()
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // OAuth2를 이용한 인증이 아닌 username, password를 쓰는 form 기반 인증을 처리하는 필터로 자세한 내용은 노션 지식 공유 참고
                 .exceptionHandling()
