@@ -47,7 +47,7 @@ class VideoRoomComponent extends Component {
       token: "",//
       playGame: false,//
       goGame: true,
-      playerlist: ["가은", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
+      playerlist: ["현경", "큐티가은", "냐냐냐", "묵템프주니어2세"],//
       subToken: undefined,// ?
     };
     // this.timer // timer component를 갖고온다면
@@ -153,7 +153,6 @@ class VideoRoomComponent extends Component {
   }
 
   connect(token) {
-    console.log("세션 잘 담기는지 확인", this.state.session)
     this.state.session
       .connect(token, { clientData: this.state.myUserName })
       .then(() => {
@@ -729,7 +728,7 @@ class VideoRoomComponent extends Component {
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
                     playerList={this.state.playerlist}
-                    myNickname={this.state.userName}
+                    myNickname={this.state.myUserName}
                     theEndGame={this.theEndGame}
                   />
                 </div>

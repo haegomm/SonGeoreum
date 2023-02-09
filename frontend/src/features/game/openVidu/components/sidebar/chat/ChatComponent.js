@@ -22,7 +22,7 @@ export default class ChatComponent extends Component {
     this.handlePressKey = this.handlePressKey.bind(this);
     this.close = this.close.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    this.handleWhoGetScore = this.handleWhoGetScore(this)
+    this.handleWhoGetScore = this.handleWhoGetScore.bind(this)
   }
 
   componentDidMount() {
