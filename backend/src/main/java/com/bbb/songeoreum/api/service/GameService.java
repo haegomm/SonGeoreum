@@ -247,6 +247,25 @@ public class GameService {
     }
 
     /**
+     * 대기방에서 유저가 퇴장할 시 대기방 상태를 확인하고 마지막 유저가 퇴장하여 대기방이 종료되었다면 열려있는 대기방으로 대채합니다
+     *
+     * @param id session의 sessionId
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
+    public void removeUser(String id) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        Session standbySession = standbyRooms.peek();
+
+        if (!id.equals(standbySession.getSessionId())) {
+            throw new NotFoundException("세션이 일치하지 않습니다");
+        }
+
+        checkActiveSessionAndUpdate();
+
+    }
+
+    /**
      * 해당 게임방을 종료시키고 HashMap에서 제거합니다
      * 게임 로그를 DB에 저장합니다
      *
@@ -295,25 +314,6 @@ public class GameService {
 
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("standbyRooms size : {}", standbyRooms.size());
-
-    }
-
-    /**
-     * 대기방에서 유저가 퇴장할 시 대기방 상태를 확인하고 마지막 유저가 퇴장하여 대기방이 종료되었다면 열려있는 대기방으로 대채합니다
-     *
-     * @param id session의 sessionId
-     * @throws OpenViduJavaClientException
-     * @throws OpenViduHttpException
-     */
-    public void removeUser(String id) throws OpenViduJavaClientException, OpenViduHttpException {
-
-        Session standbySession = standbyRooms.peek();
-
-        if (!id.equals(standbySession.getSessionId())) {
-            throw new NotFoundException("세션이 일치하지 않습니다");
-        }
-
-        checkActiveSessionAndUpdate();
 
     }
 
