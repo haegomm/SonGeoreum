@@ -2,23 +2,11 @@ import * as React from "react";
 
 import "./TestResult.scss";
 
-export default function TestResult({ link, categoryNum }) {
-  const media =
-    categoryNum > 3 ? (
-      <video
-        src={link}
-        autoPlay
-        poster=""
-        //   control
-        loop
-      ></video>
-    ) : (
-      <img className="handImage" src={link} referrerPolicy="no-referrer" />
-    );
-
+export default function TestResult({ score, resetTestMode }) {
   return (
-    <div className="testScreen">
-      <div className="videoBox">{media}</div>
+    <div className="resultScreen">
+      <div className="">결과창입니다. 얻는 점수는 : {score}</div>
+      <button onClick={resetTestMode}>나가기</button>
     </div>
   );
 }

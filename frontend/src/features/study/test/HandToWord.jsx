@@ -10,7 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export default function HandToWord({ categoryNum, resetTestMode }) {
+export default function HandToWord({ categoryNum, finishTest }) {
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
   const [number, setNumber] = useState(0); // 현재 문제 번호
   const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
@@ -69,7 +69,7 @@ export default function HandToWord({ categoryNum, resetTestMode }) {
     setNumber(0);
     setShowAnswer(false);
     setShowCorrect(false);
-    resetTestMode();
+    finishTest(score);
     console.log("test result >> ", score);
   };
 
