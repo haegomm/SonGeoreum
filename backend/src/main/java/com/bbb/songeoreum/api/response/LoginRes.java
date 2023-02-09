@@ -8,13 +8,6 @@ import lombok.*;
 @ToString
 public class LoginRes {
 
-    //pk
-    @ApiModelProperty(example = "유저의 DB상 PK")
-    private Long id;
-
-    // 사용자 타입(NORMAL:일반,  KAKAO:카카오톡)
-    @ApiModelProperty(example = "사용자 타입(NORMAL:일반,  KAKAO:카카오톡)")
-    private String userType;
 
     // 일반 회원 아이디
     @ApiModelProperty(example = "일반 회원 아이디")
@@ -44,9 +37,7 @@ public class LoginRes {
     private String message;
 
     @Builder
-    public LoginRes(Long id, String userType, String email, String nickname, String picture, int level, int experience, String accessToken, String message) {
-        this.id = id;
-        this.userType = userType;
+    public LoginRes(String email, String nickname, String picture, int level, int experience, String accessToken, String message) {
         this.email = email;
         this.nickname = nickname;
         this.picture = picture;

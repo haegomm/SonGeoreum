@@ -1,6 +1,7 @@
 package com.bbb.songeoreum.jwt;
 
 import com.bbb.songeoreum.db.repository.UserRepository;
+import com.bbb.songeoreum.exception.NotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
