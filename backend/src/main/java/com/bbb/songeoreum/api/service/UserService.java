@@ -2,6 +2,7 @@ package com.bbb.songeoreum.api.service;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
+import com.bbb.songeoreum.api.response.GetTopTenUserRes;
 import com.bbb.songeoreum.api.response.GetUserRes;
 import com.bbb.songeoreum.api.response.UpdateExperienceRes;
 import com.bbb.songeoreum.db.domain.User;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -135,6 +139,19 @@ public class UserService {
 
         return updateExperienceRes;
 
+    }
+
+    // 실시간 랭킹 조회
+    public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException{
+
+        List<GetTopTenUserRes> list = userRepository.findAllOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
+        List<GetTopTenUserRes> result = new ArrayList<>();
+
+        for(int i=0; i<10; i++){
+            result.add(list.get(i));
+        }
+
+        return result;
     }
 
 }

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
@@ -272,6 +273,13 @@ public class UserController {
 
         return new ResponseEntity<UpdateExperienceRes>(updateExperienceRes, HttpStatus.OK);
 
+    }
+
+    // 실시간 랭킹 조회
+    @ApiOperation(value = "실시간 랭킹 조회")
+    @GetMapping("/ranking")
+    public ResponseEntity<List<GetTopTenUserRes>> getTopTenUser() throws NotFoundException{
+        return new ResponseEntity<List<GetTopTenUserRes>>(userService.getTopTenUser(), HttpStatus.OK);
     }
 
 }
