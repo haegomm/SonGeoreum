@@ -33,7 +33,7 @@ export default function NavbarSide({onLoginHandler}) {
   const onLogoutHandler = (e) => {
     e.preventDefault();
 
-    dispatch(authAction.logout(userId)).then((response) => {
+    dispatch(authAction.logout()).then((response) => {
       console.log('로갓눌럿다')
       deleteUserInfo()
       navigate('/');
