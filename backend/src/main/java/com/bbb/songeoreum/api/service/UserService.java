@@ -107,6 +107,10 @@ public class UserService {
     public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException {
         // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
         User realUser = userRepository.findById(id).get();
+
+        // 닉네임 중복 체크
+        duplicateNickname(updateUserReq.getNickname());
+
         realUser.updateUser(updateUserReq);
     }
 
