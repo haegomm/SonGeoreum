@@ -18,7 +18,17 @@ class HanddetectionConsumer(WebsocketConsumer):
         self.accept()
 
         category_pk = self.scope['url_route']['kwargs']['category']
-        self.knn = knn.Knn(category=self.category_mapper[category_pk])
+        # self.knn = knn.Knn(category=self.category_mapper[category_pk])
+        if category_pk == '1':
+            knn_factory = knn.ConsonantKnnFactory()
+            self.knn = knn_factory.create_knn()
+        elif category_pk == '2':
+            knn_factory = knn.VowelKnnFactory()
+            self.knn = knn_factory.create_knn()
+        elif category_pk == '3':
+            knn_factory = knn.NumberKnnFactory()
+            self.knn = knn_factory.create_knn()
+
         self.logger.info("WebSocket Connected with " + self.category_mapper[category_pk])
 
         # Send Message If Connected Successfully
