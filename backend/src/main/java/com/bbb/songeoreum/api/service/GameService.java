@@ -99,19 +99,6 @@ public class GameService {
         calculateMultiplierAndUpdate();
     }
 
-    // multiplier 계산 로직
-    public void calculateMultiplierAndUpdate() {
-        int gameRoomCnt = gameRooms.size();
-
-        // 최초 대기방 수 대비 현재 게임방 수에 따라 multiplier 설정
-        multiplier = gameRoomCnt / INITIAL_ROOM_NO + 1;
-
-        // REDZONE 값, 대기 큐 추가 방 갯수 값 수정
-        poolRedzoneNo = (int) (INITIAL_ROOM_NO * POOL_REDZONE_RATIO * multiplier);
-        poolAdditionNo = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO * multiplier);
-
-    }
-
     // 주기적으로 자동적으로 호출됨
     // gameRooms 순회하며 비정상적으로 오래 살아있는 게임방 초기화 작업 (예: 20분이 넘어갔는데 안 끝난 게임)
     @Scheduled(fixedRate = GC_INTERVAL_MINUTES * 60000)
@@ -132,28 +119,6 @@ public class GameService {
                 log.debug("세션 {} gameRooms에서 퇴출", id);
             }
         }
-    }
-
-    public Session checkActiveSessionAndUpdate() throws OpenViduJavaClientException, OpenViduHttpException {
-        Session returnSession = null;
-        while (!standbyRooms.isEmpty()) {
-            try {
-                returnSession = standbyRooms.peek();
-                // 세션이 닫혀있으면 여기서 에러날꺼임
-                returnSession.fetch();
-                return returnSession;
-            } catch (Exception e) {
-                // 위에서 에러났다는 뜻은 못쓰는 세션이라는 뜻, 버려주세요~
-                standbyRooms.poll();
-                // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
-                if (standbyRooms.size() < poolRedzoneNo) {
-                    increaseRoomBuffer();
-                }
-            }
-        }
-        // 아래 코드까지 사실 가면 안됨, 위에서 increaseRoomBuffer을 해주기 때문
-        increaseRoomBuffer();
-        return standbyRooms.peek();
     }
 
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -253,7 +218,6 @@ public class GameService {
         log.debug("standbyRooms count : {}", standbyRooms.size());
         log.debug("connected players count : {}", connectedPlayersCnt);
         log.debug("multiplier : {}", multiplier);
-
 
         return enterRoomRes;
     }
@@ -379,12 +343,48 @@ public class GameService {
         }
     }
 
+    // Helper Methods
+    
     public void increaseRoomBuffer() throws OpenViduJavaClientException, OpenViduHttpException {
         calculateMultiplierAndUpdate();
         for (int i = 0; i < poolAdditionNo; i++) {
             Session session = openVidu.createSession();
             standbyRooms.add(session);
         }
+    }
+
+    public void calculateMultiplierAndUpdate() {
+        int gameRoomCnt = gameRooms.size();
+
+        // 최초 대기방 수 대비 현재 게임방 수에 따라 multiplier 설정
+        multiplier = gameRoomCnt / INITIAL_ROOM_NO + 1;
+
+        // REDZONE 값, 대기 큐 추가 방 갯수 값 수정
+        poolRedzoneNo = (int) (INITIAL_ROOM_NO * POOL_REDZONE_RATIO * multiplier);
+        poolAdditionNo = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO * multiplier);
+
+    }
+
+    public Session checkActiveSessionAndUpdate() throws OpenViduJavaClientException, OpenViduHttpException {
+        Session returnSession = null;
+        while (!standbyRooms.isEmpty()) {
+            try {
+                returnSession = standbyRooms.peek();
+                // 세션이 닫혀있으면 여기서 에러날꺼임
+                returnSession.fetch();
+                return returnSession;
+            } catch (Exception e) {
+                // 위에서 에러났다는 뜻은 못쓰는 세션이라는 뜻, 버려주세요~
+                standbyRooms.poll();
+                // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
+                if (standbyRooms.size() < poolRedzoneNo) {
+                    increaseRoomBuffer();
+                }
+            }
+        }
+        // 아래 코드까지 사실 가면 안됨, 위에서 increaseRoomBuffer을 해주기 때문
+        increaseRoomBuffer();
+        return standbyRooms.peek();
     }
 
     public void clearRoom(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -409,6 +409,7 @@ public class GameService {
         calculateMultiplierAndUpdate();
     }
 
+    // 개발용
     public void resetRooms() throws OpenViduJavaClientException, OpenViduHttpException {
         for (String id : gameRooms.keySet()) {
             Session session = (Session) gameRooms.get(id).get("session");
@@ -432,6 +433,7 @@ public class GameService {
         }
     }
 
+    // 개발용
     public void getInfo() {
         log.debug("standbyRoom : {}", standbyRooms.peek().getActiveConnections().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
