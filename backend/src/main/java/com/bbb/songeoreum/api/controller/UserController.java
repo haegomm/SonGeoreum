@@ -55,6 +55,7 @@ public class UserController {
 
         String kakaoAccessToken = authService.getKakaoAccessToken(code);
         log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);
+        authService.kakaoLogin(kakaoAccessToken);
     }
 
 

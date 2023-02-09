@@ -1,32 +1,22 @@
 package com.bbb.songeoreum.api.service;
 
-import com.bbb.songeoreum.oauth.info.KakaoTokenDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
+import com.bbb.songeoreum.db.domain.User;
+import com.bbb.songeoreum.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Slf4j
 @Service
@@ -45,6 +35,12 @@ public class AuthService {
 
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
     private String KAKAO_TOKEN_URI;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
+    private String KAKO_USER_INFO_URI;
+
+    private final UserRepository userRepository;
+
 
     // 인가코드로 kakaoAccessToken 받아오는 메소드
     public String getKakaoAccessToken(String code) {
@@ -86,18 +82,19 @@ public class AuthService {
 
             br.close();
             bw.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
 
         return kakaoAccessToken;
     }
 
-    /* login 요청 보내는 회원가입 유무 판단해 분기 처리 */
-//    public ResponseEntity<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
-//        // kakaoAccessToken 으로 회원정보 받아오기
-//        User kakaoUser = getKakaoInfo(kakaoAccessToken);
-//        LoginResponseDto loginResponseDto = new LoginResponseDto();
+    // login 요청 보내는 회원가입 유무 판단해 분기 처리
+    public void kakaoLogin(String kakaoAccessToken) {
+        // kakaoAccessToken 으로 회원정보 받아오기
+        User kakaoUser = getKakaoInfo(kakaoAccessToken);
+
+//        KakaoLoginRes kakaoLoginRes = new KakaoLoginRes();
 //        try {
 //            TokenDto tokenDto = securityService.login(kakaoUser);
 //            loginResponseDto.setUser(userRepository.findByUserId(kakaoUser.getUserId()));
@@ -109,7 +106,58 @@ public class AuthService {
 //            loginResponseDto.setLoginSuccess(false);
 //            return ResponseEntity.ok(loginResponseDto);
 //        }
-//    }
+    }
+
+    // kakaoAccessToken 으로 카카오 서버에 정보 요청
+    public User getKakaoInfo(String kakaoAccessToken) {
+        User user = null;
+
+        try {
+            URL url = new URL(KAKO_USER_INFO_URI);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + kakaoAccessToken);
+            int responseCode = conn.getResponseCode();
+            log.debug("responseCode : {} ", responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line = "";
+            String kakaoResponse = "";
+
+            while ((line = br.readLine()) != null) {
+                kakaoResponse += line;
+            }
+
+            log.debug("response body : {} ", kakaoResponse);
+
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(kakaoResponse); // JSON으로 파싱
+            JSONObject jsonObject = (JSONObject) obj; // 파싱한 obj를 JSONObject 객체에 담음.
+
+            String kakaoId = jsonObject.get("id").toString();
+            log.debug("카카오가 넘겨준 카카오 id : {} ", kakaoId);
+
+            user = userRepository.findByKakaoId(kakaoId);
+
+            if (user != null) {
+                log.debug("카카오로 로그인을 한 적이 있는 user입니다.");
+            } else {
+                log.debug("카카오 로그인 최초입니다.");
+
+                // 카카오 사용자는 최초 로그인 시 닉네임이 guest + 숫자로 지정
+                String nickname = "guest" + (userRepository.count() + 1);
+                LocalDateTime createdDate = LocalDateTime.now();
+
+                user = new User("KAKAO", kakaoId, nickname, createdDate);
+
+                return userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
+            }
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        }
+        return user;
+    }
 
 
 }
