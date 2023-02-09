@@ -55,6 +55,13 @@ public class UserController {
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
 
+    // 카카오 테스트
+    @ApiOperation(value = "카카오 테스트")
+    @GetMapping("/oauth2/kakao")
+    public void kakaoTest(@RequestParam("code") String code) {
+        log.debug("카카오에서 인가 코드 받아옴.!!!!!! : {}", code);
+    }
+
 
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
