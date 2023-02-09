@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
+import setIsLogin from './Navbar'
+import ModifyProfile from './ModifyProfile';
+import './NavbarSide.scss'
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -14,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-export default function TemporaryDrawer() {
+export default function NavbarSide({onLoginHandler}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -30,7 +33,7 @@ export default function TemporaryDrawer() {
   const onLogoutHandler = (e) => {
     e.preventDefault();
 
-    dispatch(authAction.logout(userId)).then((response) => {
+    dispatch(authAction.logout()).then((response) => {
       console.log('로갓눌럿다')
       deleteUserInfo()
       navigate('/');
@@ -48,11 +51,6 @@ export default function TemporaryDrawer() {
   const onMyVocaaHandler = (e) => {
     console.log('단어장으로 이동해용~')
     // navigate('/'); 나의단어장 생기면 그쪽으로 이동
-  }
-
-  const onModifingHandler = (e) => {
-    console.log('플필수정')
-    // 프로필수정 추가
   }
   
   const [state, setState] = useState({right: false});
@@ -72,13 +70,11 @@ export default function TemporaryDrawer() {
       >
       <List>
         <ListItem key='profileBlock' disablePadding>
-        <div>
         <img src={picture} alt="profileImage" />
-      </div>
-      <div>
+      </ListItem>
+      <ListItem key='ProfileInfo' disablePadding>
         <span>{nickname}</span>
         <span>님</span>
-      </div>
         </ListItem>
       </List>
       <Divider />
@@ -90,7 +86,10 @@ export default function TemporaryDrawer() {
           <ListItemButton>
             <ListItemText
               primary='로그아웃'
-              onClick={onLogoutHandler} />
+              onClick={() => {
+                onLoginHandler(getUserInfo().userId)
+                onLogoutHandler()
+              } }/>
           </ListItemButton>
         </ListItem>
         <ListItem key='myVocaButton' disablePadding>
@@ -100,11 +99,11 @@ export default function TemporaryDrawer() {
               onClick={onMyVocaaHandler} />
           </ListItemButton>
         </ListItem>
+      </List>
+      <List>
         <ListItem key='modifyProfileButton' disablePadding>
           <ListItemButton>
-            <ListItemText
-              primary='프로필 수정'
-              onClick={onModifingHandler} />
+            <ModifyProfile />
           </ListItemButton>
         </ListItem>
       </List>
@@ -114,7 +113,9 @@ export default function TemporaryDrawer() {
   return (
     <div>
         <React.Fragment key='right'>
-          <Button onClick={toggleDrawer('right', true)}>right</Button>
+          <Button onClick={toggleDrawer('right', true)}>
+            <img className="drawerButton" src={picture} alt="profileImage" />
+            </Button>
           <Drawer
             anchor='right'
             open={state['right']}
