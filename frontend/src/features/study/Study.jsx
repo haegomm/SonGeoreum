@@ -50,7 +50,7 @@ export default function Study() {
       selectedCategoryInfo={selectedCategoryInfo}
     />
   ) : (
-    <div className="studyBox">
+    <div className="studyBox    fade-in-box">
       <div className="guideText">학습모드를 선택해주세요</div>
       <div>
         <TextButton text={"배움모드"} selectedMode={selectedMode} />
