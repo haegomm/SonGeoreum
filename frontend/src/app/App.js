@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Reset } from "styled-reset";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -14,6 +14,7 @@ import KakaoLogin from "../features/auth/login/KakaoLogin";
 import Result from "../features/game/openVidu/components/Result";
 import Study from "../features/study/Study";
 import Test from "../features/study/test/Test";
+// import PublicRoute from "../common/routes/PublicRoute";
 
 function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
@@ -29,17 +30,21 @@ function App() {
           <Routes>
             <Route path="/" element={<Navbar />}>
               <Route index element={<Home />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
               <Route path="study" element={<Study />} />
               <Route path="test" element={<Test />} />
-              <Route path="result" element={<Result />} />
               <Route path="*" element={<Home />} />
-              <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
+              <Route path="/game" element={<Game />} />
+              <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
+              <Route path="result" element={<Result />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="login" element={<Login />} />
             </Route>
-            <Route path="/game" element={<Game />} />
           </Routes>
         </Router>
+              {/* <PublicRoute restricted={true} path="api/oauth2/code/kakao" element={<KakaoLogin />} />
+              <PublicRoute restricted={false} path="result" element={<Result />} />
+              <PublicRoute restricted={true} path="signup" element={<Signup />} />
+              <PublicRoute restricted={true} path="login" element={<Login />} /> */}
       </ThemeProvider>
     </div>
   );
