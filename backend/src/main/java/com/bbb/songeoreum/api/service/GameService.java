@@ -259,76 +259,68 @@ public class GameService {
     }
 
     @Transactional
-    public int exitRoom(String id) {
-        // 성공 시 0, 실패 시 1 반환
+    public void exitRoom(String id) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        Map<String, Object> sessionInfo = gameRooms.get(id);
+        Session session;
         try {
-            Map<String, Object> sessionInfo = gameRooms.get(id);
-            Session session;
-            try {
-                session = (Session) sessionInfo.get("session");
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                throw new NotFoundException("세션을 찾을 수 없습니다.");
-            }
-
-            // DB 저장 //////////////////////////////////////
-            // DB에 게임 로그(gamelog) 데이터 저장
-
-            LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
-            LocalDateTime endDate = LocalDateTime.now();
-            String sessionId = session.getSessionId();
-
-            Gamelog gamelog = Gamelog.builder()
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .sessionId(sessionId)
-                    .build();
-
-            gamelogRepository.save(gamelog);
-
-            // DB에 로그-회원(gamelog_user) 데이터 저장
-
-            for (Connection c : session.getActiveConnections()) {
-                // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
-                Long userId = Long.parseLong(c.getServerData());
-                User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-
-                GamelogUser gamelogUser = GamelogUser.builder()
-                        .user(user)
-                        .gamelog(gamelog)
-                        .build();
-
-                gamelogUserRepository.save(gamelogUser);
-            }
-
-            // 해당 세션에 연결된 모든 connection 퇴출하고 빈 세션을 gameRooms에서 제거
-            clearRoom(id, session);
-
-            log.debug("gameRooms : {}", gameRooms.toString());
-            log.debug("standbyRooms size : {}", standbyRooms.size());
-
-            return 0;
+            session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
             log.error(e.getMessage());
-            return 1;
+            throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
+
+        // DB 저장 //////////////////////////////////////
+        // DB에 게임 로그(gamelog) 데이터 저장
+
+        LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
+        LocalDateTime endDate = LocalDateTime.now();
+        String sessionId = session.getSessionId();
+
+        Gamelog gamelog = Gamelog.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .sessionId(sessionId)
+                .build();
+
+        gamelogRepository.save(gamelog);
+
+        // DB에 로그-회원(gamelog_user) 데이터 저장
+
+        for (Connection c : session.getActiveConnections()) {
+            // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
+            Long userId = Long.parseLong(c.getServerData());
+            User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+
+            GamelogUser gamelogUser = GamelogUser.builder()
+                    .user(user)
+                    .gamelog(gamelog)
+                    .build();
+
+            gamelogUserRepository.save(gamelogUser);
+        }
+
+        // 해당 세션에 연결된 모든 connection 퇴출하고 빈 세션을 gameRooms에서 제거
+        clearRoom(id, session);
+
+        log.debug("gameRooms : {}", gameRooms.toString());
+        log.debug("standbyRooms size : {}", standbyRooms.size());
 
     }
 
-    public int removeUser(GameRemoveUserReq gameRemoveUserReq) {
-        // 성공 시 0, 실패 시 1 반환
-        try {
-            String sessionId = gameRemoveUserReq.getSessionId();
+    public void removeUser(GameRemoveUserReq gameRemoveUserReq) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        String sessionId = gameRemoveUserReq.getSessionId();
 //            String connectionId = gameRemoveUserReq.getConnectionId();
-            Session standbySession = standbyRooms.peek();
+        Session standbySession = standbyRooms.peek();
 
-            standbySession.fetch();
+        standbySession.fetch();
 
-            if (!sessionId.equals(standbySession.getSessionId())) {
-                throw new NotFoundException("세션이 일치하지 않습니다");
-            }
+        if (!sessionId.equals(standbySession.getSessionId())) {
+            throw new NotFoundException("세션이 일치하지 않습니다");
+        }
 
-            // 유저가 대기방에 있는지 확인
+        // 유저가 대기방에 있는지 확인
 //            boolean flag = false;
 //
 //            for (Connection c : standbySession.getActiveConnections()) {
@@ -344,19 +336,17 @@ public class GameService {
 
 //            int noOfActiveConnectionsBeforeDisconnect = standbySession.getActiveConnections().size();
 
-            // 해당 connection의 연결 해제
+        // 해당 connection의 연결 해제
 //            standbySession.forceDisconnect(connectionId);
 
-            int noOfActiveConnectionsAfterDisconnect = standbySession.getActiveConnections().size();
+        int noOfActiveConnectionsAfterDisconnect = standbySession.getActiveConnections().size();
 
-            // 유저 퇴출 전 active connections가 1 이상이었고 지금 active connections 가 없을때
-            // 어차피 세션 자동으로 닫히니까 버리겠소 (OpenVidu가 마지막 active connection 닫히는 순간 세션 종료시켜 버리기 때문)
-            if (noOfActiveConnectionsAfterDisconnect == 0) {
+        // 유저 퇴출 전 active connections가 1 이상이었고 지금 active connections 가 없을때
+        // 어차피 세션 자동으로 닫히니까 버리겠소 (OpenVidu가 마지막 active connection 닫히는 순간 세션 종료시켜 버리기 때문)
+        if (noOfActiveConnectionsAfterDisconnect == 0) {
 //                standbyRooms.poll();
-                checkActiveSessionAndUpdate();
-            }
-
-            return 0;
+            checkActiveSessionAndUpdate();
+        }
 
 //        } catch (OpenViduHttpException e) {
 //            log.error(e.getMessage());
@@ -364,14 +354,9 @@ public class GameService {
 //            standbyRooms.poll();
 //            return 0;
 
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return 1;
-        }
     }
 
-    public int resetStandby(String id) throws OpenViduJavaClientException, OpenViduHttpException {
-        // 성공 시 0, 실패 시 1 반환
+    public void resetStandby(String id) throws OpenViduJavaClientException, OpenViduHttpException {
         try {
             Session standbySession = standbyRooms.peek();
 
@@ -385,17 +370,12 @@ public class GameService {
             // 대기방 리스트 정리 (종료시킨 방 버리고 작동하는 방을 앞에다 두기)
             checkActiveSessionAndUpdate();
 //            standbyRooms.poll();
-            return 0;
 
         } catch (OpenViduHttpException e) {
-            log.error(e.getMessage());
+            log.debug(e.getMessage() + " : 이미 세션이 종료되어서 예외 발생. 정상 작동 중입니다.");
             checkActiveSessionAndUpdate();
 //            standbyRooms.poll();
-            return 0;
 
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return 1;
         }
     }
 
@@ -412,7 +392,7 @@ public class GameService {
         try {
             session.close();
         } catch (OpenViduHttpException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + " : 이미 세션이 종료되어서 예외 발생. 정상 작동 중입니다.");
         }
         // 빈 세션을 HashMap에서 제거
         gameRooms.remove(id);

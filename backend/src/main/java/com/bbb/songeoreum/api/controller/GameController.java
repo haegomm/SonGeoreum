@@ -3,9 +3,7 @@ package com.bbb.songeoreum.api.controller;
 import com.bbb.songeoreum.api.request.GameRemoveUserReq;
 import com.bbb.songeoreum.api.request.UserIdReq;
 import com.bbb.songeoreum.api.response.EnterRoomRes;
-import com.bbb.songeoreum.api.response.ExitRoomRes;
-import com.bbb.songeoreum.api.response.RemoveUserRes;
-import com.bbb.songeoreum.api.response.ResetStandbyRes;
+import com.bbb.songeoreum.api.response.SuccessRes;
 import com.bbb.songeoreum.api.service.GameService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -33,27 +31,19 @@ public class GameController {
     // OpenVidu 세션(방) 생성 및/또는 입장
     @ApiOperation(value = "게임 방 생성 및/또는 입장")
     @PostMapping("/session")
-    public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) {
+    public ResponseEntity<EnterRoomRes> enterRoom(@Valid @RequestBody UserIdReq userIdReq) throws OpenViduJavaClientException, OpenViduHttpException {
 
         HttpStatus httpStatus = null;
         EnterRoomRes enterRoomRes = null;
 
         // gameService의 큐 맨 앞에 있는 session에 connection 생성하고 반환
-        try {
-            enterRoomRes = gameService.enterRoom(userIdReq.getId());
+        enterRoomRes = gameService.enterRoom(userIdReq.getId());
 
-            log.debug("Connection 성공");
+        log.debug("Connection 성공");
 
-            enterRoomRes.setMessage(SUCCESS);
+        enterRoomRes.setMessage(SUCCESS);
 
-            httpStatus = HttpStatus.OK;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            enterRoomRes = EnterRoomRes.builder().message(FAIL).build();
-
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
+        httpStatus = HttpStatus.OK;
 
         return new ResponseEntity<>(enterRoomRes, httpStatus);
     }
@@ -61,70 +51,40 @@ public class GameController {
     // 대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제
     @ApiOperation(value = "대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제")
     @PostMapping("/session/user")
-    public ResponseEntity<RemoveUserRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) {
+    public ResponseEntity<SuccessRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        HttpStatus httpStatus = null;
-        RemoveUserRes removeUserRes = null;
+        gameService.removeUser(gameRemoveUserReq);
 
-        log.debug("이건 gameRemoveUserReq == {}", gameRemoveUserReq);
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
 
-        int result = gameService.removeUser(gameRemoveUserReq);
-
-        if (result == 0) {
-            httpStatus = HttpStatus.OK;
-            removeUserRes = RemoveUserRes.builder().message(SUCCESS).build();
-        } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            removeUserRes = RemoveUserRes.builder().message(FAIL).build();
-        }
-
-        return new ResponseEntity<>(removeUserRes, httpStatus);
+        return new ResponseEntity<>(successRes, httpStatus);
     }
 
     // 게임 종료 및 게임방 초기화 
     @ApiOperation(value = "게임 종료 및 게임방 초기화")
     @DeleteMapping("/session/{sessionId}")
-    public ResponseEntity<ExitRoomRes> exitRoom(@PathVariable("sessionId") String id) {
+    public ResponseEntity<SuccessRes> exitRoom(@PathVariable("sessionId") String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        HttpStatus httpStatus = null;
-        ExitRoomRes exitRoomRes = null;
+        gameService.exitRoom(id);
 
-        int result = gameService.exitRoom(id);
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
 
-        if (result == 0) {
-            httpStatus = HttpStatus.OK;
-            exitRoomRes = ExitRoomRes.builder().message(SUCCESS).build();
-
-        } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            exitRoomRes = ExitRoomRes.builder().message(FAIL).build();
-
-        }
-
-        return new ResponseEntity<>(exitRoomRes, httpStatus);
+        return new ResponseEntity<>(successRes, httpStatus);
     }
 
     // 대기방 초기화
     @ApiOperation(value = "대기방 초기화")
     @PutMapping("/session/{sessionId}")
-    public ResponseEntity<ResetStandbyRes> resetStandby(@PathVariable("sessionId") String id) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<SuccessRes> resetStandby(@PathVariable("sessionId") String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        HttpStatus httpStatus = null;
-        ResetStandbyRes resetStandbyRes = null;
+        gameService.resetStandby(id);
 
-        int result = gameService.resetStandby(id);
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
 
-        if (result == 0) {
-            httpStatus = HttpStatus.OK;
-            resetStandbyRes = ResetStandbyRes.builder().message(SUCCESS).build();
-
-        } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            resetStandbyRes = ResetStandbyRes.builder().message(FAIL).build();
-
-        }
-
-        return new ResponseEntity<>(resetStandbyRes, httpStatus);
+        return new ResponseEntity<>(successRes, httpStatus);
     }
 
     @ApiOperation(value = "개발용 : 게임 중인 방 모두 초기화")
