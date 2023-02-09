@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -65,21 +67,22 @@ public class AuthService {
             bw.flush();
 
             int responseCode = conn.getResponseCode();
-            System.out.println("response code =  " + responseCode);
+            log.debug("response code : {}  ", responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             String line = "";
-            String result = "";
+            String kakaoResponse = "";
 
             while ((line = br.readLine()) != null) {
-                result += line;
+                kakaoResponse += line;
             }
-            System.out.println("response body=" + result);
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+            log.debug("response body : {}", kakaoResponse);
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(kakaoResponse); // JSON으로 파싱
+            JSONObject jsonObject = (JSONObject) obj; // 파싱한 obj를 JSONObject 객체에 담음.
 
-            kakaoAccessToken = element.getAsJsonObject().get("access_token").getAsString();
+            kakaoAccessToken = (String) jsonObject.get("access_token");
 
             br.close();
             bw.close();
