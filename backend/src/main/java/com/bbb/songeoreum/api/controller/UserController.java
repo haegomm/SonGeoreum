@@ -2,8 +2,8 @@ package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.LoginReq;
-import com.bbb.songeoreum.api.response.LoginRes;
-import com.bbb.songeoreum.api.service.JwtService;
+import com.bbb.songeoreum.api.request.UpdateUserReq;
+import com.bbb.songeoreum.api.response.*;
 import com.bbb.songeoreum.api.service.UserService;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
@@ -20,12 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
@@ -42,10 +41,15 @@ public class UserController {
 
     private final UserService userService;
 
-    private final JwtService jwtService;
-
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
+
+    // 카카오 테스트
+    @ApiOperation(value = "카카오 테스트")
+    @GetMapping("/oauth2/kakao")
+    public void kakaoTest(@RequestParam("code") String code) {
+        log.debug("카카오에서 인가 코드 받아옴.!!!!!! : {}", code);
+    }
 
 
     // 이메일 중복체크
@@ -60,7 +64,7 @@ public class UserController {
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
         }
     }
 
@@ -76,7 +80,7 @@ public class UserController {
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (DuplicateException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(FAIL, HttpStatus.CONFLICT);
+            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
         }
     }
 
@@ -129,8 +133,6 @@ public class UserController {
             userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
             loginRes = LoginRes.builder()
-                    .id(loginUser.getId())
-                    .userType(loginUser.getUserType())
                     .email(loginUser.getEmail())
                     .nickname(loginUser.getNickname())
                     .picture(loginUser.getPicture())
@@ -162,48 +164,107 @@ public class UserController {
 
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
-    @GetMapping("/logout/{id}")
-    public ResponseEntity<Map<String, Object>> logoutUser(@PathVariable("id") Long id, HttpSession session) {
+    @GetMapping("/logout")
+    public ResponseEntity<LogoutRes> logoutUser(HttpServletRequest request, HttpServletResponse response) {
 
-        Map<String, Object> resultMap = new HashMap<>();
+        User user = (User) request.getAttribute("user"); // 로그아웃 요청한 user
+
         HttpStatus status = HttpStatus.ACCEPTED;
+        LogoutRes logoutRes = null; // 리턴값
 
         try {
-            userService.deleteRefreshToken(id);
-            resultMap.put("message", SUCCESS);
+            userService.deleteRefreshToken(user.getId());
+            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            logoutRes = LogoutRes.builder().message(SUCCESS).build();
             status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
             log.error("로그아웃 실패 : {}", e);
-            resultMap.put("message", e.getMessage());
+            logoutRes = LogoutRes.builder().message(FAIL).build();
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<LogoutRes>(logoutRes, status);
     }
+
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
-    @PostMapping("/refresh/{id}")
-    public ResponseEntity<?> refreshToken(@PathVariable("id") Long id, HttpServletRequest request)
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
 
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        String token = request.getHeader("refreshToken");
+        RefreshTokenRes refreshTokenRes = null; // 리턴 값
+        HttpStatus status = null;
 
-        log.debug("token : {}, id : {}", token, id);
+        // refresh token
+        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
+                .map(Cookie::getValue)
+                .orElse(null);
 
-        if (jwtService.checkToken(token)) {
-            if (token.equals(userService.getRefreshToken(id).getRefreshToken())) {
-                String accessToken = jwtService.createAccessToken("email", id);
-                log.debug("accessToken : {}", accessToken);
-                log.debug("정상적으로 액세스토큰 재발급!!!");
-                resultMap.put("access-token", accessToken);
-                resultMap.put("message", SUCCESS);
-                status = HttpStatus.ACCEPTED;
-            }
-        } else {
-            log.debug("리프레쉬토큰도 사용불!!!!!!!");
+        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
+
+        if (!authRefreshToken.validate() || user.getRefreshToken() == null) {
+            log.debug("유효하지 않은 refresh token 입니다.");
+            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
+            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+
+        //
+
+        Date now = new Date();
+
+        // access 토큰 발급
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                user.getId(), // access 토큰에 user pk 저장
+                user.getNickname(),
+                "ROLE_USER",
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+
+        log.debug("정상적으로 액세스토큰 재발급!!!");
+        refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
+        status = HttpStatus.OK;
+
+
+        return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
     }
+
+    // 회원 정보 조회
+    // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
+    @ApiOperation(value = "회원 정보 조회") // 해당 Api의 설명
+    @GetMapping("/profile")
+    public ResponseEntity<GetUserRes> getUser(HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getAttribute("user");
+
+        GetUserRes getUserRes = userService.getUser(user.getId());
+
+        return new ResponseEntity<GetUserRes>(getUserRes, HttpStatus.OK);
+    }
+
+    // 프로필 수정
+    @ApiOperation(value = "프로필 수정")
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateUser(@Valid @RequestBody UpdateUserReq updateUserReq, HttpServletRequest request, HttpServletResponse response) {
+
+        User user = (User) request.getAttribute("user");
+        // 닉네임 중복체크 로직 추가
+
+        userService.updateUser(updateUserReq, user.getId());
+
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+
+    }
+
+    // 게임 결과 경험치 반영
+    @ApiOperation(value = "게임 결과 경험치 반영")
+    @PutMapping("/game/{experience}")
+    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getAttribute("user");
+
+        UpdateExperienceRes updateExperienceRes = userService.updateExperience(user.getId(), experience);
+
+        return new ResponseEntity<UpdateExperienceRes>(updateExperienceRes, HttpStatus.OK);
+
+    }
+
 }
