@@ -61,12 +61,15 @@ public class FavoriteController {
      */
     @GetMapping("/word/{wordId}")
     @ApiOperation(value = "나의 단어장에 있는 단어인지 확인한다.")
-    public ResponseEntity<FavoriteWordRes> findByUserAndWord(@RequestParam(name = "wordId") Long wordId, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<FavoriteWordRes> findByUserAndWord(@PathVariable(name = "wordId") Long wordId, HttpServletRequest httpServletRequest) {
 
         String msg = FAIL;
 
         User user = (User) httpServletRequest.getAttribute("user");
         Long userId = user.getId();
+
+        log.info("userId: {}", userId);
+        log.info("wordId: {}", wordId);
 
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
         if (findFavorite != null) msg = SUCCESS;
