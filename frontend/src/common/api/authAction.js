@@ -47,8 +47,8 @@ function logout() {
   }
 }
 
-function kakakoLogin() {
-  const request = axios.get('/api/oauth2/authorization/kakao').then((response) => response.data)
+function kakaoLogin(data) {
+  const request = axios.get(`/api/user/oauth2/kakao?code=${data}`).then((response) => response.data)
   .catch((err) => err)
   return {
     type: KAKAOLOGIN,
@@ -64,7 +64,7 @@ const authAction = {
   checkEmail,
   checkNickname,
   logout,
-  kakakoLogin,
+  kakaoLogin,
   isLogin,
 }
 
