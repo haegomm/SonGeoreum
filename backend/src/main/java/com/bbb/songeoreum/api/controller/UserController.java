@@ -47,8 +47,8 @@ public class UserController {
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
 
-    // 카카오 테스트
-    @ApiOperation(value = "카카오 테스트")
+    // 카카오 로그인
+    @ApiOperation(value = "카카오 로그인")
     @GetMapping("/oauth2/kakao")
     public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
 
@@ -105,7 +105,7 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<LoginRes> loginUser(@Valid @RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
+    public ResponseEntity<LoginRes> loginUser(@RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
@@ -196,7 +196,7 @@ public class UserController {
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request)
             throws Exception {
         User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
 
@@ -241,7 +241,7 @@ public class UserController {
     // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
     @ApiOperation(value = "회원 정보 조회") // 해당 Api의 설명
     @GetMapping("/profile")
-    public ResponseEntity<GetUserRes> getUser(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<GetUserRes> getUser(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
 
         GetUserRes getUserRes = userService.getUser(user.getId());
@@ -252,7 +252,7 @@ public class UserController {
     // 프로필 수정
     @ApiOperation(value = "프로필 수정")
     @PutMapping("/profile")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody UpdateUserReq updateUserReq, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) {
 
         User user = (User) request.getAttribute("user");
         // 닉네임 중복체크 로직 추가
@@ -266,7 +266,7 @@ public class UserController {
     // 게임 결과 경험치 반영
     @ApiOperation(value = "게임 결과 경험치 반영")
     @PutMapping("/game/{experience}")
-    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
 
         UpdateExperienceRes updateExperienceRes = userService.updateExperience(user.getId(), experience);
@@ -278,7 +278,7 @@ public class UserController {
     // 실시간 랭킹 조회
     @ApiOperation(value = "실시간 랭킹 조회")
     @GetMapping("/ranking")
-    public ResponseEntity<List<GetTopTenUserRes>> getTopTenUser() throws NotFoundException{
+    public ResponseEntity<List<GetTopTenUserRes>> getTopTenUser() throws NotFoundException {
         return new ResponseEntity<List<GetTopTenUserRes>>(userService.getTopTenUser(), HttpStatus.OK);
     }
 
