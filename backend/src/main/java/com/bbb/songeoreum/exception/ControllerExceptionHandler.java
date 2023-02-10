@@ -53,4 +53,20 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage() + " : OpenVidu 관련 예외가 발생했습니다.");
     }
 
+    @ExceptionHandler(WordNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorRes handleWordNotFoundException(WordNotFoundException e) {
+        log.error(e.getMessage());
+        return ErrorRes.make(e.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorRes handleUserNotFoundException(UserNotFoundException e) {
+        log.error(e.getMessage());
+        return ErrorRes.make(e.getMessage());
+    }
+
 }
