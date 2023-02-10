@@ -194,7 +194,7 @@ public class UserController {
 
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
-    @PostMapping("/refresh")
+    @GetMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request)
             throws Exception {
         User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
