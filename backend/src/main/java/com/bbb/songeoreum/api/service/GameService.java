@@ -271,6 +271,8 @@ public class GameService {
      */
     public void removeUser(String sessionId, Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
+        log.debug("특정 유저 대기방 퇴장 시 호출");
+        
         Session standbySession = standbyRooms.peek();
 
         if (!sessionId.equals(standbySession.getSessionId())) {
