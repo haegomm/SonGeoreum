@@ -39,12 +39,13 @@ function App() {
               <Route path="result" element={<Result />} />
               <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
               <Route path="login" element={<Login />} />
-              <Route
+              <Route path="signup" element={<Signup />} />
+              {/* <Route
                 path="signup"
                 element={
                   <PrivateRoute authenticated={access} component={<Signup />} />
                 }
-              />
+              /> */}
               {/* <Route path="login" 
               element={
               <PrivateRoute 
