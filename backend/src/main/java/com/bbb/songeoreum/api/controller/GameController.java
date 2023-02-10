@@ -74,9 +74,11 @@ public class GameController {
      */
     @ApiOperation(value = "대기중인 방에서 유저가 나갈 시 해당 세션에서 유저 connection 해제")
     @PostMapping("/session/user")
-    public ResponseEntity<SuccessRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<SuccessRes> removeUser(@Valid @RequestBody GameRemoveUserReq gameRemoveUserReq, HttpServletRequest httpServletRequest) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        gameService.removeUser(gameRemoveUserReq.getSessionId());
+        User user = (User) httpServletRequest.getAttribute("user");
+
+        gameService.removeUser(gameRemoveUserReq.getSessionId(), user.getId());
 
         HttpStatus httpStatus = HttpStatus.OK;
         SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
