@@ -11,10 +11,6 @@ import lombok.ToString;
 @ToString
 public class KakaoLoginRes {
 
-    // 카카오톡 회원 아이디
-    @ApiModelProperty(example = "카카오톡 회원 아이디")
-    private String kakaoId;
-
     // 닉네임
     @ApiModelProperty(example = "닉네임")
     private String nickname;
@@ -39,8 +35,7 @@ public class KakaoLoginRes {
     private String message;
 
     @Builder
-    public KakaoLoginRes(String kakaoId, String nickname, String picture, int level, int experience, String accessToken, String message) {
-        this.kakaoId = kakaoId;
+    public KakaoLoginRes(String nickname, String picture, int level, int experience, String accessToken, String message) {
         this.nickname = nickname;
         this.picture = picture;
         this.level = level;
@@ -53,5 +48,5 @@ public class KakaoLoginRes {
     public KakaoLoginRes(String message) {
         this.message = message;
     }
-    
+
 }

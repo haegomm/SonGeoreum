@@ -141,7 +141,6 @@ public class UserController {
             userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
             loginRes = LoginRes.builder()
-                    .email(loginUser.getEmail())
                     .nickname(loginUser.getNickname())
                     .picture(loginUser.getPicture())
                     .level(loginUser.getLevel())

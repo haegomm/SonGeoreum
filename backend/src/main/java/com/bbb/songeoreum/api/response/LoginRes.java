@@ -8,11 +8,6 @@ import lombok.*;
 @ToString
 public class LoginRes {
 
-
-    // 일반 회원 아이디
-    @ApiModelProperty(example = "일반 회원 아이디")
-    private String email;
-
     // 닉네임
     @ApiModelProperty(example = "닉네임")
     private String nickname;
@@ -37,8 +32,7 @@ public class LoginRes {
     private String message;
 
     @Builder
-    public LoginRes(String email, String nickname, String picture, int level, int experience, String accessToken, String message) {
-        this.email = email;
+    public LoginRes(String nickname, String picture, int level, int experience, String accessToken, String message) {
         this.nickname = nickname;
         this.picture = picture;
         this.level = level;

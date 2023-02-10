@@ -152,7 +152,6 @@ public class AuthService {
             userRepository.saveAndFlush(kakaoUser); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
 
             kakaoLoginRes = KakaoLoginRes.builder()
-                    .kakaoId(kakaoUser.getKakaoId())
                     .nickname(kakaoUser.getNickname())
                     .picture(kakaoUser.getPicture())
                     .level(kakaoUser.getLevel())
