@@ -264,17 +264,30 @@ public class GameService {
     /**
      * 대기방에서 유저가 퇴장할 시 대기방 상태를 확인하고 마지막 유저가 퇴장하여 대기방이 종료되었다면 열려있는 대기방으로 대채합니다
      *
-     * @param id session의 sessionId
+     * @param sessionId session의 sessionId
+     * @param userId    user의 userId
      * @throws OpenViduJavaClientException
      * @throws OpenViduHttpException
      */
-    public void removeUser(String id) throws OpenViduJavaClientException, OpenViduHttpException {
+    public void removeUser(String sessionId, Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
+        log.debug("특정 유저 대기방 퇴장 시 호출");
+        
         Session standbySession = standbyRooms.peek();
 
-        if (!id.equals(standbySession.getSessionId())) {
+        if (!sessionId.equals(standbySession.getSessionId())) {
             log.error("특정 유저를 퇴장시키는 과정에서 세션이 일치하지 않습니다.");
             throw new NotFoundException("세션이 일치하지 않습니다");
+        }
+
+        try {
+            for (Connection c : standbySession.getConnections()) {
+                if (Long.parseLong(c.getServerData()) == userId) {
+                    standbySession.forceDisconnect(c);
+                }
+            }
+        } catch (Exception e) {
+            log.error("대기방에서 나간 유저 강제해제 실패했지만 괜찮음");
         }
 
         checkActiveSessionAndUpdate();
