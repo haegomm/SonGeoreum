@@ -21,7 +21,7 @@ function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
   // CssBaseline로 theme를 전처리해줍니다
   // 현재 보여지는 페이지에 따라 nav 크기를 조절해줍니다.
-  const access = getUserInfo().userId
+  const access = getUserInfo().userId;
   return (
     <div className="App">
       <Reset />
@@ -38,17 +38,19 @@ function App() {
               <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
               <Route path="result" element={<Result />} />
               <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
-              <Route path="signup" 
+              <Route path="login" element={<Login />} />
+              <Route
+                path="signup"
+                element={
+                  <PrivateRoute authenticated={access} component={<Signup />} />
+                }
+              />
+              {/* <Route path="login" 
               element={
               <PrivateRoute 
               authenticated={access}
-              component={<Signup />} />}/>
-              <Route path="login" 
-              element={
-              <PrivateRoute 
-              authenticated={access}
-              component={<Login />} />}/>
-                {/* <PublicRoute restricted={false} path="result" element={<Result />} /> */}
+              component={<Login />} />}/> */}
+              {/* <PublicRoute restricted={false} path="result" element={<Result />} /> */}
             </Route>
             {/* </Route> */}
           </Routes>
