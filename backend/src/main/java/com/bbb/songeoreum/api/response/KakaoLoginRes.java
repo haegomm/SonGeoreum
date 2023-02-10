@@ -1,12 +1,15 @@
 package com.bbb.songeoreum.api.response;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
 @ToString
-public class LoginRes {
+public class KakaoLoginRes {
 
     // 닉네임
     @ApiModelProperty(example = "닉네임")
@@ -32,7 +35,7 @@ public class LoginRes {
     private String message;
 
     @Builder
-    public LoginRes(String nickname, String picture, int level, int experience, String accessToken, String message) {
+    public KakaoLoginRes(String nickname, String picture, int level, int experience, String accessToken, String message) {
         this.nickname = nickname;
         this.picture = picture;
         this.level = level;
@@ -42,7 +45,7 @@ public class LoginRes {
     }
 
     @Builder
-    public LoginRes(String message) {
+    public KakaoLoginRes(String message) {
         this.message = message;
     }
 
