@@ -211,7 +211,7 @@ class VideoRoomComponent extends Component {
             this.props.joinSession();
           }
 
-          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+          // // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
           // if (this.state.goGame === false) {
           //   if (this.state.subscribers > 2 && this.state.playGame === true) {
           //     this.state.localUser
@@ -820,6 +820,7 @@ class VideoRoomComponent extends Component {
     // this.state.subToken = tokenID;
     console.log("토큰이 저장됐습니까? : ", this.state.subToken);
     console.log(this.state.sessionId);
+    console.log("게임 시작했니!?!?!?!? ", this.playGame);
     // console.log(token.searchParams);
     return token; // The token
   }
