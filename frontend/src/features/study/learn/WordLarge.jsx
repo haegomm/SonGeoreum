@@ -31,26 +31,27 @@ export default function WordLarge({ isLogin, categoryNum }) {
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(`/api/words?categoryId=${categoryNum}`);
-      setWordList(data.data);
+      setWordList(() => data.data);
       console.log(data.data);
+      const num = data.data[0].id;
       setWordNumber(() => 0);
-      setStartNumber(data.data[0].id);
+      setStartNumber(() => data.data[0].id);
       setEndNumber(data.data.length - 1);
+      if (isLogin) {
+        async function getStar() {
+          const data = await axios.get(`/api/favorites/word/${num}`);
+          console.log("즐겨찾기 확인해보자 >> ", data.data.message);
+          const isStar = data.data.message;
+          if (isStar === "success") setStar(() => true);
+        }
+        getStar();
+      }
     }
     getInfo();
-    if (isLogin) {
-      async function getStar() {
-        const num = 0 + startNumber;
-        const data = await axios.get(`/api/favorites/word/${num}`);
-        console.log("즐겨찾기 확인해보자 >> ", data.data.message);
-        const isStar = data.data.message;
-        if (isStar === "success") setStar(() => true);
-      }
-      getStar();
-    }
   }, []);
 
   const starInfo = (num) => {
+    console.log("즐겨찾기를 확인?");
     if (isLogin && wordList) {
       async function getStar() {
         const data = await axios.get(`/api/favorites/word/${num}`);
@@ -63,6 +64,18 @@ export default function WordLarge({ isLogin, categoryNum }) {
     }
   };
 
+  const starInfoSmallWord = (num) => {
+    console.log("작은 단어장에서 즐겨찾기 확인");
+    async function getStar() {
+      const data = await axios.get(`/api/favorites/word/${num}`);
+      console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
+      const isStar = data.data.message;
+      if (isStar === "success") return true;
+      else return false;
+    }
+    getStar();
+  };
+
   const handleListItemClick = (index) => {
     console.log("index 확인중..", index);
     setWordNumber(index);
@@ -73,13 +86,14 @@ export default function WordLarge({ isLogin, categoryNum }) {
     const num = wordNumber;
     setWordNumber(num + 1);
     console.log(wordNumber);
-    starInfo(num + startNumber);
+    starInfo(wordList[wordNumber + 1].id);
   };
 
   const numberMinus = () => {
     const num = wordNumber;
     setWordNumber(num - 1);
     console.log(wordNumber);
+    starInfo(wordList[wordNumber - 1].id);
   };
 
   const up =
@@ -206,12 +220,6 @@ export default function WordLarge({ isLogin, categoryNum }) {
   };
 
   if (wordList && wordList.length > 0) {
-    console.log("나와라..", wordList);
-
-    console.log("번호는?", wordNumber);
-    console.log("이것도..", wordList[wordNumber].name);
-    console.log("별이 켜졌나..", star);
-
     const media =
       categoryNum > 3 && wordList && wordList.length > 0 ? (
         <video

@@ -185,7 +185,7 @@ export default function MyVoca() {
               <WordSmall
                 key={word.id}
                 text={word.name}
-                star={true}
+                star={false}
                 isLogin={true}
                 index={index}
                 handleListItemClick={handleListItemClick}
@@ -202,7 +202,6 @@ export default function MyVoca() {
             <div id="flip-container" className="flip-container">
               <div className="flipper">
                 <div className="front">
-                  <div className="starBox">{isStar}</div>
                   <div className="shuffleBox">
                     {/* <ShuffleRoundedIcon
                       color="blue"
