@@ -13,11 +13,7 @@ export default function TestScreen({ link, categoryNum }) {
         loop
       ></video>
     ) : (
-      <img
-        className="handImage"
-        src={link}
-        referrerPolicy="strict-origin-when-cross-origin"
-      />
+      <img className="handImage" src={link} referrerPolicy="no-referrer" />
     );
 
   return (
