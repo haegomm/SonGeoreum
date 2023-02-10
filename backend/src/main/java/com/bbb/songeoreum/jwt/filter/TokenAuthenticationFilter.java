@@ -26,7 +26,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String headerToken = HeaderUtil.getAccessToken(request);
-        log.debug("헤더야 : {}", request.getAttribute("accessToken"));
         log.debug("헤더로 넘어온 토큰 : {}", headerToken);
         AuthToken token = tokenProvider.convertAuthToken(headerToken);
 
@@ -40,7 +39,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             request.setAttribute("user", principalDetails.getUser());
             
-            log.debug("request.getAttributes : {}", request.getAttribute("user"));
 
             // SecurityContextHolder 에다가 Authentication을 담아줌. 즉, 이 사용자는 인증이 완료되었다는 의미
             SecurityContextHolder.getContext().setAuthentication(authentication);

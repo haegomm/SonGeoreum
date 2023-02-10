@@ -75,7 +75,6 @@ public class AuthTokenProvider {
             // claims.get("id") => return type : Object
             // 따라서 Long 타입으로 바꿔주기 위해 String으로 변환한 후 Long으로 타입 변환함.
             PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findById(Long.valueOf(String.valueOf(claims.get("id")))).get());
-            log.debug("principalDetails 타입 : {}", principalDetails.getUser().toString());
             return new UsernamePasswordAuthenticationToken(principalDetails, authToken, authorities);
         } else {
             throw new TokenValidFailedException();

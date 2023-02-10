@@ -2,6 +2,7 @@ package com.bbb.songeoreum.api.service;
 
 import com.bbb.songeoreum.api.request.InsertUserReq;
 import com.bbb.songeoreum.api.request.UpdateUserReq;
+import com.bbb.songeoreum.api.response.GetTopTenUserRes;
 import com.bbb.songeoreum.api.response.GetUserRes;
 import com.bbb.songeoreum.api.response.UpdateExperienceRes;
 import com.bbb.songeoreum.db.domain.User;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -93,7 +97,6 @@ public class UserService {
     @Transactional
     public void deleteRefreshToken(Long id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
-        log.debug("deleteRefreshToken 요청한 user : {} ", user);
         user.deleteRefreshToken();
     }
 
@@ -105,11 +108,15 @@ public class UserService {
     // 프로필 수정
     @Transactional
     public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException {
+
         // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
         User realUser = userRepository.findById(id).get();
 
-        // 닉네임 중복 체크
-        duplicateNickname(updateUserReq.getNickname());
+        // 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 할 필요가 없다.
+        if (!realUser.getNickname().equals(realUser.getNickname())) {
+            // 닉네임 중복 체크
+            duplicateNickname(updateUserReq.getNickname());
+        }
 
         realUser.updateUser(updateUserReq);
     }
@@ -132,6 +139,14 @@ public class UserService {
 
         return updateExperienceRes;
 
+    }
+
+    // 실시간 랭킹 조회
+    public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
+
+        List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
+        
+        return list;
     }
 
 }
