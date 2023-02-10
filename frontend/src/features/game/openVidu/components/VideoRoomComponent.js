@@ -211,40 +211,40 @@ class VideoRoomComponent extends Component {
             this.props.joinSession();
           }
 
-          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-          if (this.state.goGame === false) {
-            if (this.state.subscribers > 2 && this.state.playGame === true) {
-              this.state.localUser
-                .getStreamManager()
-                .signal({
-                  data: {
-                    playGame: this.state.playGame,
-                    playerList: this.state.playerList,
-                  }, // 문자열로 보내짐 // json.parse() 해주기
-                  to: [],
-                  type: "play-game",
-                })
-                .then(() => {
-                  console.log("얘들아 게임 시작한다~~!");
-                })
-                .catch((error) => {
-                  console.error();
-                });
-            } else if (this.state.subscribers > 2) {
-              this.state.localUser
-                .getStreamManager()
-                .on("signal:play-game", (event) => {
-                  console.log("오케이 가보자고");
-                  console.log(event.data);
-                  console.log(event.from);
-                  const data = JSON.parse(event.data); // 했음
-                  this.setState({
-                    goGame: data.goGame,
-                    playerList: data.playerList,
-                  });
-                });
-            }
-          }
+          // // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+          // if (this.state.goGame === false) {
+          //   if (this.state.subscribers > 2 && this.state.playGame === true) {
+          //     this.state.localUser
+          //       .getStreamManager()
+          //       .signal({
+          //         data: {
+          //           playGame: this.state.playGame,
+          //           playerList: this.state.playerList,
+          //         }, // 문자열로 보내짐 // json.parse() 해주기
+          //         to: [],
+          //         type: "play-game",
+          //       })
+          //       .then(() => {
+          //         console.log("얘들아 게임 시작한다~~!");
+          //       })
+          //       .catch((error) => {
+          //         console.error();
+          //       });
+          //   } else if (this.state.subscribers > 2) {
+          //     this.state.localUser
+          //       .getStreamManager()
+          //       .on("signal:play-game", (event) => {
+          //         console.log("오케이 가보자고");
+          //         console.log(event.data);
+          //         console.log(event.from);
+          //         const data = JSON.parse(event.data); // 했음
+          //         this.setState({
+          //           goGame: data.goGame,
+          //           playerList: data.playerList,
+          //         });
+          //       });
+          //   }
+          // }
         });
       });
     }
@@ -442,6 +442,40 @@ class VideoRoomComponent extends Component {
           }
           if (data.isScreenShareActive !== undefined) {
             user.setScreenShareActive(data.isScreenShareActive);
+          }
+          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+          if (this.state.goGame === false) {
+            if (this.state.subscribers > 2 && this.state.playGame === true) {
+              this.state.localUser
+                .getStreamManager()
+                .signal({
+                  data: {
+                    playGame: this.state.playGame,
+                    playerList: this.state.playerList,
+                  }, // 문자열로 보내짐 // json.parse() 해주기
+                  to: [],
+                  type: "play-game",
+                })
+                .then(() => {
+                  console.log("얘들아 게임 시작한다~~!");
+                })
+                .catch((error) => {
+                  console.error();
+                });
+            } else if (this.state.subscribers > 2) {
+              this.state.localUser
+                .getStreamManager()
+                .on("signal:play-game", (event) => {
+                  console.log("오케이 가보자고");
+                  console.log(event.data);
+                  console.log(event.from);
+                  const data = JSON.parse(event.data); // 했음
+                  this.setState({
+                    goGame: data.goGame,
+                    playerList: data.playerList,
+                  });
+                });
+            }
           }
         }
       });
@@ -661,7 +695,7 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame) {
+    if (!this.state.goGame && !this.state.playGame) {
       return (
         <Loading
           subscribers={this.state.subscribers}
@@ -786,6 +820,7 @@ class VideoRoomComponent extends Component {
     // this.state.subToken = tokenID;
     console.log("토큰이 저장됐습니까? : ", this.state.subToken);
     console.log(this.state.sessionId);
+    console.log("게임 시작했니!?!?!?!? ", this.playGame);
     // console.log(token.searchParams);
     return token; // The token
   }
