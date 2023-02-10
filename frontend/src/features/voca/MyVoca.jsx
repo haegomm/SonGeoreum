@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import LargeButton from "../../common/button/LargeButton";
 import axios from "../../common/api/https";
+import LargeButton from "../../common/button/LargeButton";
 import WordSmall from "../../common/card/WordSmall";
 
 import "../study/learn/WordLarge.scss";
@@ -30,7 +30,7 @@ export default function MyVoca() {
 
   useEffect(() => {
     async function getInfo() {
-      const data = await axios.get(`/api/favorites/user/words`);
+      const data = await axios.get(`/api/favorites`);
       setWordList(data.data);
       console.log(data.data);
       setWordNumber(0);

@@ -22,7 +22,7 @@ import ListItemText from "@mui/material/ListItemText";
 
 export default function WordLarge({ isLogin, categoryNum }) {
   const [star, setStar] = useState(false); // 즐겨찾기 유무
-  const [wordNumber, setWordNumber] = useState(); // 현재 단어 번호
+  const [wordNumber, setWordNumber] = useState(0); // 현재 단어 번호
   const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
   const [endNumber, setEndNumber] = useState(); // 현재 단어 번호
   const [wordList, setWordList] = useState(); // 단어 목록
@@ -33,12 +33,35 @@ export default function WordLarge({ isLogin, categoryNum }) {
       const data = await axios.get(`/api/words?categoryId=${categoryNum}`);
       setWordList(data.data);
       console.log(data.data);
-      setWordNumber(0);
+      setWordNumber(() => 0);
       setStartNumber(data.data[0].id);
       setEndNumber(data.data.length - 1);
     }
     getInfo();
+    if (isLogin) {
+      async function getStar() {
+        const num = 0 + startNumber;
+        const data = await axios.get(`/api/favorites/word/${num}`);
+        console.log("즐겨찾기 확인해보자 >> ", data.data.message);
+        const isStar = data.data.message;
+        if (isStar === "success") setStar(() => true);
+      }
+      getStar();
+    }
   }, []);
+
+  const starInfo = (num) => {
+    if (isLogin && wordList) {
+      async function getStar() {
+        const data = await axios.get(`/api/favorites/word/${num}`);
+        console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
+        const isStar = data.data.message;
+        if (isStar === "success") setStar(() => true);
+        else setStar(() => false);
+      }
+      getStar();
+    }
+  };
 
   const handleListItemClick = (index) => {
     console.log("index 확인중..", index);
@@ -50,6 +73,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
     const num = wordNumber;
     setWordNumber(num + 1);
     console.log(wordNumber);
+    starInfo(num + startNumber);
   };
 
   const numberMinus = () => {
@@ -118,15 +142,42 @@ export default function WordLarge({ isLogin, categoryNum }) {
       </div>
     );
 
-  const starChange = (event) => {
-    setStar(!star);
-    // 이곳에 즐겨찾기 하기, 해제하기 코드가 들어갑니다.
+  const starPost = (id) => {
+    console.log("즐겨찾기 >> ", id);
+    setStar(true);
+    async function postStar() {
+      const data = await axios.post(`/api/favorites`, {
+        wordId: id,
+      });
+      console.log(data);
+    }
+    postStar();
+  };
+
+  const starDelete = (id) => {
+    console.log("즐겨찾기 해제 >> ", id);
+    setStar(true);
+    async function deleteStar() {
+      const data = await axios.delete(`/api/favorites`, {
+        wordId: id,
+      });
+      console.log(data);
+    }
+    deleteStar();
   };
 
   const isStar = star ? (
-    <StarIcon color="yellow" sx={{ fontSize: 45 }} onClick={starChange} />
+    <StarIcon
+      color="yellow"
+      sx={{ fontSize: 45 }}
+      onClick={() => starDelete(wordNumber + startNumber)}
+    />
   ) : (
-    <StarIcon color="disabled" sx={{ fontSize: 45 }} onClick={starChange} />
+    <StarIcon
+      color="disabled"
+      sx={{ fontSize: 45 }}
+      onClick={() => starPost(wordNumber + startNumber)}
+    />
   );
 
   const flip = () => {
@@ -159,6 +210,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
 
     console.log("번호는?", wordNumber);
     console.log("이것도..", wordList[wordNumber].name);
+    console.log("별이 켜졌나..", star);
 
     const media =
       categoryNum > 3 && wordList && wordList.length > 0 ? (
