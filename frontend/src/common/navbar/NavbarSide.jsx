@@ -38,7 +38,7 @@ export default function NavbarSide() {
 
   const onMyVocaaHandler = (e) => {
     console.log('단어장으로 이동해용~')
-    // navigate('/'); 나의단어장 생기면 그쪽으로 이동
+    navigate('/myvoca');
   }
   
   const [state, setState] = useState({right: false});
