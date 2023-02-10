@@ -14,13 +14,14 @@ import KakaoLogin from "../features/auth/login/KakaoLogin";
 import Result from "../features/game/openVidu/components/Result";
 import Study from "../features/study/Study";
 import Test from "../features/study/test/Test";
-import PublicRoute from "../common/routes/PublicRoute";
+import PrivateRoute from "../common/routes/PublicRoute";
+import { getUserInfo } from "../common/api/authInfo";
 
 function App() {
   // ThemeProvider로 기본 테마를 적용합니다.
   // CssBaseline로 theme를 전처리해줍니다
   // 현재 보여지는 페이지에 따라 nav 크기를 조절해줍니다.
-
+  const access = getUserInfo().userId
   return (
     <div className="App">
       <Reset />
@@ -33,18 +34,23 @@ function App() {
               <Route path="study" element={<Study />} />
               <Route path="test" element={<Test />} />
               <Route path="*" element={<Home />} />
-              <Route path="/game" element={<Game />} />
+              <Route path="game" element={<Game />} />
               {/* <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
               <Route path="result" element={<Result />} />
               <Route path="signup" element={<Signup />} />
               <Route path="login" element={<Login />} /> */}
-              <Route element={<PublicRoute restricted={true} />}>
+              {/* <Route element={<PublicRoute restricted={true} />}>/ */}
                 <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
-                <Route path="signup" element={<Signup />} />
+                {/* <Route path="signup" element={<Signup />} /> */}
+                <Route path="signup" 
+               element={
+               <PrivateRoute 
+                authenticated={access}
+                component={<Signup />} />}/>
                 <Route path="login" element={<Login />} />
                 {/* <PublicRoute restricted={false} path="result" element={<Result />} /> */}
             </Route>
-            </Route>
+            {/* </Route> */}
           </Routes>
         </Router>
       </ThemeProvider>

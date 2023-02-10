@@ -34,7 +34,7 @@ function Login(props) {
     };
 
     dispatch(authAction.login(body)).then((response) => {
-      if (response.payload.message) {
+      if (response.payload.message === 'success') {
         saveUserInfo(response.payload)
         alert('로그인 성공!')
         window.location.replace("/")
