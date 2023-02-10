@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useDispatch } from 'react-redux';
-import authAction from '../../../common/api/authAction';
+import { useDispatch } from "react-redux";
+import authAction from "../../../common/api/authAction";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { saveUserInfo } from '../../../common/api/authInfo';
-import socailLoginButtons from '../../../assets/socialLogin/socialLoginButtons';
+import { saveUserInfo } from "../../../common/api/authInfo";
+import socailLoginButtons from "../../../assets/socialLogin/socialLoginButtons";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ function Login(props) {
   
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-  // const [isLogin, setIsLogin] = useState(false);
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
@@ -35,11 +34,11 @@ function Login(props) {
     };
 
     dispatch(authAction.login(body)).then((response) => {
-      if (response.payload.message) {
-        // setIsLogin(true)
+      if (response.payload.message === 'success') {
         saveUserInfo(response.payload)
         alert('로그인 성공!')
-        navigate('/');
+        window.location.replace("/")
+        // navigate('/');
       } else{
         alert('로그인에 실패했습니다. 다시 시도해주세요');
       }
@@ -49,8 +48,7 @@ function Login(props) {
   return (
     <div>
       <h1>로그인</h1>
-      <form
-        onSubmit={onSubmitHandler}>
+      <form onSubmit={onSubmitHandler}>
         <label>이메일</label>
         <input type="email" onChange={onEmailHandler} />
         <label>비밀번호</label>
@@ -63,12 +61,10 @@ function Login(props) {
       <Link to="/signup">가입하기</Link>
       <br />
       <a href={KAKAO_REQUEST}>
-        <img
-        src={socailLoginButtons}
-        alt='' />
+        <img src={socailLoginButtons} alt="" />
       </a>
     </div>
-  )
+  );
 }
 
 export default Login;

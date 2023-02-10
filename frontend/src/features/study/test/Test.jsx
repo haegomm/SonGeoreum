@@ -1,11 +1,12 @@
 import { useState } from "react";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 import SelectCategory from "../SelectCategory";
 import SelectTestMode from "./SelectTestMode";
 import HandToWord from "./HandToWord";
 import WordToHand from "./WordToHand";
+import TestResult from "./TestResult";
 
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { Grid } from "@mui/material";
 
 export default function Test() {
@@ -13,6 +14,8 @@ export default function Test() {
   const [categoryName, setCategoryName] = useState(""); // 선택한 카테고리 이름
   const [categoryTestable, setCategoryTestable] = useState(true); // 선택한 카테고리 모션인식 유무
   const [testMode, setTestMode] = useState(); // 테스트 모드
+  const [testDone, setTestDone] = useState(false); // 테스트 종료 여부
+  const [score, setScore] = useState(0); // 얻은 점수
 
   const selectedCategoryNum = (num) => {
     console.log("selected category number >> ", num);
@@ -36,9 +39,16 @@ export default function Test() {
     setTestMode(mode);
   };
 
+  const finishTest = (score) => {
+    console.log("finish test");
+    setTestDone(true);
+    setScore(score);
+  };
+
   const resetTestMode = () => {
     console.log("reset test mode ");
     setTestMode(null);
+    setTestDone(false);
   };
 
   const testModeSelect = categoryNum ? (
@@ -46,11 +56,11 @@ export default function Test() {
       <button className="reselectButton" onClick={() => resetCategory()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <div className="modeText">
+      <div className="modeText  fade-in-box">
         <div>{categoryName}</div>
       </div>
-      <div className="guideText">실전 방법을 선택해주세요</div>
-      <div className="studyBox">
+      <div className="guideText  fade-in-box">실전 방법을 선택해주세요</div>
+      <div className="studyBox  fade-in-up">
         <SelectTestMode
           num={categoryNum}
           able={categoryTestable}
@@ -68,17 +78,22 @@ export default function Test() {
 
   const testScreen =
     testMode && testMode === "handToWord" ? (
-      <HandToWord categoryNum={categoryNum} resetTestMode={resetTestMode} />
+      <HandToWord categoryNum={categoryNum} finishTest={finishTest} />
     ) : (
-      <WordToHand categoryNum={categoryNum} resetTestMode={resetTestMode} />
+      <WordToHand categoryNum={categoryNum} finishTest={finishTest} />
     );
 
   const testStart = testMode ? testScreen : testModeSelect;
+  const test = testDone ? (
+    <TestResult score={score} resetTestMode={resetTestMode} />
+  ) : (
+    testStart
+  );
 
   return (
     <Grid container justifyContent="center">
       <Grid item xs={8} sx={{ marginTop: 0 }}>
-        {testStart}
+        {test}
       </Grid>
     </Grid>
   );
