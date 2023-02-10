@@ -61,4 +61,12 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage());
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorRes handleUserNotFoundException(UserNotFoundException e) {
+        log.error(e.getMessage());
+        return ErrorRes.make(e.getMessage());
+    }
+
 }
