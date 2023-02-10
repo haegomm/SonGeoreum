@@ -1,5 +1,6 @@
 package com.bbb.songeoreum.api.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FavoriteToggleReq {
 
-    private String userId;
-
-    private String wordId;
+    @ApiModelProperty(example = "단어의 ID")
+    private Long wordId;
 
 }
