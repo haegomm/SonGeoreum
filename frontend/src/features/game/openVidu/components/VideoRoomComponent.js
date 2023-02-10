@@ -446,8 +446,7 @@ class VideoRoomComponent extends Component {
           // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
           if (this.state.goGame === false) {
             if (this.state.subscribers > 2 && this.state.playGame === true) {
-              this.state.localUser
-                .getStreamManager()
+              this.state.session
                 .signal({
                   data: {
                     playGame: this.state.playGame,
@@ -463,18 +462,16 @@ class VideoRoomComponent extends Component {
                   console.error();
                 });
             } else if (this.state.subscribers > 2) {
-              this.state.localUser
-                .getStreamManager()
-                .on("signal:play-game", (event) => {
-                  console.log("오케이 가보자고");
-                  console.log(event.data);
-                  console.log(event.from);
-                  const data = JSON.parse(event.data); // 했음
-                  this.setState({
-                    goGame: data.goGame,
-                    playerList: data.playerList,
-                  });
+              this.state.session.on("signal:play-game", (event) => {
+                console.log("오케이 가보자고");
+                console.log(event.data);
+                console.log(event.from);
+                const data = JSON.parse(event.data); // 했음
+                this.setState({
+                  goGame: data.playGame,
+                  playerList: data.playerList,
                 });
+              });
             }
           }
         }
