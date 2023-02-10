@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
-import LargeButton from "../../../common/button/LargeButton";
-import axios from "../../../common/api/https";
-import WordSmall from "../../../common/card/WordSmall";
+import LargeButton from "../../common/button/LargeButton";
+import axios from "../../common/api/https";
+import WordSmall from "../../common/card/WordSmall";
 
-import "./WordLarge.scss";
-import "../FadeIn.scss";
-import "../../../common/card/flip.scss";
+import "../study/learn/WordLarge.scss";
+import "../study/FadeIn.scss";
+import "../../common/card/flip.scss";
 
 import StarIcon from "@mui/icons-material/Star";
 import ShuffleRoundedIcon from "@mui/icons-material/ShuffleRounded";
@@ -20,7 +20,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
-export default function WordLarge({ isLogin, categoryNum }) {
+export default function MyVoca() {
   const [star, setStar] = useState(false); // 즐겨찾기 유무
   const [wordNumber, setWordNumber] = useState(); // 현재 단어 번호
   const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
@@ -30,7 +30,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
 
   useEffect(() => {
     async function getInfo() {
-      const data = await axios.get(`/api/words?categoryId=${categoryNum}`);
+      const data = await axios.get(`/api/favorites/user/words`);
       setWordList(data.data);
       console.log(data.data);
       setWordNumber(0);
@@ -140,19 +140,19 @@ export default function WordLarge({ isLogin, categoryNum }) {
     setBlockListMode(!blockListMode);
   };
 
-  const shuffle = () => {
-    async function shuffleInfo() {
-      const data = await axios.get(
-        `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
-      );
-      setWordList(data.data);
-      console.log(data.data);
-      setWordNumber(0);
-      setStartNumber(data.data[0].id);
-      setEndNumber(data.data.length - 1);
-    }
-    shuffleInfo();
-  };
+  //   const shuffle = () => {
+  //     async function shuffleInfo() {
+  //       const data = await axios.get(
+  //         `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
+  //       );
+  //       setWordList(data.data);
+  //       console.log(data.data);
+  //       setWordNumber(0);
+  //       setStartNumber(data.data[0].id);
+  //       setEndNumber(data.data.length - 1);
+  //     }
+  //     shuffleInfo();
+  //   };
 
   if (wordList && wordList.length > 0) {
     console.log("나와라..", wordList);
@@ -160,22 +160,23 @@ export default function WordLarge({ isLogin, categoryNum }) {
     console.log("번호는?", wordNumber);
     console.log("이것도..", wordList[wordNumber].name);
 
-    const media =
-      categoryNum > 3 && wordList && wordList.length > 0 ? (
-        <video
-          src={wordList[wordNumber].contentUrl}
-          autoPlay
-          poster=""
-          //   control
-          loop
-        ></video>
-      ) : (
-        <img
-          className="handImage"
-          src={wordList[wordNumber].contentUrl}
-          referrerPolicy="no-referrer"
-        />
-      );
+    const media = null;
+    //   categoryNum > 3 && wordList && wordList.length > 0 ? (
+    //     <video
+    //       src={wordList[wordNumber].contentUrl}
+    //       autoPlay
+    //       poster=""
+    //       //   control
+    //       loop
+    //     ></video>
+    //   ) : (
+    //     <img
+    //       className="handImage"
+    //       src={wordList[wordNumber].contentUrl}
+    //       referrerPolicy="no-referrer"
+    //     />
+    //   );
+
     if (blockListMode) {
       return (
         <div>
@@ -185,7 +186,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
                 key={word.id}
                 text={word.name}
                 star={true}
-                isLogin={isLogin}
+                isLogin={true}
                 index={index}
                 handleListItemClick={handleListItemClick}
                 listMode={listMode}
@@ -203,11 +204,11 @@ export default function WordLarge({ isLogin, categoryNum }) {
                 <div className="front">
                   <div className="starBox">{isStar}</div>
                   <div className="shuffleBox">
-                    <ShuffleRoundedIcon
+                    {/* <ShuffleRoundedIcon
                       color="blue"
                       sx={{ fontSize: 45 }}
                       onClick={() => shuffle()}
-                    />
+                    /> */}
                   </div>
                   <div className="menuBox">
                     <MenuRoundedIcon
@@ -267,11 +268,11 @@ export default function WordLarge({ isLogin, categoryNum }) {
               </div>
               <div className="arrowBox">{down}</div>
             </div>
-            <LargeButton
+            {/* <LargeButton
               text="TEST"
               type="learnToTest"
               backgroundColor="blue"
-            />
+            /> */}
           </div>
         </div>
       );
