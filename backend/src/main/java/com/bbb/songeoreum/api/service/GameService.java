@@ -214,6 +214,8 @@ public class GameService {
 
         connectedPlayersCnt++;
 
+        log.debug("connectedPlayersCnt : {}", connectedPlayersCnt);
+
         if (connectedPlayersCnt == ROOM_SIZE) {
             toGameRooms(sessionId);
             playGame = true;
@@ -469,7 +471,9 @@ public class GameService {
     }
 
     // 개발용 : 정보 조회
-    public void getInfo() {
+    public void getInfo() throws OpenViduJavaClientException, OpenViduHttpException {
+        standbyRooms.peek().fetch();
+
         List<String> activeConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getActiveConnections()) {
             activeConnections.add(c.getServerData());
