@@ -404,6 +404,7 @@ public class GameService {
                 return returnSession;
             } catch (Exception e) {
                 standbyRooms.poll();
+                log.debug("대기방 Queue에서 만료함 세션 처리 완료");
                 if (standbyRooms.size() < poolRedzoneNo) {
                     increaseRoomBuffer();
                 }
@@ -472,7 +473,7 @@ public class GameService {
 
     // 개발용 : 정보 조회
     public void getInfo() throws OpenViduJavaClientException, OpenViduHttpException {
-        standbyRooms.peek().fetch();
+        checkActiveSessionAndUpdate();
 
         List<String> activeConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getActiveConnections()) {
