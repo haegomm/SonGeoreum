@@ -17,7 +17,7 @@ const KakaoLogin = (props) => {
   useEffect(() => {
     async function kakakoLogin() {
       const data = await axios.get(
-        `api/user/oauth2/kakao?code=${code}`
+        `/api/oauth2/kakao?code=${code}`
         );
       console.log('백한테 보내줬다!', data)
     }

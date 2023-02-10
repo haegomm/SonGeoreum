@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import authAction from '../../../common/api/authAction';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { saveUserInfo } from '../../../common/api/authInfo';
+import { getUserInfo, saveUserInfo } from '../../../common/api/authInfo';
 import socailLoginButtons from '../../../assets/socialLogin/socialLoginButtons';
 
 function Login(props) {
@@ -18,7 +18,6 @@ function Login(props) {
   
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-  // const [isLogin, setIsLogin] = useState(false);
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
@@ -35,11 +34,11 @@ function Login(props) {
     };
 
     dispatch(authAction.login(body)).then((response) => {
-      if (response.payload.message) {
-        // setIsLogin(true)
+      if (response.payload.message === 'success') {
         saveUserInfo(response.payload)
         alert('로그인 성공!')
-        navigate('/');
+        window.location.replace("/")
+        // navigate('/');
       } else{
         alert('로그인에 실패했습니다. 다시 시도해주세요');
       }

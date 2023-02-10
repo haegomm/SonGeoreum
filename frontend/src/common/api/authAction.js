@@ -1,5 +1,6 @@
 import axios from './https'
 import { LOGIN, SIGNUP, LOGOUT,  CHECKEMAIL, CHECKNICKNAME, KAKAOLOGIN } from '../../features/auth/authTypes';
+import { getUserInfo } from "./authInfo";
 
 function login(data) {
   const request = axios.post('/api/user/login', data).then((response) => response.data)
@@ -55,6 +56,8 @@ function kakakoLogin() {
   }
 }
 
+const isLogin = () => !!getUserInfo().accessToken;
+
 const authAction = { 
   login, 
   signup,
@@ -62,6 +65,7 @@ const authAction = {
   checkNickname,
   logout,
   kakakoLogin,
+  isLogin,
 }
 
 export default authAction;
