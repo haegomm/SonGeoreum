@@ -1,6 +1,5 @@
 package com.bbb.songeoreum.api.service;
 
-import com.bbb.songeoreum.api.request.GameRemoveUserReq;
 import com.bbb.songeoreum.api.response.EnterRoomRes;
 import com.bbb.songeoreum.db.domain.Gamelog;
 import com.bbb.songeoreum.db.domain.GamelogUser;
@@ -29,6 +28,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * {@code GameService}는 게임 관련 로직을 처리하는 서비스입니다.
+ *
+ * @author Youngmook-Lim
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -38,109 +43,135 @@ public class GameService {
     private final GamelogUserRepository gamelogUserRepository;
     private final UserRepository userRepository;
 
-    // OpenVidu 서버 URL 및 암호키(BBB) 설정 (application.yml에서 가져옴)
+    /**
+     * OpenVidu 서버 URL 및 암호키를 설정합니다
+     */
     @Value("${OPENVIDU_URL}")
     private String OPENVIDU_URL;
     @Value("${OPENVIDU_SECRET}")
     private String OPENVIDU_SECRET;
 
-    // OpenVidu 객체 (session, connection 생성 용도)
+    /**
+     * OpenVidu session 및 connection을 생성하기 위한 OpenVidu 객체입니다
+     */
     private OpenVidu openVidu;
 
-    // 대기방 큐
+    /**
+     * 대기방(session)을 담는 Queue 자료구조입니다
+     */
     private Queue<Session> standbyRooms;
 
 
-    // 게임중인 방
+    /**
+     * 게임 중인 방(session)을 담는 Map 자료구조입니다
+     */
     private Map<String, Map<String, Object>> gameRooms;
 
-    ////////// 방 생성 관련 변수 //////////
-    // 최초 생성 방 갯수 (pool)
+    /**
+     * 서버 구동 시 최초 생성되는 session pool의 크기입니다
+     */
     private static final int INITIAL_ROOM_NO = 10;
 
-    // 현재 진행 중인 게임에 비례한 multiplier
-    // 용도 : 진행중이 게임이 많을 수록(그만큼 바쁘다는 뜻) 밑에 REDZONE이 높아지고
-    // REDZONE 도달 시 추가되는 대기방 갯수도 많아진다
-    // 기본값은 1;
+    /**
+     * 현재 진행중이 게임방의 갯수에 정비례한 muliplier 값입니다
+     * 진행중인 게임방의 갯수가 많을수록 대기방 갯수의 하한선이 높아지며
+     * 하한선 도달 시 추가되는 대기방 갯수도 높아집니다
+     * 기본값은 1입니다
+     */
     private int multiplier = 1;
 
-    // 현재 대기방이 최초 방 갯수 대비 특정 비율(REDZONE) 하락했을 경우
-    // 대기 pool에 방을 추가해준다
+    /**
+     * 대기방 갯수의 하한선을 지정합니다
+     * 하한선 이하로 대기방 갯수가 떨어지게 되면 자동으로 대기방이 추가됩니다
+     */
     private static final double POOL_REDZONE_RATIO = 0.5;
     private int poolRedzoneNo = (int) (INITIAL_ROOM_NO * POOL_REDZONE_RATIO * multiplier);
 
-    // 대기방 갯수가 특정 비율 이상 하락했을 시 추가해주는 방 갯수
+    /**
+     * 하한선 이하로 대기방 갯수가 하락할 시 추가되는 대기방 갯수를 지정합니다
+     */
     private static final double POOL_ADDITION_RATIO = 0.3;
     private int poolAdditionNo = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO * multiplier);
+
+    /**
+     * 한 게임의 참가자 수를 지정합니다
+     */
     private static final int ROOM_SIZE = 4;
+
+    /**
+     * 게임의 최대시간을 지정합니다
+     * 해당 최대시간을 초과할 시 Garbage Collector가 해당 게임을 종료 및 초기화 시킵니다
+     */
     private static final int MAX_GAME_TIME_MINUTES = 20;
+
+    /**
+     * 대기방과 게임방의 session을 관리하는 Garbage Collector의 구동 주기입니다
+     */
     private static final int GC_INTERVAL_MINUTES = 5;
 
+    /**
+     * Spring Boot 서버 구동 후 1회 호출되는 메서드입니다
+     * 대기방 Queue와 게임방 Map을 초기화하고 대기방 session pool을 형성합니다
+     * 대기방과 게임방을 담는 자료구조는 Thread-Safe를 보장하기 위해 각각 ConcurrentLinkedQueue, ConcurrentHashMap를 사용합니다
+     *
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     @PostConstruct
     public void initialSetup() throws OpenViduJavaClientException, OpenViduHttpException {
-        // OpenVidu 객체 초기화 (WAS 띄우고 한번만 실행 (@PostConstruct))
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
-        // 대기방 큐 초기화
-        // 큐는 멀티 스레드 환경을 반영하여 ConcurrentLinkedQueue를 활용
         standbyRooms = new ConcurrentLinkedQueue<>();
+        gameRooms = new ConcurrentHashMap<>();
 
-        // 최초 방 갯수만큼 Session 생성 + 큐에 추가
         for (int i = 0; i < INITIAL_ROOM_NO; i++) {
             Session session = openVidu.createSession();
             standbyRooms.add(session);
         }
 
-        // 해시맵은 멀티 스레드 환경을 반영하여 ConcurrentHashMap을 활용
-        gameRooms = new ConcurrentHashMap<>();
-
-        // 방 갯수 초기화
-//        multiplier = INITIAL_ROOM_NO;
-        calculateMultiplierAndUpdate();
     }
 
-    // 주기적으로 자동적으로 호출됨
-    // gameRooms 순회하며 비정상적으로 오래 살아있는 게임방 초기화 작업 (예: 20분이 넘어갔는데 안 끝난 게임)
+    /**
+     * Session을 관리하는 Garbage Collector 입니다
+     * 주기적으로 대기방과 게임방을 탐색하며 비정상적으로 오래 살아있거나 닫혀버린 session을 정리합니다
+     *
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     @Scheduled(fixedRate = GC_INTERVAL_MINUTES * 60000)
     public void garbageCollector() throws OpenViduJavaClientException, OpenViduHttpException {
         log.debug("Session Garbage Collector 출동");
 
-        // 대기방 정리 (앞에서부터 정상 세션 나올때까지만 작동)
         checkActiveSessionAndUpdate();
 
-        // 게임방 정리
         for (String id : gameRooms.keySet()) {
             Map<String, Object> sessionInfo = gameRooms.get(id);
             LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
             Duration duration = Duration.between(startDate, LocalDateTime.now());
             log.debug("게임 시작 후 지난 시간(분) : {}", duration.toMinutes());
             if (duration.toMinutes() >= MAX_GAME_TIME_MINUTES) {
-                clearRoom(id, (Session) sessionInfo.get("session"));
+                clearGameRoom(id, (Session) sessionInfo.get("session"));
                 log.debug("세션 {} gameRooms에서 퇴출", id);
             }
         }
     }
 
+    /**
+     * 현재 대기방 session에 유저를 연결하기 위해 connection을 생성합니다
+     * 해당 유저가 DB상에 존재하는 유저인지, 현재 대기방에 중복 유저가 있는지를 확인합니다
+     * 대기방에 연결된 유저의 수가 4명이면 해당 session을 대기방에서 제거하고 게임방으로 이동시킵니다
+     * 대기방 갯수가 REDZONE 미만으로 하락 시 대기방을 추가해 줍니다
+     *
+     * @param userId 해당 유저의 id
+     * @return Session 입장을 위한 token, 게임 시작 여부 playGame, sessionId, 현재 연결된 유저 리스트를 반환합니다
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     public EnterRoomRes enterRoom(Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        // 큐의 맨 앞 대기방(여기에 참가자 차곡차곡 채워넣을 것)
-        Session availableSession = null;
-
-        // 쓸 수 있는 세션 찾을때까지 돈다
-        availableSession = checkActiveSessionAndUpdate();
-
+        Session availableSession = checkActiveSessionAndUpdate();
         String sessionId = availableSession.getSessionId();
 
-        // 실제 사용용
-        int connectedPlayersCnt = availableSession.getActiveConnections().size();
-
-        // POSTMAN 테스트 용 : 실제로 사용할때는 프론트가 연결을 해주면서 active connection이 생성되고
-        // active connection 기준으로 모든걸 계산해야 하는게 맞지만
-        // POSTMAN으로 테스트 할 시 프론트가 연결을 해주는게 아니므로 active connection이 아닌 것들까지 포함한
-        // getConnections()를 활용하여 로직 테스트
-//        int connectedPlayersCnt = availableSession.getConnections().size();
-
-        // 현재 대기방에 중복되는 유저 있는지 확인
         for (Connection c : availableSession.getActiveConnections()) {
             Long cId = Long.parseLong(c.getServerData());
             if (userId.equals(cId)) {
@@ -148,23 +179,21 @@ public class GameService {
             }
         }
 
-        // 존재하는 유저인지 확인
         if (!userRepository.findById(userId).isPresent()) {
             throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
         }
 
-        Connection connection = null;
-        String token = null;
+        int connectedPlayersCnt = availableSession.getActiveConnections().size();
         boolean playGame = false;
+        String token = null;
+        Connection connection = null;
         EnterRoomRes enterRoomRes = null;
 
 
-        // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
         if (standbyRooms.size() < poolRedzoneNo) {
             increaseRoomBuffer();
         }
 
-        // 비정상적인 코드일때 처리 또는 throw exception
         if (connectedPlayersCnt == ROOM_SIZE) {
             toGameRooms(sessionId);
             availableSession = checkActiveSessionAndUpdate();
@@ -172,29 +201,23 @@ public class GameService {
             throw new RoomOverflowException();
         }
 
-        // connection의 params 만들기 : 해당 connection에 연결되는 유저의 ID값 저장
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .data(userId.toString())
                 .build();
 
-        // 큐의 맨 앞에 있는 대기방의 참가자 수가 4 미만일 경우 connection 생성
         try {
             connection = availableSession.createConnection(connectionProperties);
         } catch (Exception e) {
-            // checkActiveSessionAndUpdate에서 열려있는 세션을 보장했지 때문에 아래 에러는 뜨면 안됨
             throw new NoConnectionError();
         }
 
         connectedPlayersCnt++;
-//        log.debug(String.valueOf(connectedPlayersCnt));
 
-        // 정원 완료 시 게임방으로 세션 이동하고 playGame을 true로 세팅
         if (connectedPlayersCnt == ROOM_SIZE) {
             toGameRooms(sessionId);
             playGame = true;
         }
 
-        // 재확인 : 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
         if (standbyRooms.size() < poolRedzoneNo) {
             increaseRoomBuffer();
         }
@@ -209,6 +232,7 @@ public class GameService {
             Long cId = Long.parseLong(c.getServerData());
             enterRoomRes.getPlayersList().add(cId);
         }
+
         enterRoomRes.getPlayersList().add(userId);
 
         log.debug("standbyRoom : {}", standbyRooms.peek().getActiveConnections().toString());
@@ -222,20 +246,45 @@ public class GameService {
         return enterRoomRes;
     }
 
+    /**
+     * 대기방에서 유저가 퇴장할 시 대기방 상태를 확인하고 마지막 유저가 퇴장하여 대기방이 종료되었다면 열려있는 대기방으로 대채합니다
+     *
+     * @param id session의 sessionId
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
+    public void removeUser(String id) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        Session standbySession = standbyRooms.peek();
+
+        if (!id.equals(standbySession.getSessionId())) {
+            throw new NotFoundException("세션이 일치하지 않습니다");
+        }
+
+        checkActiveSessionAndUpdate();
+
+    }
+
+    /**
+     * 해당 게임방을 종료시키고 HashMap에서 제거합니다
+     * 게임 로그를 DB에 저장합니다
+     *
+     * @param id session의 sessionId
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     @Transactional
     public void exitRoom(String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
         Map<String, Object> sessionInfo = gameRooms.get(id);
         Session session;
+
         try {
             session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
-
-        // DB 저장 //////////////////////////////////////
-        // DB에 게임 로그(gamelog) 데이터 저장
 
         LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
         LocalDateTime endDate = LocalDateTime.now();
@@ -249,10 +298,7 @@ public class GameService {
 
         gamelogRepository.save(gamelog);
 
-        // DB에 로그-회원(gamelog_user) 데이터 저장
-
         for (Connection c : session.getActiveConnections()) {
-            // enterRoom 메서드에서 지정한 ConnectionProperties의 data 속성값 갖고오기
             Long userId = Long.parseLong(c.getServerData());
             User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
 
@@ -264,62 +310,20 @@ public class GameService {
             gamelogUserRepository.save(gamelogUser);
         }
 
-        // 해당 세션에 연결된 모든 connection 퇴출하고 빈 세션을 gameRooms에서 제거
-        clearRoom(id, session);
+        clearGameRoom(id, session);
 
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("standbyRooms size : {}", standbyRooms.size());
 
     }
 
-    public void removeUser(GameRemoveUserReq gameRemoveUserReq) throws OpenViduJavaClientException, OpenViduHttpException {
-
-        String sessionId = gameRemoveUserReq.getSessionId();
-//            String connectionId = gameRemoveUserReq.getConnectionId();
-        Session standbySession = standbyRooms.peek();
-
-        standbySession.fetch();
-
-        if (!sessionId.equals(standbySession.getSessionId())) {
-            throw new NotFoundException("세션이 일치하지 않습니다");
-        }
-
-        // 유저가 대기방에 있는지 확인
-//            boolean flag = false;
-//
-//            for (Connection c : standbySession.getActiveConnections()) {
-//                if (c.getConnectionId().equals(connectionId)) {
-//                    flag = true;
-//                    break;
-//                }
-//            }
-//
-//            if (!flag) {
-//                throw new UserNotFoundException("해당 유저는 대기방에 없습니다.");
-//            }
-
-//            int noOfActiveConnectionsBeforeDisconnect = standbySession.getActiveConnections().size();
-
-        // 해당 connection의 연결 해제
-//            standbySession.forceDisconnect(connectionId);
-
-        int noOfActiveConnectionsAfterDisconnect = standbySession.getActiveConnections().size();
-
-        // 유저 퇴출 전 active connections가 1 이상이었고 지금 active connections 가 없을때
-        // 어차피 세션 자동으로 닫히니까 버리겠소 (OpenVidu가 마지막 active connection 닫히는 순간 세션 종료시켜 버리기 때문)
-        if (noOfActiveConnectionsAfterDisconnect == 0) {
-//                standbyRooms.poll();
-            checkActiveSessionAndUpdate();
-        }
-
-//        } catch (OpenViduHttpException e) {
-//            log.error(e.getMessage());
-//            // 여기 왔다는 거는 forceDisconnect에서 에러났다는 소리고 세션 닫혔다는 소리니까 버리겠소
-//            standbyRooms.poll();
-//            return 0;
-
-    }
-
+    /**
+     * 대기방에 있는 모든 유저들을 퇴출시키고 대기방을 초기화합니다
+     *
+     * @param id session의 sessionId
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     public void resetStandby(String id) throws OpenViduJavaClientException, OpenViduHttpException {
         try {
             Session standbySession = standbyRooms.peek();
@@ -328,23 +332,23 @@ public class GameService {
                 throw new NotFoundException("세션이 일치하지 않습니다");
             }
 
-            // 대기방 종료시키기
             standbySession.close();
 
-            // 대기방 리스트 정리 (종료시킨 방 버리고 작동하는 방을 앞에다 두기)
             checkActiveSessionAndUpdate();
-//            standbyRooms.poll();
 
         } catch (OpenViduHttpException e) {
             log.debug(e.getMessage() + " : 이미 세션이 종료되어서 예외 발생. 정상 작동 중입니다.");
             checkActiveSessionAndUpdate();
-//            standbyRooms.poll();
 
         }
     }
 
-    // Helper Methods
-
+    /**
+     * 대기방에 session을 지정 갯수만큼 추가합니다
+     *
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     public void increaseRoomBuffer() throws OpenViduJavaClientException, OpenViduHttpException {
         calculateMultiplierAndUpdate();
         for (int i = 0; i < poolAdditionNo; i++) {
@@ -353,52 +357,67 @@ public class GameService {
         }
     }
 
+    /**
+     * Multiplier 값을 계산하고 대기방의 REDZONE 값, 추가 session 갯수를 갱신합니다
+     */
     public void calculateMultiplierAndUpdate() {
         int gameRoomCnt = gameRooms.size();
 
-        // 최초 대기방 수 대비 현재 게임방 수에 따라 multiplier 설정
         multiplier = gameRoomCnt / INITIAL_ROOM_NO + 1;
 
-        // REDZONE 값, 대기 큐 추가 방 갯수 값 수정
         poolRedzoneNo = (int) (INITIAL_ROOM_NO * POOL_REDZONE_RATIO * multiplier);
         poolAdditionNo = (int) (INITIAL_ROOM_NO * POOL_ADDITION_RATIO * multiplier);
 
     }
 
+    /**
+     * 대기방 Queue의 head를 탐색하며 닫혀있는 session을 제거하고 필요 시 session을 대기방에 추가합니다
+     *
+     * @return
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     public Session checkActiveSessionAndUpdate() throws OpenViduJavaClientException, OpenViduHttpException {
         Session returnSession = null;
         while (!standbyRooms.isEmpty()) {
             try {
                 returnSession = standbyRooms.peek();
-                // 세션이 닫혀있으면 여기서 에러날꺼임
                 returnSession.fetch();
                 return returnSession;
             } catch (Exception e) {
-                // 위에서 에러났다는 뜻은 못쓰는 세션이라는 뜻, 버려주세요~
                 standbyRooms.poll();
-                // 대기방 갯수가 REDZONE 밑으로 떨어졌을 경우 대기방 갯수 추가
                 if (standbyRooms.size() < poolRedzoneNo) {
                     increaseRoomBuffer();
                 }
             }
         }
-        // 아래 코드까지 사실 가면 안됨, 위에서 increaseRoomBuffer을 해주기 때문
         increaseRoomBuffer();
         return standbyRooms.peek();
     }
 
-    public void clearRoom(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
-        // 세션 종료
+    /**
+     * 해당 게임 session을 초기화하고 게임방에서 삭제합니다
+     *
+     * @param id      session의 sessionId
+     * @param session 삭제할 session
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
+    public void clearGameRoom(String id, Session session) throws OpenViduJavaClientException, OpenViduHttpException {
         try {
             session.close();
         } catch (OpenViduHttpException e) {
             log.error(e.getMessage() + " : 이미 세션이 종료되어서 예외 발생. 정상 작동 중입니다.");
         }
-        // 빈 세션을 HashMap에서 제거
         gameRooms.remove(id);
         calculateMultiplierAndUpdate();
     }
 
+    /**
+     * 해당 session을 대기방에서 게임방으로 이동합니다
+     *
+     * @param sessionId session의 sessionId
+     */
     public void toGameRooms(String sessionId) {
         Map<String, Object> sessionInfo = new ConcurrentHashMap<>();
         Session session = standbyRooms.poll();
@@ -409,7 +428,7 @@ public class GameService {
         calculateMultiplierAndUpdate();
     }
 
-    // 개발용
+    // 개발용 : 대기방, 게임방 전체 초기화
     public void resetRooms() throws OpenViduJavaClientException, OpenViduHttpException {
         for (String id : gameRooms.keySet()) {
             Session session = (Session) gameRooms.get(id).get("session");
@@ -433,7 +452,7 @@ public class GameService {
         }
     }
 
-    // 개발용
+    // 개발용 : 정보 조회
     public void getInfo() {
         log.debug("standbyRoom : {}", standbyRooms.peek().getActiveConnections().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
