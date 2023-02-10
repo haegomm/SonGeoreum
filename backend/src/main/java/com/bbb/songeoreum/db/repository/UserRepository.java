@@ -17,8 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByKakaoId(String kakaoId);
 
-    @Query("select u from User u order by u.experience desc")
-    List<User> findAllOrderByExperienceDesc();
+    List<User> findTop10ByOrderByExperienceDesc();
 
 
 }

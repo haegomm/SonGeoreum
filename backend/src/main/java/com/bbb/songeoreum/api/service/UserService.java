@@ -113,7 +113,7 @@ public class UserService {
         User realUser = userRepository.findById(id).get();
 
         // 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 할 필요가 없다.
-        if(!realUser.getNickname().equals(realUser.getNickname())){
+        if (!realUser.getNickname().equals(realUser.getNickname())) {
             // 닉네임 중복 체크
             duplicateNickname(updateUserReq.getNickname());
         }
@@ -142,16 +142,11 @@ public class UserService {
     }
 
     // 실시간 랭킹 조회
-    public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException{
+    public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
 
-        List<GetTopTenUserRes> list = userRepository.findAllOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
-        List<GetTopTenUserRes> result = new ArrayList<>();
-
-        for(int i=0; i<10; i++){
-            result.add(list.get(i));
-        }
-
-        return result;
+        List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
+        
+        return list;
     }
 
 }
