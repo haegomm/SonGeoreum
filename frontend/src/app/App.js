@@ -14,7 +14,7 @@ import KakaoLogin from "../features/auth/login/KakaoLogin";
 import Result from "../features/game/openVidu/components/Result";
 import Study from "../features/study/Study";
 import Test from "../features/study/test/Test";
-import PrivateRoute from "../common/routes/PublicRoute";
+import PrivateRoute from "../common/routes/PrivateRoute";
 import { getUserInfo } from "../common/api/authInfo";
 
 function App() {
@@ -35,19 +35,19 @@ function App() {
               <Route path="test" element={<Test />} />
               <Route path="*" element={<Home />} />
               <Route path="game" element={<Game />} />
-              {/* <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
+              <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
               <Route path="result" element={<Result />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="login" element={<Login />} /> */}
-              {/* <Route element={<PublicRoute restricted={true} />}>/ */}
-                <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
-                {/* <Route path="signup" element={<Signup />} /> */}
-                <Route path="signup" 
-               element={
-               <PrivateRoute 
-                authenticated={access}
-                component={<Signup />} />}/>
-                <Route path="login" element={<Login />} />
+              <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} />
+              <Route path="signup" 
+              element={
+              <PrivateRoute 
+              authenticated={access}
+              component={<Signup />} />}/>
+              <Route path="login" 
+              element={
+              <PrivateRoute 
+              authenticated={access}
+              component={<Login />} />}/>
                 {/* <PublicRoute restricted={false} path="result" element={<Result />} /> */}
             </Route>
             {/* </Route> */}

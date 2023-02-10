@@ -1,22 +1,10 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import isLogin from '../api/authAction'
+ import { Navigate } from 'react-router-dom';
 
-function PrivateRoute({
-  component: Component,
-  ...rest
-}) {
-  return (
-    <Route
-      {...rest}
-      render={(props) => (
-        isLogin() ?
-          <Component {...props} />
-        : <Redirect to="login" />
-      )
-    }
-    />
-  );
-};
+ function PrivateRoute({ authenticated, component: Component }) {
+   return (
+     authenticated ? Component : <Navigate to='/' {...alert("접근할 수 없는 페이지입니다.")} />
+   )
+ }
 
-export default PrivateRoute;
+ export default PrivateRoute 
