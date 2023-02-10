@@ -56,7 +56,9 @@ public class UserController {
 
         String kakaoAccessToken = authService.getKakaoAccessToken(code);
         log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);
-        return authService.kakaoLogin(kakaoAccessToken, request, response);
+        ResponseEntity<KakaoLoginRes> kakaoLoginRes = authService.kakaoLogin(kakaoAccessToken, request, response);
+        log.debug("카카오 로그인 user 닉네임 : {}", kakaoLoginRes.getBody().getNickname());
+        return kakaoLoginRes;
     }
 
 
@@ -134,6 +136,7 @@ public class UserController {
                     new Date(now.getTime() + refreshTokenExpiry)
             );
 
+            log.debug("일반 로그인 user id(PK) : {}, 닉네임 : {}", loginUser.getId(), loginUser.getNickname());
             log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
             log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
 
@@ -207,9 +210,11 @@ public class UserController {
                 .map(Cookie::getValue)
                 .orElse(null);
 
+        log.debug("refresh token : {}", refreshToken);
+
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
-        if (!authRefreshToken.validate() || user.getRefreshToken() == null) {
+        if (authRefreshToken.validate() == false || user.getRefreshToken() == null) {
             log.debug("유효하지 않은 refresh token 입니다.");
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
