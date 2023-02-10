@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,7 +103,7 @@ public class GameService {
      * 게임의 최대시간을 지정합니다
      * 해당 최대시간을 초과할 시 Garbage Collector가 해당 게임을 종료 및 초기화 시킵니다
      */
-    private static final int MAX_GAME_TIME_MINUTES = 20;
+    private static final int MAX_GAME_TIME_MINUTES = 15;
 
     /**
      * 대기방과 게임방의 session을 관리하는 Garbage Collector의 구동 주기입니다
@@ -235,12 +236,24 @@ public class GameService {
 
         enterRoomRes.getPlayersList().add(userId);
 
-        log.debug("standbyRoom : {}", standbyRooms.peek().getActiveConnections().toString());
+        List<String> activeConnections = new ArrayList<>();
+        for (Connection c : standbyRooms.peek().getActiveConnections()) {
+            activeConnections.add(c.getServerData());
+        }
+
+        List<String> allConnections = new ArrayList<>();
+        for (Connection c : standbyRooms.peek().getConnections()) {
+            allConnections.add(c.getServerData());
+        }
+
+        log.debug("standbyRoom(active) : {}", activeConnections);
+        log.debug("standbyRoom(all) : {}", allConnections);
         log.debug("playersList : {}", enterRoomRes.getPlayersList().toString());
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("gameRooms count : {}", gameRooms.size());
         log.debug("standbyRooms count : {}", standbyRooms.size());
-        log.debug("connected players count : {}", connectedPlayersCnt);
+        log.debug("connected players count(active) : {}", activeConnections.size());
+        log.debug("connected players count(all) : {}", allConnections.size());
         log.debug("multiplier : {}", multiplier);
 
         return enterRoomRes;
@@ -258,6 +271,7 @@ public class GameService {
         Session standbySession = standbyRooms.peek();
 
         if (!id.equals(standbySession.getSessionId())) {
+            log.error("특정 유저를 퇴장시키는 과정에서 세션이 일치하지 않습니다.");
             throw new NotFoundException("세션이 일치하지 않습니다");
         }
 
@@ -283,6 +297,7 @@ public class GameService {
             session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
             log.error(e.getMessage());
+            log.error("게임방 종료 단계에서 세션이 일치하지 않습니다.");
             throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
 
@@ -329,6 +344,7 @@ public class GameService {
             Session standbySession = standbyRooms.peek();
 
             if (!id.equals(standbySession.getSessionId())) {
+                log.error("대기방 초기화 단계에서 세션이 일치하지 않습니다");
                 throw new NotFoundException("세션이 일치하지 않습니다");
             }
 
@@ -454,11 +470,23 @@ public class GameService {
 
     // 개발용 : 정보 조회
     public void getInfo() {
-        log.debug("standbyRoom : {}", standbyRooms.peek().getActiveConnections().toString());
+        List<String> activeConnections = new ArrayList<>();
+        for (Connection c : standbyRooms.peek().getActiveConnections()) {
+            activeConnections.add(c.getServerData());
+        }
+
+        List<String> allConnections = new ArrayList<>();
+        for (Connection c : standbyRooms.peek().getConnections()) {
+            allConnections.add(c.getServerData());
+        }
+
+        log.debug("standbyRoom(active) : {}", activeConnections);
+        log.debug("standbyRoom(all) : {}", allConnections);
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("gameRooms count : {}", gameRooms.size());
         log.debug("standbyRooms count : {}", standbyRooms.size());
-        log.debug("connected players count : {}", standbyRooms.peek().getActiveConnections().size());
+        log.debug("connected players count(active) : {}", activeConnections.size());
+        log.debug("connected players count(all) : {}", allConnections.size());
         log.debug("multiplier : {}", multiplier);
     }
 }
