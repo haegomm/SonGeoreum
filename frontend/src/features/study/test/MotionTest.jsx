@@ -26,11 +26,14 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
 
       const handSocket = new WebSocket(url);
 
+      let status = false;
       let count = 0;
       handSocket.onmessage = function (e) {
         let data = JSON.parse(e.data).response;
+        status = true;
+        // console.log(JSON.parse(e.data));
+        // console.log(JSON.parse(e.data).response);
         if (word !== data) {
-          //console.log("다르다", data, word);
           count = 0;
         } else {
           console.log("같다");
@@ -44,11 +47,13 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
       };
 
       function sendMessage(msg) {
-        handSocket.send(
-          JSON.stringify({
-            message: msg,
-          })
-        );
+        if (status) {
+          handSocket.send(
+            JSON.stringify({
+              message: msg,
+            })
+          );
+        }
       }
 
       /*
@@ -72,7 +77,11 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
           // select one hand
           let oneHandLandMarks = results.multiHandLandmarks[0];
           // send data to server for prediction
+
+          // handSocket.current.onopen = () => {
+          //webSocket이 맺어지고 난 후, 실행
           sendMessage(oneHandLandMarks);
+          // };
 
           // draw detected hand boundary
           if (oneHandLandMarks) {

@@ -21,7 +21,7 @@ export default function Study() {
   const selectedMode = (mode) => {
     console.log("switch", mode);
     setMode(mode);
-    if (mode == "실전모드") navigate("/test");
+    if (mode === "실전모드") navigate("/test");
   };
 
   const selectedCategoryNum = (num) => {
