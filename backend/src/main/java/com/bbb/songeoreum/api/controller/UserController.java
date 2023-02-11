@@ -259,7 +259,6 @@ public class UserController {
     public ResponseEntity<String> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) {
 
         User user = (User) request.getAttribute("user");
-        // 닉네임 중복체크 로직 추가
 
         userService.updateUser(updateUserReq, user.getId());
 
