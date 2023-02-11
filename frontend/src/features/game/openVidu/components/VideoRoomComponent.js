@@ -1,4 +1,3 @@
-// import axios from "axios";
 import axios from "../../../../common/api/https";
 import { OpenVidu } from "openvidu-browser";
 import React, { Component, useLocalStorage } from "react";
@@ -92,17 +91,6 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
-    this.state.session.on("signal:play-game", (event) => {
-      console.log("오케이 가보자고");
-      console.log(event.data);
-      console.log(event.from);
-      const data = JSON.parse(event.data);
-      console.log(data);
-      this.setState({
-        goGame: data.playGame,
-        playerList: data.playerList,
-      });
-    });
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
@@ -110,7 +98,7 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    clearTimeout(this.timer); // 타이머 종료
+    // clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
 
@@ -345,7 +333,7 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "여기있어요",
+      mySessionId: "",
       myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
       localUser: undefined,
     });
@@ -492,6 +480,17 @@ class VideoRoomComponent extends Component {
           });
       }
     }
+    this.state.session.on("signal:play-game", (event) => {
+      console.log("오케이 가보자고");
+      console.log(event.data);
+      console.log(event.from);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      this.setState({
+        goGame: data.playGame,
+        playerList: data.playerList,
+      });
+    });
   }
 
   updateLayout() {
