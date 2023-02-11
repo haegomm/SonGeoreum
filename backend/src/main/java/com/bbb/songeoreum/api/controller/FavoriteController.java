@@ -1,12 +1,12 @@
 package com.bbb.songeoreum.api.controller;
 
 import com.bbb.songeoreum.api.request.FavoriteToggleReq;
-import com.bbb.songeoreum.api.response.FavoriteToggleRes;
 import com.bbb.songeoreum.api.response.FavoriteRes;
-import com.bbb.songeoreum.api.response.FavoriteWordRes;
+import com.bbb.songeoreum.api.response.SuccessRes;
 import com.bbb.songeoreum.api.service.FavoriteService;
 import com.bbb.songeoreum.db.domain.Favorite;
 import com.bbb.songeoreum.db.domain.User;
+import com.bbb.songeoreum.exception.WordNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -61,22 +61,16 @@ public class FavoriteController {
      */
     @GetMapping("/word/{wordId}")
     @ApiOperation(value = "나의 단어장에 있는 단어인지 확인한다.")
-    public ResponseEntity<FavoriteWordRes> findByUserAndWord(@PathVariable(name = "wordId") Long wordId, HttpServletRequest httpServletRequest) {
-
-        String msg = FAIL;
+    public ResponseEntity<SuccessRes> findByUserAndWord(@PathVariable(name = "wordId") Long wordId, HttpServletRequest httpServletRequest) {
 
         User user = (User) httpServletRequest.getAttribute("user");
         Long userId = user.getId();
 
-        log.info("userId: {}", userId);
-        log.info("wordId: {}", wordId);
-
         Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
-        if (findFavorite != null) msg = SUCCESS;
 
-        FavoriteWordRes favoriteUserWordRes = FavoriteWordRes.builder().message(msg).build();
+        SuccessRes successRes = SuccessRes.make(SUCCESS);
 
-        return new ResponseEntity<FavoriteWordRes>(favoriteUserWordRes, HttpStatus.OK);
+        return new ResponseEntity<SuccessRes>(successRes, HttpStatus.OK);
     }
 
     /**
@@ -86,25 +80,21 @@ public class FavoriteController {
      */
     @PostMapping
     @ApiOperation("특정 단어를 나의 단어장에 추가한다.")
-    public ResponseEntity<FavoriteToggleRes> saveFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
-
-        log.debug("Fovorite Save Request: {} ", favoriteToggleReq);
+    public ResponseEntity<SuccessRes> saveFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
 
         User user = (User) httpServletRequest.getAttribute("user");
         Long userId = user.getId();
         Long wordId = favoriteToggleReq.getWordId();
 
-        String msg = SUCCESS;
-
-        Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
-
-        if (findFavorite == null) {
+        try {
+            Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
+        } catch (WordNotFoundException e) {
             favoriteService.saveFavorite(userId, wordId);
         }
 
-        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().message(msg).build();
+        SuccessRes successRes = SuccessRes.make(SUCCESS);
 
-        return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
+        return new ResponseEntity<SuccessRes>(successRes, HttpStatus.OK);
     }
 
     /**
@@ -114,24 +104,22 @@ public class FavoriteController {
      */
     @DeleteMapping
     @ApiOperation("특정 단어를 나의 단어장에서 삭제한다.")
-    public ResponseEntity<FavoriteToggleRes> deleteFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
-
-        log.debug("Fovorite Delete Request: {} ", favoriteToggleReq);
-
-        String msg = SUCCESS;
+    public ResponseEntity<SuccessRes> deleteFavorite(@RequestBody FavoriteToggleReq favoriteToggleReq, HttpServletRequest httpServletRequest) {
 
         User user = (User) httpServletRequest.getAttribute("user");
         Long userId = user.getId();
         Long wordId = favoriteToggleReq.getWordId();
 
-        Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
-        if (findFavorite != null) {
+        try {
+            Favorite findFavorite = favoriteService.findFavoriteByUserAndWord(userId, wordId);
             favoriteService.deleteFavorite(findFavorite);
+        } catch (WordNotFoundException e) {
+            log.debug("이미 삭제된 단어입니다.");
         }
 
-        FavoriteToggleRes favoriteToggleRes = FavoriteToggleRes.builder().message(msg).build();
+        SuccessRes successRes = SuccessRes.make(SUCCESS);
 
-        return new ResponseEntity<FavoriteToggleRes>(favoriteToggleRes, HttpStatus.OK);
+        return new ResponseEntity<SuccessRes>(successRes, HttpStatus.OK);
     }
 
 }

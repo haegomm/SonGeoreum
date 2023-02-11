@@ -65,6 +65,8 @@ public class FavoriteService {
 
         Favorite findFavorite = favoriteRepository.findByUser_IdAndWord_Id(userId, wordId);
 
+        if (findFavorite == null) throw new WordNotFoundException();
+
         return findFavorite;
     }
 
