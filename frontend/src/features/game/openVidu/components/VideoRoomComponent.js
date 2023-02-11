@@ -11,6 +11,7 @@ import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
 import SideBar from "./sidebar/SideBar";
+import { Navigate } from "react-router-dom";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -25,7 +26,7 @@ class VideoRoomComponent extends Component {
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SonGeoreum";
-    let userName = localStorage.getItem("nickname");
+    let userName = window.localStorage.getItem("nickname");
     console.log(this.props.user);
     this.remotes = [];
     this.localUserAccessAllowed = false;
@@ -91,6 +92,17 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
+    this.state.session.on("signal:play-game", (event) => {
+      console.log("오케이 가보자고");
+      console.log(event.data);
+      console.log(event.from);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      this.setState({
+        goGame: data.playGame,
+        playerList: data.playerList,
+      });
+    });
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
@@ -425,6 +437,7 @@ class VideoRoomComponent extends Component {
   }
 
   subscribeToUserChanged() {
+    console.log("시작해?", this.state.playGame);
     this.state.session.on("signal:userChanged", (event) => {
       let remoteUsers = this.state.subscribers;
       remoteUsers.forEach((user) => {
@@ -443,37 +456,6 @@ class VideoRoomComponent extends Component {
           if (data.isScreenShareActive !== undefined) {
             user.setScreenShareActive(data.isScreenShareActive);
           }
-          // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-          if (this.state.goGame === false) {
-            if (this.state.subscribers > 2 && this.state.playGame === true) {
-              this.state.session
-                .signal({
-                  data: {
-                    playGame: this.state.playGame,
-                    playerList: this.state.playerList,
-                  }, // 문자열로 보내짐 // json.parse() 해주기
-                  to: [],
-                  type: "play-game",
-                })
-                .then(() => {
-                  console.log("얘들아 게임 시작한다~~!");
-                })
-                .catch((error) => {
-                  console.error();
-                });
-            } else if (this.state.subscribers > 2) {
-              this.state.session.on("signal:play-game", (event) => {
-                console.log("오케이 가보자고");
-                console.log(event.data);
-                console.log(event.from);
-                const data = JSON.parse(event.data); // 했음
-                this.setState({
-                  goGame: data.playGame,
-                  playerList: data.playerList,
-                });
-              });
-            }
-          }
         }
       });
       this.setState(
@@ -483,6 +465,33 @@ class VideoRoomComponent extends Component {
         () => this.checkSomeoneShareScreen()
       );
     });
+    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+    if (this.state.goGame === false) {
+      console.log("시그널 조건1 통과");
+      if (this.state.playGame === true) {
+        console.log("시그널 조건2 통과");
+        const data = {
+          playGame: this.state.playGame,
+          playerList: this.state.playerlist,
+        };
+        this.state.session
+          .signal({
+            // data: {
+            //   playGame: this.state.playGame,
+            //   playerList: this.state.playerList,
+            // }, // 문자열로 보내짐 // json.parse() 해주기
+            data: JSON.stringify(data),
+            to: [],
+            type: "play-game",
+          })
+          .then(() => {
+            console.log("시그널 보내기 성공");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }
   }
 
   updateLayout() {
@@ -697,6 +706,7 @@ class VideoRoomComponent extends Component {
         <Loading
           subscribers={this.state.subscribers}
           sessionId={this.state.sessionId}
+          leaveSession={this.leaveSession}
         />
       );
     } else {
@@ -760,7 +770,7 @@ class VideoRoomComponent extends Component {
                     messageReceived={this.checkNotification}
                     playerList={this.state.playerlist}
                     myNickname={this.state.myUserName}
-                    theEndGame={this.theEndGame}
+                    leaveSession={this.leaveSession}
                   />
                 </div>
               )}
@@ -796,20 +806,26 @@ class VideoRoomComponent extends Component {
       console.log("요청성공 >> ", response.data);
       return response.data; // The sessionId
     } catch (err) {
+      alert("게임방 입장에 실패하셨습니다. 다시 시도해주세요:)");
+      Navigate("/");
       console.log("요청실패 ㅠㅠ", err);
     }
   }
 
   async createToken(sessionData) {
-    this.setState({
-      message: sessionData.message,
-      playGame: sessionData.playGame,
-      playerList: sessionData.playerList,
-      sessionId: sessionData.sessionId,
-      token: sessionData.token,
-    });
-
+    const message = sessionData.message;
+    const playGame = sessionData.playGame;
+    const playerList = sessionData.playerList;
+    const sessionId = sessionData.sessionId;
     const token = sessionData.token;
+
+    this.setState({
+      message: message,
+      playGame: playGame,
+      playerList: playerList,
+      sessionId: sessionId,
+      token: token,
+    });
 
     // const tokenData = token.split("=");
     // console.log(tokenData);
