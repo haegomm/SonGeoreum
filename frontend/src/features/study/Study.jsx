@@ -17,6 +17,7 @@ import SelectCategory from "./SelectCategory";
 export default function Study() {
   const [mode, setMode] = useState(); // 학습 모드 저장
   const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
+  const [categoryName, setCategoryName] = useState(); // 선택한 카테고리 이름
   const isLogin = getUserInfo().nickname;
   console.log(isLogin);
 
@@ -45,6 +46,7 @@ export default function Study() {
 
   const selectedCategoryInfo = (name, isTestable) => {
     console.log(name, isTestable);
+    setCategoryName(name);
   };
 
   const selectModeScreen = mode ? (
@@ -69,7 +71,11 @@ export default function Study() {
       <button className="reselectButton" onClick={() => resetCategory()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <WordLarge isLogin={isLogin} categoryNum={categoryNum} />
+      <WordLarge
+        isLogin={isLogin}
+        categoryNum={categoryNum}
+        categoryName={categoryName}
+      />
     </div>
   );
 

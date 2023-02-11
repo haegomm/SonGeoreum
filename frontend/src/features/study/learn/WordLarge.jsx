@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import LargeButton from "../../../common/button/LargeButton";
 import axios from "../../../common/api/https";
@@ -20,7 +21,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
-export default function WordLarge({ isLogin, categoryNum }) {
+export default function WordLarge({ isLogin, categoryNum, categoryName }) {
+  const navigate = useNavigate();
+
   const [star, setStar] = useState(false); // 즐겨찾기 유무
   const [wordNumber, setWordNumber] = useState(0); // 현재 단어 번호
   const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
@@ -104,20 +107,20 @@ export default function WordLarge({ isLogin, categoryNum }) {
     console.log("index 확인중..", index);
     setWordNumber(index);
     starInfo(index);
-    console.log(wordNumber);
+    // console.log(wordNumber);
   };
 
   const numberPlus = () => {
     const num = wordNumber;
     setWordNumber(num + 1);
-    console.log(num + 1);
+    // console.log(num + 1);
     starInfo(num + 1);
   };
 
   const numberMinus = () => {
     const num = wordNumber;
     setWordNumber(num - 1);
-    console.log(num - 1);
+    // console.log(num - 1);
     starInfo(num - 1);
   };
 
@@ -201,7 +204,9 @@ export default function WordLarge({ isLogin, categoryNum }) {
     setStar(false);
     async function deleteStar() {
       const data = await axios.delete(`/api/favorites`, {
-        wordId: id,
+        data: {
+          wordId: id,
+        },
       });
       console.log(data);
     }
@@ -211,17 +216,25 @@ export default function WordLarge({ isLogin, categoryNum }) {
     setStarList(list);
   };
 
-  const isStar = star ? (
-    <StarIcon
-      color="yellow"
-      sx={{ fontSize: 45 }}
-      onClick={() => starDelete(wordNumber, wordNumber + startNumber)}
-    />
+  const isStar = isLogin ? (
+    star ? (
+      <StarIcon
+        color="yellow"
+        sx={{ fontSize: 45 }}
+        onClick={() => starDelete(wordNumber, wordNumber + startNumber)}
+      />
+    ) : (
+      <StarIcon
+        color="disabled"
+        sx={{ fontSize: 45 }}
+        onClick={() => starPost(wordNumber, wordNumber + startNumber)}
+      />
+    )
   ) : (
     <StarIcon
       color="disabled"
       sx={{ fontSize: 45 }}
-      onClick={() => starPost(wordNumber, wordNumber + startNumber)}
+      // onClick={} 로그인하겠습니까 모달창
     />
   );
 
@@ -280,6 +293,12 @@ export default function WordLarge({ isLogin, categoryNum }) {
     shuffleInfo();
   };
 
+  const toTest = () => {
+    navigate("/test", { state: [categoryNum, categoryName] });
+
+    // navigate("/test", { num: categoryNum, name: categoryName });
+  };
+
   if (wordList && wordList.length > 0) {
     const media =
       categoryNum > 3 && wordList && wordList.length > 0 ? (
@@ -297,22 +316,35 @@ export default function WordLarge({ isLogin, categoryNum }) {
           referrerPolicy="no-referrer"
         />
       );
+
+    const smallWordList =
+      isLogin && starList
+        ? wordList.map((word, index) => (
+            <WordSmall
+              key={word.id}
+              text={word.name}
+              star={starList[index]}
+              isLogin={isLogin}
+              index={index}
+              handleListItemClick={handleListItemClick}
+              listMode={listMode}
+            />
+          ))
+        : wordList.map((word, index) => (
+            <WordSmall
+              key={word.id}
+              text={word.name}
+              isLogin={isLogin}
+              index={index}
+              handleListItemClick={handleListItemClick}
+              listMode={listMode}
+            />
+          ));
+
     if (blockListMode) {
       return (
         <div>
-          <div className="fade-up">
-            {wordList.map((word, index) => (
-              <WordSmall
-                key={word.id}
-                text={word.name}
-                star={starList[index]}
-                isLogin={isLogin}
-                index={index}
-                handleListItemClick={handleListItemClick}
-                listMode={listMode}
-              />
-            ))}
-          </div>
+          <div className="fade-up">{smallWordList}</div>
         </div>
       );
     } else {
@@ -392,6 +424,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
               text="TEST"
               type="learnToTest"
               backgroundColor="blue"
+              onclick={toTest}
             />
           </div>
         </div>
