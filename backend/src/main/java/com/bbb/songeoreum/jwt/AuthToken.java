@@ -84,8 +84,6 @@ public class AuthToken { // JwtUtil
     토큰 뜯어보기
      */
     public Claims getTokenClaims() {
-        log.debug("getTokenClaims");
-        log.debug("key = {}", key);
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)

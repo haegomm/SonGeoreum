@@ -38,6 +38,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             request.setAttribute("user", principalDetails.getUser());
+
+            log.debug("TokenAuthenticationFilter로 접근한 user id(PK) : {}, 닉네임 : {}", principalDetails.getUser().getId(), principalDetails.getUser().getNickname());
             
 
             // SecurityContextHolder 에다가 Authentication을 담아줌. 즉, 이 사용자는 인증이 완료되었다는 의미
