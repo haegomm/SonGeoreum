@@ -210,7 +210,7 @@ public class UserController {
                 .map(Cookie::getValue)
                 .orElse(null);
 
-        log.debug("refresh token : {}", refreshToken);
+        log.debug("쿠키에 담긴 refresh token : {}", refreshToken);
 
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
