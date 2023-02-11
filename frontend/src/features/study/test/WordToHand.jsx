@@ -8,6 +8,7 @@ import "./HandToWord.scss";
 import "../../../common/card/TestScreen.scss";
 
 export default function WordToHand({ categoryNum, finishTest }) {
+  const num = categoryNum;
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
   const [number, setNumber] = useState(0); // 현재 문제 번호
   const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
@@ -36,7 +37,7 @@ export default function WordToHand({ categoryNum, finishTest }) {
       setShowCorrect(true);
       const nowScore = score + 1;
       setScore(nowScore);
-      setTimeout(correct, 2000, num);
+      correct(num);
     } else {
       console.log("틀렸습니다", num);
       setShowAnswer(true);
@@ -46,13 +47,20 @@ export default function WordToHand({ categoryNum, finishTest }) {
     }
   };
 
-  const startCorrect = () => {
-    const num = number + 1;
-    console.log("정답입니다", num);
-    setShowAnswer(true);
-    setShowCorrect(true);
-    const nowScore = score + 1;
-    setScore(nowScore);
+  const startCorrect = (word) => {
+    console.log("나와라", showAnswer);
+    console.log(" 상태", document.getElementById("next"));
+    if (
+      document.getElementById("next") === null &&
+      word === document.getElementById("topcard").innerText
+    ) {
+      document.getElementById("next");
+      const num = number + 1;
+      console.log("정답입니다", num);
+      setShowCorrect(true);
+      setShowAnswer(true);
+      setScore((number) => number + 1);
+    }
     // setTimeout(correct, 2000, num);
   };
 
@@ -102,19 +110,11 @@ export default function WordToHand({ categoryNum, finishTest }) {
             src={testList[number].contentUrl}
             referrerPolicy="no-referrer"
           />
-          <button className="green" onClick={() => next(number + 1)}>
+          <button id="next" className="green" onClick={() => next(number + 1)}>
             다음 문제
           </button>
         </div>
-      ) : (
-        <div className="flexBox">
-          <MotionTest
-            word={testList[number].name}
-            categoryNum={categoryNum}
-            startCorrect={startCorrect}
-          />
-        </div>
-      )
+      ) : null
     ) : null;
 
   const correctCircle = showCorrect ? null : null; // 이부분에 정답 효과를 넣습니다.
@@ -143,6 +143,13 @@ export default function WordToHand({ categoryNum, finishTest }) {
               {guide}
               {/* 타이머 넣고 싶어요 */}
               <div className="canvasText">3초 후 카메라가 나옵니다</div>
+              <div className="flexBox">
+                <MotionTest
+                  // word={testList[number].name}
+                  categoryNum={num}
+                  startCorrect={startCorrect}
+                />
+              </div>
               {showAnswerWord}
             </div>
           </div>
