@@ -32,12 +32,12 @@ const Loading = (props) => {
   }, []);
 
   const roomOut = async () => {
+    // props.leaveSession();
     try {
       const response = await axios.post("/api/game/session/user", {
         sessionId: sessionId,
       });
       console.log("나갈게~ >>", sessionId);
-      props.leaveSession();
       navigate("/");
       console.log(response.data);
       return response.data;

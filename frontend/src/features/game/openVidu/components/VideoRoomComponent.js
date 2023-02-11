@@ -1,4 +1,3 @@
-// import axios from "axios";
 import axios from "../../../../common/api/https";
 import { OpenVidu } from "openvidu-browser";
 import React, { Component, useLocalStorage } from "react";
@@ -99,7 +98,7 @@ class VideoRoomComponent extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
     window.removeEventListener("resize", this.updateLayout);
     window.removeEventListener("resize", this.checkSize);
-    clearTimeout(this.timer); // 타이머 종료
+    // clearTimeout(this.timer); // 타이머 종료
     this.leaveSession();
   }
 
@@ -300,9 +299,9 @@ class VideoRoomComponent extends Component {
 
     mySession.disconnect();
 
-    // if (mySession) {
-    //   mySession.disconnect();
-    // }
+    if (mySession) {
+      mySession.disconnect();
+    }
 
     if (this.state.playGame || this.state.goGame) {
       try {
@@ -334,7 +333,7 @@ class VideoRoomComponent extends Component {
     this.setState({
       session: undefined,
       subscribers: [],
-      mySessionId: "여기있어요",
+      mySessionId: "",
       myUserName: "OpenVidu_User" + Math.floor(Math.random() * 100),
       localUser: undefined,
     });
