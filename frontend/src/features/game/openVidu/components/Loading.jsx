@@ -37,6 +37,7 @@ const Loading = (props) => {
         sessionId: sessionId,
       });
       console.log("나갈게~ >>", sessionId);
+      props.leaveSession();
       navigate("/");
       console.log(response.data);
       return response.data;

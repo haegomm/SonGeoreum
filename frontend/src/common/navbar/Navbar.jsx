@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Route,
   Outlet,
@@ -18,12 +18,10 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
-import NavbarSide from './NavbarSide'
-import authAction from '../api/authAction';
-
+import NavbarSide from "./NavbarSide";
+import authAction from "../api/authAction";
 
 export default function Navbar() {
-
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
@@ -67,9 +65,8 @@ export default function Navbar() {
     menuWeight: 500,
     // iconButton
     iconButtonMargin: 24,
-
   };
-  
+
   return (
     <div>
       <div
