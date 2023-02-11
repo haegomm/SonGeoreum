@@ -48,7 +48,6 @@ const Loading = (props) => {
 
   return (
     <div id="LoadingBox">
-      <h1>로딩화면 테스트</h1>
       <button onClick={() => roomOut()}>나가기버튼</button>
       <div>
         <SpinnerCircular
@@ -59,9 +58,15 @@ const Loading = (props) => {
           secondaryColor="rgba(57, 78, 172, 0.22)"
         />
       </div>
-      <div>곧 게임이 시작됩니다.</div>
-      <div>4 명 중 {subscribers.length + 1} 명이 모였습니다.</div>
-      <div>{tips[tipNumber]}</div>
+      <div className="loadingTitleBox">
+        <h2>곧 게임이 시작됩니다.</h2>
+      </div>
+      <div className="waitingListBox">
+        <h1>4 명 중 {subscribers.length + 1} 명이 모였습니다.</h1>
+      </div>
+      <div className="tipBox">
+        <h4>{tips[tipNumber]}</h4>
+      </div>
     </div>
   );
 };
