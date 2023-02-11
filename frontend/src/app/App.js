@@ -49,7 +49,7 @@ function App() {
     })}
 
   useEffect(() => {
-    const tokenIssue = setInterval(() => reissueToken(), 1200000);
+    const tokenIssue = setInterval(() => reissueToken(), 300000);
   }, [])
   
   const access = getUserInfo().accessToken;
