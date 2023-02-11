@@ -92,17 +92,6 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
-    this.state.session.on("signal:play-game", (event) => {
-      console.log("오케이 가보자고");
-      console.log(event.data);
-      console.log(event.from);
-      const data = JSON.parse(event.data);
-      console.log(data);
-      this.setState({
-        goGame: data.playGame,
-        playerList: data.playerList,
-      });
-    });
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
@@ -492,6 +481,17 @@ class VideoRoomComponent extends Component {
           });
       }
     }
+    this.state.session.on("signal:play-game", (event) => {
+      console.log("오케이 가보자고");
+      console.log(event.data);
+      console.log(event.from);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      this.setState({
+        goGame: data.playGame,
+        playerList: data.playerList,
+      });
+    });
   }
 
   updateLayout() {
