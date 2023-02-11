@@ -19,21 +19,41 @@ import MyVoca from "../features/voca/MyVoca";
 
 import PrivateRoute from "../common/routes/PrivateRoute";
 import { getUserInfo } from "../common/api/authInfo";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
   // ThemeProvider로 기본 테마를 적용합니다.
   // CssBaseline로 theme를 전처리해줍니다
   // 현재 보여지는 페이지에 따라 nav 크기를 조절해줍니다.
-  useEffect(() => {
-    const reissueToken = async () => {
-      await (userAction.issueAccessToken())
-      .then((res) => {
-        console.log('토큰 받아볼게', res)
-      })
-    }
-    reissueToken()}, [])
+  // useEffect(() => {
+  //   const reissueToken = async () => {
+  //     await (userAction.issueAccessToken())
+  //     .then((res) => {
+  //       console.log('토큰 받아볼게', res)
+  //     })
+  //   }
+  //   reissueToken()}, [])
   
-  const access = getUserInfo().userId;
+  // const access = getUserInfo().userId;
+  // return (
+
+    function reissueToken() {dispatch(userAction.issueAccessToken()).then((response) => {
+      console.log('토큰 재발급시도', response)
+      if (response.payload.message === 'success') {
+        console.log('토큰재발급 성공!')
+        window.localStorage.setItem('accessToken', response.payload.accessToken)
+      } else{
+        console.log('토큰재발급 실패ㅜㅜ')
+      }
+    })}
+
+  useEffect(() => {
+    const tokenIssue = setInterval(() => reissueToken(), 1200000);
+  }, [])
+  
+  const access = getUserInfo().accessToken;
+
   return (
     <div className="App">
       <Reset />

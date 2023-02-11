@@ -21,7 +21,7 @@ function enquireProfile(data) {
 }
 
 function issueAccessToken() {
-  const request = axios.put('/api/user/refresh').then((response) => response.data)
+  const request = axios.get('/api/user/refresh').then((response) => response.data)
   .catch((err) => err)
   return {
     type: ISSUEACCESSTOKEN,
