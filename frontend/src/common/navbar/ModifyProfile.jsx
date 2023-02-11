@@ -52,6 +52,8 @@ function ModifyProfile() {
     dispatch(userAction.modifyprofile(body)).then((response) => {
       if (response.payload === 'success') {
         alert('프로필 수정 성공~');
+        window.localStorage.setItem('nickname', Nickname)
+        window.localStorage.setItem('picture', profileImageUrl)
       } else{
         alert('수정 실패ㅠ~');
       }

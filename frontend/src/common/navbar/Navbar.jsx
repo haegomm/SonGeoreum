@@ -125,20 +125,20 @@ export default function Navbar() {
             ))}
             <NavbarSide />
             <MenuItem>
-              <Typography
-                textAlign="center"
-                fontSize={sizeList.menu}
-                fontWeight={sizeList.menuWeight}
-                component={Link} // anchor
-                to={"/login"} // 이동하는 링크입니다
-                style={{
-                  textDecoration: "none",
-                  color: "white",
-                }}
-              >
-                로그인
-              </Typography>
-            </MenuItem>
+                <Typography
+                  textAlign="center"
+                  fontSize={sizeList.menu}
+                  fontWeight={sizeList.menuWeight}
+                  component={Link} // anchor
+                  to={"/login"} // 이동하는 링크입니다
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
+                  }}
+                >
+                  로그인
+                </Typography>
+              </MenuItem>
 
             {/* 나중에 아래 주석 풀기 : 로그인 상태에 따라 로그인 버튼과 프로필 버튼 다르게 */}
             {/* {authAction.isLogin() ? (
@@ -160,6 +160,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             )} */}
+
           </Toolbar>
         </AppBar>
       </Box>
