@@ -299,9 +299,9 @@ class VideoRoomComponent extends Component {
 
     mySession.disconnect();
 
-    if (mySession) {
-      mySession.disconnect();
-    }
+    // if (mySession) {
+    //   mySession.disconnect();
+    // }
 
     if (this.state.playGame || this.state.goGame) {
       try {
