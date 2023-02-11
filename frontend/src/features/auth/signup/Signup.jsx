@@ -19,16 +19,16 @@ function Signup(props) {
   const [emailError, setEmailError] = useState('')
   const [emailFormError, setEmailFormError] = useState('')
   const [nicknameError, setNicknameError] = useState('')
+  const [nicknameFormError, setNicknameFormError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
   const onEmailHandler = (e) => {
-    setEmail(e.currentTarget.value);
-    console.log('중복체크', authValidation(e.currentTarget.value, 'email') === false)
-    console.log('공백체크', Email !== '')
-    authValidation(e.currentTarget.value, 'email') === false && Email !== ''? setEmailFormError('') : setEmailFormError('올바르지 않은 이메일 형식입니다')
-    dispatch(authAction.checkEmail(e.currentTarget.value)).then((response) => {
-      if (response.payload === 'success' && Email !== '') {
+    const currentEmail = e.currentTarget.value
+    setEmail(currentEmail);
+    authValidation(currentEmail, 'email') ? setEmailFormError('') : setEmailFormError('올바르지 않은 이메일 형식입니다')
+    dispatch(authAction.checkEmail(currentEmail)).then((response) => {
+      if (response.payload === 'success' || currentEmail === '') {
         setEmailError('')
       } else{
         setEmailError('이미 가입한 이메일입니다');
@@ -37,19 +37,22 @@ function Signup(props) {
   };
 
   const onNicknameHandler = (e) => {
-    setNickname(e.currentTarget.value)
-    authValidation(e.currentTarget.value, 'nickname') && Nickname !== '' ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
-    dispatch(authAction.checkNickname(e.currentTarget.value)).then((response) => {
-      if (response.payload !== 'success') {
-        setNicknameError('중복 닉네임이 존재합니다')
-      } else{
+    const currentNickname = e.currentTarget.value
+    setNickname(currentNickname)
+    authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
+    dispatch(authAction.checkNickname(currentNickname)).then((response) => {
+      if (response.payload === 'success' || currentNickname === '') {
         setNicknameError('');
+      } else{
+        setNicknameError('중복 닉네임이 존재합니다')
       }
     });
   };
+
   const onPasswordHandler = (e) => {
     setPassword(e.currentTarget.value);
-    authValidation(e.currentTarget.value, 'password') ? setPasswordError('') : setPasswordError('8자 이상 20자 이하의 문자열을 입력해주세요')
+    console.log('비밀번호 유효성', authValidation(e.currentTarget.value, 'password'))
+    authValidation(e.currentTarget.value, 'password') ? setPasswordError('') : setPasswordError('8자 이상 20자 이하의 비밀번호를 입력해주세요')
   };
   const onConfirmPasswordHandler = (e) => {
     setConfirmPassword(e.currentTarget.value);
@@ -96,6 +99,7 @@ function Signup(props) {
           <span>닉네임</span>
           <input type="text" onBlur={onNicknameHandler} />
           <span>{nicknameError}</span>
+          <span>{nicknameFormError}</span>
           <br />
           <span>비밀번호</span>
           <input type="password" value={Password} onChange={onPasswordHandler} />
