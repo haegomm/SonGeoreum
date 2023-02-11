@@ -196,9 +196,9 @@ export default function WordLarge({ isLogin, categoryNum }) {
     setStarList(list);
   };
 
-  const starDelete = (id) => {
+  const starDelete = (num, id) => {
     console.log("즐겨찾기 해제 >> ", id);
-    setStar(true);
+    setStar(false);
     async function deleteStar() {
       const data = await axios.delete(`/api/favorites`, {
         wordId: id,
@@ -206,13 +206,16 @@ export default function WordLarge({ isLogin, categoryNum }) {
       console.log(data);
     }
     deleteStar();
+    const list = starList;
+    list[num] = false;
+    setStarList(list);
   };
 
   const isStar = star ? (
     <StarIcon
       color="yellow"
       sx={{ fontSize: 45 }}
-      onClick={() => starDelete(wordNumber + startNumber)}
+      onClick={() => starDelete(wordNumber, wordNumber + startNumber)}
     />
   ) : (
     <StarIcon
