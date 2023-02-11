@@ -44,13 +44,13 @@ public class AuthService {
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENTID}")
     private String KAKAO_CLIENT_ID;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENTSECRET}")
     private String KAKAO_CLIENT_SECRET;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_REDIRECTURI}")
     private String KAKAO_REDIRECT_URI;
 
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
@@ -58,6 +58,7 @@ public class AuthService {
 
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
     private String KAKO_USER_INFO_URI;
+
 
     private final UserRepository userRepository;
     private final AuthTokenProvider tokenProvider;
@@ -78,6 +79,7 @@ public class AuthService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=" + KAKAO_CLIENT_ID);
+            sb.append("&client_secret=" + KAKAO_CLIENT_SECRET);
             sb.append("&redirect_uri=" + KAKAO_REDIRECT_URI);
             sb.append("&code=" + code);
 
