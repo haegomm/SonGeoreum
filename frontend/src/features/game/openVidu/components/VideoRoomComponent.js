@@ -92,6 +92,17 @@ class VideoRoomComponent extends Component {
 
     this.joinSession();
 
+    this.state.session.on("signal:play-game", (event) => {
+      console.log("오케이 가보자고");
+      console.log(event.data);
+      console.log(event.from);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      this.setState({
+        goGame: data.playGame,
+        playerList: data.playerList,
+      });
+    });
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
   }
 
@@ -456,16 +467,20 @@ class VideoRoomComponent extends Component {
     });
     // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
     if (this.state.goGame === false) {
-      console.log("시그널1");
+      console.log("시그널 조건1 통과");
       if (this.state.playGame === true) {
-        console.log("시그널2");
+        console.log("시그널 조건2 통과");
+        const data = {
+          playGame: this.state.playGame,
+          playerList: this.state.playerlist,
+        };
         this.state.session
           .signal({
             // data: {
             //   playGame: this.state.playGame,
             //   playerList: this.state.playerList,
             // }, // 문자열로 보내짐 // json.parse() 해주기
-            data: "얘들아 게임 시작한다~~!",
+            data: JSON.stringify(data),
             to: [],
             type: "play-game",
           })
@@ -475,18 +490,6 @@ class VideoRoomComponent extends Component {
           .catch((error) => {
             console.error(error);
           });
-      } else if (this.state.subscribers > 2) {
-        this.state.session.on("signal:play-game", (event) => {
-          console.log("오케이 가보자고");
-          console.log(event.data);
-          console.log(event.from);
-          const data = JSON.parse(event.data);
-          console.log(data); // 했음
-          // this.setState({
-          //   goGame: data.playGame,
-          //   playerList: data.playerList,
-          // });
-        });
       }
     }
   }
@@ -703,6 +706,7 @@ class VideoRoomComponent extends Component {
         <Loading
           subscribers={this.state.subscribers}
           sessionId={this.state.sessionId}
+          leaveSession={this.leaveSession}
         />
       );
     } else {
@@ -766,7 +770,7 @@ class VideoRoomComponent extends Component {
                     messageReceived={this.checkNotification}
                     playerList={this.state.playerlist}
                     myNickname={this.state.myUserName}
-                    theEndGame={this.theEndGame}
+                    leaveSession={this.leaveSession}
                   />
                 </div>
               )}
