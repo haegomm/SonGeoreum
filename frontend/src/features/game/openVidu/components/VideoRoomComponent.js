@@ -25,7 +25,7 @@ class VideoRoomComponent extends Component {
     let sessionName = this.props.sessionName
       ? this.props.sessionName
       : "SonGeoreum";
-    let userName = localStorage.getItem("nickname");
+    let userName = window.localStorage.getItem("nickname");
     console.log(this.props.user);
     this.remotes = [];
     this.localUserAccessAllowed = false;
@@ -425,6 +425,7 @@ class VideoRoomComponent extends Component {
   }
 
   subscribeToUserChanged() {
+    console.log("시작해?", this.state.playGame);
     this.state.session.on("signal:userChanged", (event) => {
       let remoteUsers = this.state.subscribers;
       remoteUsers.forEach((user) => {
@@ -444,36 +445,38 @@ class VideoRoomComponent extends Component {
             user.setScreenShareActive(data.isScreenShareActive);
           }
           // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-          if (this.state.goGame === false) {
-            if (this.state.subscribers > 2 && this.state.playGame === true) {
-              this.state.session
-                .signal({
-                  data: {
-                    playGame: this.state.playGame,
-                    playerList: this.state.playerList,
-                  }, // 문자열로 보내짐 // json.parse() 해주기
-                  to: [],
-                  type: "play-game",
-                })
-                .then(() => {
-                  console.log("얘들아 게임 시작한다~~!");
-                })
-                .catch((error) => {
-                  console.error();
-                });
-            } else if (this.state.subscribers > 2) {
-              this.state.session.on("signal:play-game", (event) => {
-                console.log("오케이 가보자고");
-                console.log(event.data);
-                console.log(event.from);
-                const data = JSON.parse(event.data); // 했음
-                this.setState({
-                  goGame: data.playGame,
-                  playerList: data.playerList,
-                });
-              });
-            }
-          }
+          // if (this.state.goGame === false) {
+          //   console.log("시그널1");
+          //   if (this.state.playGame === true) {
+          //     console.log("시그널2");
+          //     this.state.session
+          //       .signal({
+          //         data: {
+          //           playGame: this.state.playGame,
+          //           playerList: this.state.playerList,
+          //         }, // 문자열로 보내짐 // json.parse() 해주기
+          //         to: [],
+          //         type: "play-game",
+          //       })
+          //       .then(() => {
+          //         console.log("얘들아 게임 시작한다~~!");
+          //       })
+          //       .catch((error) => {
+          //         console.error();
+          //       });
+          //   } else if (this.state.subscribers > 2) {
+          //     this.state.session.on("signal:play-game", (event) => {
+          //       console.log("오케이 가보자고");
+          //       console.log(event.data);
+          //       console.log(event.from);
+          //       const data = JSON.parse(event.data); // 했음
+          //       this.setState({
+          //         goGame: data.playGame,
+          //         playerList: data.playerList,
+          //       });
+          //     });
+          //   }
+          // }
         }
       });
       this.setState(
@@ -801,15 +804,19 @@ class VideoRoomComponent extends Component {
   }
 
   async createToken(sessionData) {
-    this.setState({
-      message: sessionData.message,
-      playGame: sessionData.playGame,
-      playerList: sessionData.playerList,
-      sessionId: sessionData.sessionId,
-      token: sessionData.token,
-    });
-
+    const message = sessionData.message;
+    const playGame = sessionData.playGame;
+    const playerList = sessionData.playerList;
+    const sessionId = sessionData.sessionId;
     const token = sessionData.token;
+
+    this.setState({
+      message: message,
+      playGame: playGame,
+      playerList: playerList,
+      sessionId: sessionId,
+      token: token,
+    });
 
     // const tokenData = token.split("=");
     // console.log(tokenData);

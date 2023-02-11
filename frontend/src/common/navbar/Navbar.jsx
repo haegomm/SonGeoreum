@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Route,
   Outlet,
@@ -18,12 +18,10 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
-import NavbarSide from './NavbarSide'
-import authAction from '../api/authAction';
-
+import NavbarSide from "./NavbarSide";
+import authAction from "../api/authAction";
 
 export default function Navbar() {
-
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
@@ -67,9 +65,8 @@ export default function Navbar() {
     menuWeight: 500,
     // iconButton
     iconButtonMargin: 24,
-
   };
-  
+
   return (
     <div>
       <div
@@ -126,25 +123,25 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            {/* <NavbarSide />
+            <NavbarSide />
             <MenuItem>
-                <Typography
-                  textAlign="center"
-                  fontSize={sizeList.menu}
-                  fontWeight={sizeList.menuWeight}
-                  component={Link} // anchor
-                  to={"/login"} // 이동하는 링크입니다
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                  }}
-                >
-                  로그인
-                </Typography>
-              </MenuItem> */}
+              <Typography
+                textAlign="center"
+                fontSize={sizeList.menu}
+                fontWeight={sizeList.menuWeight}
+                component={Link} // anchor
+                to={"/login"} // 이동하는 링크입니다
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                }}
+              >
+                로그인
+              </Typography>
+            </MenuItem>
 
             {/* 나중에 아래 주석 풀기 : 로그인 상태에 따라 로그인 버튼과 프로필 버튼 다르게 */}
-            {authAction.isLogin() ? (
+            {/* {authAction.isLogin() ? (
               <NavbarSide />
             ) : (
               <MenuItem>
@@ -162,8 +159,7 @@ export default function Navbar() {
                   로그인
                 </Typography>
               </MenuItem>
-            )}
-
+            )} */}
           </Toolbar>
         </AppBar>
       </Box>
