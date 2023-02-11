@@ -26,6 +26,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
   const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
   const [endNumber, setEndNumber] = useState(); // 현재 단어 번호
   const [wordList, setWordList] = useState(); // 단어 목록
+  const [starList, setStarList] = useState(); // 즐겨찾기 단어 목록
   const [blockListMode, setBlockListMode] = useState(false); // 작은 단어장 리스트
 
   useEffect(() => {
@@ -33,16 +34,36 @@ export default function WordLarge({ isLogin, categoryNum }) {
       const data = await axios.get(`/api/words?categoryId=${categoryNum}`);
       setWordList(() => data.data);
       console.log(data.data);
-      const num = data.data[0].id;
       setWordNumber(() => 0);
       setStartNumber(() => data.data[0].id);
       setEndNumber(data.data.length - 1);
       if (isLogin) {
         async function getStar() {
-          const data = await axios.get(`/api/favorites/word/${num}`);
-          console.log("즐겨찾기 확인해보자 >> ", data.data.message);
-          const isStar = data.data.message;
-          if (isStar === "success") setStar(() => true);
+          const favorites = await axios.get(`/api/favorites`);
+          console.log("즐겨찾기 확인해보자 >> ", favorites.data);
+          if (favorites.data) {
+            let list = [];
+            for (let i = 0; i < favorites.data.length; i++) {
+              // console.log(favorites.data[i].categoryId);
+              if (favorites.data[i].categoryId == categoryNum) {
+                list.push(favorites.data[i]);
+              }
+            }
+            console.log(list);
+
+            let favoritesList = [];
+            for (let i = 0; i < data.data.length; i++) {
+              let status = false;
+              for (let j = 0; j < favorites.data.length; j++) {
+                if (data.data[i].id === favorites.data[j].id) status = true;
+              }
+              favoritesList.push(status);
+            }
+            console.log(favoritesList);
+            setStarList(favoritesList);
+
+            if (favoritesList[0] === true) setStar(true);
+          }
         }
         getStar();
       }
@@ -51,16 +72,19 @@ export default function WordLarge({ isLogin, categoryNum }) {
   }, []);
 
   const starInfo = (num) => {
-    console.log("즐겨찾기를 확인?");
+    // console.log("즐겨찾기를 확인?");
     if (isLogin && wordList) {
-      async function getStar() {
-        const data = await axios.get(`/api/favorites/word/${num}`);
-        console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
-        const isStar = data.data.message;
-        if (isStar === "success") setStar(() => true);
-        else setStar(() => false);
-      }
-      getStar();
+      // async function getStar() {
+      //   const data = await axios.get(`/api/favorites/word/${num}`);
+      //   console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
+      //   const isStar = data.data.message;
+      //   if (isStar === "success") setStar(() => true);
+      //   else setStar(() => false);
+      // }
+      // getStar();
+      // console.log(starList[num]);
+      if (starList[num] === true) setStar(() => true);
+      else setStar(() => false);
     }
   };
 
@@ -79,21 +103,22 @@ export default function WordLarge({ isLogin, categoryNum }) {
   const handleListItemClick = (index) => {
     console.log("index 확인중..", index);
     setWordNumber(index);
+    starInfo(index);
     console.log(wordNumber);
   };
 
   const numberPlus = () => {
     const num = wordNumber;
     setWordNumber(num + 1);
-    console.log(wordNumber);
-    starInfo(wordList[wordNumber + 1].id);
+    console.log(num + 1);
+    starInfo(num + 1);
   };
 
   const numberMinus = () => {
     const num = wordNumber;
     setWordNumber(num - 1);
-    console.log(wordNumber);
-    starInfo(wordList[wordNumber - 1].id);
+    console.log(num - 1);
+    starInfo(num - 1);
   };
 
   const up =
@@ -156,7 +181,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
       </div>
     );
 
-  const starPost = (id) => {
+  const starPost = (num, id) => {
     console.log("즐겨찾기 >> ", id);
     setStar(true);
     async function postStar() {
@@ -166,6 +191,9 @@ export default function WordLarge({ isLogin, categoryNum }) {
       console.log(data);
     }
     postStar();
+    const list = starList;
+    list[num] = true;
+    setStarList(list);
   };
 
   const starDelete = (id) => {
@@ -190,7 +218,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
     <StarIcon
       color="disabled"
       sx={{ fontSize: 45 }}
-      onClick={() => starPost(wordNumber + startNumber)}
+      onClick={() => starPost(wordNumber, wordNumber + startNumber)}
     />
   );
 
@@ -215,6 +243,36 @@ export default function WordLarge({ isLogin, categoryNum }) {
       setWordNumber(0);
       setStartNumber(data.data[0].id);
       setEndNumber(data.data.length - 1);
+      if (isLogin) {
+        async function getStar() {
+          const favorites = await axios.get(`/api/favorites`);
+          console.log("즐겨찾기 확인해보자 >> ", favorites.data);
+          if (favorites.data) {
+            let list = [];
+            for (let i = 0; i < favorites.data.length; i++) {
+              // console.log(favorites.data[i].categoryId);
+              if (favorites.data[i].categoryId == categoryNum) {
+                list.push(favorites.data[i]);
+              }
+            }
+            console.log(list);
+
+            let favoritesList = [];
+            for (let i = 0; i < data.data.length; i++) {
+              let status = false;
+              for (let j = 0; j < favorites.data.length; j++) {
+                if (data.data[i].id === favorites.data[j].id) status = true;
+              }
+              favoritesList.push(status);
+            }
+            console.log(favoritesList);
+            setStarList(favoritesList);
+
+            if (favoritesList[0] === true) setStar(true);
+          }
+        }
+        getStar();
+      }
     }
     shuffleInfo();
   };
@@ -244,7 +302,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
               <WordSmall
                 key={word.id}
                 text={word.name}
-                star={true}
+                star={starList[index]}
                 isLogin={isLogin}
                 index={index}
                 handleListItemClick={handleListItemClick}
