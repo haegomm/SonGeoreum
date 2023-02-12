@@ -49,7 +49,7 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public void insertUser(InsertUserReq insertUserReq) {
+    public void insertUser(InsertUserReq insertUserReq) throws DuplicateException {
 
         LocalDateTime createDate = LocalDateTime.now();
 

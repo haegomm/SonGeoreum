@@ -96,11 +96,14 @@ public class UserController {
     // 회원가입
     @ApiOperation(value = "회원가입") // 해당 Api의 설명
     @PostMapping("/signup")
-    public ResponseEntity<String> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) {
+    public ResponseEntity<SuccessRes> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) throws DuplicateException {
 
-        log.debug("회원가입 정보 = {} ", insertUserReq);
+        log.debug("회원가입 정보 = {} ", insertUserReq.toString());
+
         userService.insertUser(insertUserReq);
-        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, HttpStatus.OK);
     }
 
     // 로그인
