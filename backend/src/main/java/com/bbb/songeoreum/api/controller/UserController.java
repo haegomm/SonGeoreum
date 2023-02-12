@@ -50,6 +50,7 @@ public class UserController {
 
     /**
      * 카카오 로그인을 진행합니다.
+     *
      * @param code 카카오에게 받은 인가 코드
      * @return 성공 시 DB에 저장된 kakao user 정보를 {@code ResponseEntity} 로 반환합니다.
      * @throws NotFoundException
@@ -70,6 +71,7 @@ public class UserController {
 
     /**
      * 이메일 중복체크
+     *
      * @param email 중복체크 요청한 이메일
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws DuplicateException
@@ -91,6 +93,7 @@ public class UserController {
 
     /**
      * 닉네임 중복체크
+     *
      * @param nickname 중복체크 요청한 닉네임
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws DuplicateException
@@ -111,6 +114,7 @@ public class UserController {
 
     /**
      * 회원 가입
+     *
      * @param insertUserReq 회원 가입 form에 사용자가 입력한 정보
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws DuplicateException
@@ -129,7 +133,8 @@ public class UserController {
 
     /**
      * 로그인
-     * @param loginReq 로그인을 요청한 사용자의 이메일, 비밀번호
+     *
+     * @param loginReq            로그인을 요청한 사용자의 이메일, 비밀번호
      * @param httpServletRequest
      * @param httpServletResponse
      * @return 로그인 한 사용자의 정보 중 상시 화면에 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다
@@ -197,6 +202,7 @@ public class UserController {
 
     /**
      * 로그아웃
+     *
      * @param httpServletRequest
      * @param httpServletResponse
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
@@ -219,6 +225,7 @@ public class UserController {
 
     /**
      * Access Token 재발급
+     *
      * @param httpServletRequest
      * @return 재발급 된 access token을 {@code ResponseEntity}로 반환합니다
      * @throws UnAuthorizedException
@@ -263,6 +270,7 @@ public class UserController {
 
     /**
      * 회원 정보 조회 - 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줍니다.
+     *
      * @param httpServletRequest
      * @return 해당 메서드를 호출한 사용자의 정보를 {@code ResponseEntity}로 반환합니다
      */
@@ -278,7 +286,8 @@ public class UserController {
 
     /**
      * 프로필 수정
-     * @param updateUserReq 수정할 닉네임, 프로필 사진
+     *
+     * @param updateUserReq      수정할 닉네임, 프로필 사진
      * @param httpServletRequest
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws NotFoundException
@@ -300,7 +309,8 @@ public class UserController {
 
     /**
      * 게임, 테스트 결과 경험치 반영
-     * @param experience 게임, 테스트에서 획득한 경험치
+     *
+     * @param experience         게임, 테스트에서 획득한 경험치
      * @param httpServletRequest
      * @return 획득한 경험치를 사용자 정보에 업데이트 한 레벨, 경험치를 {@code ResponseEntity}로 반환합니다
      */
@@ -315,7 +325,12 @@ public class UserController {
 
     }
 
-    // 실시간 랭킹 조회
+    /**
+     * 실시간 랭킹 조회
+     *
+     * @return 경험치를 기준으로 상위 10명의 리스트를 담은 {@code ResponseEntity}를 반환합니다
+     * @throws NotFoundException
+     */
     @ApiOperation(value = "실시간 랭킹 조회")
     @GetMapping("/ranking")
     public ResponseEntity<List<GetTopTenUserRes>> getTopTenUser() throws NotFoundException {
