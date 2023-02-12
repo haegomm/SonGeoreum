@@ -86,7 +86,7 @@ public class User implements Serializable {
         this.userType = userType;
         this.kakaoId = kakaoId;
         this.nickname = nickname;
-        this.picture = "default.jpg";
+        this.picture = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAJcSURBVHhe7dyxbdtAGIZhOrNIKgxPcJwgcZNKI5Bl3LhLmQHI1iOkShNyA00QuMhxF+Ukni3aSCR9Te4r3qcRDbMQXpDn/0jAN/v9vsJ1PuRPXIFYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiseaxr5v67q+Oanrth+nKZ/gZF9MHLom5G/xV6EZYj7XQ7lYQ5ObnNUM+XQHxW/D0HRDXFxAMcahCa9X3NOnuve5IfN3/P/STXjmLovd6Q61uboKrlkXnHKFzmTp8h0dVvfbXGv3HOeD0oznrNXmLh+5MI41/f41H4Tb9XxQmnGs+LybD+42q/mgNN9Y44+n42foHj8eDwzkhd7LYdTK389pKrWKlQbSN3sgt/1O4VjL2fON42CfT7JhuWaFptl+3qxNlvWFHK2Qf15ZM7P70GyBPyxa757cpGD5l8V5/jVMHHfStrESu6208QRfrb58zQ8Id99/OjzUco5VVevbfG15PHjwjmXGO9brXtrjwYNzrKn/Nu+lq7C9d5hQy8Sa+rYdzy/Z09iuH16uK49WhSb4l6EgzO92lnPBu710YvMIvtCcdWGXs+BTKik1lMYLb6OTdNU5bQyTohP8fMed3qgepB8bx8czB/yzMQFDqYBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYAmIJiCUgloBYV6uqPxD1g8MwVDLXAAAAAElFTkSuQmCC";
         this.level = 1;
         this.experience = 0;
         this.createdDate = createdDate;
