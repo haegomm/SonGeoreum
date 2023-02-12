@@ -1,5 +1,5 @@
 import axios from "../../../../common/api/https";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
 
@@ -9,7 +9,7 @@ const Loading = (props) => {
   const sessionId = props.sessionId;
   const subscribers = props.subscribers;
 
-  let tipNumber = 0;
+  const [tipNumber, setTipNumber] = useState(0);
   const tips = [
     "농인들에겐 제 1의 언어가 수어입니다😊",
     "농인들 문화에는 '얼굴이름'이라는 것이 있어요😉",
@@ -21,9 +21,9 @@ const Loading = (props) => {
   useEffect(() => {
     try {
       const changeTips = setInterval(() => {
-        tipNumber = (tipNumber + 1) % tips.length;
-        // console.log(tipNumber)
-        // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다")
+        setTipNumber((tipNumber + 1) % tips.length);
+        console.log(tipNumber);
+        console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
       }, 3000);
       return () => clearInterval(changeTips);
     } catch (err) {
