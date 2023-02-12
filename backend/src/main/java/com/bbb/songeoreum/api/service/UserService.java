@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)  // 트랜잭션 안에서만 데이터 변경하게 설정
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -69,15 +69,12 @@ public class UserService {
 
         LocalDateTime createDate = LocalDateTime.now();
 
-        // password 인코딩
         String password = bCryptPasswordEncoder.encode(insertUserReq.getPassword());
 
         User user = User.builder().insertUserReq(insertUserReq).createDate(createDate).password(password).build();
 
-        // 이메일 중복 체크
         duplicateEmail(user.getEmail());
 
-        // 닉네임 중복 체크
         duplicateNickname(user.getNickname());
 
         userRepository.save(user);
@@ -137,6 +134,8 @@ public class UserService {
 
     /**
      * 프로필 수정을 요청한 정보를 DB에 저장합니다.
+     * 이때 request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록시키기 위해 한 번 더 검색합니다.
+     * 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 하지 않습니다.
      * @param updateUserReq 수정할 닉네임, 프로필 사진
      * @param id 프로필 수정할 id(user table PK)
      * @throws NotFoundException
@@ -145,13 +144,10 @@ public class UserService {
     @Transactional
     public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException, DuplicateException {
 
-        // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
         User realUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
 
-        // 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 할 필요가 없다.
         if (!updateUserReq.getNickname().equals(realUser.getNickname())) {
 
-            // 닉네임 중복 체크
             duplicateNickname(updateUserReq.getNickname());
 
         }
@@ -169,7 +165,6 @@ public class UserService {
 
         User realUser = userRepository.findById(id).get();
 
-        // 기존 경험치에 넘어온 경험치를 더해줌.
         int calculatedExperience = experience + realUser.getExperience();
 
         int level = Math.min(calculatedExperience / 10 + 1, 10);
@@ -189,10 +184,7 @@ public class UserService {
      * @throws NotFoundException
      */
     public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
-
-        List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
-
-        return list;
+        return userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
     }
 
 }
