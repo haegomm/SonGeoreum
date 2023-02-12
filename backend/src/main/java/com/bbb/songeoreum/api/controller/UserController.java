@@ -58,7 +58,7 @@ public class UserController {
      * 카카오 로그인을 진행합니다.
      *
      * @param code 카카오에게 받은 인가 코드
-     * @return 성공 시 DB에 저장된 kakao user 정보를 {@code ResponseEntity} 로 반환합니다.
+     * @return 성공 시 DB에 저장된 kakao 사용자 정보를 {@code ResponseEntity} 로 반환합니다.
      * @throws NotFoundException
      * @throws IllegalArgumentException
      */
@@ -140,7 +140,7 @@ public class UserController {
     /**
      * 로그인
      *
-     * @param loginReq            로그인을 요청한 사용자의 이메일, 비밀번호
+     * @param loginReq 로그인을 요청한 사용자의 이메일, 비밀번호
      * @param httpServletRequest
      * @param httpServletResponse
      * @return 로그인 한 사용자의 정보 중 상시 화면에 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다
@@ -292,7 +292,7 @@ public class UserController {
     /**
      * 프로필 수정
      *
-     * @param updateUserReq      수정할 닉네임, 프로필 사진
+     * @param updateUserReq 수정할 닉네임, 프로필 사진
      * @param httpServletRequest
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws NotFoundException
@@ -315,7 +315,7 @@ public class UserController {
     /**
      * 게임, 테스트 결과 경험치 반영
      *
-     * @param experience         게임, 테스트에서 획득한 경험치
+     * @param experience 게임, 테스트에서 획득한 경험치
      * @param httpServletRequest
      * @return 획득한 경험치를 사용자 정보에 업데이트 한 레벨, 경험치를 {@code ResponseEntity}로 반환합니다
      */
