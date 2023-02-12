@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { getUserInfo } from "../../../common/api/authInfo";
+
 import axios from "../../../common/api/https";
 import SelectCategory from "../SelectCategory";
 import SelectTestMode from "./SelectTestMode";
@@ -14,7 +16,7 @@ import { Grid } from "@mui/material";
 export default function Test() {
   const location = useLocation();
   const result = location.state;
-  console.log(result);
+  console.log("단어장에서 테스트로 넘어왔나요?? >>", result);
 
   const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
   const [categoryName, setCategoryName] = useState(""); // 선택한 카테고리 이름
@@ -22,6 +24,9 @@ export default function Test() {
   const [testMode, setTestMode] = useState(); // 테스트 모드
   const [testDone, setTestDone] = useState(false); // 테스트 종료 여부
   const [score, setScore] = useState(0); // 얻은 점수
+
+  const isLogin = getUserInfo().nickname;
+  console.log("로그인된 상태인가요? >>", isLogin);
 
   useEffect(() => {
     if (result) {
@@ -58,7 +63,7 @@ export default function Test() {
     console.log("finish test");
     setTestDone(true);
     setScore(score);
-    if (score > 0) {
+    if (score > 0 && isLogin) {
       console.log("점수를 입력합니다");
       async function putScore() {
         const data = await axios.put(`/api/user/game/${score}`, {
