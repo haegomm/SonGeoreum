@@ -32,11 +32,17 @@ import java.util.Map;
 
 import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
 
+/**
+ * {@code UserController}는 회원과 관련된 API를 처리하는 컨트롤러입니다.
+ *
+ * @author wjdwn03
+ * @version 1.0
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-@Api(tags = {"사용자 API"}) // Swagger에 보여줄 명칭
+@Api(tags = {"사용자 API"})
 public class UserController {
 
     private static final String SUCCESS = "success";
@@ -119,7 +125,7 @@ public class UserController {
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws DuplicateException
      */
-    @ApiOperation(value = "회원가입") // 해당 Api의 설명
+    @ApiOperation(value = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<SuccessRes> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) throws DuplicateException {
 
@@ -140,31 +146,30 @@ public class UserController {
      * @return 로그인 한 사용자의 정보 중 상시 화면에 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다
      * @throws NotFoundException
      */
-    @ApiOperation(value = "로그인") // 해당 Api의 설명
+    @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<LoginRes> loginUser(@RequestBody LoginReq loginReq, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
         HttpStatus status = null;
-        LoginRes loginRes = null; // 리턴값
+        LoginRes loginRes = null;
 
         User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
 
         Date now = new Date();
 
-        // access 토큰 발급
         AuthToken accessToken = tokenProvider.createAuthToken(
-                loginUser.getId(), // access 토큰에 user pk 저장
+                loginUser.getId(),
                 loginUser.getNickname(),
                 "ROLE_USER",
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        // refreshToken 기한
+
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
-        // refresh 토큰 발급
+
         AuthToken refreshToken = tokenProvider.createAuthToken(
                 appProperties.getAuth().getTokenSecret(),
                 new Date(now.getTime() + refreshTokenExpiry)
@@ -174,7 +179,7 @@ public class UserController {
         log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
         log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
 
-        // refresh token DB에 저장
+
         userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
         loginRes = LoginRes.builder()
@@ -186,12 +191,12 @@ public class UserController {
                 .message(SUCCESS)
                 .build();
 
-        // 쿠키 기한
+
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
-        // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
+
         CookieUtil.deleteCookie(httpServletRequest, httpServletResponse, REFRESH_TOKEN);
-        // response에 쿠키 담아줌.
+
         CookieUtil.addCookie(httpServletResponse, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
         status = HttpStatus.OK;
@@ -208,11 +213,11 @@ public class UserController {
      * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
      * @throws NotFoundException
      */
-    @ApiOperation(value = "로그아웃") // 해당 Api의 설명
+    @ApiOperation(value = "로그아웃")
     @GetMapping("/logout")
     public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
 
-        User user = (User) httpServletRequest.getAttribute("user"); // 로그아웃 요청한 user
+        User user = (User) httpServletRequest.getAttribute("user");
 
         HttpStatus status = HttpStatus.OK;
 
@@ -234,9 +239,9 @@ public class UserController {
     @GetMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest httpServletRequest)
             throws UnAuthorizedException {
-        User user = (User) httpServletRequest.getAttribute("user"); // access token 재발급 요청한 user
+        User user = (User) httpServletRequest.getAttribute("user");
 
-        // refresh token
+
         String refreshToken = CookieUtil.getCookie(httpServletRequest, REFRESH_TOKEN)
                 .map(Cookie::getValue)
                 .orElse(null);
@@ -252,9 +257,9 @@ public class UserController {
 
         Date now = new Date();
 
-        // access 토큰 발급
+
         AuthToken accessToken = tokenProvider.createAuthToken(
-                user.getId(), // access 토큰에 user pk 저장
+                user.getId(),
                 user.getNickname(),
                 "ROLE_USER",
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
@@ -274,7 +279,7 @@ public class UserController {
      * @param httpServletRequest
      * @return 해당 메서드를 호출한 사용자의 정보를 {@code ResponseEntity}로 반환합니다
      */
-    @ApiOperation(value = "회원 정보 조회") // 해당 Api의 설명
+    @ApiOperation(value = "회원 정보 조회")
     @GetMapping("/profile")
     public ResponseEntity<GetUserRes> getUser(HttpServletRequest httpServletRequest) {
         User user = (User) httpServletRequest.getAttribute("user");
