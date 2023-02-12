@@ -89,7 +89,12 @@ public class UserController {
 
     }
 
-    // 닉네임 중복체크
+    /**
+     * 닉네임 중복체크
+     * @param nickname 중복체크 요청한 닉네임
+     * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
+     * @throws DuplicateException
+     */
     @ApiOperation(value = "닉네임 중복체크")
     @GetMapping("/signup/nickname/{nickname}")
     public ResponseEntity<SuccessRes> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
