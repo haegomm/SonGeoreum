@@ -78,10 +78,16 @@ export default function Test() {
     }
   };
 
-  const finishHandTuto = () => {
-    console.log("finish hand tuto");
-    setTestDone(false);
-    setIsHandTuto((isHandTuto) => !isHandTuto);
+  const finishHandTuto = (status) => {
+    console.log(status);
+    if (status === false) {
+      console.log("테스트창으로 돌아가야함");
+      setTestMode(null);
+    } else {
+      console.log("finish hand tuto");
+      setTestDone(false);
+      setIsHandTuto((isHandTuto) => !isHandTuto);
+    }
   };
 
   const finishTextTuto = () => {
@@ -133,7 +139,7 @@ export default function Test() {
         <HandToWord
           categoryNum={categoryNum}
           isTuto={false}
-          finishTest={finishHandTuto}
+          finishTest={finishTextTuto}
         />
       )
     ) : isHandTuto ? (
@@ -146,7 +152,7 @@ export default function Test() {
       <WordToHand
         categoryNum={categoryNum}
         isTuto={false}
-        finishTest={finishTextTuto}
+        finishTest={finishHandTuto}
       />
     );
 

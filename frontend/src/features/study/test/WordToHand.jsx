@@ -90,13 +90,22 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
   };
 
   const exitTest = () => {
-    console.log("테스트를 종료합니다.");
-    setNumber(0);
-    setShowAnswer(false);
-    // setShowCorrect(false);
-    finishTest(score);
-    setCamReady(false);
-    console.log("test result >> ", score);
+    if (isTuto) {
+      console.log("테스트를 종료합니다.");
+      setNumber(0);
+      setShowAnswer(false);
+      // setShowCorrect(false);
+      finishTest(score);
+      setCamReady(false);
+      console.log("test result >> ", score);
+    } else {
+      console.log("튜토리얼 중도에 종료합니다.");
+      setNumber(0);
+      setShowAnswer(false);
+      setShowCorrect(false);
+      finishTest(false);
+      setCamReady(false);
+    }
   };
 
   const gotoTest = () => {
@@ -104,7 +113,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
     setNumber(0);
     setShowAnswer(false);
     setShowCorrect(false);
-    finishTest();
+    finishTest(true);
     async function getInfo() {
       const data = await axios.get(
         `/api/words?categoryId=${categoryNum}&isRandom=true`
@@ -121,6 +130,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
     setCamReady(() => true);
   };
 
+  const tutoText = "웹캠이 정상적으로 작동한다면 V(브이)를 표시해주세요";
   const defaultText = "제시어를 보고 수어로 표현해보세요";
   const correctText = "정답입니다";
   const showAnswerText = "정답을 확인해보세요";
@@ -130,8 +140,9 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
         ? correctText
         : showAnswerText
       : defaultText
-    : null;
+    : tutoText;
 
+  const nextButtonText = isTuto ? "다음 문제" : "START";
   const showAnswerWord =
     testList && testList.length > 0 ? (
       showAnswer ? (
@@ -142,7 +153,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
             referrerPolicy="no-referrer"
           />
           <button id="next" className="green" onClick={() => next(number + 1)}>
-            다음 문제
+            {nextButtonText}
           </button>
         </div>
       ) : null
@@ -173,10 +184,10 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
   const topCardScreen =
     isTuto && testList && testList.length > 0 && camReady ? (
       <TopCard text={testList[number].name} />
+    ) : showCorrect ? (
+      <TopCard text={"준비 완료"} color="green" />
     ) : (
-      <div className="guideText">
-        웹캠이 정상적으로 작동한다면 V(브이)를 표시해주세요
-      </div>
+      <TopCard text={"테스트 준비"} />
     );
 
   const camScreen = camReady ? motionTest : null;
