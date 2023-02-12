@@ -25,7 +25,7 @@ public class EnterRoomRes {
     @ApiModelProperty(example = "상태메시지")
     private String message;
 
-    @ApiModelProperty(example = "현재 세션에 연결되어 있는 유저 ID 리스트")
-    private List<Long> playersList;
+    @ApiModelProperty(example = "현재 세션에 연결되어 있는 유저 닉네임 리스트")
+    private List<String> playersList;
 
 }
