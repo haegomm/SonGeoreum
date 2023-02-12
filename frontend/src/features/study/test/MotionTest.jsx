@@ -29,10 +29,10 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
       /*
     Websocket Connect
   */
+      if (categoryNum === -1) categoryNum = 3;
       let url = `wss://i8b106.p.ssafy.io/ws/socket-server/${categoryNum}`;
 
       const handSocket = new WebSocket(url);
-
       let status = false;
       let count = 0;
       let word = "";

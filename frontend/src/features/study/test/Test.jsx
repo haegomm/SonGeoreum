@@ -22,11 +22,13 @@ export default function Test() {
   const [categoryName, setCategoryName] = useState(""); // 선택한 카테고리 이름
   const [categoryTestable, setCategoryTestable] = useState(true); // 선택한 카테고리 모션인식 유무
   const [testMode, setTestMode] = useState(); // 테스트 모드
+  const [isTuto, setIsTuto] = useState(); // 튜토리얼 완료 여부
   const [testDone, setTestDone] = useState(false); // 테스트 종료 여부
   const [score, setScore] = useState(0); // 얻은 점수
 
   const isLogin = getUserInfo().nickname;
   console.log("로그인된 상태인가요? >>", isLogin);
+  console.log("튜토리얼을 마쳤나요? >>", isTuto);
 
   useEffect(() => {
     if (result) {
@@ -75,6 +77,12 @@ export default function Test() {
     }
   };
 
+  const finishTuto = () => {
+    console.log("finish tuto");
+    setTestDone(false);
+    setIsTuto((isTuto) => !isTuto);
+  };
+
   const resetTestMode = () => {
     console.log("reset test mode ");
     setTestMode(null);
@@ -106,12 +114,39 @@ export default function Test() {
     />
   );
 
-  const testScreen =
+  // 튜토리얼이 완료 됐으면 원래대로 진행
+  const originTest =
     testMode && testMode === "handToWord" ? (
-      <HandToWord categoryNum={categoryNum} finishTest={finishTest} />
+      <HandToWord
+        categoryNum={categoryNum}
+        isTuto={true}
+        finishTest={finishTest}
+      />
     ) : (
-      <WordToHand categoryNum={categoryNum} finishTest={finishTest} />
+      <WordToHand
+        categoryNum={categoryNum}
+        isTuto={true}
+        finishTest={finishTest}
+      />
     );
+
+  // 튜토리얼 진행 전 -> -1을 넘겨서 튜토리얼 진행
+  const tutoTest =
+    testMode && testMode === "handToWord" ? (
+      <HandToWord
+        categoryNum={categoryNum}
+        isTuto={false}
+        finishTest={finishTuto}
+      />
+    ) : (
+      <WordToHand
+        categoryNum={categoryNum}
+        isTuto={false}
+        finishTest={finishTuto}
+      />
+    );
+
+  const testScreen = isTuto ? originTest : tutoTest;
 
   const testStart = testMode ? testScreen : testModeSelect;
   const test = testDone ? (
