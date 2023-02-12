@@ -17,10 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@code UserService}는 일반 사용자 관련 로직을 처리하는 서비스입니다.
+ *
+ * @author wjdwn03
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
