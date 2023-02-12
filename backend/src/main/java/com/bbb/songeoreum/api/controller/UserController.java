@@ -217,7 +217,12 @@ public class UserController {
         return new ResponseEntity<>(successRes, status);
     }
 
-
+    /**
+     * Access Token 재발급
+     * @param httpServletRequest
+     * @return 재발급 된 access token을 {@code ResponseEntity}로 반환합니다
+     * @throws UnAuthorizedException
+     */
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @GetMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest httpServletRequest)
