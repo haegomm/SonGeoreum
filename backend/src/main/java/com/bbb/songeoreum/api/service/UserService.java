@@ -59,7 +59,11 @@ public class UserService {
 
     }
 
-    // 회원가입
+    /**
+     * DB에 회원 정보를 저장합니다.
+     * @param insertUserReq 회원 가입 form에 사용자가 입력한 정보
+     * @throws DuplicateException
+     */
     @Transactional
     public void insertUser(InsertUserReq insertUserReq) throws DuplicateException {
 
