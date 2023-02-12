@@ -157,7 +157,7 @@ public class UserService {
         }
         realUser.updateUser(updateUserReq);
     }
-    
+
     /**
      * 게임, 테스트 결과 획득한 경험치를 DB에 저장합니다.
      * @param id 경험치를 저장할 id(user table PK)
@@ -183,7 +183,11 @@ public class UserService {
 
     }
 
-    // 실시간 랭킹 조회
+    /**
+     * 경험치를 기준으로 상위 10명의 리스트를 반환합니다.
+     * @return 상위 10명을 GetTopTenUserRes DTO로 담은 List
+     * @throws NotFoundException
+     */
     public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
 
         List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
