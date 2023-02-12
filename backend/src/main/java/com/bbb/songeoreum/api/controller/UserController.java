@@ -170,24 +170,17 @@ public class UserController {
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
     @GetMapping("/logout")
-    public ResponseEntity<LogoutRes> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
         User user = (User) request.getAttribute("user"); // 로그아웃 요청한 user
 
-        HttpStatus status = HttpStatus.ACCEPTED;
-        LogoutRes logoutRes = null; // 리턴값
+        HttpStatus status = HttpStatus.OK;
 
-        try {
-            userService.deleteRefreshToken(user.getId());
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            logoutRes = LogoutRes.builder().message(SUCCESS).build();
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            log.error("로그아웃 실패 : {}", e);
-            logoutRes = LogoutRes.builder().message(FAIL).build();
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<LogoutRes>(logoutRes, status);
+        userService.deleteRefreshToken(user.getId());
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, status);
     }
 
 

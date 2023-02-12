@@ -96,7 +96,7 @@ public class UserService {
 
     @Transactional
     public void deleteRefreshToken(Long id) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
         user.deleteRefreshToken();
     }
 
