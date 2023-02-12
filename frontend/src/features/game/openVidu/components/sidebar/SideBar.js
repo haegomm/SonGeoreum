@@ -19,23 +19,23 @@ const SideBar = (props) => {
     navigate("result", { state: result });
   };
 
-  useEffect(() => {
-    getWordList();
-  }, []);
+  // useEffect(() => {
+  //   getWordList();
+  // }, []);
 
-  const getWordList = async () => {
-    try {
-      const response = await axios.get(
-        "/api/words?isRandom=true&isTestable=false&num=12"
-      );
-      console.log("단어리스트를 가지고 왔어요", response.data);
-      setQuestionList(response.data);
-      console.log("문제들이야!!!!", questionList);
-      return response.data;
-    } catch (err) {
-      console.log("단어리스트를 못 가져왔는뎅ㅜ!!!", err);
-    }
-  };
+  // const getWordList = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "/api/words?isRandom=true&isTestable=false&num=12"
+  //     );
+  //     console.log("단어리스트를 가지고 왔어요", response.data);
+  //     setQuestionList(response.data);
+  //     console.log("문제들이야!!!!", questionList);
+  //     return response.data;
+  //   } catch (err) {
+  //     console.log("단어리스트를 못 가져왔는뎅ㅜ!!!", err);
+  //   }
+  // };
 
   const resultScore = () => {
     const result = [];

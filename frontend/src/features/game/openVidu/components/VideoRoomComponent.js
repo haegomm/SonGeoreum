@@ -43,7 +43,8 @@ class VideoRoomComponent extends Component {
       token: "", //
       playGame: false, //
       goGame: false,
-      playerlist: [], //
+      playerList: [], //
+      wordsList: [],
       subToken: undefined, // ?
     };
     // this.timer // timer component를 갖고온다면
@@ -63,6 +64,7 @@ class VideoRoomComponent extends Component {
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
     this.theEndGame = this.theEndGame.bind(this);
+    this.getWordsList = this.getWordsList.bind(this);
   }
 
   componentDidMount() {
@@ -210,41 +212,6 @@ class VideoRoomComponent extends Component {
           if (this.props.joinSession) {
             this.props.joinSession();
           }
-
-          // // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-          // if (this.state.goGame === false) {
-          //   if (this.state.subscribers > 2 && this.state.playGame === true) {
-          //     this.state.localUser
-          //       .getStreamManager()
-          //       .signal({
-          //         data: {
-          //           playGame: this.state.playGame,
-          //           playerList: this.state.playerList,
-          //         }, // 문자열로 보내짐 // json.parse() 해주기
-          //         to: [],
-          //         type: "play-game",
-          //       })
-          //       .then(() => {
-          //         console.log("얘들아 게임 시작한다~~!");
-          //       })
-          //       .catch((error) => {
-          //         console.error();
-          //       });
-          //   } else if (this.state.subscribers > 2) {
-          //     this.state.localUser
-          //       .getStreamManager()
-          //       .on("signal:play-game", (event) => {
-          //         console.log("오케이 가보자고");
-          //         console.log(event.data);
-          //         console.log(event.from);
-          //         const data = JSON.parse(event.data); // 했음
-          //         this.setState({
-          //           goGame: data.goGame,
-          //           playerList: data.playerList,
-          //         });
-          //       });
-          //   }
-          // }
         });
       });
     }
@@ -290,6 +257,18 @@ class VideoRoomComponent extends Component {
         this.updateLayout();
       }
     );
+  }
+
+  async getWordsList() {
+    try {
+      const response = await axios.get(
+        "/api/words?isRandom=true&isTestable=false&num=12"
+      );
+      console.log("단어 리스트를 갖고 왔어^^", response.data);
+      return response.data;
+    } catch (err) {
+      console.log("단어 리스트 못갖고 왔어ㅜ", err);
+    }
   }
 
   async leaveSession() {
@@ -458,9 +437,11 @@ class VideoRoomComponent extends Component {
       console.log("시그널 조건1 통과");
       if (this.state.playGame === true) {
         console.log("시그널 조건2 통과");
+        const wordsList = getWordsList();
         const data = {
           playGame: this.state.playGame,
-          playerList: this.state.playerlist,
+          playerList: this.state.playerList,
+          wordsList: wordsList,
         };
         this.state.session
           .signal({
@@ -489,12 +470,13 @@ class VideoRoomComponent extends Component {
       this.setState({
         goGame: data.playGame,
         playerList: data.playerList,
+        wordsList: data.wordsList,
       });
     });
   }
 
   updateLayout() {
-    if (!this.state.playGame || !this.state.goGame) return;
+    if (!this.state.playGame && !this.state.goGame) return;
     setTimeout(() => {
       this.layout.updateLayout();
     }, 20);
