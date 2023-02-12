@@ -298,8 +298,13 @@ public class UserController {
 
     }
 
-    // 게임 결과 경험치 반영
-    @ApiOperation(value = "게임 결과 경험치 반영")
+    /**
+     * 게임, 테스트 결과 경험치 반영
+     * @param experience 게임, 테스트에서 획득한 경험치
+     * @param httpServletRequest
+     * @return 획득한 경험치를 사용자 정보에 업데이트 한 레벨, 경험치를 {@code ResponseEntity}로 반환합니다
+     */
+    @ApiOperation(value = "게임, 테스트 결과 경험치 반영")
     @PutMapping("/game/{experience}")
     public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest httpServletRequest) {
         User user = (User) httpServletRequest.getAttribute("user");
