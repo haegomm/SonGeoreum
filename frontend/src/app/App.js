@@ -54,20 +54,20 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Navbar />}>
-              <Route index element={<Home />} />
+              {/* <Route index element={<Home />} />
               <Route path="study" element={<Study />} />
               <Route path="test" element={<Test />} />
               <Route path="*" element={<Home />} />
               <Route path="game" element={<Game />} />
               <Route path="oauth2/code/kakao" element={<KakaoLogin />} />
-              <Route path="result" element={<Result />} />
+              <Route path="result" element={<Result />} /> */}
               {/* <Route path="api/oauth2/code/kakao" element={<KakaoLogin />} /> */}
-              <Route path="login" element={<Login />} />
+              {/* <Route path="login" element={<Login />} />
               <Route path="signup" element={<Signup />} />
-              <Route path="myvoca" element={<MyVoca />} />
+              <Route path="myvoca" element={<MyVoca />} /> */}
 
               {/* 최종 배포 시 상단 라우터를 지우고 아래 라우터를 활성화 */}
-              {/* <Route index element={<Home />} />
+              <Route index element={<Home />} />
               <Route path="study" element={<Study />} />
               <Route path="test" element={<Test />} />
               <Route path="*" element={<Home />} />
@@ -82,7 +82,7 @@ function App() {
                 <PublicRoute authenticated={access} component={<KakaoLogin />} />}/>
               
               <Route path="myvoca" element={
-                <PrivateRoute authenticated={access} component={<MyVoca />} />}/> */}
+                <PrivateRoute authenticated={access} component={<MyVoca />} />}/>
             </Route>
           </Routes>
         </Router>
