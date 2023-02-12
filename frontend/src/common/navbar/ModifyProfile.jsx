@@ -17,22 +17,25 @@ function ModifyProfile() {
   const dispatch = useDispatch();
 
   const [expanded, setExpanded] = useState(false);
-  const [Nickname, setNickname] = useState(getUserInfo.nickname);
+  const [Nickname, setNickname] = useState(getUserInfo().nickname);
   const [nicknameError, setNicknameError] = useState('')
-  const [profileImageUrl, setProfileImageUrl] = useState(getUserInfo.picture)
+  const [nicknameFormError, setNicknameFormError] = useState('')
+  const [profileImageUrl, setProfileImageUrl] = useState(getUserInfo().picture)
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const onNicknameHandler = (e) => {
-    setNickname(e.currentTarget.value)
-    authValidation(e.currentTarget.value, 'nickname') && Nickname !== '' ? setNicknameError('') : setNicknameError('2자 이상 6자 이하의 문자열을 입력해주세요');
-    dispatch(authAction.checkNickname(e.currentTarget.value)).then((response) => {
-      if (response.payload !== 'success') {
-        setNicknameError('중복 닉네임이 존재합니다')
-      } else{
+    const oldNickname = getUserInfo().nickname
+    const currentNickname = e.currentTarget.value
+    authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
+    dispatch(authAction.checkNickname(currentNickname)).then((response) => {
+      if (response.payload === 'success' || currentNickname === '' || currentNickname === oldNickname) {
         setNicknameError('');
+        setNickname(currentNickname)
+      } else{
+        setNicknameError('중복 닉네임이 존재합니다')
       }
     });
   };
@@ -76,6 +79,7 @@ function ModifyProfile() {
           <label>닉네임</label>
           <input type="text" onBlur={onNicknameHandler} />
           <span>{nicknameError}</span>
+          <span>{nicknameFormError}</span>
           <br />
           <br />
           <label>프로필사진</label>
@@ -90,7 +94,9 @@ function ModifyProfile() {
               />
             ))}
           </div>
-          <button type="submit">수정</button>
+          <button type="submit" 
+          disabled={nicknameError || nicknameFormError}>
+            수정</button>
         </form>
         </div>
         </AccordionDetails>
