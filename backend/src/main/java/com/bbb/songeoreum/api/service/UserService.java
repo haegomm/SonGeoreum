@@ -71,7 +71,7 @@ public class UserService {
     // 로그인
     public User loginUser(String email, String password) throws NotFoundException {
 
-        User loginUser = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        User loginUser = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요."));
         if (passwordEncoder.matches(password, loginUser.getPassword())) {
             return loginUser;
         } else {

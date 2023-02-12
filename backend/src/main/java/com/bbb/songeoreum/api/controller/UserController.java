@@ -116,60 +116,53 @@ public class UserController {
         HttpStatus status = null;
         LoginRes loginRes = null; // 리턴값
 
-        try {
-            User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
+        User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
 
-            Date now = new Date();
+        Date now = new Date();
 
-            // access 토큰 발급
-            AuthToken accessToken = tokenProvider.createAuthToken(
-                    loginUser.getId(), // access 토큰에 user pk 저장
-                    loginUser.getNickname(),
-                    "ROLE_USER",
-                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-            );
+        // access 토큰 발급
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                loginUser.getId(), // access 토큰에 user pk 저장
+                loginUser.getNickname(),
+                "ROLE_USER",
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
 
-            // refreshToken 기한
-            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+        // refreshToken 기한
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
-            // refresh 토큰 발급
-            AuthToken refreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
-                    new Date(now.getTime() + refreshTokenExpiry)
-            );
+        // refresh 토큰 발급
+        AuthToken refreshToken = tokenProvider.createAuthToken(
+                appProperties.getAuth().getTokenSecret(),
+                new Date(now.getTime() + refreshTokenExpiry)
+        );
 
-            log.debug("일반 로그인 user id(PK) : {}, 닉네임 : {}", loginUser.getId(), loginUser.getNickname());
-            log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
-            log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
+        log.debug("일반 로그인 user id(PK) : {}, 닉네임 : {}", loginUser.getId(), loginUser.getNickname());
+        log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
+        log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
 
-            // refresh token DB에 저장
-            userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
+        // refresh token DB에 저장
+        userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
-            loginRes = LoginRes.builder()
-                    .nickname(loginUser.getNickname())
-                    .picture(loginUser.getPicture())
-                    .level(loginUser.getLevel())
-                    .experience(loginUser.getExperience())
-                    .accessToken(accessToken.getToken())
-                    .message(SUCCESS)
-                    .build();
+        loginRes = LoginRes.builder()
+                .nickname(loginUser.getNickname())
+                .picture(loginUser.getPicture())
+                .level(loginUser.getLevel())
+                .experience(loginUser.getExperience())
+                .accessToken(accessToken.getToken())
+                .message(SUCCESS)
+                .build();
 
-            // 쿠키 기한
-            int cookieMaxAge = (int) refreshTokenExpiry / 60;
+        // 쿠키 기한
+        int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
-            // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            // response에 쿠키 담아줌.
-            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        // response에 쿠키 담아줌.
+        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-            status = HttpStatus.ACCEPTED;
+        status = HttpStatus.OK;
 
-
-        } catch (Exception e) {
-            log.error("로그인 실패 : {}", e.getMessage());
-            loginRes = LoginRes.builder().message(FAIL).build();
-            status = HttpStatus.NOT_FOUND;
-        }
 
         return new ResponseEntity<LoginRes>(loginRes, status);
     }
