@@ -83,8 +83,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-
-    // 로그인
+    /**
+     * 로그인 요청한 정보와 DB에 저장된 정보가 일치하는지 확인합니다.
+     * @param email 사용자가 입력한 이메일
+     * @param password 사용자가 입력한 비밀번호
+     * @return 성공 시 해당 사용자의 정보 중 화면에 상시 노출되어야 하는 정보를 User 객체로 반환합니다.
+     * @throws NotFoundException
+     */
     public User loginUser(String email, String password) throws NotFoundException {
 
         User loginUser = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요."));
@@ -95,7 +100,7 @@ public class UserService {
         }
 
     }
-
+    
     @Transactional
     public void saveRefreshToken(Long id, String refreshToken) throws NotFoundException {
 
