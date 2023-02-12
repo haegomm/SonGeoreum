@@ -83,7 +83,6 @@ class VideoRoomComponent extends Component {
       animate: true, // Whether you want to animate the transitions
     };
 
-    console.log("내 닉네임이야: ", this.state.myUserName);
     this.layout.initLayoutContainer(
       document.getElementById("layout"),
       openViduLayoutOptions
@@ -665,7 +664,7 @@ class VideoRoomComponent extends Component {
     });
   }
   checkSize() {
-    if (!this.state.playGame) return;
+    // if (!this.state.playGame) return;
     if (
       document.getElementById("layout").offsetWidth <= 700 &&
       !this.hasBeenUpdated
@@ -710,7 +709,7 @@ class VideoRoomComponent extends Component {
             // user={this.state.localUser}
             showNotification={this.state.messageReceived}
             camStatusChanged={this.camStatusChanged}
-            // micStatusChanged={this.micStatusChanged}
+            micStatusChanged={this.micStatusChanged}
             //   screenShare={this.screenShare}
             //   stopScreenShare={this.stopScreenShare}
             //   toggleFullscreen={this.toggleFullscreen}
