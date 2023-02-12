@@ -29,7 +29,7 @@ export default function Test() {
 
   const isLogin = getUserInfo().nickname;
   console.log("로그인된 상태인가요? >>", isLogin);
-  console.log("튜토리얼을 마쳤나요? >>", isHandTuto);
+  console.log("튜토리얼을 마쳤나요? >>", isTextTuto);
 
   useEffect(() => {
     if (result) {
@@ -90,10 +90,16 @@ export default function Test() {
     }
   };
 
-  const finishTextTuto = () => {
-    console.log("finish text tuto");
-    setTestDone(false);
-    setIsHandTuto((isTextTuto) => !isTextTuto);
+  const finishTextTuto = (status) => {
+    console.log(status);
+    if (status === false) {
+      console.log("테스트창으로 돌아가야함");
+      setTestMode(null);
+    } else {
+      console.log("finish text tuto");
+      setTestDone(false);
+      setIsTextTuto((isHandTuto) => !isHandTuto);
+    }
   };
 
   const resetTestMode = () => {
