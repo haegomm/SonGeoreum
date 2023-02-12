@@ -10,6 +10,7 @@ import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
+import com.bbb.songeoreum.exception.TokenValidFailedException;
 import com.bbb.songeoreum.exception.UnAuthorizedException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
@@ -26,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class UserController {
     // 카카오 로그인
     @ApiOperation(value = "카카오 로그인")
     @GetMapping("/oauth2/kakao")
-    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) throws NotFoundException, IllegalArgumentException {
 
         log.debug("카카오 user 로그인");
 

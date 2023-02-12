@@ -82,4 +82,12 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage());
     }
 
+    @ExceptionHandler(TokenValidFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorRes handleTokenValidFailedException(TokenValidFailedException e){
+        log.error(e.getMessage());
+        return ErrorRes.make(e.getMessage());
+    }
+
 }
