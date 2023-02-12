@@ -55,7 +55,6 @@ public class UserController {
      * @throws NotFoundException
      * @throws IllegalArgumentException
      */
-    // 카카오 로그인
     @ApiOperation(value = "카카오 로그인")
     @GetMapping("/oauth2/kakao")
     public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException, IllegalArgumentException {
@@ -69,8 +68,12 @@ public class UserController {
         return kakaoLoginRes;
     }
 
-
-    // 이메일 중복체크
+    /**
+     * 이메일 중복체크
+     * @param email 중복체크 요청한 이메일
+     * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
+     * @throws DuplicateException
+     */
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email/{email}")
     public ResponseEntity<SuccessRes> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
