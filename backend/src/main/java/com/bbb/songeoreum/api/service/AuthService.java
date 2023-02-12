@@ -120,7 +120,8 @@ public class AuthService {
     }
 
     /**
-     * 카카오가 보낸 사용자 정보를 DB에 저장하고 로그인 처리합니다.
+     * DB에 저장된 카카오 사용자 정보로 로그인 처리합니다.
+     * access token, refresh token을 발급하고 refresh token은 쿠키에 저장합니다.
      * @param kakaoAccessToken 카카오가 발급한 access token
      * @param request
      * @param response
@@ -195,6 +196,12 @@ public class AuthService {
     }
 
     // kakaoAccessToken 으로 카카오 서버에 정보 요청
+
+    /**
+     * 카카오가 발급한 access token으로 카카오 사용자 정보를 요청하여 반환합니다.
+     * @param kakaoAccessToken 카카오가 발급한 access token
+     * @return 카카오가 보낸 사용자 정보를 DB에 저장한 후 User 객체로 반환합니다.
+     */
     public User getKakaoInfo(String kakaoAccessToken) {
         User user = null;
 
