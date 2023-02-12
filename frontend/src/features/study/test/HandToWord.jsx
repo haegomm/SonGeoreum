@@ -18,6 +18,9 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
   const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
   const [showCorrect, setShowCorrect] = useState(false); // 정답 시 효과 보여주기
   const [showAnswer, setShowAnswer] = useState(false); // 오답 시 정답 보여주기
+  const [tutoText, setTutoText] = useState(
+    "수어를 보고 정답 2를 입력해보세요."
+  );
   const [score, setScore] = useState(0); // 점수
 
   useEffect(() => {
@@ -50,6 +53,20 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
     }
   }, []);
 
+  const tutoDone = "정답입니다! 테스트가 곧 시작됩니다.";
+  const defaultText = "정답을 입력해주세요";
+  const correctText = "정답입니다";
+  const showAnswerText = "정답을 확인해보세요";
+  const guide = isTuto
+    ? !showAnswer && !showCorrect
+      ? defaultText
+      : showCorrect
+      ? correctText
+      : showAnswerText
+    : showCorrect
+    ? tutoDone
+    : tutoText;
+
   const inputValue = () => {
     const text = document.getElementById("inputBox").value;
     console.log(text);
@@ -62,8 +79,12 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
       if (isTuto) setScore(() => nowScore);
       setTimeout(correct, 2000, num);
     } else {
-      console.log("틀렸습니다", num);
-      setShowAnswer(true);
+      if (!isTuto) {
+        setTutoText("올바른 정답 2를 입력해주세요.");
+      } else {
+        console.log("틀렸습니다", num);
+        setShowAnswer(true);
+      }
     }
     if (num === 10 && !showAnswer && !showCorrect) {
       setTimeout(exitTest, 2000); // 결과 페이지로 넘어가야 합니다
@@ -87,12 +108,20 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
   };
 
   const exitTest = () => {
-    console.log("테스트를 종료합니다.");
-    setNumber(0);
-    setShowAnswer(false);
-    setShowCorrect(false);
-    finishTest(score);
-    console.log("test result >> ", score);
+    if (isTuto) {
+      console.log("테스트를 종료합니다.");
+      setNumber(0);
+      setShowAnswer(false);
+      setShowCorrect(false);
+      finishTest(score);
+      console.log("test result >> ", score);
+    } else {
+      console.log("튜토리얼 중도에 종료합니다.");
+      setNumber(0);
+      setShowAnswer(false);
+      setShowCorrect(false);
+      finishTest(false);
+    }
   };
 
   const gotoTest = () => {
@@ -110,18 +139,6 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
     }
     getInfo();
   };
-
-  const tutoText = "수어를 보고 정답 2를 입력해보세요.";
-  const defaultText = "정답을 입력해주세요";
-  const correctText = "정답입니다";
-  const showAnswerText = "정답을 확인해보세요";
-  const guide = isTuto
-    ? !showAnswer && !showCorrect
-      ? defaultText
-      : showCorrect
-      ? correctText
-      : showAnswerText
-    : tutoText;
 
   const showAnswerWord = showAnswer ? (
     <TestAnswer myInput={myInput} answer={testList[number].name} />
@@ -141,9 +158,18 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
           id="inputBox"
           sx={{ ml: 1, flex: 1 }}
           placeholder="정답을 입력해주세요"
-          inputProps={{ "aria-label": "search google maps" }}
+          inputProps={{
+            onKeyPress: (event) => {
+              const { key } = event;
+              console.log(key);
+              if (key === "Enter") {
+                inputValue();
+              }
+            },
+          }}
           disabled={showCorrect}
         />
+        <InputBase disabled style={{ display: "none" }} />
 
         <IconButton
           color="primary"
@@ -172,6 +198,7 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
         <div className="testBox">
           <div className="testGuideText">{guide}</div>
           <div className="fixedBox">
+            <div>{number + 1} / 10</div>
             {showNextButton}
             <button className="fixedButton red" onClick={exitTest}>
               종료
