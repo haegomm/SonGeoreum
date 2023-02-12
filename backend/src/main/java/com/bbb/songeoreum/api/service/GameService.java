@@ -232,20 +232,22 @@ public class GameService {
                 .playersList(new ArrayList<>()).build();
 
         for (Connection c : availableSession.getActiveConnections()) {
-            Long cId = Long.parseLong(c.getServerData());
-            enterRoomRes.getPlayersList().add(cId);
+            Long cUserId = Long.parseLong(c.getServerData());
+            User user = userRepository.findById(cUserId).orElseThrow(NotFoundException::new);
+
+            enterRoomRes.getPlayersList().add(user.getNickname());
         }
 
-        enterRoomRes.getPlayersList().add(userId);
+        enterRoomRes.getPlayersList().add(userRepository.findById(userId).orElseThrow(NotFoundException::new).getNickname());
 
         List<String> activeConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getActiveConnections()) {
-            activeConnections.add(c.getServerData());
+            activeConnections.add(userRepository.findById(Long.parseLong(c.getServerData())).orElseThrow(NotFoundException::new).getNickname());
         }
 
         List<String> allConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getConnections()) {
-            allConnections.add(c.getServerData());
+            allConnections.add(userRepository.findById(Long.parseLong(c.getServerData())).orElseThrow(NotFoundException::new).getNickname());
         }
 
         log.debug("standbyRoom(active) : {}", activeConnections);
@@ -272,7 +274,7 @@ public class GameService {
     public void removeUser(String sessionId, Long userId) throws OpenViduJavaClientException, OpenViduHttpException {
 
         log.debug("특정 유저 대기방 퇴장 시 호출");
-        
+
         Session standbySession = standbyRooms.peek();
 
         if (!sessionId.equals(standbySession.getSessionId())) {
@@ -490,12 +492,12 @@ public class GameService {
 
         List<String> activeConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getActiveConnections()) {
-            activeConnections.add(c.getServerData());
+            activeConnections.add(userRepository.findById(Long.parseLong(c.getServerData())).orElseThrow(NotFoundException::new).getNickname());
         }
 
         List<String> allConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getConnections()) {
-            allConnections.add(c.getServerData());
+            allConnections.add(userRepository.findById(Long.parseLong(c.getServerData())).orElseThrow(NotFoundException::new).getNickname());
         }
 
         log.debug("standbyRoom(active) : {}", activeConnections);
