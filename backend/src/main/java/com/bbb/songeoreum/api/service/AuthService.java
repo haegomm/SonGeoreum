@@ -69,6 +69,7 @@ public class AuthService {
 
     /**
      * 인가코드로 카카오에게 access token을 요청하여 전달받은 반환합니다.
+     *
      * @param code 전달받은 인가코드
      * @return 카카오가 발급한 access token
      */
@@ -105,8 +106,7 @@ public class AuthService {
             }
             log.debug("response body : {}", kakaoResponse);
             JSONParser parser = new JSONParser();
-            Object obj = parser.parse(kakaoResponse); // JSON으로 파싱
-            JSONObject jsonObject = (JSONObject) obj; // 파싱한 obj를 JSONObject 객체에 담음.
+            JSONObject jsonObject = (JSONObject) parser.parse(kakaoResponse);
 
             kakaoAccessToken = (String) jsonObject.get("access_token");
 
@@ -122,6 +122,8 @@ public class AuthService {
     /**
      * DB에 저장된 카카오 사용자 정보로 로그인 처리합니다.
      * access token, refresh token을 발급하고 refresh token은 쿠키에 저장합니다.
+     * saveAndFlush는 save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 한다.
+     *
      * @param kakaoAccessToken 카카오가 발급한 access token
      * @param request
      * @param response
@@ -133,7 +135,6 @@ public class AuthService {
 
         HttpStatus status = null;
         KakaoLoginRes kakaoLoginRes = null;
-        // kakaoAccessToken 으로 회원정보 받아오기
 
         try {
             User kakaoUser = getKakaoInfo(kakaoAccessToken);
@@ -142,22 +143,17 @@ public class AuthService {
                 throw new NotFoundException("카카오로부터 user 정보를 가져오지 못했습니다.");
             }
 
-            // 토큰 저장 시작
-
             Date now = new Date();
 
-            // access 토큰 설정
             AuthToken accessToken = tokenProvider.createAuthToken(
-                    kakaoUser.getId(), // access 토큰에 user pk 저장
+                    kakaoUser.getId(),
                     kakaoUser.getNickname(),
                     "ROLE_USER",
                     new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
             );
 
-            // refreshToken 기한
             long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
-            // refresh 토큰 설정
             AuthToken refreshToken = tokenProvider.createAuthToken(
                     appProperties.getAuth().getTokenSecret(),
                     new Date(now.getTime() + refreshTokenExpiry)
@@ -166,10 +162,9 @@ public class AuthService {
             log.debug("accessToken : {}", accessToken.getToken());
             log.debug("refreshToken : {}", refreshToken.getToken());
 
-            // DB 저장
             kakaoUser.saveRefreshToken(refreshToken.getToken());
             log.debug("kakaoUser 리프레시 토큰 저장한 후 : {}", kakaoUser.getRefreshToken());
-            userRepository.saveAndFlush(kakaoUser); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
+            userRepository.saveAndFlush(kakaoUser);
 
             kakaoLoginRes = KakaoLoginRes.builder()
                     .nickname(kakaoUser.getNickname())
@@ -195,10 +190,10 @@ public class AuthService {
 
     }
 
-    // kakaoAccessToken 으로 카카오 서버에 정보 요청
-
     /**
      * 카카오가 발급한 access token으로 카카오 사용자 정보를 요청하여 반환합니다.
+     * 카카오 사용자는 최초 로그인 시 닉네임이 guest + 숫자로 지정됩니다.
+     *
      * @param kakaoAccessToken 카카오가 발급한 access token
      * @return 카카오가 보낸 사용자 정보를 DB에 저장한 후 User 객체로 반환합니다.
      */
@@ -225,8 +220,7 @@ public class AuthService {
             log.debug("response body : {} ", kakaoResponse);
 
             JSONParser parser = new JSONParser();
-            Object obj = parser.parse(kakaoResponse); // JSON으로 파싱
-            JSONObject jsonObject = (JSONObject) obj; // 파싱한 obj를 JSONObject 객체에 담음.
+            JSONObject jsonObject = (JSONObject) parser.parse(kakaoResponse);
 
             String kakaoId = jsonObject.get("id").toString();
             log.debug("카카오가 넘겨준 카카오 id : {} ", kakaoId);
@@ -238,19 +232,16 @@ public class AuthService {
             } else {
                 log.debug("카카오 로그인 최초입니다.");
 
-                // 카카오 사용자는 최초 로그인 시 닉네임이 guest + 숫자로 지정
                 String nickname = "guest" + (userRepository.count() + 1);
                 LocalDateTime createdDate = LocalDateTime.now();
 
                 user = new User("KAKAO", kakaoId, nickname, createdDate);
 
-                return userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
+                return userRepository.saveAndFlush(user);
             }
         } catch (Exception e) {
             log.debug(e.getMessage());
         }
         return user;
     }
-
-
 }
