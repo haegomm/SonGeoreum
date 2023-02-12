@@ -220,7 +220,7 @@ class VideoRoomComponent extends Component {
 
     localUser.setNickname(this.state.myUserName);
     localUser.setConnectionId(this.state.session.connection.connectionId);
-    localUser.setScreenShareActive(false);
+    localUser.setScreenShareActive(true);
     localUser.setStreamManager(publisher);
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
@@ -482,7 +482,7 @@ class VideoRoomComponent extends Component {
   }
 
   updateLayout() {
-    if (!this.state.playGame && !this.state.goGame) return;
+    // if (!this.state.playGame && !this.state.goGame) return;
     setTimeout(() => {
       this.layout.updateLayout();
     }, 20);
