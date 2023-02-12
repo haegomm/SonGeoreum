@@ -188,11 +188,8 @@ public class UserController {
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @GetMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request)
-            throws Exception {
+            throws UnAuthorizedException {
         User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
-
-        RefreshTokenRes refreshTokenRes = null; // 리턴 값
-        HttpStatus status = null;
 
         // refresh token
         String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
@@ -208,8 +205,6 @@ public class UserController {
             throw new UnAuthorizedException("유효하지 않은 refresh token 입니다.");
         }
 
-        //
-
         Date now = new Date();
 
         // access 토큰 발급
@@ -221,8 +216,8 @@ public class UserController {
         );
 
         log.debug("정상적으로 액세스토큰 재발급!!!");
-        refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
-        status = HttpStatus.OK;
+        RefreshTokenRes refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
+        HttpStatus status = HttpStatus.OK;
 
 
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
