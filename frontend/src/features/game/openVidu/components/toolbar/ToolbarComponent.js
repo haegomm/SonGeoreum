@@ -3,8 +3,8 @@ import "./ToolbarComponent.css";
 
 import { AppBar } from "@mui/material";
 import { Toolbar } from "@mui/material";
-// import Mic from "@mui/icons-material/Mic";
-// import MicOff from "@mui/icons-material/MicOff";
+import Mic from "@mui/icons-material/Mic";
+import MicOff from "@mui/icons-material/MicOff";
 import Videocam from "@mui/icons-material/Videocam";
 import VideocamOff from "@mui/icons-material/VideocamOff";
 import StopScreenShare from "@mui/icons-material/StopScreenShare";
@@ -17,7 +17,7 @@ export default class ToolbarComponent extends Component {
     super(props);
     this.state = { fullscreen: false };
     this.camStatusChanged = this.camStatusChanged.bind(this);
-    // this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
     this.screenShare = this.screenShare.bind(this);
     this.stopScreenShare = this.stopScreenShare.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
@@ -26,9 +26,9 @@ export default class ToolbarComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
   }
 
-  // micStatusChanged() {
-  //   this.props.micStatusChanged();
-  // }
+  micStatusChanged() {
+    this.props.micStatusChanged();
+  }
 
   camStatusChanged() {
     this.props.camStatusChanged();
@@ -82,11 +82,11 @@ export default class ToolbarComponent extends Component {
               id="navMicButton"
               onClick={this.micStatusChanged}
             >
-              {/* {localUser !== undefined && localUser.isAudioActive() ? (
+              {localUser !== undefined && localUser.isAudioActive() ? (
                 <Mic />
               ) : (
                 <MicOff color="secondary" />
-              )} */}
+              )}
             </IconButton>
 
             <IconButton
@@ -130,14 +130,14 @@ export default class ToolbarComponent extends Component {
                 <Fullscreen />
               )}
             </IconButton> */}
-            {/* <IconButton
+            <IconButton
               color="secondary"
               className="navButton"
               onClick={this.leaveSession}
               id="navLeaveButton"
             >
-              <PowerSettingsNew />
-            </IconButton> */}
+              {/* <PowerSettingsNew /> */}
+            </IconButton>
             {/* <IconButton
               color="inherit"
               onClick={this.toggleChat}

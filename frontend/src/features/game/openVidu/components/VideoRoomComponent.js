@@ -55,6 +55,7 @@ class VideoRoomComponent extends Component {
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.updateLayout = this.updateLayout.bind(this);
     this.camStatusChanged = this.camStatusChanged.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
     this.nicknameChanged = this.nicknameChanged.bind(this);
     this.toggleFullscreen = this.toggleFullscreen.bind(this);
     this.switchCamera = this.switchCamera.bind(this);
@@ -83,7 +84,6 @@ class VideoRoomComponent extends Component {
       animate: true, // Whether you want to animate the transitions
     };
 
-    console.log("내 닉네임이야: ", this.state.myUserName);
     this.layout.initLayoutContainer(
       document.getElementById("layout"),
       openViduLayoutOptions
@@ -179,16 +179,16 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     await this.OV.getUserMedia({
-      // audioSource: undefined,
+      audioSource: undefined,
       videoSource: undefined,
     });
     var devices = await this.OV.getDevices();
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
-      // audioSource: undefined,
+      audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      // publishAudio: localUser.isAudioActive(),
+      publishAudio: localUser.isAudioActive(false),
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -239,7 +239,11 @@ class VideoRoomComponent extends Component {
         });
       }
     );
-    this.letsStart();
+    if (this.state.goGame === false) {
+      if (this.state.playGame === true) {
+        this.letsStart();
+      }
+    }
   }
 
   updateSubscribers() {
@@ -251,7 +255,7 @@ class VideoRoomComponent extends Component {
       () => {
         if (this.state.localUser) {
           this.sendSignalUserChanged({
-            // isAudioActive: this.state.localUser.isAudioActive(),
+            isAudioActive: this.state.localUser.isAudioActive(false),
             isVideoActive: this.state.localUser.isVideoActive(),
             nickname: this.state.localUser.getNickname(),
             isScreenShareActive: this.state.localUser.isScreenShareActive(),
@@ -281,31 +285,31 @@ class VideoRoomComponent extends Component {
 
   async startSignal(wordsData) {
     // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    console.log("참가자들 닉네임", this.state.playersList);
-    if (this.state.goGame === false) {
-      console.log("시그널 조건1 통과");
-      if (this.state.playGame === true) {
-        console.log("시그널 조건2 통과");
-        const data = {
-          playGame: this.state.playGame,
-          playersList: this.state.playersList,
-          wordsList: wordsData,
-        };
-        this.state.session
-          .signal({
-            data: JSON.stringify(data),
-            to: [],
-            type: "play-game",
-          })
-          .then(() => {
-            console.log("시그널 보내기 성공");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    }
+    // console.log("참가자들 닉네임", this.state.playersList);
+    // if (this.state.goGame === false) {
+    //   console.log("시그널 조건1 통과");
+    //   if (this.state.playGame === true) {
+    //     console.log("시그널 조건2 통과");
+    const data = {
+      playGame: this.state.playGame,
+      playersList: this.state.playersList,
+      wordsList: wordsData,
+    };
+    this.state.session
+      .signal({
+        data: JSON.stringify(data),
+        to: [],
+        type: "play-game",
+      })
+      .then(() => {
+        console.log("시그널 보내기 성공");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
+  // }
+  // }
 
   async leaveSession() {
     console.log("이곳을...떠나겠습니다...");
@@ -380,6 +384,13 @@ class VideoRoomComponent extends Component {
     this.setState({ localUser: localUser });
   }
 
+  micStatusChanged() {
+    localUser.setAudioActive(!localUser.isAudioActive());
+    localUser.getStreamManager().publishAudio(localUser.isAudioActive());
+    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.setState({ localUser: localUser });
+  }
+
   nicknameChanged(nickname) {
     let localUser = this.state.localUser;
     localUser.setNickname(nickname);
@@ -446,9 +457,9 @@ class VideoRoomComponent extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("여기다 여기 EVENTO REMOTE: ", event.data);
-          // if (data.isAudioActive !== undefined) {
-          //   user.setAudioActive(data.isAudioActive);
-          // }
+          if (data.isAudioActive !== undefined) {
+            user.setAudioActive(data.isAudioActive);
+          }
           if (data.isVideoActive !== undefined) {
             user.setVideoActive(data.isVideoActive);
           }
@@ -482,7 +493,7 @@ class VideoRoomComponent extends Component {
   }
 
   updateLayout() {
-    if (!this.state.playGame && !this.state.goGame) return;
+    // if (!this.state.playGame && !this.state.goGame) return;
     setTimeout(() => {
       this.layout.updateLayout();
     }, 20);
@@ -543,9 +554,9 @@ class VideoRoomComponent extends Component {
           // Creating a new publisher with specific videoSource
           // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
-            // audioSource: undefined,
+            audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            // publishAudio: localUser.isAudioActive(),
+            publishAudio: localUser.isAudioActive(false),
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -574,7 +585,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        // publishAudio: localUser.isAudioActive(),
+        publishAudio: localUser.isAudioActive(false),
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
@@ -661,7 +672,7 @@ class VideoRoomComponent extends Component {
     });
   }
   checkSize() {
-    if (!this.state.playGame) return;
+    // if (!this.state.playGame) return;
     if (
       document.getElementById("layout").offsetWidth <= 700 &&
       !this.hasBeenUpdated
@@ -706,7 +717,7 @@ class VideoRoomComponent extends Component {
             // user={this.state.localUser}
             showNotification={this.state.messageReceived}
             camStatusChanged={this.camStatusChanged}
-            // micStatusChanged={this.micStatusChanged}
+            micStatusChanged={this.micStatusChanged}
             //   screenShare={this.screenShare}
             //   stopScreenShare={this.stopScreenShare}
             //   toggleFullscreen={this.toggleFullscreen}

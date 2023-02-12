@@ -22,8 +22,8 @@ const Loading = (props) => {
     try {
       const changeTips = setInterval(() => {
         setTipNumber((tipNumber + 1) % tips.length);
-        console.log(tipNumber);
-        console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
+        // console.log(tipNumber);
+        // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
       }, 3000);
       return () => clearInterval(changeTips);
     } catch (err) {
