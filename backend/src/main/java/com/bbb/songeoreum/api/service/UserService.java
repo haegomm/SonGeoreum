@@ -124,8 +124,13 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
         user.deleteRefreshToken();
     }
-
-    // 회원 정보 조회
+    
+    /**
+     * 파라미터로 넘어온 id에 해당하는 사용자의 정보를 반환합니다.
+     * @param id DB에서 정보를 조회할 id(user table PK)
+     * @return 요청 들어온 사용자의 정보를 담은 GetUserRes DTO
+     * @throws NotFoundException
+     */
     public GetUserRes getUser(Long id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(NotFoundException::new).toDTO();
     }
