@@ -10,7 +10,9 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export default function HandToWord({ categoryNum, finishTest }) {
+export default function HandToWord({ categoryNum, isTuto, finishTest }) {
+  let num = categoryNum;
+  if (!isTuto) num = 3;
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
   const [number, setNumber] = useState(0); // 현재 문제 번호
   const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
@@ -19,14 +21,33 @@ export default function HandToWord({ categoryNum, finishTest }) {
   const [score, setScore] = useState(0); // 점수
 
   useEffect(() => {
-    async function getInfo() {
-      const data = await axios.get(
-        `/api/words?categoryId=${categoryNum}&isRandom=true`
-      );
-      setTestList(data.data);
-      console.log("data >> ", data.data);
+    console.log("카테고리 번호를 확인합니다. >> ", categoryNum);
+    console.log("튜토리얼을 했나요? ?? ", isTuto);
+    if (!isTuto) {
+      async function getInfo() {
+        const tutorialList = [
+          {
+            id: 31,
+            name: "2",
+            contentUrl:
+              "https://dbscthumb-phinf.pstatic.net/2157_000_1/20121029221657647_9TQ6Z0TU7.jpg/m51_7_i31.jpg?type=w130_fst&wm=N",
+          },
+        ];
+        setTestList(tutorialList);
+        console.log("튜토리얼을 시작합니다. >> ", tutorialList);
+        console.log("길이가 어떤데?? >> ", tutorialList.length);
+      }
+      getInfo();
+    } else {
+      async function getInfo() {
+        const data = await axios.get(
+          `/api/words?categoryId=${categoryNum}&isRandom=true`
+        );
+        setTestList(data.data);
+        console.log("data >> ", data.data);
+      }
+      getInfo();
     }
-    getInfo();
   }, []);
 
   const inputValue = () => {
@@ -38,7 +59,7 @@ export default function HandToWord({ categoryNum, finishTest }) {
       console.log("정답입니다", num);
       setShowCorrect(true);
       const nowScore = score + 1;
-      setScore(nowScore);
+      if (isTuto) setScore(() => nowScore);
       setTimeout(correct, 2000, num);
     } else {
       console.log("틀렸습니다", num);
@@ -51,9 +72,10 @@ export default function HandToWord({ categoryNum, finishTest }) {
 
   const correct = (num) => {
     console.log("정답효과 종료");
-    setNumber(num);
+    if (isTuto) setNumber(num);
     setShowCorrect(false);
     document.getElementById("inputBox").value = "";
+    if (!isTuto) gotoTest();
   };
 
   const next = (num) => {
@@ -73,15 +95,33 @@ export default function HandToWord({ categoryNum, finishTest }) {
     console.log("test result >> ", score);
   };
 
+  const gotoTest = () => {
+    console.log("튜토리얼을 종료합니다.");
+    setNumber(0);
+    setShowAnswer(false);
+    setShowCorrect(false);
+    finishTest(true);
+    async function getInfo() {
+      const data = await axios.get(
+        `/api/words?categoryId=${categoryNum}&isRandom=true`
+      );
+      setTestList(() => data.data);
+      console.log("data >> ", data.data);
+    }
+    getInfo();
+  };
+
+  const tutoText = "수어를 보고 정답 2를 입력해보세요.";
   const defaultText = "정답을 입력해주세요";
   const correctText = "정답입니다";
   const showAnswerText = "정답을 확인해보세요";
-  const guide =
-    !showAnswer && !showCorrect
+  const guide = isTuto
+    ? !showAnswer && !showCorrect
       ? defaultText
       : showCorrect
       ? correctText
-      : showAnswerText;
+      : showAnswerText
+    : tutoText;
 
   const showAnswerWord = showAnswer ? (
     <TestAnswer myInput={myInput} answer={testList[number].name} />
@@ -138,10 +178,7 @@ export default function HandToWord({ categoryNum, finishTest }) {
             </button>
           </div>
           <div className="flexBox">
-            <TestScreen
-              link={testList[number].contentUrl}
-              categoryNum={categoryNum}
-            />
+            <TestScreen link={testList[number].contentUrl} categoryNum={num} />
           </div>
         </div>
         {correctCircle}

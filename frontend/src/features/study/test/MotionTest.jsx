@@ -1,10 +1,17 @@
 /*global drawConnectors, HAND_CONNECTIONS, drawLandmarks, Hands, Camera*/
 /*eslint no-undef: "error"*/
-
+import React from "react";
 import $script from "scriptjs";
 import "./MotionTest.scss";
 
-export default function MotionTest({ word, categoryNum, startCorrect }) {
+function customCompare(prev, next) {
+  const pr = JSON.stringify(prev);
+  const ne = JSON.stringify(next);
+  return pr === ne;
+}
+
+const MotionTest = ({ categoryNum, startCorrect }) => {
+  console.log("리렌더링 테스트");
   $script(
     [
       "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js",
@@ -22,33 +29,40 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
       /*
     Websocket Connect
   */
+      if (categoryNum === -1) categoryNum = 3;
       let url = `wss://i8b106.p.ssafy.io/ws/socket-server/${categoryNum}`;
 
       const handSocket = new WebSocket(url);
-
+      let status = false;
       let count = 0;
+      let word = "";
       handSocket.onmessage = function (e) {
         let data = JSON.parse(e.data).response;
+        status = true;
+        // console.log(JSON.parse(e.data));
+        // console.log(JSON.parse(e.data).response);
         if (word !== data) {
-          //console.log("다르다", data, word);
           count = 0;
+          word = data;
         } else {
           console.log("같다");
           count = count + 1;
           if (count > 20) {
-            console.log("정답입니다");
+            console.log(word);
             count = 0;
-            startCorrect();
+            startCorrect(word);
           }
         }
       };
 
       function sendMessage(msg) {
-        handSocket.send(
-          JSON.stringify({
-            message: msg,
-          })
-        );
+        if (status) {
+          handSocket.send(
+            JSON.stringify({
+              message: msg,
+            })
+          );
+        }
       }
 
       /*
@@ -72,7 +86,11 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
           // select one hand
           let oneHandLandMarks = results.multiHandLandmarks[0];
           // send data to server for prediction
+
+          // handSocket.current.onopen = () => {
+          //webSocket이 맺어지고 난 후, 실행
           sendMessage(oneHandLandMarks);
+          // };
 
           // draw detected hand boundary
           if (oneHandLandMarks) {
@@ -159,4 +177,5 @@ export default function MotionTest({ word, categoryNum, startCorrect }) {
       </div>
     </div>
   );
-}
+};
+export default React.memo(MotionTest, customCompare);

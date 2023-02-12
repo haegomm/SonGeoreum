@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getUserInfo } from "../../common/api/authInfo";
+
 import WordLarge from "./learn/WordLarge";
 import TextButton from "../../common/button/TextButton";
 
@@ -15,13 +17,16 @@ import SelectCategory from "./SelectCategory";
 export default function Study() {
   const [mode, setMode] = useState(); // 학습 모드 저장
   const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
+  const [categoryName, setCategoryName] = useState(); // 선택한 카테고리 이름
+  const isLogin = getUserInfo().nickname;
+  console.log(isLogin);
 
   const navigate = useNavigate();
 
   const selectedMode = (mode) => {
     console.log("switch", mode);
     setMode(mode);
-    if (mode == "실전모드") navigate("/test");
+    if (mode === "실전모드") navigate("/test");
   };
 
   const selectedCategoryNum = (num) => {
@@ -41,6 +46,7 @@ export default function Study() {
 
   const selectedCategoryInfo = (name, isTestable) => {
     console.log(name, isTestable);
+    setCategoryName(name);
   };
 
   const selectModeScreen = mode ? (
@@ -65,7 +71,11 @@ export default function Study() {
       <button className="reselectButton" onClick={() => resetCategory()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <WordLarge isLogin={true} categoryNum={categoryNum} />
+      <WordLarge
+        isLogin={isLogin}
+        categoryNum={categoryNum}
+        categoryName={categoryName}
+      />
     </div>
   );
 
