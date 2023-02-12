@@ -2,15 +2,12 @@ package com.bbb.songeoreum.api.service;
 
 
 import com.bbb.songeoreum.api.response.KakaoLoginRes;
-import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
-import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
-import com.bbb.songeoreum.oauth.entity.RoleType;
 import com.bbb.songeoreum.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +16,6 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +23,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 
 import static com.bbb.songeoreum.db.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
 
+/**
+ * {@code AuthService}는 카카오 사용자 관련 로직을 처리하는 서비스입니다.
+ *
+ * @author wjdwn03
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)  // 트랜잭션 안에서만 데이터 변경하게 설정
+@Transactional(readOnly = true)
 public class AuthService {
 
     private static final String SUCCESS = "success";
