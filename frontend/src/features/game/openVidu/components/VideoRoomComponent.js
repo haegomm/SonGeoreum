@@ -179,16 +179,16 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     await this.OV.getUserMedia({
-      // audioSource: undefined,
+      audioSource: undefined,
       videoSource: undefined,
     });
     var devices = await this.OV.getDevices();
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
-      // audioSource: undefined,
+      audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      // publishAudio: localUser.isAudioActive(),
+      publishAudio: localUser.isAudioActive(false),
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -251,7 +251,7 @@ class VideoRoomComponent extends Component {
       () => {
         if (this.state.localUser) {
           this.sendSignalUserChanged({
-            // isAudioActive: this.state.localUser.isAudioActive(),
+            isAudioActive: this.state.localUser.isAudioActive(false),
             isVideoActive: this.state.localUser.isVideoActive(),
             nickname: this.state.localUser.getNickname(),
             isScreenShareActive: this.state.localUser.isScreenShareActive(),
@@ -446,9 +446,9 @@ class VideoRoomComponent extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("여기다 여기 EVENTO REMOTE: ", event.data);
-          // if (data.isAudioActive !== undefined) {
-          //   user.setAudioActive(data.isAudioActive);
-          // }
+          if (data.isAudioActive !== undefined) {
+            user.setAudioActive(data.isAudioActive);
+          }
           if (data.isVideoActive !== undefined) {
             user.setVideoActive(data.isVideoActive);
           }
@@ -543,9 +543,9 @@ class VideoRoomComponent extends Component {
           // Creating a new publisher with specific videoSource
           // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
-            // audioSource: undefined,
+            audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            // publishAudio: localUser.isAudioActive(),
+            publishAudio: localUser.isAudioActive(false),
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -574,7 +574,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        // publishAudio: localUser.isAudioActive(),
+        publishAudio: localUser.isAudioActive(false),
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
