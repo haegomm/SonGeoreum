@@ -239,7 +239,11 @@ class VideoRoomComponent extends Component {
         });
       }
     );
-    this.letsStart();
+    if (this.state.goGame === false) {
+      if (this.state.playGame === true) {
+        this.letsStart();
+      }
+    }
   }
 
   updateSubscribers() {
@@ -281,31 +285,31 @@ class VideoRoomComponent extends Component {
 
   async startSignal(wordsData) {
     // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    console.log("참가자들 닉네임", this.state.playersList);
-    if (this.state.goGame === false) {
-      console.log("시그널 조건1 통과");
-      if (this.state.playGame === true) {
-        console.log("시그널 조건2 통과");
-        const data = {
-          playGame: this.state.playGame,
-          playersList: this.state.playersList,
-          wordsList: wordsData,
-        };
-        this.state.session
-          .signal({
-            data: JSON.stringify(data),
-            to: [],
-            type: "play-game",
-          })
-          .then(() => {
-            console.log("시그널 보내기 성공");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    }
+    // console.log("참가자들 닉네임", this.state.playersList);
+    // if (this.state.goGame === false) {
+    //   console.log("시그널 조건1 통과");
+    //   if (this.state.playGame === true) {
+    //     console.log("시그널 조건2 통과");
+    const data = {
+      playGame: this.state.playGame,
+      playersList: this.state.playersList,
+      wordsList: wordsData,
+    };
+    this.state.session
+      .signal({
+        data: JSON.stringify(data),
+        to: [],
+        type: "play-game",
+      })
+      .then(() => {
+        console.log("시그널 보내기 성공");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
+  // }
+  // }
 
   async leaveSession() {
     console.log("이곳을...떠나겠습니다...");
