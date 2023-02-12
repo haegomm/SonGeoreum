@@ -38,6 +38,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 이메일 중복 체크
+
+    /**
+     * DB에서 요청 온 이메일을 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
+     * @param email 중복체크 요청한 이메일
+     * @throws DuplicateException
+     */
     public void duplicateEmail(String email) throws DuplicateException {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicateException("중복된 이메일입니다.");
