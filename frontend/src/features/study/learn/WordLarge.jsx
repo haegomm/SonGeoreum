@@ -216,6 +216,19 @@ export default function WordLarge({ isLogin, categoryNum, categoryName }) {
     setStarList(list);
   };
 
+  const needLogin = () => {
+    console.log("로그인 하시겠습니까?");
+    const gotoLogin = window.confirm(
+      "회원만 이용 가능합니다. 로그인 하시겠습니까?"
+    );
+    if (gotoLogin) {
+      console.log("로그인 창으로 이동합니다.");
+      navigate("/login");
+    } else {
+      console.log("취소되었습니다");
+    }
+  };
+
   const isStar = isLogin ? (
     star ? (
       <StarIcon
@@ -234,7 +247,7 @@ export default function WordLarge({ isLogin, categoryNum, categoryName }) {
     <StarIcon
       color="disabled"
       sx={{ fontSize: 45 }}
-      // onClick={} 로그인하겠습니까 모달창
+      onClick={() => needLogin()}
     />
   );
 
