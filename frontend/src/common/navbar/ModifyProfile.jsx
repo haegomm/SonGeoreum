@@ -29,12 +29,11 @@ function ModifyProfile() {
   const onNicknameHandler = (e) => {
     const oldNickname = getUserInfo().nickname
     const currentNickname = e.currentTarget.value
-    setNickname(currentNickname)
-    console.log(authValidation(currentNickname, 'nickname'))
     authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
       if (response.payload === 'success' || currentNickname === '' || currentNickname === oldNickname) {
         setNicknameError('');
+        setNickname(currentNickname)
       } else{
         setNicknameError('중복 닉네임이 존재합니다')
       }
@@ -95,7 +94,9 @@ function ModifyProfile() {
               />
             ))}
           </div>
-          <button type="submit">수정</button>
+          <button type="submit" 
+          disabled={nicknameError || nicknameFormError}>
+            수정</button>
         </form>
         </div>
         </AccordionDetails>

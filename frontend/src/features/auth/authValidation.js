@@ -5,7 +5,7 @@ function authValidation(value, type) {
     EMAIL: /\S+@\S+\.\S+/,
     // PASSWORD_RULE: /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{7,20}$/,        
     PASSWORD_RULE: /^(?=.*[a-zA-Z]).{8,20}$/,        
-    NICKNAME_RULE: /^([가-힣a-zA-Z]+).{2,8}$/
+    NICKNAME_RULE: /^[a-zA-Zㄱ-힣0-9-_.]{2,10}$/
   };
 
   if (type === "email") {        

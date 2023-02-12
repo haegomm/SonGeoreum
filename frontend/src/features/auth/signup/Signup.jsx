@@ -6,6 +6,7 @@ import authAction from '../../../common/api/authAction';
 import profileImages from '../../../assets/profile/profileImages';
 import "./Signup.scss";
 import authValidation from '../authValidation';
+import LargeButton from '../../../common/button/LargeButton';
 
 function Signup(props) {
   const dispatch = useDispatch();
@@ -30,8 +31,8 @@ function Signup(props) {
     dispatch(authAction.checkEmail(currentEmail)).then((response) => {
       if (response.payload === 'success' || currentEmail === '') {
         setEmailError('')
-      } else{
-        setEmailError('이미 가입한 이메일입니다');
+      }else{
+        setEmailError('이미 가입한 이메일입니다')
       }
     });
   };
@@ -42,8 +43,8 @@ function Signup(props) {
     authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
       if (response.payload === 'success' || currentNickname === '') {
-        setNicknameError('');
-      } else{
+        setNicknameError('')
+      }else{
         setNicknameError('중복 닉네임이 존재합니다')
       }
     });
@@ -51,13 +52,13 @@ function Signup(props) {
 
   const onPasswordHandler = (e) => {
     setPassword(e.currentTarget.value);
-    console.log('비밀번호 유효성', authValidation(e.currentTarget.value, 'password'))
     authValidation(e.currentTarget.value, 'password') ? setPasswordError('') : setPasswordError('8자 이상 20자 이하의 비밀번호를 입력해주세요')
   };
+
   const onConfirmPasswordHandler = (e) => {
     setConfirmPassword(e.currentTarget.value);
     Password === e.currentTarget.value ? setConfirmPasswordError('') : setConfirmPasswordError('비밀번호가 일치하지 않습니다')
-  };
+  }
 
   const onImageHandler = (e) => {
     setProfileImageUrl(e.currentTarget.src)
@@ -121,7 +122,14 @@ function Signup(props) {
               />
             ))}
           </div>
-          <button type="submit">가입</button>
+          <button type="submit" className='signupButton'>
+            <LargeButton
+            text="가입하기"
+            type="gameStart"
+            backgroundColor="blue"
+            disable={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}
+            />
+            </button>
         </form>
       </div>
     </div>
