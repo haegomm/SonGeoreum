@@ -124,7 +124,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
         user.deleteRefreshToken();
     }
-    
+
     /**
      * 파라미터로 넘어온 id에 해당하는 사용자의 정보를 반환합니다.
      * @param id DB에서 정보를 조회할 id(user table PK)
@@ -135,7 +135,13 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(NotFoundException::new).toDTO();
     }
 
-    // 프로필 수정
+    /**
+     * 프로필 수정을 요청한 정보를 DB에 저장합니다.
+     * @param updateUserReq 수정할 닉네임, 프로필 사진
+     * @param id 프로필 수정할 id(user table PK)
+     * @throws NotFoundException
+     * @throws DuplicateException
+     */
     @Transactional
     public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException, DuplicateException {
 
