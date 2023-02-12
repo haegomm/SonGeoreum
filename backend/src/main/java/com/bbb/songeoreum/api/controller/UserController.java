@@ -65,17 +65,17 @@ public class UserController {
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email/{email}")
-    public ResponseEntity<String> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
+    public ResponseEntity<SuccessRes> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
 
         log.debug("중복체크 요청 이메일 = {}", email);
 
-        try {
-            userService.duplicateEmail(email);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-        } catch (DuplicateException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
-        }
+        userService.duplicateEmail(email);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, httpStatus);
+
     }
 
     // 닉네임 중복체크

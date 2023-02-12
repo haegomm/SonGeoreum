@@ -33,7 +33,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 이메일 중복 체크
-    public void duplicateEmail(String email) {
+    public void duplicateEmail(String email) throws DuplicateException {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicateException("중복된 이메일입니다.");
         }
