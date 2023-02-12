@@ -199,7 +199,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
       <div>
         <div className="motionTestBox">
           <div className="fixedBox">
-            <div>{number} / 10</div>
+            <div>{number + 1} / 10</div>
             {buttonShow}
             <button className="fixedButton red" onClick={exitTest}>
               종료

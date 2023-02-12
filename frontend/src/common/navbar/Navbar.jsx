@@ -4,6 +4,7 @@ import {
   Outlet,
   Link,
   NavLink,
+  useLocation,
 } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -27,8 +28,15 @@ export default function Navbar() {
     { name: "게임하기", path: "/game" },
     { name: "알아보기", path: "/culture" },
   ]; // 페이지
-
+  const location = useLocation();
   const [isShort, setShort] = useState(true); // navBar 사이즈 조절
+
+  useEffect(() => {
+    console.log(location);
+    const path = location.pathname;
+    if (path === "/study" || path === "/test" || path === "/myvoca")
+      setShort(() => false);
+  }, [location]);
 
   const sizeLong = () => {
     setShort(false);
@@ -160,7 +168,6 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             )}
-
           </Toolbar>
         </AppBar>
       </Box>

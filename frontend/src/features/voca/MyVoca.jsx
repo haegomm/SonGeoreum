@@ -4,9 +4,11 @@ import axios from "../../common/api/https";
 import LargeButton from "../../common/button/LargeButton";
 import WordSmall from "../../common/card/WordSmall";
 
-import "../study/learn/WordLarge.scss";
+import "./MyVoca.scss";
 import "../study/FadeIn.scss";
 import "../../common/card/flip.scss";
+
+import Grid from "@mui/material/Grid";
 
 import StarIcon from "@mui/icons-material/Star";
 import ShuffleRoundedIcon from "@mui/icons-material/ShuffleRounded";
@@ -179,101 +181,109 @@ export default function MyVoca() {
 
     if (blockListMode) {
       return (
-        <div>
-          <div className="fade-up">
-            {wordList.map((word, index) => (
-              <WordSmall
-                key={word.id}
-                text={word.name}
-                star={false}
-                isLogin={true}
-                index={index}
-                handleListItemClick={handleListItemClick}
-                listMode={listMode}
-              />
-            ))}
-          </div>
-        </div>
+        <Grid container justifyContent="center">
+          <Grid item xs={8} sx={{ marginTop: 0 }}>
+            <div className="myvocaText">나의 단어장</div>
+            <div className="marginTop fade-up">
+              {wordList.map((word, index) => (
+                <WordSmall
+                  key={word.id}
+                  text={word.name}
+                  star={false}
+                  isLogin={true}
+                  index={index}
+                  handleListItemClick={handleListItemClick}
+                  listMode={listMode}
+                />
+              ))}
+            </div>
+          </Grid>
+        </Grid>
       );
     } else {
       return (
-        <div className="container  fade-up">
-          <div className="bigWordCard">
-            <div id="flip-container" className="flip-container">
-              <div className="flipper">
-                <div className="front">
-                  <div className="shuffleBox">
-                    {/* <ShuffleRoundedIcon
+        <Grid container justifyContent="center">
+          <Grid item xs={8} sx={{ marginTop: 0 }}>
+            <div className="myvocaText">나의 단어장</div>
+            <div className="container fade-up">
+              <div className="bigWordCard">
+                <div id="flip-container" className="flip-container">
+                  <div className="flipper">
+                    <div className="front">
+                      <div className="shuffleBox">
+                        {/* <ShuffleRoundedIcon
                       color="blue"
                       sx={{ fontSize: 45 }}
                       onClick={() => shuffle()}
                     /> */}
-                  </div>
-                  <div className="menuBox">
-                    <MenuRoundedIcon
-                      color="blue"
-                      sx={{ fontSize: 45 }}
-                      onClick={() => listMode()}
-                    />
-                  </div>
-                  {previous}
-                  {next}
-                  <div onClick={flip}>
-                    <div className="word">{wordList[wordNumber].name}</div>
-                  </div>
-                </div>
-                <div className="back">
-                  <div className="starBox">{isStar}</div>
-                  {previous}
-                  {next}
-                  <div className="wordBackBox" onClick={flipAgain}>
-                    <div className="wordVideoBox">{media}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="wordList">
-            <div className="wordListCard">
-              <div className="arrowBox ">{up}</div>
-              <div className="listBox scroll-container">
-                <List
-                  sx={{ width: "100%", maxWidth: 360 }}
-                  style={{ color: "black", padding: 0 }}
-                  aria-label="contacts"
-                >
-                  {wordList.map((word, index) => (
-                    <ListItem
-                      disablePadding
-                      id={"section" + word.id}
-                      key={"id" + word.id}
-                    >
-                      <ListItemButton
-                        selected={wordNumber === index}
-                        onClick={(event) => handleListItemClick(index)}
-                      >
-                        <ListItemText
-                          primary={word.name}
-                          primaryTypographyProps={{
-                            fontSize: 20,
-                            fontWeight: "medium",
-                            letterSpacing: 0,
-                          }}
+                      </div>
+                      <div className="menuBox">
+                        <MenuRoundedIcon
+                          color="blue"
+                          sx={{ fontSize: 45 }}
+                          onClick={() => listMode()}
                         />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
+                      </div>
+                      {previous}
+                      {next}
+                      <div onClick={flip}>
+                        <div className="word">{wordList[wordNumber].name}</div>
+                      </div>
+                    </div>
+                    <div className="back">
+                      <div className="starBox">{isStar}</div>
+                      {previous}
+                      {next}
+                      <div className="wordBackBox" onClick={flipAgain}>
+                        <div className="wordVideoBox">{media}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="arrowBox">{down}</div>
-            </div>
-            {/* <LargeButton
+              <div className="wordList">
+                <div className="wordListCard">
+                  <div className="arrowBox ">{up}</div>
+                  <div className="listBox scroll-container">
+                    <List
+                      sx={{ width: "100%", maxWidth: 360 }}
+                      style={{ color: "black", padding: 0 }}
+                      aria-label="contacts"
+                    >
+                      {wordList.map((word, index) => (
+                        <ListItem
+                          disablePadding
+                          id={"section" + word.id}
+                          key={"id" + word.id}
+                        >
+                          <ListItemButton
+                            selected={wordNumber === index}
+                            onClick={(event) => handleListItemClick(index)}
+                          >
+                            <ListItemText
+                              primary={word.name}
+                              primaryTypographyProps={{
+                                fontSize: 20,
+                                fontWeight: "medium",
+                                letterSpacing: 0,
+                              }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </div>
+                  <div className="arrowBox">{down}</div>
+                </div>
+                {/* <LargeButton
               text="TEST"
               type="learnToTest"
               backgroundColor="blue"
             /> */}
-          </div>
-        </div>
+              </div>
+            </div>
+          </Grid>
+        </Grid>
       );
     }
   }
