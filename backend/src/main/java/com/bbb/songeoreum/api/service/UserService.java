@@ -33,14 +33,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordEncoder passwordEncoder;
 
-    // 이메일 중복 체크
-
     /**
-     * DB에서 요청 온 이메일을 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
+     * 요청 온 이메일을 DB에서 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
      * @param email 중복체크 요청한 이메일
      * @throws DuplicateException
      */
@@ -50,7 +47,11 @@ public class UserService {
         }
     }
 
-    // 닉네임 중복 체크
+    /**
+     * 요청 온 닉네임을 DB에서 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
+     * @param nickname 중복체크 요청한 닉네임
+     * @throws DuplicateException
+     */
     public void duplicateNickname(String nickname) throws DuplicateException {
         if (userRepository.findByNickname(nickname).isPresent()) {
             throw new DuplicateException("중복된 닉네임입니다.");
