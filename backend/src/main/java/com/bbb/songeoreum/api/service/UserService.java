@@ -107,17 +107,18 @@ public class UserService {
 
     // 프로필 수정
     @Transactional
-    public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException {
+    public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException, DuplicateException {
 
         // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
-        User realUser = userRepository.findById(id).get();
+        User realUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
 
         // 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 할 필요가 없다.
-        if (!realUser.getNickname().equals(realUser.getNickname())) {
+        if (!updateUserReq.getNickname().equals(realUser.getNickname())) {
+
             // 닉네임 중복 체크
             duplicateNickname(updateUserReq.getNickname());
-        }
 
+        }
         realUser.updateUser(updateUserReq);
     }
 

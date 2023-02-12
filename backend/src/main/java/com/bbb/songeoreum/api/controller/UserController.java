@@ -244,13 +244,15 @@ public class UserController {
     // 프로필 수정
     @ApiOperation(value = "프로필 수정")
     @PutMapping("/profile")
-    public ResponseEntity<String> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) {
+    public ResponseEntity<SuccessRes> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) throws NotFoundException, DuplicateException {
 
         User user = (User) request.getAttribute("user");
 
         userService.updateUser(updateUserReq, user.getId());
 
-        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, HttpStatus.OK);
 
     }
 
