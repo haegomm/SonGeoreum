@@ -109,7 +109,12 @@ public class UserController {
         return new ResponseEntity<>(successRes, httpStatus);
     }
 
-    // 회원가입
+    /**
+     * 회원 가입
+     * @param insertUserReq 회원 가입 form에 사용자가 입력한 정보
+     * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
+     * @throws DuplicateException
+     */
     @ApiOperation(value = "회원가입") // 해당 Api의 설명
     @PostMapping("/signup")
     public ResponseEntity<SuccessRes> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) throws DuplicateException {
