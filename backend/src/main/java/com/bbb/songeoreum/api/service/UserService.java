@@ -33,14 +33,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 이메일 중복 체크
-    public void duplicateEmail(String email) {
+    public void duplicateEmail(String email) throws DuplicateException {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicateException("중복된 이메일입니다.");
         }
     }
 
     // 닉네임 중복 체크
-    public void duplicateNickname(String nickname) {
+    public void duplicateNickname(String nickname) throws DuplicateException {
         if (userRepository.findByNickname(nickname).isPresent()) {
             throw new DuplicateException("중복된 닉네임입니다.");
         }
@@ -49,7 +49,7 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public void insertUser(InsertUserReq insertUserReq) {
+    public void insertUser(InsertUserReq insertUserReq) throws DuplicateException {
 
         LocalDateTime createDate = LocalDateTime.now();
 
@@ -71,7 +71,7 @@ public class UserService {
     // 로그인
     public User loginUser(String email, String password) throws NotFoundException {
 
-        User loginUser = userRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        User loginUser = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해주세요."));
         if (passwordEncoder.matches(password, loginUser.getPassword())) {
             return loginUser;
         } else {
@@ -96,7 +96,7 @@ public class UserService {
 
     @Transactional
     public void deleteRefreshToken(Long id) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
         user.deleteRefreshToken();
     }
 
@@ -107,17 +107,18 @@ public class UserService {
 
     // 프로필 수정
     @Transactional
-    public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException {
+    public void updateUser(UpdateUserReq updateUserReq, Long id) throws NotFoundException, DuplicateException {
 
         // request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록 시키기 위해 한번 더 검색
-        User realUser = userRepository.findById(id).get();
+        User realUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
 
         // 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 할 필요가 없다.
-        if (!realUser.getNickname().equals(realUser.getNickname())) {
+        if (!updateUserReq.getNickname().equals(realUser.getNickname())) {
+
             // 닉네임 중복 체크
             duplicateNickname(updateUserReq.getNickname());
-        }
 
+        }
         realUser.updateUser(updateUserReq);
     }
 
@@ -145,7 +146,7 @@ public class UserService {
     public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
 
         List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
-        
+
         return list;
     }
 

@@ -6,6 +6,7 @@ import com.bbb.songeoreum.api.response.LoginRes;
 import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.db.repository.UserRepository;
+import com.bbb.songeoreum.exception.NotFoundException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
@@ -45,12 +46,15 @@ public class AuthService {
     private static final String FAIL = "fail";
 
     @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENTID}")
+//    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String KAKAO_CLIENT_ID;
 
     @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENTSECRET}")
+//    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String KAKAO_CLIENT_SECRET;
 
     @Value("${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_REDIRECTURI}")
+//    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String KAKAO_REDIRECT_URI;
 
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
@@ -115,7 +119,7 @@ public class AuthService {
 
     // login 요청 보내는 회원가입 유무 판단해 분기 처리
     @Transactional
-    public ResponseEntity<KakaoLoginRes> kakaoLogin(String kakaoAccessToken, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(String kakaoAccessToken, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
         HttpStatus status = null;
         KakaoLoginRes kakaoLoginRes = null;
@@ -123,6 +127,10 @@ public class AuthService {
 
         try {
             User kakaoUser = getKakaoInfo(kakaoAccessToken);
+
+            if (kakaoUser == null) {
+                throw new NotFoundException("카카오로부터 user 정보를 가져오지 못했습니다.");
+            }
 
             // 토큰 저장 시작
 
@@ -168,10 +176,9 @@ public class AuthService {
             CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
             status = HttpStatus.ACCEPTED;
 
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             log.error("로그인 실패 : {}", e.getMessage());
-            kakaoLoginRes = KakaoLoginRes.builder().message(FAIL).build();
-            status = HttpStatus.NOT_FOUND;
+            throw new IllegalArgumentException("카카오로부터 user 정보를 가져오지 못했습니다.");
         }
 
         return new ResponseEntity<KakaoLoginRes>(kakaoLoginRes, status);

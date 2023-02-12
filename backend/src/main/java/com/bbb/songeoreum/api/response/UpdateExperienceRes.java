@@ -18,10 +18,4 @@ public class UpdateExperienceRes {
     @ApiModelProperty(example = "경험치")
     private int experience;
 
-   // @Builder
-   // public UpdateExperienceRes(int level, int experience){
-   //     this.level = level;
-    //    this.experience = experience;
-    //}
-
 }

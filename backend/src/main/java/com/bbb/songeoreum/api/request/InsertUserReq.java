@@ -1,10 +1,7 @@
 package com.bbb.songeoreum.api.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +9,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class InsertUserReq {
@@ -33,7 +31,7 @@ public class InsertUserReq {
 
     // 닉네임
     @NotBlank // Null, 빈 문자열, 스페이스만 있는 문자열 불가
-    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 10)
     private String nickname;
 
     // 프로필 사진 URL
