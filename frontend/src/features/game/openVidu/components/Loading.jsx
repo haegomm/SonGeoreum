@@ -43,6 +43,7 @@ const Loading = (props) => {
       return response.data;
     } catch (err) {
       console.log("못나가^^ >>", err);
+      navigate("/");
     }
   };
 
