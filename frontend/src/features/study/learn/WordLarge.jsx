@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import LargeButton from "../../../common/button/LargeButton";
 import axios from "../../../common/api/https";
@@ -20,42 +21,107 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
-export default function WordLarge({ isLogin, categoryNum }) {
+export default function WordLarge({ isLogin, categoryNum, categoryName }) {
+  const navigate = useNavigate();
+
   const [star, setStar] = useState(false); // 즐겨찾기 유무
-  const [wordNumber, setWordNumber] = useState(); // 현재 단어 번호
+  const [wordNumber, setWordNumber] = useState(0); // 현재 단어 번호
   const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
   const [endNumber, setEndNumber] = useState(); // 현재 단어 번호
   const [wordList, setWordList] = useState(); // 단어 목록
+  const [starList, setStarList] = useState(); // 즐겨찾기 단어 목록
   const [blockListMode, setBlockListMode] = useState(false); // 작은 단어장 리스트
 
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(`/api/words?categoryId=${categoryNum}`);
-      setWordList(data.data);
+      setWordList(() => data.data);
       console.log(data.data);
-      setWordNumber(0);
-      setStartNumber(data.data[0].id);
+      setWordNumber(() => 0);
+      setStartNumber(() => data.data[0].id);
       setEndNumber(data.data.length - 1);
+      if (isLogin) {
+        async function getStar() {
+          const favorites = await axios.get(`/api/favorites`);
+          console.log("즐겨찾기 확인해보자 >> ", favorites.data);
+          if (favorites.data) {
+            let list = [];
+            for (let i = 0; i < favorites.data.length; i++) {
+              // console.log(favorites.data[i].categoryId);
+              if (favorites.data[i].categoryId == categoryNum) {
+                list.push(favorites.data[i]);
+              }
+            }
+            console.log(list);
+
+            let favoritesList = [];
+            for (let i = 0; i < data.data.length; i++) {
+              let status = false;
+              for (let j = 0; j < favorites.data.length; j++) {
+                if (data.data[i].id === favorites.data[j].id) status = true;
+              }
+              favoritesList.push(status);
+            }
+            console.log(favoritesList);
+            setStarList(favoritesList);
+
+            if (favoritesList[0] === true) setStar(true);
+          }
+        }
+        getStar();
+      }
     }
     getInfo();
   }, []);
 
+  const starInfo = (num) => {
+    // console.log("즐겨찾기를 확인?");
+    if (isLogin && wordList) {
+      // async function getStar() {
+      //   const data = await axios.get(`/api/favorites/word/${num}`);
+      //   console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
+      //   const isStar = data.data.message;
+      //   if (isStar === "success") setStar(() => true);
+      //   else setStar(() => false);
+      // }
+      // getStar();
+      // console.log(starList[num]);
+      if (starList[num] === true) setStar(() => true);
+      else setStar(() => false);
+    }
+  };
+
+  const starInfoSmallWord = (num) => {
+    console.log("작은 단어장에서 즐겨찾기 확인");
+    async function getStar() {
+      const data = await axios.get(`/api/favorites/word/${num}`);
+      console.log(`즐겨찾기 확인해보자 ${num} >> `, data.data.message);
+      const isStar = data.data.message;
+      if (isStar === "success") return true;
+      else return false;
+    }
+    getStar();
+  };
+
   const handleListItemClick = (index) => {
     console.log("index 확인중..", index);
     setWordNumber(index);
-    console.log(wordNumber);
+    starInfo(index);
+    // console.log(wordNumber);
   };
 
   const numberPlus = () => {
     const num = wordNumber;
     setWordNumber(num + 1);
-    console.log(wordNumber);
+    // console.log(num + 1);
+    starInfo(num + 1);
   };
 
   const numberMinus = () => {
     const num = wordNumber;
     setWordNumber(num - 1);
-    console.log(wordNumber);
+    // console.log(num - 1);
+    starInfo(num - 1);
   };
 
   const up =
@@ -118,15 +184,58 @@ export default function WordLarge({ isLogin, categoryNum }) {
       </div>
     );
 
-  const starChange = (event) => {
-    setStar(!star);
-    // 이곳에 즐겨찾기 하기, 해제하기 코드가 들어갑니다.
+  const starPost = (num, id) => {
+    console.log("즐겨찾기 >> ", id);
+    setStar(true);
+    async function postStar() {
+      const data = await axios.post(`/api/favorites`, {
+        wordId: id,
+      });
+      console.log(data);
+    }
+    postStar();
+    const list = starList;
+    list[num] = true;
+    setStarList(list);
   };
 
-  const isStar = star ? (
-    <StarIcon color="yellow" sx={{ fontSize: 45 }} onClick={starChange} />
+  const starDelete = (num, id) => {
+    console.log("즐겨찾기 해제 >> ", id);
+    setStar(false);
+    async function deleteStar() {
+      const data = await axios.delete(`/api/favorites`, {
+        data: {
+          wordId: id,
+        },
+      });
+      console.log(data);
+    }
+    deleteStar();
+    const list = starList;
+    list[num] = false;
+    setStarList(list);
+  };
+
+  const isStar = isLogin ? (
+    star ? (
+      <StarIcon
+        color="yellow"
+        sx={{ fontSize: 45 }}
+        onClick={() => starDelete(wordNumber, wordNumber + startNumber)}
+      />
+    ) : (
+      <StarIcon
+        color="disabled"
+        sx={{ fontSize: 45 }}
+        onClick={() => starPost(wordNumber, wordNumber + startNumber)}
+      />
+    )
   ) : (
-    <StarIcon color="disabled" sx={{ fontSize: 45 }} onClick={starChange} />
+    <StarIcon
+      color="disabled"
+      sx={{ fontSize: 45 }}
+      // onClick={} 로그인하겠습니까 모달창
+    />
   );
 
   const flip = () => {
@@ -150,16 +259,47 @@ export default function WordLarge({ isLogin, categoryNum }) {
       setWordNumber(0);
       setStartNumber(data.data[0].id);
       setEndNumber(data.data.length - 1);
+      if (isLogin) {
+        async function getStar() {
+          const favorites = await axios.get(`/api/favorites`);
+          console.log("즐겨찾기 확인해보자 >> ", favorites.data);
+          if (favorites.data) {
+            let list = [];
+            for (let i = 0; i < favorites.data.length; i++) {
+              // console.log(favorites.data[i].categoryId);
+              if (favorites.data[i].categoryId == categoryNum) {
+                list.push(favorites.data[i]);
+              }
+            }
+            console.log(list);
+
+            let favoritesList = [];
+            for (let i = 0; i < data.data.length; i++) {
+              let status = false;
+              for (let j = 0; j < favorites.data.length; j++) {
+                if (data.data[i].id === favorites.data[j].id) status = true;
+              }
+              favoritesList.push(status);
+            }
+            console.log(favoritesList);
+            setStarList(favoritesList);
+
+            if (favoritesList[0] === true) setStar(true);
+          }
+        }
+        getStar();
+      }
     }
     shuffleInfo();
   };
 
+  const toTest = () => {
+    navigate("/test", { state: [categoryNum, categoryName] });
+
+    // navigate("/test", { num: categoryNum, name: categoryName });
+  };
+
   if (wordList && wordList.length > 0) {
-    console.log("나와라..", wordList);
-
-    console.log("번호는?", wordNumber);
-    console.log("이것도..", wordList[wordNumber].name);
-
     const media =
       categoryNum > 3 && wordList && wordList.length > 0 ? (
         <video
@@ -176,22 +316,35 @@ export default function WordLarge({ isLogin, categoryNum }) {
           referrerPolicy="no-referrer"
         />
       );
+
+    const smallWordList =
+      isLogin && starList
+        ? wordList.map((word, index) => (
+            <WordSmall
+              key={word.id}
+              text={word.name}
+              star={starList[index]}
+              isLogin={isLogin}
+              index={index}
+              handleListItemClick={handleListItemClick}
+              listMode={listMode}
+            />
+          ))
+        : wordList.map((word, index) => (
+            <WordSmall
+              key={word.id}
+              text={word.name}
+              isLogin={isLogin}
+              index={index}
+              handleListItemClick={handleListItemClick}
+              listMode={listMode}
+            />
+          ));
+
     if (blockListMode) {
       return (
         <div>
-          <div className="fade-up">
-            {wordList.map((word, index) => (
-              <WordSmall
-                key={word.id}
-                text={word.name}
-                star={true}
-                isLogin={isLogin}
-                index={index}
-                handleListItemClick={handleListItemClick}
-                listMode={listMode}
-              />
-            ))}
-          </div>
+          <div className="fade-up">{smallWordList}</div>
         </div>
       );
     } else {
@@ -271,6 +424,7 @@ export default function WordLarge({ isLogin, categoryNum }) {
               text="TEST"
               type="learnToTest"
               backgroundColor="blue"
+              onclick={toTest}
             />
           </div>
         </div>

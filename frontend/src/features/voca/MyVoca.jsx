@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import LargeButton from "../../common/button/LargeButton";
 import axios from "../../common/api/https";
+import LargeButton from "../../common/button/LargeButton";
 import WordSmall from "../../common/card/WordSmall";
 
 import "../study/learn/WordLarge.scss";
@@ -30,7 +30,7 @@ export default function MyVoca() {
 
   useEffect(() => {
     async function getInfo() {
-      const data = await axios.get(`/api/favorites/user/words`);
+      const data = await axios.get(`/api/favorites`);
       setWordList(data.data);
       console.log(data.data);
       setWordNumber(0);
@@ -185,7 +185,7 @@ export default function MyVoca() {
               <WordSmall
                 key={word.id}
                 text={word.name}
-                star={true}
+                star={false}
                 isLogin={true}
                 index={index}
                 handleListItemClick={handleListItemClick}
@@ -202,7 +202,6 @@ export default function MyVoca() {
             <div id="flip-container" className="flip-container">
               <div className="flipper">
                 <div className="front">
-                  <div className="starBox">{isStar}</div>
                   <div className="shuffleBox">
                     {/* <ShuffleRoundedIcon
                       color="blue"

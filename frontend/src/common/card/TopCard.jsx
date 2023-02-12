@@ -5,7 +5,7 @@ export default function TopCard({ text, color }) {
   const selectedColor = color === "green" ? "#90de8a" : color;
 
   return (
-    <div className="topCard" style={{ color: selectedColor }}>
+    <div id="topcard" className="topCard" style={{ color: selectedColor }}>
       {text}
     </div>
   );
