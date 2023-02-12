@@ -314,9 +314,9 @@ class VideoRoomComponent extends Component {
 
     mySession.disconnect();
 
-    // if (mySession) {
-    //   mySession.disconnect();
-    // }
+    if (mySession) {
+      mySession.disconnect();
+    }
 
     if (this.state.playGame || this.state.goGame) {
       try {
@@ -757,6 +757,7 @@ class VideoRoomComponent extends Component {
                     messageReceived={this.checkNotification}
                     playersList={this.state.playersList}
                     myNickname={this.state.myUserName}
+                    wordsList={this.state.wordsList}
                     leaveSession={this.leaveSession}
                   />
                 </div>
