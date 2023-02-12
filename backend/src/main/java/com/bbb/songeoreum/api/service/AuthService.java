@@ -125,13 +125,13 @@ public class AuthService {
      * saveAndFlush는 save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 한다.
      *
      * @param kakaoAccessToken 카카오가 발급한 access token
-     * @param request
-     * @param response
+     * @param httpServletRequest
+     * @param httpServletResponse
      * @return 카카오 사용자 정보를 DB에 저장한 정보 중 화면에 상시 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다.
      * @throws NotFoundException
      */
     @Transactional
-    public ResponseEntity<KakaoLoginRes> kakaoLogin(String kakaoAccessToken, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(String kakaoAccessToken, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
 
         HttpStatus status = null;
         KakaoLoginRes kakaoLoginRes = null;
@@ -177,8 +177,8 @@ public class AuthService {
 
             int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+            CookieUtil.deleteCookie(httpServletRequest, httpServletResponse, REFRESH_TOKEN);
+            CookieUtil.addCookie(httpServletResponse, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
             status = HttpStatus.ACCEPTED;
 
         } catch (IllegalArgumentException e) {
