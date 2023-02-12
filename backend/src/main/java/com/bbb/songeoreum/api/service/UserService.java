@@ -157,8 +157,13 @@ public class UserService {
         }
         realUser.updateUser(updateUserReq);
     }
-
-    // 게임 결과 경험치 반영
+    
+    /**
+     * 게임, 테스트 결과 획득한 경험치를 DB에 저장합니다.
+     * @param id 경험치를 저장할 id(user table PK)
+     * @param experience 게임, 테스트에서 획득한 경험치
+     * @return 파라미터로 넘어온 경험치를 반영한 UpdateExperienceRes DTO로 반환합니다.
+     */
     @Transactional
     public UpdateExperienceRes updateExperience(Long id, int experience) {
 
