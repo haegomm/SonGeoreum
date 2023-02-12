@@ -66,9 +66,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
-
-
-    // 인가코드로 kakaoAccessToken 받아오는 메소드
+    
+    /**
+     * 인가코드로 카카오에게 access token을 요청하여 전달받은 반환합니다.
+     * @param code 전달받은 인가코드
+     * @return 카카오가 발급한 access token
+     */
     public String getKakaoAccessToken(String code) {
 
         String kakaoAccessToken = "";
