@@ -10,6 +10,8 @@ import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
+import com.bbb.songeoreum.exception.TokenValidFailedException;
+import com.bbb.songeoreum.exception.UnAuthorizedException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.util.CookieUtil;
@@ -25,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +53,7 @@ public class UserController {
     // 카카오 로그인
     @ApiOperation(value = "카카오 로그인")
     @GetMapping("/oauth2/kakao")
-    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) throws NotFoundException, IllegalArgumentException {
 
         log.debug("카카오 user 로그인");
 
@@ -65,43 +68,45 @@ public class UserController {
     // 이메일 중복체크
     @ApiOperation(value = "이메일 중복체크")
     @GetMapping("/signup/email/{email}")
-    public ResponseEntity<String> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
+    public ResponseEntity<SuccessRes> duplicateEmail(@PathVariable("email") String email) throws DuplicateException {
 
         log.debug("중복체크 요청 이메일 = {}", email);
 
-        try {
-            userService.duplicateEmail(email);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-        } catch (DuplicateException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
-        }
+        userService.duplicateEmail(email);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, httpStatus);
+
     }
 
     // 닉네임 중복체크
     @ApiOperation(value = "닉네임 중복체크")
     @GetMapping("/signup/nickname/{nickname}")
-    public ResponseEntity<String> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
+    public ResponseEntity<SuccessRes> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
 
         log.debug("중복체크 요청 닉네임 = {}", nickname);
 
-        try {
-            userService.duplicateNickname(nickname);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-        } catch (DuplicateException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
-        }
+        userService.duplicateNickname(nickname);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, httpStatus);
     }
 
     // 회원가입
     @ApiOperation(value = "회원가입") // 해당 Api의 설명
     @PostMapping("/signup")
-    public ResponseEntity<String> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) {
+    public ResponseEntity<SuccessRes> insertUser(@Valid @RequestBody InsertUserReq insertUserReq) throws DuplicateException {
 
-        log.debug("회원가입 정보 = {} ", insertUserReq);
+        log.debug("회원가입 정보 = {} ", insertUserReq.toString());
+
         userService.insertUser(insertUserReq);
-        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, HttpStatus.OK);
     }
 
     // 로그인
@@ -114,60 +119,53 @@ public class UserController {
         HttpStatus status = null;
         LoginRes loginRes = null; // 리턴값
 
-        try {
-            User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
+        User loginUser = userService.loginUser(loginReq.getEmail(), loginReq.getPassword());
 
-            Date now = new Date();
+        Date now = new Date();
 
-            // access 토큰 발급
-            AuthToken accessToken = tokenProvider.createAuthToken(
-                    loginUser.getId(), // access 토큰에 user pk 저장
-                    loginUser.getNickname(),
-                    "ROLE_USER",
-                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-            );
+        // access 토큰 발급
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                loginUser.getId(), // access 토큰에 user pk 저장
+                loginUser.getNickname(),
+                "ROLE_USER",
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
 
-            // refreshToken 기한
-            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+        // refreshToken 기한
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
-            // refresh 토큰 발급
-            AuthToken refreshToken = tokenProvider.createAuthToken(
-                    appProperties.getAuth().getTokenSecret(),
-                    new Date(now.getTime() + refreshTokenExpiry)
-            );
+        // refresh 토큰 발급
+        AuthToken refreshToken = tokenProvider.createAuthToken(
+                appProperties.getAuth().getTokenSecret(),
+                new Date(now.getTime() + refreshTokenExpiry)
+        );
 
-            log.debug("일반 로그인 user id(PK) : {}, 닉네임 : {}", loginUser.getId(), loginUser.getNickname());
-            log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
-            log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
+        log.debug("일반 로그인 user id(PK) : {}, 닉네임 : {}", loginUser.getId(), loginUser.getNickname());
+        log.debug("일반 user 로그인 accessToken 정보 : {}", accessToken.getToken());
+        log.debug("일반 user 로그인 refreshToken 정보 : {}", refreshToken.getToken());
 
-            // refresh token DB에 저장
-            userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
+        // refresh token DB에 저장
+        userService.saveRefreshToken(loginUser.getId(), refreshToken.getToken());
 
-            loginRes = LoginRes.builder()
-                    .nickname(loginUser.getNickname())
-                    .picture(loginUser.getPicture())
-                    .level(loginUser.getLevel())
-                    .experience(loginUser.getExperience())
-                    .accessToken(accessToken.getToken())
-                    .message(SUCCESS)
-                    .build();
+        loginRes = LoginRes.builder()
+                .nickname(loginUser.getNickname())
+                .picture(loginUser.getPicture())
+                .level(loginUser.getLevel())
+                .experience(loginUser.getExperience())
+                .accessToken(accessToken.getToken())
+                .message(SUCCESS)
+                .build();
 
-            // 쿠키 기한
-            int cookieMaxAge = (int) refreshTokenExpiry / 60;
+        // 쿠키 기한
+        int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
-            // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            // response에 쿠키 담아줌.
-            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        // response에 쿠키 담아줌.
+        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-            status = HttpStatus.ACCEPTED;
+        status = HttpStatus.OK;
 
-
-        } catch (Exception e) {
-            log.error("로그인 실패 : {}", e.getMessage());
-            loginRes = LoginRes.builder().message(FAIL).build();
-            status = HttpStatus.NOT_FOUND;
-        }
 
         return new ResponseEntity<LoginRes>(loginRes, status);
     }
@@ -175,35 +173,25 @@ public class UserController {
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
     @GetMapping("/logout")
-    public ResponseEntity<LogoutRes> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
         User user = (User) request.getAttribute("user"); // 로그아웃 요청한 user
 
-        HttpStatus status = HttpStatus.ACCEPTED;
-        LogoutRes logoutRes = null; // 리턴값
+        HttpStatus status = HttpStatus.OK;
 
-        try {
-            userService.deleteRefreshToken(user.getId());
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-            logoutRes = LogoutRes.builder().message(SUCCESS).build();
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            log.error("로그아웃 실패 : {}", e);
-            logoutRes = LogoutRes.builder().message(FAIL).build();
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<LogoutRes>(logoutRes, status);
+        userService.deleteRefreshToken(user.getId());
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, status);
     }
 
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @GetMapping("/refresh")
     public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request)
-            throws Exception {
+            throws UnAuthorizedException {
         User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
-
-        RefreshTokenRes refreshTokenRes = null; // 리턴 값
-        HttpStatus status = null;
 
         // refresh token
         String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
@@ -216,12 +204,8 @@ public class UserController {
 
         if (authRefreshToken.validate() == false || user.getRefreshToken() == null) {
             log.debug("유효하지 않은 refresh token 입니다.");
-            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
-            status = HttpStatus.UNAUTHORIZED;
-            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
+            throw new UnAuthorizedException("유효하지 않은 refresh token 입니다.");
         }
-
-        //
 
         Date now = new Date();
 
@@ -234,8 +218,8 @@ public class UserController {
         );
 
         log.debug("정상적으로 액세스토큰 재발급!!!");
-        refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
-        status = HttpStatus.OK;
+        RefreshTokenRes refreshTokenRes = RefreshTokenRes.builder().message(SUCCESS).accessToken(accessToken.getToken()).build();
+        HttpStatus status = HttpStatus.OK;
 
 
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
@@ -256,13 +240,15 @@ public class UserController {
     // 프로필 수정
     @ApiOperation(value = "프로필 수정")
     @PutMapping("/profile")
-    public ResponseEntity<String> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) {
+    public ResponseEntity<SuccessRes> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) throws NotFoundException, DuplicateException {
 
         User user = (User) request.getAttribute("user");
 
         userService.updateUser(updateUserReq, user.getId());
 
-        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, HttpStatus.OK);
 
     }
 
