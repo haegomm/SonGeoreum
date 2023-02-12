@@ -11,6 +11,7 @@ import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
 import SideBar from "./sidebar/SideBar";
 import { Navigate } from "react-router-dom";
+import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
@@ -43,7 +44,8 @@ class VideoRoomComponent extends Component {
       token: "", //
       playGame: false, //
       goGame: false,
-      playerlist: [], //
+      playersList: [], //
+      wordsList: [],
       subToken: undefined, // ?
     };
     // this.timer // timer component를 갖고온다면
@@ -63,6 +65,8 @@ class VideoRoomComponent extends Component {
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
     this.theEndGame = this.theEndGame.bind(this);
+    this.getWordsList = this.getWordsList.bind(this);
+    this.startSignal = this.startSignal.bind(this);
   }
 
   componentDidMount() {
@@ -175,16 +179,16 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     await this.OV.getUserMedia({
-      audioSource: undefined,
+      // audioSource: undefined,
       videoSource: undefined,
     });
     var devices = await this.OV.getDevices();
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
-      audioSource: undefined,
+      // audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(),
+      // publishAudio: localUser.isAudioActive(),
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -210,41 +214,6 @@ class VideoRoomComponent extends Component {
           if (this.props.joinSession) {
             this.props.joinSession();
           }
-
-          // // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-          // if (this.state.goGame === false) {
-          //   if (this.state.subscribers > 2 && this.state.playGame === true) {
-          //     this.state.localUser
-          //       .getStreamManager()
-          //       .signal({
-          //         data: {
-          //           playGame: this.state.playGame,
-          //           playerList: this.state.playerList,
-          //         }, // 문자열로 보내짐 // json.parse() 해주기
-          //         to: [],
-          //         type: "play-game",
-          //       })
-          //       .then(() => {
-          //         console.log("얘들아 게임 시작한다~~!");
-          //       })
-          //       .catch((error) => {
-          //         console.error();
-          //       });
-          //   } else if (this.state.subscribers > 2) {
-          //     this.state.localUser
-          //       .getStreamManager()
-          //       .on("signal:play-game", (event) => {
-          //         console.log("오케이 가보자고");
-          //         console.log(event.data);
-          //         console.log(event.from);
-          //         const data = JSON.parse(event.data); // 했음
-          //         this.setState({
-          //           goGame: data.goGame,
-          //           playerList: data.playerList,
-          //         });
-          //       });
-          //   }
-          // }
         });
       });
     }
@@ -270,6 +239,7 @@ class VideoRoomComponent extends Component {
         });
       }
     );
+    this.letsStart();
   }
 
   updateSubscribers() {
@@ -281,7 +251,7 @@ class VideoRoomComponent extends Component {
       () => {
         if (this.state.localUser) {
           this.sendSignalUserChanged({
-            isAudioActive: this.state.localUser.isAudioActive(),
+            // isAudioActive: this.state.localUser.isAudioActive(),
             isVideoActive: this.state.localUser.isVideoActive(),
             nickname: this.state.localUser.getNickname(),
             isScreenShareActive: this.state.localUser.isScreenShareActive(),
@@ -292,6 +262,51 @@ class VideoRoomComponent extends Component {
     );
   }
 
+  async letsStart() {
+    const wordsData = await this.getWordsList();
+    return await this.startSignal(wordsData);
+  }
+
+  async getWordsList() {
+    try {
+      const response = await axios.get(
+        "/api/words?isRandom=true&isTestable=false&num=12"
+      );
+      console.log("단어 리스트를 갖고 왔어^^", response.data);
+      return response.data;
+    } catch (err) {
+      console.log("단어 리스트 못갖고 왔어ㅜ", err);
+    }
+  }
+
+  async startSignal(wordsData) {
+    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+    console.log("참가자들 닉네임", this.state.playersList);
+    if (this.state.goGame === false) {
+      console.log("시그널 조건1 통과");
+      if (this.state.playGame === true) {
+        console.log("시그널 조건2 통과");
+        const data = {
+          playGame: this.state.playGame,
+          playersList: this.state.playersList,
+          wordsList: wordsData,
+        };
+        this.state.session
+          .signal({
+            data: JSON.stringify(data),
+            to: [],
+            type: "play-game",
+          })
+          .then(() => {
+            console.log("시그널 보내기 성공");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }
+  }
+
   async leaveSession() {
     console.log("이곳을...떠나겠습니다...");
     const mySession = this.state.session;
@@ -299,9 +314,9 @@ class VideoRoomComponent extends Component {
 
     mySession.disconnect();
 
-    // if (mySession) {
-    //   mySession.disconnect();
-    // }
+    if (mySession) {
+      mySession.disconnect();
+    }
 
     if (this.state.playGame || this.state.goGame) {
       try {
@@ -425,16 +440,15 @@ class VideoRoomComponent extends Component {
   }
 
   subscribeToUserChanged() {
-    console.log("시작해?", this.state.playGame);
     this.state.session.on("signal:userChanged", (event) => {
       let remoteUsers = this.state.subscribers;
       remoteUsers.forEach((user) => {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("여기다 여기 EVENTO REMOTE: ", event.data);
-          if (data.isAudioActive !== undefined) {
-            user.setAudioActive(data.isAudioActive);
-          }
+          // if (data.isAudioActive !== undefined) {
+          //   user.setAudioActive(data.isAudioActive);
+          // }
           if (data.isVideoActive !== undefined) {
             user.setVideoActive(data.isVideoActive);
           }
@@ -453,48 +467,22 @@ class VideoRoomComponent extends Component {
         () => this.checkSomeoneShareScreen()
       );
     });
-    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    if (this.state.goGame === false) {
-      console.log("시그널 조건1 통과");
-      if (this.state.playGame === true) {
-        console.log("시그널 조건2 통과");
-        const data = {
-          playGame: this.state.playGame,
-          playerList: this.state.playerlist,
-        };
-        this.state.session
-          .signal({
-            // data: {
-            //   playGame: this.state.playGame,
-            //   playerList: this.state.playerList,
-            // }, // 문자열로 보내짐 // json.parse() 해주기
-            data: JSON.stringify(data),
-            to: [],
-            type: "play-game",
-          })
-          .then(() => {
-            console.log("시그널 보내기 성공");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    }
+
     this.state.session.on("signal:play-game", (event) => {
       console.log("오케이 가보자고");
       console.log(event.data);
-      console.log(event.from);
       const data = JSON.parse(event.data);
       console.log(data);
       this.setState({
         goGame: data.playGame,
-        playerList: data.playerList,
+        playersList: data.playersList,
+        wordsList: data.wordsList,
       });
     });
   }
 
   updateLayout() {
-    if (!this.state.playGame) return;
+    if (!this.state.playGame && !this.state.goGame) return;
     setTimeout(() => {
       this.layout.updateLayout();
     }, 20);
@@ -555,9 +543,9 @@ class VideoRoomComponent extends Component {
           // Creating a new publisher with specific videoSource
           // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
-            audioSource: undefined,
+            // audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            publishAudio: localUser.isAudioActive(),
+            // publishAudio: localUser.isAudioActive(),
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -586,7 +574,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        publishAudio: localUser.isAudioActive(),
+        // publishAudio: localUser.isAudioActive(),
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
@@ -767,8 +755,9 @@ class VideoRoomComponent extends Component {
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
-                    playerList={this.state.playerlist}
+                    playersList={this.state.playersList}
                     myNickname={this.state.myUserName}
+                    wordsList={this.state.wordsList}
                     leaveSession={this.leaveSession}
                   />
                 </div>
@@ -812,16 +801,17 @@ class VideoRoomComponent extends Component {
   }
 
   async createToken(sessionData) {
+    console.log("받아온 데이터 값", sessionData);
     const message = sessionData.message;
     const playGame = sessionData.playGame;
-    const playerList = sessionData.playerList;
+    const playersList = sessionData.playersList;
     const sessionId = sessionData.sessionId;
     const token = sessionData.token;
 
     this.setState({
       message: message,
       playGame: playGame,
-      playerList: playerList,
+      playersList: playersList,
       sessionId: sessionId,
       token: token,
     });
