@@ -10,7 +10,6 @@ import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
-import com.bbb.songeoreum.exception.TokenValidFailedException;
 import com.bbb.songeoreum.exception.UnAuthorizedException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
@@ -27,7 +26,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,16 +48,23 @@ public class UserController {
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
 
+    /**
+     * 카카오 로그인을 진행합니다.
+     * @param code 카카오에게 받은 인가 코드
+     * @return 성공 시 DB에 저장된 kakao user 정보를 {@code ResponseEntity} 로 반환합니다.
+     * @throws NotFoundException
+     * @throws IllegalArgumentException
+     */
     // 카카오 로그인
     @ApiOperation(value = "카카오 로그인")
     @GetMapping("/oauth2/kakao")
-    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) throws NotFoundException, IllegalArgumentException {
+    public ResponseEntity<KakaoLoginRes> kakaoLogin(@RequestParam("code") String code, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException, IllegalArgumentException {
 
         log.debug("카카오 user 로그인");
 
         String kakaoAccessToken = authService.getKakaoAccessToken(code);
         log.debug("카카오에서 accessToken 받아옴 : {}", kakaoAccessToken);
-        ResponseEntity<KakaoLoginRes> kakaoLoginRes = authService.kakaoLogin(kakaoAccessToken, request, response);
+        ResponseEntity<KakaoLoginRes> kakaoLoginRes = authService.kakaoLogin(kakaoAccessToken, httpServletRequest, httpServletResponse);
         log.debug("카카오 로그인 user 닉네임 : {}", kakaoLoginRes.getBody().getNickname());
         return kakaoLoginRes;
     }
@@ -112,7 +117,7 @@ public class UserController {
     // 로그인
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
-    public ResponseEntity<LoginRes> loginUser(@RequestBody LoginReq loginReq, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
+    public ResponseEntity<LoginRes> loginUser(@RequestBody LoginReq loginReq, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
 
         log.debug("로그인 요청 들어옴.");
 
@@ -160,9 +165,9 @@ public class UserController {
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         // 쿠키를 왜 delete를 하는지는 잘 모르겠음. 찾아봐야겠음.
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        CookieUtil.deleteCookie(httpServletRequest, httpServletResponse, REFRESH_TOKEN);
         // response에 쿠키 담아줌.
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        CookieUtil.addCookie(httpServletResponse, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
         status = HttpStatus.OK;
 
@@ -173,14 +178,14 @@ public class UserController {
     //로그아웃
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
     @GetMapping("/logout")
-    public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
+    public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
 
-        User user = (User) request.getAttribute("user"); // 로그아웃 요청한 user
+        User user = (User) httpServletRequest.getAttribute("user"); // 로그아웃 요청한 user
 
         HttpStatus status = HttpStatus.OK;
 
         userService.deleteRefreshToken(user.getId());
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        CookieUtil.deleteCookie(httpServletRequest, httpServletResponse, REFRESH_TOKEN);
         SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
 
         return new ResponseEntity<>(successRes, status);
@@ -189,12 +194,12 @@ public class UserController {
 
     @ApiOperation(value = "Access Token 재발급", notes = "만료된 access token을 재발급받는다.", response = Map.class)
     @GetMapping("/refresh")
-    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest request)
+    public ResponseEntity<RefreshTokenRes> refreshToken(HttpServletRequest httpServletRequest)
             throws UnAuthorizedException {
-        User user = (User) request.getAttribute("user"); // access token 재발급 요청한 user
+        User user = (User) httpServletRequest.getAttribute("user"); // access token 재발급 요청한 user
 
         // refresh token
-        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
+        String refreshToken = CookieUtil.getCookie(httpServletRequest, REFRESH_TOKEN)
                 .map(Cookie::getValue)
                 .orElse(null);
 
@@ -229,8 +234,8 @@ public class UserController {
     // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
     @ApiOperation(value = "회원 정보 조회") // 해당 Api의 설명
     @GetMapping("/profile")
-    public ResponseEntity<GetUserRes> getUser(HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<GetUserRes> getUser(HttpServletRequest httpServletRequest) {
+        User user = (User) httpServletRequest.getAttribute("user");
 
         GetUserRes getUserRes = userService.getUser(user.getId());
 
@@ -240,9 +245,9 @@ public class UserController {
     // 프로필 수정
     @ApiOperation(value = "프로필 수정")
     @PutMapping("/profile")
-    public ResponseEntity<SuccessRes> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest request) throws NotFoundException, DuplicateException {
+    public ResponseEntity<SuccessRes> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest httpServletRequest) throws NotFoundException, DuplicateException {
 
-        User user = (User) request.getAttribute("user");
+        User user = (User) httpServletRequest.getAttribute("user");
 
         userService.updateUser(updateUserReq, user.getId());
 
@@ -255,8 +260,8 @@ public class UserController {
     // 게임 결과 경험치 반영
     @ApiOperation(value = "게임 결과 경험치 반영")
     @PutMapping("/game/{experience}")
-    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
+    public ResponseEntity<UpdateExperienceRes> updateExperience(@PathVariable("experience") int experience, HttpServletRequest httpServletRequest) {
+        User user = (User) httpServletRequest.getAttribute("user");
 
         UpdateExperienceRes updateExperienceRes = userService.updateExperience(user.getId(), experience);
 
