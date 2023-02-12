@@ -69,4 +69,12 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage());
     }
 
+    @ExceptionHandler(DuplicateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ErrorRes handleDuplicateException(DuplicateException e){
+        log.error(e.getMessage());
+        return ErrorRes.make(e.getMessage());
+    }
+
 }
