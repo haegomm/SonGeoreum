@@ -100,7 +100,13 @@ public class UserService {
         }
 
     }
-    
+
+    /**
+     * 발급된 refresh token을 DB에 저장합니다.
+     * @param id refresh token을 저장할 사용자의 id(user table PK)
+     * @param refreshToken DB에 저장할 refresh token
+     * @throws NotFoundException
+     */
     @Transactional
     public void saveRefreshToken(Long id, String refreshToken) throws NotFoundException {
 
