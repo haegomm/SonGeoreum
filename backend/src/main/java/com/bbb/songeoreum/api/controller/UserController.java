@@ -127,7 +127,14 @@ public class UserController {
         return new ResponseEntity<>(successRes, HttpStatus.OK);
     }
 
-    // 로그인
+    /**
+     * 로그인
+     * @param loginReq 로그인을 요청한 사용자의 이메일, 비밀번호
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @return 로그인 한 사용자의 정보 중 상시 화면에 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다
+     * @throws NotFoundException
+     */
     @ApiOperation(value = "로그인") // 해당 Api의 설명
     @PostMapping("/login")
     public ResponseEntity<LoginRes> loginUser(@RequestBody LoginReq loginReq, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
