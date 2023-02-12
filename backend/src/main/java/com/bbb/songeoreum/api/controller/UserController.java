@@ -260,7 +260,7 @@ public class UserController {
 
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
     }
-    
+
     /**
      * 회원 정보 조회 - 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줍니다.
      * @param httpServletRequest
@@ -276,7 +276,14 @@ public class UserController {
         return new ResponseEntity<GetUserRes>(getUserRes, HttpStatus.OK);
     }
 
-    // 프로필 수정
+    /**
+     * 프로필 수정
+     * @param updateUserReq 수정할 닉네임, 프로필 사진
+     * @param httpServletRequest
+     * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
+     * @throws NotFoundException
+     * @throws DuplicateException
+     */
     @ApiOperation(value = "프로필 수정")
     @PutMapping("/profile")
     public ResponseEntity<SuccessRes> updateUser(@RequestBody UpdateUserReq updateUserReq, HttpServletRequest httpServletRequest) throws NotFoundException, DuplicateException {
