@@ -64,7 +64,7 @@ class VideoRoomComponent extends Component {
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
     this.theEndGame = this.theEndGame.bind(this);
-    this.getWordsList = this.getWordsList.bind(this);
+    // this.getWordsList = this.getWordsList.bind(this);
   }
 
   componentDidMount() {
@@ -237,6 +237,46 @@ class VideoRoomComponent extends Component {
         });
       }
     );
+    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+    if (this.state.goGame === false) {
+      console.log("시그널 조건1 통과");
+      if (this.state.playGame === true) {
+        console.log("시그널 조건2 통과");
+        const playerList = this.state.subscribers + [this.state.myNickname];
+        console.log("참가자들", playerList);
+        const wordsList = axios.get(
+          "/api/words?isRandom=true&isTestable=false&num=12"
+        );
+        const data = {
+          playGame: this.state.playGame,
+          playerList: playerList,
+          wordsList: wordsList.data,
+        };
+        this.state.session
+          .signal({
+            data: JSON.stringify(data),
+            to: [],
+            type: "play-game",
+          })
+          .then(() => {
+            console.log("시그널 보내기 성공");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    }
+    this.state.session.on("signal:play-game", (event) => {
+      console.log("오케이 가보자고");
+      console.log(event.data);
+      const data = JSON.parse(event.data);
+      console.log(data);
+      this.setState({
+        goGame: data.playGame,
+        playerList: data.playerList,
+        wordsList: data.wordsList,
+      });
+    });
   }
 
   updateSubscribers() {
@@ -259,17 +299,17 @@ class VideoRoomComponent extends Component {
     );
   }
 
-  async getWordsList() {
-    try {
-      const response = await axios.get(
-        "/api/words?isRandom=true&isTestable=false&num=12"
-      );
-      console.log("단어 리스트를 갖고 왔어^^", response.data);
-      return response.data;
-    } catch (err) {
-      console.log("단어 리스트 못갖고 왔어ㅜ", err);
-    }
-  }
+  // async getWordsList() {
+  //   try {
+  //     const response = await axios.get(
+  //       "/api/words?isRandom=true&isTestable=false&num=12"
+  //     );
+  //     console.log("단어 리스트를 갖고 왔어^^", response.data);
+  //     return response.data;
+  //   } catch (err) {
+  //     console.log("단어 리스트 못갖고 왔어ㅜ", err);
+  //   }
+  // }
 
   async leaveSession() {
     console.log("이곳을...떠나겠습니다...");
@@ -404,7 +444,6 @@ class VideoRoomComponent extends Component {
   }
 
   subscribeToUserChanged() {
-    console.log("시작해?", this.state.playGame);
     this.state.session.on("signal:userChanged", (event) => {
       let remoteUsers = this.state.subscribers;
       remoteUsers.forEach((user) => {
@@ -432,47 +471,53 @@ class VideoRoomComponent extends Component {
         () => this.checkSomeoneShareScreen()
       );
     });
-    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    if (this.state.goGame === false) {
-      console.log("시그널 조건1 통과");
-      if (this.state.playGame === true) {
-        console.log("시그널 조건2 통과");
-        const wordsList = getWordsList();
-        const data = {
-          playGame: this.state.playGame,
-          playerList: this.state.playerList,
-          wordsList: wordsList,
-        };
-        this.state.session
-          .signal({
-            // data: {
-            //   playGame: this.state.playGame,
-            //   playerList: this.state.playerList,
-            // }, // 문자열로 보내짐 // json.parse() 해주기
-            data: JSON.stringify(data),
-            to: [],
-            type: "play-game",
-          })
-          .then(() => {
-            console.log("시그널 보내기 성공");
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+
+    if (
+      (this.state.playGame || this.state.goGame) &&
+      this.state.subscribers < 3
+    ) {
+      this.leaveSession();
     }
-    this.state.session.on("signal:play-game", (event) => {
-      console.log("오케이 가보자고");
-      console.log(event.data);
-      console.log(event.from);
-      const data = JSON.parse(event.data);
-      console.log(data);
-      this.setState({
-        goGame: data.playGame,
-        playerList: data.playerList,
-        wordsList: data.wordsList,
-      });
-    });
+    // // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
+    // if (this.state.goGame === false) {
+    //   console.log("시그널 조건1 통과");
+    //   if (this.state.playGame === true) {
+    //     console.log("시그널 조건2 통과");
+    //     const playerList = this.state.subscribers + [this.state.myNickname];
+    //     console.log("참가자들", playerList);
+    //     const wordsList = axios.get(
+    //       "/api/words?isRandom=true&isTestable=false&num=12"
+    //     );
+    //     const data = {
+    //       playGame: this.state.playGame,
+    //       playerList: playerList,
+    //       wordsList: wordsList.data,
+    //     };
+    //     this.state.session
+    //       .signal({
+    //         data: JSON.stringify(data),
+    //         to: [],
+    //         type: "play-game",
+    //       })
+    //       .then(() => {
+    //         console.log("시그널 보내기 성공");
+    //       })
+    //       .catch((error) => {
+    //         console.error(error);
+    //       });
+    //   }
+    // }
+    // this.state.session.on("signal:play-game", (event) => {
+    //   console.log("오케이 가보자고");
+    //   console.log(event.data);
+    //   const data = JSON.parse(event.data);
+    //   console.log(data);
+    //   this.setState({
+    //     goGame: data.playGame,
+    //     playerList: data.playerList,
+    //     wordsList: data.wordsList,
+    //   });
+    // });
   }
 
   updateLayout() {
