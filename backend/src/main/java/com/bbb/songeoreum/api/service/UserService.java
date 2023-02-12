@@ -114,13 +114,11 @@ public class UserService {
         user.saveRefreshToken(refreshToken);
     }
 
-
-    public User getRefreshToken(Long id) throws NotFoundException {
-
-        return userRepository.findById(id).orElseThrow(NotFoundException::new);
-    }
-
-
+    /**
+     * 로그아웃 시 호출되는 메서드로 DB에 저장된 refresh token을 삭제합니다.
+     * @param id refresh token을 삭제할 id(user table PK)
+     * @throws NotFoundException
+     */
     @Transactional
     public void deleteRefreshToken(Long id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("존재하지 않는 user 입니다."));
