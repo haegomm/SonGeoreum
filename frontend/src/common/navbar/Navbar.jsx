@@ -123,7 +123,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            <NavbarSide />
+            {/* <NavbarSide />
             <MenuItem>
                 <Typography
                   textAlign="center"
@@ -138,10 +138,10 @@ export default function Navbar() {
                 >
                   로그인
                 </Typography>
-              </MenuItem>
+              </MenuItem> */}
 
             {/* 나중에 아래 주석 풀기 : 로그인 상태에 따라 로그인 버튼과 프로필 버튼 다르게 */}
-            {/* {authAction.isLogin() ? (
+            {authAction.isLogin() ? (
               <NavbarSide />
             ) : (
               <MenuItem>
@@ -159,7 +159,7 @@ export default function Navbar() {
                   로그인
                 </Typography>
               </MenuItem>
-            )} */}
+            )}
 
           </Toolbar>
         </AppBar>
