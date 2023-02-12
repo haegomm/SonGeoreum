@@ -10,6 +10,7 @@ import com.bbb.songeoreum.config.AppProperties;
 import com.bbb.songeoreum.db.domain.User;
 import com.bbb.songeoreum.exception.DuplicateException;
 import com.bbb.songeoreum.exception.NotFoundException;
+import com.bbb.songeoreum.exception.UnAuthorizedException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.util.CookieUtil;
@@ -204,9 +205,7 @@ public class UserController {
 
         if (authRefreshToken.validate() == false || user.getRefreshToken() == null) {
             log.debug("유효하지 않은 refresh token 입니다.");
-            refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
-            status = HttpStatus.UNAUTHORIZED;
-            throw new NotFoundException("유효하지 않은 refresh token 입니다.");
+            throw new UnAuthorizedException("유효하지 않은 refresh token 입니다.");
         }
 
         //
