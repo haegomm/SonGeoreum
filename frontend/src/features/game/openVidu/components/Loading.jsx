@@ -1,5 +1,5 @@
 import axios from "../../../../common/api/https";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
 
@@ -9,21 +9,21 @@ const Loading = (props) => {
   const sessionId = props.sessionId;
   const subscribers = props.subscribers;
 
-  let tipNumber = 0;
+  const [tipNumber, setTipNumber] = useState(0);
   const tips = [
-    "다같이 정답을 보면서 수어를 따라해 보세요1",
-    "다같이 정답을 보면서 수어를 따라해 보세요2",
-    "다같이 정답을 보면서 수어를 따라해 보세요3",
-    "다같이 정답을 보면서 수어를 따라해 보세요4",
+    "농인들에겐 제 1의 언어가 수어입니다😊",
+    "농인들 문화에는 '얼굴이름'이라는 것이 있어요😉",
+    "본 게임은 마이크 기능을 제공하지 않습니다. 표정과 몸짓 손짓으로 문제를 표현해봐요🤗",
+    "농인들만의 문화가 있어요. 궁금하시다면 게임이 끝난 후 알아보기를 이용해보세요!😘",
   ];
 
   // Mount시 setTips 실행
   useEffect(() => {
     try {
       const changeTips = setInterval(() => {
-        tipNumber = (tipNumber + 1) % tips.length;
-        // console.log(tipNumber)
-        // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다")
+        setTipNumber((tipNumber + 1) % tips.length);
+        console.log(tipNumber);
+        console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
       }, 3000);
       return () => clearInterval(changeTips);
     } catch (err) {
@@ -43,6 +43,7 @@ const Loading = (props) => {
       return response.data;
     } catch (err) {
       console.log("못나가^^ >>", err);
+      navigate("/");
     }
   };
 

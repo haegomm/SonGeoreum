@@ -7,34 +7,16 @@ import ChatComponent from "./chat/ChatComponent";
 const SideBar = (props) => {
   const playerList = props.playerList;
   const myNickname = props.myNickname;
+  const questionList = props.wordsList;
   const [gameCnt, setGameCnt] = useState(0);
-  const [questionList, setQuestionList] = useState();
   const [showAnswer, setShowAnswer] = useState(false);
-  let scoreList = [0, 0, 0, 0];
+  const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
 
   const navigate = useNavigate();
 
   const handletheEndGame = (result) => {
     props.theEndGame();
     navigate("result", { state: result });
-  };
-
-  useEffect(() => {
-    getWordList();
-  }, []);
-
-  const getWordList = async () => {
-    try {
-      const response = await axios.get(
-        "/api/words?isRandom=true&isTestable=false&num=12"
-      );
-      console.log("단어리스트를 가지고 왔어요", response.data);
-      setQuestionList(response.data);
-      console.log("문제들이야!!!!", questionList);
-      return response.data;
-    } catch (err) {
-      console.log("단어리스트를 못 가져왔는뎅ㅜ!!!", err);
-    }
   };
 
   const resultScore = () => {
@@ -76,7 +58,7 @@ const SideBar = (props) => {
   const whoGetScore = (who) => {
     if (who) {
       let Idx = playerList.indexOf(who);
-      scoreList[Idx] += 1;
+      setSocreList((scoreList[Idx] += 1));
     }
     if (showAnswer === false) {
       setTimeout(() => {
