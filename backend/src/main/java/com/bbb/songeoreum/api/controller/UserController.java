@@ -260,9 +260,12 @@ public class UserController {
 
         return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
     }
-
-    // 회원 정보 조회
-    // 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줌.
+    
+    /**
+     * 회원 정보 조회 - 일반, 카카오톡 사용자 모두 조회할 수 있도록 email, kakaoId 모두 반환해줍니다.
+     * @param httpServletRequest
+     * @return 해당 메서드를 호출한 사용자의 정보를 {@code ResponseEntity}로 반환합니다
+     */
     @ApiOperation(value = "회원 정보 조회") // 해당 Api의 설명
     @GetMapping("/profile")
     public ResponseEntity<GetUserRes> getUser(HttpServletRequest httpServletRequest) {
