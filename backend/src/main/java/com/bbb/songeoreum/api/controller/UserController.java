@@ -195,7 +195,13 @@ public class UserController {
         return new ResponseEntity<LoginRes>(loginRes, status);
     }
 
-    //로그아웃
+    /**
+     * 로그아웃
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @return 성공 시 성공메시지를 {@code ResponseEntity}로 반환합니다
+     * @throws NotFoundException
+     */
     @ApiOperation(value = "로그아웃") // 해당 Api의 설명
     @GetMapping("/logout")
     public ResponseEntity<SuccessRes> logoutUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws NotFoundException {
