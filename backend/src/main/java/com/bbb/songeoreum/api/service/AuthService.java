@@ -66,7 +66,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
-    
+
     /**
      * 인가코드로 카카오에게 access token을 요청하여 전달받은 반환합니다.
      * @param code 전달받은 인가코드
@@ -119,7 +119,14 @@ public class AuthService {
         return kakaoAccessToken;
     }
 
-    // login 요청 보내는 회원가입 유무 판단해 분기 처리
+    /**
+     * 카카오가 보낸 사용자 정보를 DB에 저장하고 로그인 처리합니다.
+     * @param kakaoAccessToken 카카오가 발급한 access token
+     * @param request
+     * @param response
+     * @return 카카오 사용자 정보를 DB에 저장한 정보 중 화면에 상시 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다.
+     * @throws NotFoundException
+     */
     @Transactional
     public ResponseEntity<KakaoLoginRes> kakaoLogin(String kakaoAccessToken, HttpServletRequest request, HttpServletResponse response) throws NotFoundException {
 
