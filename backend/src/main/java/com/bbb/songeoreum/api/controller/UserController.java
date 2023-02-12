@@ -206,7 +206,7 @@ public class UserController {
             log.debug("유효하지 않은 refresh token 입니다.");
             refreshTokenRes = RefreshTokenRes.builder().message(FAIL).build();
             status = HttpStatus.UNAUTHORIZED;
-            return new ResponseEntity<RefreshTokenRes>(refreshTokenRes, status);
+            throw new NotFoundException("유효하지 않은 refresh token 입니다.");
         }
 
         //
