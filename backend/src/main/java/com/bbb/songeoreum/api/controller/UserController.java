@@ -81,17 +81,16 @@ public class UserController {
     // 닉네임 중복체크
     @ApiOperation(value = "닉네임 중복체크")
     @GetMapping("/signup/nickname/{nickname}")
-    public ResponseEntity<String> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
+    public ResponseEntity<SuccessRes> duplicateNickname(@PathVariable("nickname") String nickname) throws DuplicateException {
 
         log.debug("중복체크 요청 닉네임 = {}", nickname);
 
-        try {
-            userService.duplicateNickname(nickname);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-        } catch (DuplicateException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<String>(FAIL, HttpStatus.CONFLICT);
-        }
+        userService.duplicateNickname(nickname);
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        SuccessRes successRes = SuccessRes.builder().message(SUCCESS).build();
+
+        return new ResponseEntity<>(successRes, httpStatus);
     }
 
     // 회원가입

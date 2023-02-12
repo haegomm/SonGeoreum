@@ -40,7 +40,7 @@ public class UserService {
     }
 
     // 닉네임 중복 체크
-    public void duplicateNickname(String nickname) {
+    public void duplicateNickname(String nickname) throws DuplicateException {
         if (userRepository.findByNickname(nickname).isPresent()) {
             throw new DuplicateException("중복된 닉네임입니다.");
         }
@@ -145,7 +145,7 @@ public class UserService {
     public List<GetTopTenUserRes> getTopTenUser() throws NotFoundException {
 
         List<GetTopTenUserRes> list = userRepository.findTop10ByOrderByExperienceDesc().stream().map(user -> GetTopTenUserRes.builder().user(user).build()).collect(Collectors.toList());
-        
+
         return list;
     }
 
