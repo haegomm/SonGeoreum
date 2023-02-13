@@ -113,9 +113,7 @@ function Signup(props) {
           </div>
             <div className='errorMessage'>{confirmPasswordError}</div>
             </div>
-          <br />
-          <p>프로필 사진</p>
-          <div>
+          <div className='profileList'>
             {profileImages.map((profileImage) => (
               <img
                 className={profileImage===profileImageUrl ? 'selected' : 'unselected'}
@@ -126,14 +124,9 @@ function Signup(props) {
               />
             ))}
           </div>
-          <button type="submit" className='signupButton'>
-            <LargeButton
-            text="가입하기"
-            type="gameStart"
-            backgroundColor="blue"
-            disable={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}
-            />
-            </button>
+          <button type="submit" className='signupButton' disable={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}>
+              가입하기
+          </button>
         </form>
       </div>
     </div>
