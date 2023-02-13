@@ -72,7 +72,7 @@ const SideBar = (props) => {
   // if (playersList && playersList.length > 0) { // ****** 임 시 ******
   //   if (questionList) { // ****** 임 시 ******
   return (
-    <div>
+    <div className="sidebar-wrapper">
       <div>
         {gameCnt === 12 ? (
           <div>
