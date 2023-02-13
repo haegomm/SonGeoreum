@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -308,12 +305,14 @@ public class GameService {
     public void exitRoom(String id) throws OpenViduJavaClientException, OpenViduHttpException {
 
         Map<String, Object> sessionInfo = gameRooms.get(id);
-        Session session;
+        Session session = null;
 
         try {
             session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
+            log.error(session.toString());
+            log.error("input id: {} / existing id: {}", id, session.getSessionId());
             log.error("게임방 종료 단계에서 세션이 일치하지 않습니다.");
             throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
