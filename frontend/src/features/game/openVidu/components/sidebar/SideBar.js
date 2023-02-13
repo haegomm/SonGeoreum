@@ -5,11 +5,9 @@ import AnswerVideo from "./AnswerVideo";
 import ChatComponent from "./chat/ChatComponent";
 
 const SideBar = (props) => {
-  // const playersList = props.playersList;
-  const playersList = [0, 1, 2, 3]; //임시임시임시임시임시임시임시
+  const playersList = props.playersList;
   const myNickname = props.myNickname;
-  // const questionList = props.wordsList;
-  const questionList = [0]; //임시임시임시임시임시임시임시
+  const questionList = props.wordsList;
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -59,7 +57,7 @@ const SideBar = (props) => {
 
   const whoGetScore = (who) => {
     if (who) {
-      let Idx = playersList.indexOf(who);
+      const Idx = playersList.indexOf(who);
       setSocreList((scoreList[Idx] += 1));
     }
     // if (showAnswer === false) {

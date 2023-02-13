@@ -29,13 +29,13 @@ const AnswerVideo = (props) => {
   const presenter = props.presenter;
   const showAnswer = props.showAnswer;
 
-  // useEffect(() => {
-  //   if (!showAnswer) {
-  //     setTimeout(() => {
-  //       props.whoGetScore('')
-  //     }, 5000)
-  //     }
-  // }, [])
+  useEffect(() => {
+    if (!showAnswer) {
+      setTimeout(() => {
+        props.whoGetScore("");
+      }, 5000);
+    }
+  }, []);
 
   const check =
     presenter === myNickname ? "내가 출제자야" : `다음 출제자: ${presenter}`;

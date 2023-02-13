@@ -43,9 +43,9 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: true, //임시임시임시임시임시임시임시임시임시
-      playersList: [], //
-      wordsList: [],
+      goGame: false, //
+      playersList: null, //
+      wordsList: null,
       subToken: undefined, // ?
     };
     // this.timer // timer component를 갖고온다면
@@ -758,22 +758,21 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            {
-              // localUser !== undefined &&
-              //   localUser.getStreamManager() !== undefined &&
-              // <div style={chatDisplay}>
-              <SideBar
-                user={"localUser"}
-                chatDisplay={this.state.chatDisplay}
-                close={this.toggleChat}
-                messageReceived={this.checkNotification}
-                playersList={this.state.playersList}
-                myNickname={this.state.myUserName}
-                wordsList={this.state.wordsList}
-                leaveSession={this.leaveSession}
-              />
-              // </div>
-            }
+            {localUser !== undefined &&
+              localUser.getStreamManager() !== undefined && (
+                <div style={chatDisplay}>
+                  <SideBar
+                    user={"localUser"}
+                    chatDisplay={this.state.chatDisplay}
+                    close={this.toggleChat}
+                    messageReceived={this.checkNotification}
+                    playersList={this.state.playersList}
+                    myNickname={this.state.myUserName}
+                    wordsList={this.state.wordsList}
+                    leaveSession={this.leaveSession}
+                  />
+                </div>
+              )}
           </div>
         </div>
       );
