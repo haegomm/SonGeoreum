@@ -31,7 +31,7 @@ function ModifyProfile() {
     const currentNickname = e.currentTarget.value
     authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
-      if (response.payload === 'success' || currentNickname === '' || currentNickname === oldNickname) {
+      if (response.payload.message === 'success' || currentNickname === '' || currentNickname === oldNickname) {
         setNicknameError('');
         setNickname(currentNickname)
       } else{
@@ -53,7 +53,7 @@ function ModifyProfile() {
     };
 
     dispatch(userAction.modifyprofile(body)).then((response) => {
-      if (response.payload === 'success') {
+      if (response.payload.message === 'success') {
         alert('프로필 수정 성공~');
         window.localStorage.setItem('nickname', Nickname)
         window.localStorage.setItem('picture', profileImageUrl)

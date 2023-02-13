@@ -29,7 +29,7 @@ function Signup(props) {
     setEmail(currentEmail);
     authValidation(currentEmail, 'email') ? setEmailFormError('') : setEmailFormError('올바르지 않은 이메일 형식입니다')
     dispatch(authAction.checkEmail(currentEmail)).then((response) => {
-      if (response.payload === 'success' || currentEmail === '') {
+      if (response.payload.message === 'success' || currentEmail === '') {
         setEmailError('')
       }else{
         setEmailError('이미 가입한 이메일입니다')
@@ -42,7 +42,7 @@ function Signup(props) {
     setNickname(currentNickname)
     authValidation(currentNickname, 'nickname') ? setNicknameFormError('') : setNicknameFormError('2자 이상 8자 이하의 닉네임을 입력해주세요');
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
-      if (response.payload === 'success' || currentNickname === '') {
+      if (response.payload.message === 'success' || currentNickname === '') {
         setNicknameError('')
       }else{
         setNicknameError('중복 닉네임이 존재합니다')
@@ -76,7 +76,8 @@ function Signup(props) {
     };
 
     dispatch(authAction.signup(body)).then((response) => {
-      if (response.payload === 'success') {
+      console.log(response)
+      if (response.payload.message === 'success') {
         alert('환영합니다~~~');
         navigate('/login');
       } else{
