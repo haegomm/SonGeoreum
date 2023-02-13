@@ -20,7 +20,7 @@ const APPLICATION_SERVER_URL =
 class VideoRoomComponent extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
     let sessionName = this.props.sessionName
