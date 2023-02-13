@@ -4,13 +4,19 @@ import axios from "../../../common/api/https";
 import TestScreen from "../../../common/card/TestScreen";
 import TestAnswer from "../../../common/card/TestAnswer";
 import "./HandToWord.scss";
+import "./confetti.scss";
 
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export default function HandToWord({ categoryNum, isTuto, finishTest }) {
+export default function HandToWord({
+  categoryNum,
+  categoryInfo,
+  isTuto,
+  finishTest,
+}) {
   let num = categoryNum;
   if (!isTuto) num = 3;
   const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
@@ -54,9 +60,9 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
   }, []);
 
   const tutoDone = "정답입니다! 테스트가 곧 시작됩니다.";
-  const defaultText = "정답을 입력해주세요";
+  const defaultText = "수어의 뜻을 입력해주세요";
   const correctText = "정답입니다";
-  const showAnswerText = "정답을 확인해보세요";
+  const showAnswerText = "정확한 뜻을 확인해보세요";
   const guide = isTuto
     ? !showAnswer && !showCorrect
       ? defaultText
@@ -151,7 +157,7 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
           display: "flex",
           alignItems: "center",
           width: 400,
-          margin: "16px",
+          margin: "0px",
         }}
       >
         <InputBase
@@ -190,13 +196,29 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
     </button>
   ) : null;
 
-  const correctCircle = showCorrect ? null : null; // 이부분에 정답 효과를 넣습니다.
+  const correctCircle = showCorrect ? (
+    <div class="">
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+    </div>
+  ) : null; // 이부분에 정답 효과를 넣습니다.
 
   if (testList && testList.length > 0 && number < testList.length) {
     return (
       <div>
         <div className="testBox">
-          <div className="testGuideText">{guide}</div>
+          <div className="titleText">{categoryInfo}</div>
           <div className="fixedBox">
             <div>{number + 1} / 10</div>
             {showNextButton}
@@ -204,8 +226,9 @@ export default function HandToWord({ categoryNum, isTuto, finishTest }) {
               종료
             </button>
           </div>
-          <div className="flexBox">
+          <div className="flexBox relativeBox">
             <TestScreen link={testList[number].contentUrl} categoryNum={num} />
+            <div className="motionGuideText testScreenInner">{guide}</div>
           </div>
         </div>
         {correctCircle}
