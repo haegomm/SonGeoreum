@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false,
+      goGame: true, //임시임시임시임시임시임시임시임시임시
       playersList: [], //
       wordsList: [],
       subToken: undefined, // ?
@@ -758,11 +758,13 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
+            <div className="sidebar-wrapper">
+              {
+                // localUser !== undefined &&
+                //   localUser.getStreamManager() !== undefined &&
                 <div style={chatDisplay}>
                   <SideBar
-                    user={localUser}
+                    user={"localUser"}
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
@@ -772,7 +774,8 @@ class VideoRoomComponent extends Component {
                     leaveSession={this.leaveSession}
                   />
                 </div>
-              )}
+              }
+            </div>
           </div>
         </div>
       );

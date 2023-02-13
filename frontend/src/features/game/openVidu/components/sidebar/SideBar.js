@@ -5,9 +5,11 @@ import AnswerVideo from "./AnswerVideo";
 import ChatComponent from "./chat/ChatComponent";
 
 const SideBar = (props) => {
-  const playerList = props.playerList;
+  // const playersList = props.playersList;
+  const playersList = [0, 1, 2, 3]; //임시임시임시임시임시임시임시
   const myNickname = props.myNickname;
-  const questionList = props.wordsList;
+  // const questionList = props.wordsList;
+  const questionList = [0]; //임시임시임시임시임시임시임시
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -23,7 +25,7 @@ const SideBar = (props) => {
     const result = [];
     for (let i = 0; i < 4; i++) {
       result.push({
-        nickname: playerList[i],
+        nickname: playersList[i],
         score: scoreList[i],
       });
       return result;
@@ -57,35 +59,32 @@ const SideBar = (props) => {
 
   const whoGetScore = (who) => {
     if (who) {
-      let Idx = playerList.indexOf(who);
+      let Idx = playersList.indexOf(who);
       setSocreList((scoreList[Idx] += 1));
     }
-    if (showAnswer === false) {
-      setTimeout(() => {
-        onShowAnswer(true);
-      }, 5000);
-      // onShowAnswer(true) // true
-      setTimeout(() => {
-        toNext();
-      }, 5000);
-    }
+    // if (showAnswer === false) {
+    //   setTimeout(() => {
+    //     onShowAnswer(true);
+    //   }, 5000);
+    //   // onShowAnswer(true) // true
+    //   setTimeout(() => {
+    //     toNext();
+    //   }, 5000);
+    // }
   };
 
   const test = showAnswer ? "정답보여줌" : "문제푸는중";
 
-  if (playerList && playerList.length > 0) {
+  if (playersList && playersList.length > 0) {
     if (questionList) {
       return (
         <div>
-          <div>
-            {gameCnt} {test}
-          </div>
           <AnswerVideo
             className="box"
             myNickname={myNickname}
             answerWord={questionList[gameCnt].name}
             answerApi={questionList[gameCnt].contentUrl}
-            presenter={playerList[gameCnt % 4]}
+            presenter={playersList[gameCnt % 4]}
             showAnswer={showAnswer} //
             whoGetScore={whoGetScore()}
           />
