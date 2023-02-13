@@ -769,18 +769,18 @@ class VideoRoomComponent extends Component {
             {
               // localUser !== undefined && // ****** 임 시 ******
               //   localUser.getStreamManager() !== undefined && // ****** 임 시 ******
-              <div style={chatDisplay}>
-                <SideBar
-                  user={"localUser"}
-                  chatDisplay={this.state.chatDisplay}
-                  close={this.toggleChat}
-                  messageReceived={this.checkNotification}
-                  playersList={this.state.playersList}
-                  myNickname={this.state.myUserName}
-                  wordsList={this.state.wordsList}
-                  leaveSession={this.leaveSession}
-                />
-              </div>
+              // <div style={chatDisplay}>
+              <SideBar
+                user={"localUser"}
+                chatDisplay={this.state.chatDisplay}
+                close={this.toggleChat}
+                messageReceived={this.checkNotification}
+                playersList={this.state.playersList}
+                myNickname={this.state.myUserName}
+                wordsList={this.state.wordsList}
+                leaveSession={this.leaveSession}
+              />
+              // </div>
             }
           </div>
         </div>
