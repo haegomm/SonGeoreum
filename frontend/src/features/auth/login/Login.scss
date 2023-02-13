@@ -12,17 +12,6 @@ $blue: #6488e5;
     // border: 1px;
     // background-color: #FFF9ED;
    }
-
-.loginTotoalDiv{
-    // text-align: center;
-}
-
-.bottomButton{
-    display: flex;
-    justify-content: center;
-    margin-top: 380px;
-}
-
 .normalSignUpButton{
     margin-right: 20px;
     width: 100px;
@@ -35,5 +24,26 @@ $blue: #6488e5;
     background-color: $blue;
     border-radius: 8px;
 }
+
+
+.loginTotoalDiv{
+    // text-align: center;
+}
+
+.idMessage{
+    display: flex;
+    justify-content: center;
+    margin-top: 340px;
+    font-size: large;
+    font-weight: 600;
+    color: #66645f;
+}
+
+.bottomButton{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
 
 

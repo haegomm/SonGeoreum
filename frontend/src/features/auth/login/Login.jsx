@@ -60,8 +60,9 @@ function Login(props) {
         <br />
         <button type="submit">로그인하기</button>
       </form>
-      아이디가 없으신가요?
-      <br />
+      <div className='idMessage'>
+      아직 아이디가 없으신가요?
+      </div>
       <div className='bottomButton'>
       <Link to="/signup">
         <button className="normalSignUpButton">
