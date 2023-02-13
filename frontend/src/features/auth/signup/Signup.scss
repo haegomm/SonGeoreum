@@ -1,3 +1,81 @@
+.signUpTitle{
+  margin-top: 76px;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.signUpInputEmail{
+  display: block;
+  margin:auto;
+  margin-top: 56px;
+  border:0;
+  background-color: #FFF9ED;
+  border-bottom: 2px solid #D1D1D6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputEmail::placeholder{
+  color: #D1D1D6;
+}
+.signUpInputNickname{
+  display: block;
+  margin:auto;
+  margin-top: 28px;
+  border:0;
+  background-color: #FFF9ED;
+  border-bottom: 2px solid #D1D1D6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputNickname::placeholder{
+  color: #D1D1D6;
+}
+.signUpInputPassword{
+  display: block;
+  margin:auto;
+  margin-top: 28px;
+  border:0;
+  background-color: #FFF9ED;
+  border-bottom: 2px solid #D1D1D6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputPassword::placeholder{
+  color: #D1D1D6;
+}
+.signUpInputPasswordCheck{
+  display: block;
+  margin:auto;
+  margin-top: 28px;
+  border:0;
+  background-color: #FFF9ED;
+  border-bottom: 2px solid #D1D1D6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputPasswordCheck::placeholder{
+  color: #D1D1D6;
+}
+.formItem input:focus{
+  border-bottom: 2px solid #66645f;
+}
+
 .selected{
   border: 2px solid black;
 }
@@ -8,3 +86,4 @@
  border: 0;
  background-color: #FFF9ED;
 }
+

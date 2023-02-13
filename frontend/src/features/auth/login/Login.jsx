@@ -51,7 +51,7 @@ function Login(props) {
 
   return (
     <div>
-      <h1 className='loginWord'>로그인</h1>
+      <h1 className='loginTitle'>로그인</h1>
       <form onSubmit={onSubmitHandler} >
         <div className='formItem'>
           <input type="email" placeholder='이메일' className='inputEmail' onChange={onEmailHandler} />

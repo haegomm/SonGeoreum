@@ -1,7 +1,7 @@
 $blue: #6488e5;
 
 
-.loginWord{
+.loginTitle{
     margin-top: 76px;
     font-size: 40px;
     font-weight: 600;
@@ -15,10 +15,11 @@ $blue: #6488e5;
     background-color: #FFF9ED;
     border-bottom: 2px solid #D1D1D6;
     color: #66645f;
-    width: 290px;
+    width: 320px;
     outline: none;
     display: flex;
     justify-content: center;
+    font-size: medium;
 }
 .inputEmail::placeholder{
     color: #D1D1D6;
@@ -26,15 +27,16 @@ $blue: #6488e5;
 .inputPassword{
     display: block;
     margin:auto;
+    margin-top: 24px;
     border:0;
     background-color: #FFF9ED;
     border-bottom: 2px solid #D1D1D6;
     color: #66645f;
-    width: 290px;
+    width: 320px;
     outline: none;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    font-size: medium;
 }
 .inputPassword::placeholder{
     color: #D1D1D6;

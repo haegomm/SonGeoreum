@@ -88,27 +88,20 @@ function Signup(props) {
 
   return (
     <div>
-      <h1>회원가입</h1>
+      <h1 className='signUpTitle'>회원가입</h1>
       <br />
       <div>
         <form
           onSubmit={onSubmitHandler}>
-          <label>이메일</label>
-          <input type="email" onBlur={onEmailHandler} />
+          <input type="email" placeholder="이메일" className='signUpInputEmail' onBlur={onEmailHandler} />
           <span>{emailError}</span>
           <span>{emailFormError}</span>
-          <br />
-          <span>닉네임</span>
-          <input type="text" onBlur={onNicknameHandler} />
+          <input type="text" placeholder="닉네임" className='signUpInputNickname' onBlur={onNicknameHandler} />
           <span>{nicknameError}</span>
           <span>{nicknameFormError}</span>
-          <br />
-          <span>비밀번호</span>
-          <input type="password" value={Password} onChange={onPasswordHandler} />
+          <input type="password" placeholder="비밀번호" className='signUpInputPassword' value={Password} onChange={onPasswordHandler} />
           <span>{passwordError}</span>
-          <br />
-          <span>비밀번호 확인</span>
-          <input type="password" value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
+          <input type="password" placeholder="비밀번호 확인" className='signUpInputPasswordCheck' value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
           <span>{confirmPasswordError}</span>
           <br />
           <p>프로필 사진</p>
