@@ -1,0 +1,38 @@
+$red: #e56372;
+$green: #90de8a;
+$yellow: #f9be7d;
+$blue: #6488e5;
+
+.loadingButton {
+  color: black !important;
+  align-self: flex-end;
+}
+
+#LoadingBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  gap: 12px;
+}
+
+.gameLoadingSpinner {
+  margin: 32px 0 42px 0;
+}
+
+.loadingTitleBox {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.waitingListBox {
+  font-size: 32px;
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+.tipBox {
+  margin-top: 52px;
+  font-size: 20px;
+}

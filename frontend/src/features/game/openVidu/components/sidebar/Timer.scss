@@ -1,32 +1,40 @@
 h1 {
-    font-family: "Roboto";
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .timer-wrapper {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .timer {
-    font-family: "Montserrat";
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .text {
-    color: #aaa;
-  }
-  
-  .value {
-    font-size: 40px;
-  }
-  
-  .info {
-    max-width: 360px;
-    margin: 40px auto 0;
-    text-align: center;
-    font-size: 16px;
-  }
+  font-family: "Roboto";
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.timer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0 24px 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 16px;
+}
+
+.timer {
+  font-family: "Montserrat";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.text {
+  color: #aaa;
+}
+
+.value {
+  font-size: 40px;
+}
+
+.info {
+  max-width: 360px;
+  margin: 40px auto 0;
+  text-align: center;
+  font-size: 16px;
+}

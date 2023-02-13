@@ -6,6 +6,10 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { saveUserInfo } from "../../../common/api/authInfo";
 import socailLoginButtons from "../../../assets/socialLogin/socialLoginButtons";
+import LargeButton from "../../../common/button/LargeButton";
+
+import "./Login.scss";
+import { textAlign } from "@mui/system";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -47,22 +51,31 @@ function Login(props) {
 
   return (
     <div>
-      <h1>로그인</h1>
-      <form onSubmit={onSubmitHandler}>
-        <label>이메일</label>
-        <input type="email" onChange={onEmailHandler} />
-        <label>비밀번호</label>
-        <input type="password" onChange={onPasswordHandler} />
-        <br />
-        <button type="submit">로그인하기</button>
+      <h1 className='loginWord'>LOG IN</h1>
+      <form onSubmit={onSubmitHandler} >
+        <div className='formItem'>
+          <input type="email" placeholder='이메일' className='inputEmail' onChange={onEmailHandler} />
+          </div>
+        <div className='formItem'>
+        <input type="password" placeholder='비밀번호' className='inputPassword' onChange={onPasswordHandler} />
+        </div>
+        <div>
+        <button type="submit" className='loginButton'>로그인</button>
+        </div>
       </form>
-      아이디가 없으신가요?
-      <br />
-      <Link to="/signup">가입하기</Link>
-      <br />
+      <div className='idMessage'>
+      아직 아이디가 없으신가요?
+      </div>
+      <div className='bottomButton'>
+      <Link to="/signup">
+        <button className="normalSignUpButton">
+          가입하기
+        </button>
+        </Link>
       <a href={KAKAO_REQUEST}>
-        <img src={socailLoginButtons} alt="" />
+        <img src={socailLoginButtons} className='kakaoSignUpButton' alt="" />
       </a>
+      </div>
     </div>
   );
 }

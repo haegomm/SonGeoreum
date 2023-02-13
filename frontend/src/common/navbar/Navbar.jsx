@@ -29,21 +29,26 @@ export default function Navbar() {
     { name: "알아보기", path: "/culture" },
   ]; // 페이지
   const location = useLocation();
-  const [isShort, setShort] = useState(true); // navBar 사이즈 조절
+  const [isShort, setShort] = useState(0); // navBar 사이즈 조절
 
   useEffect(() => {
     console.log(location);
     const path = location.pathname;
-    if (path === "/study" || path === "/test" || path === "/myvoca")
-      setShort(() => false);
+    if (path === "/study" || path === "/test" || path === "/myvoca") {
+      setShort(() => 1);
+    } else if (path === "/game") {
+      setShort(() => 2);
+    } else {
+      setShort(() => 0);
+    }
   }, [location]);
 
   const sizeLong = () => {
-    setShort(false);
+    setShort(1);
   };
 
   const sizeShort = () => {
-    setShort(true);
+    setShort(0);
   };
 
   const size = {
@@ -53,6 +58,10 @@ export default function Navbar() {
     },
     long: {
       navHeight: 330,
+      marginBottom: 140,
+    },
+    max: {
+      navHeight: "100vh",
       marginBottom: 140,
     },
   };
@@ -79,7 +88,14 @@ export default function Navbar() {
     <div>
       <div
         className="navBar"
-        style={{ height: isShort ? size.short.navHeight : size.long.navHeight }}
+        style={{
+          height:
+            isShort === 0
+              ? size.short.navHeight
+              : isShort === 1
+              ? size.long.navHeight
+              : size.max.navHeight,
+        }}
       ></div>
       <Box
         sx={{

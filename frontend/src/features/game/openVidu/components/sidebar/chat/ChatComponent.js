@@ -13,52 +13,53 @@ export default class ChatComponent extends Component {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
-      answerWord: props.answerWord,
+      answerWord: this.props.answerWord,
+      questionList: this.props.questionList,
     };
-    
+
     this.chatScroll = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePressKey = this.handlePressKey.bind(this);
     this.close = this.close.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    this.handleWhoGetScore = this.handleWhoGetScore.bind(this)
+    // this.handleWhoGetScore = this.handleWhoGetScore.bind(this);
   }
 
-  componentDidMount() {
-    this.props.user
-      .getStreamManager()
-      .stream.session.on("signal:chat", (event) => {
-        const data = JSON.parse(event.data);
-        let messageList = this.state.messageList;
-        messageList.push({
-          connectionId: event.from.connectionId,
-          nickname: data.nickname,
-          message: data.message,
-        });
+  // componentDidMount() {
+  //   this.props.user
+  //     .getStreamManager()
+  //     .stream.session.on("signal:chat", (event) => {
+  //       const data = JSON.parse(event.data);
+  //       let messageList = this.state.messageList;
+  //       messageList.push({
+  //         connectionId: event.from.connectionId,
+  //         nickname: data.nickname,
+  //         message: data.message,
+  //       });
 
-        // 정답 체크용 배열 (턴마다 초기화 됨)
-        let checkMessageList = this.state.checkMessageList;
-        checkMessageList.push({
-          nickname: JSON.stringify(data.nickname).replace(/\"/g, ""),
-          message: JSON.stringify(data.message).replace(/\"/g, ""),
-        });
-        this.checkMessage(checkMessageList); // 정답 체크해보자
+  //       // 정답 체크용 배열 (턴마다 초기화 됨)
+  //       let checkMessageList = this.state.checkMessageList;
+  //       checkMessageList.push({
+  //         nickname: JSON.stringify(data.nickname).replace(/\"/g, ""),
+  //         message: JSON.stringify(data.message).replace(/\"/g, ""),
+  //       });
+  //       this.checkMessage(checkMessageList); // 정답 체크해보자
 
-        const document = window.document;
-        setTimeout(() => {
-          const userImg = document.getElementById(
-            "userImg-" + (this.state.messageList.length - 1)
-          );
-          const video = document.getElementById("video-" + data.streamId);
-          const avatar = userImg.getContext("2d");
-          avatar.drawImage(video, 200, 120, 285, 285, 0, 0, 60, 60);
-          this.props.messageReceived();
-        }, 50);
-        this.setState({ messageList: messageList });
-        this.scrollToBottom();
-      });
-  }
+  //       const document = window.document;
+  //       setTimeout(() => {
+  //         const userImg = document.getElementById(
+  //           "userImg-" + (this.state.messageList.length - 1)
+  //         );
+  //         const video = document.getElementById("video-" + data.streamId);
+  //         const avatar = userImg.getContext("2d");
+  //         avatar.drawImage(video, 200, 120, 285, 285, 0, 0, 60, 60);
+  //         this.props.messageReceived();
+  //       }, 50);
+  //       this.setState({ messageList: messageList });
+  //       this.scrollToBottom();
+  //     });
+  // }
 
   // 메시지 체크하여 정답 찾는 함수
   checkMessage(checkList) {
@@ -68,12 +69,14 @@ export default class ChatComponent extends Component {
       // const nowNickname = JSON.stringify(item.nickname);
       const word = item.message;
       const nickname = item.nickname;
+      console.log("정답 단어", this.state.answerWord);
+      console.log("게임 횟수", this.state.gameCnt);
       console.log("입력한 단어: " + word);
-      if (word === "정답") {
+      if (word === this.state.answerWord) {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
         // 정답자 올려주기
-        this.handleWhoGetScore(nickname)
+        this.props.whoGetScore(nickname);
         this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다. //setState?
       } else {
         console.log("틀렸습니다.");
@@ -87,8 +90,8 @@ export default class ChatComponent extends Component {
 
   // 정답자 올려주기 // nickname let에 담아서 보내줘야하나? / this.props.nickname
   handleWhoGetScore(nickname) {
-    console.log("얘가 정답자야!!", nickname.props.user.nickname)
-    this.props.whoGetScore(nickname.props.user.nickname)
+    console.log("얘가 정답자야!!", nickname.props.user.nickname);
+    this.props.whoGetScore(nickname.props.user.nickname);
   }
 
   handleChange(event) {
@@ -138,15 +141,15 @@ export default class ChatComponent extends Component {
     return (
       <div id="chatContainer">
         <div id="chatComponent" style={styleChat}>
-          <div id="chatToolbar">
-            <span>
-              {this.props.user.getStreamManager().stream.session.sessionId} -
-              CHAT
-            </span>
-            {/* <IconButton id="closeButton" onClick={this.close}>
+          {/* <div id="chatToolbar"> */}
+          {/* <span> */}
+          {/* {this.props.user.getStreamManager().stream.session.sessionId} - */}
+          {/* 채팅하기 */}
+          {/* </span> */}
+          {/* <IconButton id="closeButton" onClick={this.close}>
                             <HighlightOff color="secondary" />
                         </IconButton> */}
-          </div>
+          {/* </div> */}
           <div className="message-wrap" ref={this.chatScroll}>
             {this.state.messageList.map((data, i) => (
               <div
@@ -180,7 +183,7 @@ export default class ChatComponent extends Component {
 
           <div id="messageInput">
             <input
-              placeholder="Send a messge"
+              placeholder="메시지를 작성하세요"
               id="chatInput"
               value={this.state.message}
               onChange={this.handleChange}
