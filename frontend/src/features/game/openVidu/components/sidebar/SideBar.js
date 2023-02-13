@@ -5,9 +5,11 @@ import AnswerVideo from "./AnswerVideo";
 import ChatComponent from "./chat/ChatComponent";
 
 const SideBar = (props) => {
-  const playersList = props.playersList;
+  // const playersList = props.playersList; // ****** 임 시 ******
+  const playersList = [0, 1, 2, 3];
   const myNickname = props.myNickname;
-  const questionList = props.wordsList;
+  // const questionList = props.wordsList; // ****** 임 시 ******
+  const questionList = [0, 1, 2, 3];
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -67,45 +69,43 @@ const SideBar = (props) => {
     }
   };
 
-  if (playersList && playersList.length > 0) {
-    if (questionList) {
-      return (
-        <div>
+  // if (playersList && playersList.length > 0) { // ****** 임 시 ******
+  //   if (questionList) { // ****** 임 시 ******
+  return (
+    <div>
+      <div>
+        {gameCnt === 12 ? (
           <div>
-            {gameCnt === 12 ? (
-              <div>
-                <div>게임이 종료되었습니다</div>
-                <div>결과창으로 넘어갑니다.</div>
-              </div>
-            ) : (
-              <AnswerVideo
-                className="box"
-                myNickname={myNickname}
-                answerWord={
-                  gameCnt === 12 ? "null" : questionList[gameCnt].name
-                }
-                answerApi={
-                  gameCnt === 12 ? "null" : questionList[gameCnt].contentUrl
-                }
-                presenter={playersList[gameCnt % 4]}
-                showAnswer={showAnswer} //
-                whoGetScore={whoGetScore()}
-              />
-            )}
+            <div>게임이 종료되었습니다</div>
+            <div>결과창으로 넘어갑니다.</div>
           </div>
-          <ChatComponent
-            user={props.user}
-            chatDisplay={props.chatDisplay}
-            close={props.close}
-            messageReceived={props.messageReceived}
+        ) : (
+          <AnswerVideo
+            className="box"
+            myNickname={myNickname}
             answerWord={gameCnt === 12 ? "null" : questionList[gameCnt].name}
-            questionList={questionList}
+            answerApi={
+              gameCnt === 12 ? "null" : questionList[gameCnt].contentUrl
+            }
+            presenter={playersList[gameCnt % 4]}
+            showAnswer={showAnswer} //
             whoGetScore={whoGetScore()}
           />
-        </div>
-      );
-    }
-  }
+        )}
+      </div>
+      <ChatComponent
+        user={props.user}
+        chatDisplay={props.chatDisplay}
+        close={props.close}
+        messageReceived={props.messageReceived}
+        answerWord={gameCnt === 12 ? "null" : questionList[gameCnt].name}
+        questionList={questionList}
+        whoGetScore={whoGetScore()}
+      />
+    </div>
+  );
+  //   }
+  // }
 };
 
 export default SideBar;
