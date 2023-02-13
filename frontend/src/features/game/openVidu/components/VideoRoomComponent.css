@@ -9,8 +9,9 @@
 }
 
 .toolbar {
-  min-height: 40px !important;
-  background-color: rgba(255, 255, 255, 0.349);
+  /* min-height: 40px !important; */
+  /* background-color: rgba(255, 255, 255, 0.349); */
+  /* box-shadow: none !important; */
 }
 
 #titleContent {
@@ -43,25 +44,25 @@
 }
 
 .bounds {
-  background-color: rgb(55, 65, 116);
+  background-color: var(--blue-bbb);
   overflow: hidden;
   position: absolute;
   left: 0;
   right: 0;
-  top: 40px;
+  top: 50px;
   bottom: 0;
   height: inherit;
   /* min-width: 400px !important; */
-  width: 70%;
+  width: 100%;
 }
 
 .sidebar {
-  background-color: yellow;
+  background-color: var(--blue-bbb);
   overflow: hidden;
   position: absolute;
   left: 40%;
   right: 0;
-  top: 0;
+  /* top: 50px; */
   bottom: 0;
   transform: translate(100%, 0);
   /* min-width: 400px !important; */
@@ -71,25 +72,56 @@
   padding: 8px; */
 }
 
+.sidebar-wrapper {
+  background-color: var(--yellow-bbb);
+  margin: 70px 20px 50px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  height: 91%;
+  border-radius: 16px;
+  padding: 24px;
+}
+
 .box {
-  width: calc(100% - 30px);
-  height: 100px;
+  /* width: calc(100% - 30px); */
+  width: 100%;
+  height: 100%;
+  /* height: 100px; */
   background-color: white;
   border-radius: 16px;
-  margin: auto;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  /* margin: auto; */
+  /* margin-top: 16px;
+  margin-bottom: 16px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  font-weight: 700;
+}
+
+.box img {
+  width: 50%;
+  object-fit: cover;
+  height: 120px;
+}
+
+.box-text {
 }
 
 .chattingBox {
   background-color: yellowgreen;
   overflow: hidden;
-  position: absolute;
+  /* position: absolute;
   left: 40%;
   right: 0;
   top: 0;
   bottom: 0;
-  transform: translate(100%, 100%);
+  transform: translate(100%, 100%); */
   /* min-width: 400px !important; */
   width: 30%;
   height: 50%;
@@ -204,7 +236,7 @@
 .OT_dialog-button-title a,
 .OT_dialog-button-title a:link,
 .OT_dialog-button-title a:active {
-  color: #02a1de;
+  color: --blue-bbb;
 }
 
 .OT_dialog-button-title strong {
@@ -219,7 +251,7 @@
   margin-bottom: 18px;
   padding: 0 1em;
 
-  background-color: #1ca3dc;
+  background-color: --blue-bbb;
   text-align: center;
   cursor: pointer;
 }
@@ -261,7 +293,7 @@
 .OT_dialog-progress-bar-fill {
   height: 100%;
 
-  background-color: #29a4da;
+  background-color: --blue-bbb;
 }
 
 .OT_dialog-plugin-upgrading .OT_dialog-plugin-upgrade-percentage {

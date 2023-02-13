@@ -34,9 +34,10 @@ const AnswerVideo = (props) => {
   const check =
     presenter === myNickname ? "내가 출제자야" : `다음 출제자: ${presenter}`;
   return (
-    <div>
+    <React.Fragment>
       <div className="timer-wrapper">
         <CountdownCircleTimer
+          size={150}
           isPlaying
           duration={5}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
@@ -47,18 +48,22 @@ const AnswerVideo = (props) => {
       </div>
       <div className="box">
         {props.showAnswer || presenter === myNickname ? (
-          <div className="box">
+          <React.Fragment>
+            <div className="box-text">
+              {answerWord} || {check}
+            </div>
             <video autoPlay loop>
               <source src={answerApi}></source>
             </video>
-          </div>
+          </React.Fragment>
         ) : (
-          <div className="box">
-            <img className="box" src={lock}></img>
-          </div>
+          <React.Fragment>
+            <div className="box-text">무엇일까요?</div>
+            <img src={lock}></img>
+          </React.Fragment>
         )}
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
