@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false, //
+      goGame: false,
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
@@ -699,17 +699,25 @@ class VideoRoomComponent extends Component {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
     var chatDisplay = { display: "block" };
-    if (!this.state.goGame && !this.state.playGame) {
-      return (
-        <Loading
-          subscribers={this.state.subscribers}
-          sessionId={this.state.sessionId}
-          leaveSession={this.leaveSession}
-        />
-      );
-    } else {
-      return (
-        <div className="container" id="container">
+
+    const displayNone = { display: "none" };
+    const displayBlock = { display: "block" };
+
+    const gameScreen =
+      !this.state.goGame && !this.state.playGame ? displayNone : displayBlock;
+    const loadingScreen =
+      !this.state.goGame && !this.state.playGame ? displayBlock : displayNone;
+
+    return (
+      <div>
+        <div style={loadingScreen}>
+          <Loading
+            subscribers={this.state.subscribers}
+            sessionId={this.state.sessionId}
+            leaveSession={this.leaveSession}
+          />
+        </div>
+        <div className="container" id="container" style={gameScreen}>
           <div>test</div>
           <ToolbarComponent
             sessionId={mySessionId}
@@ -775,8 +783,8 @@ class VideoRoomComponent extends Component {
               )}
           </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
 
   async getToken() {

@@ -14,12 +14,13 @@ const SideBar = (props) => {
 
   const navigate = useNavigate();
 
-  const handletheEndGame = (result) => {
-    props.theEndGame();
+  const handletheEndGame = async () => {
+    const result = await resultScore();
     navigate("result", { state: result });
+    // props.leaveSession();
   };
 
-  const resultScore = () => {
+  const resultScore = async () => {
     const result = [];
     for (let i = 0; i < 4; i++) {
       result.push({
@@ -41,7 +42,7 @@ const SideBar = (props) => {
     const num = gameCnt + 1;
     setGameCnt(num);
     if (gameCnt === 12) {
-      handletheEndGame(resultScore());
+      handletheEndGame();
     } else {
       console.log("다음 시작할 문제 번호: ", num);
       setTimeout(() => {
@@ -50,15 +51,10 @@ const SideBar = (props) => {
     }
   };
 
-  //   const changeAnswer = (num) => {
-  //     console.log("다음 게임 시작 >>", num)
-  //       console.log("다음 문제", questionList[num].name)
-  // }
-
   const whoGetScore = (who) => {
     if (who) {
       const Idx = playersList.indexOf(who);
-      setSocreList((scoreList[Idx] += 1));
+      setSocreList(() => (scoreList[Idx] += 1));
     }
     if (showAnswer === false) {
       setTimeout(() => {
@@ -71,27 +67,39 @@ const SideBar = (props) => {
     }
   };
 
-  const test = showAnswer ? "정답보여줌" : "문제푸는중";
-
   if (playersList && playersList.length > 0) {
     if (questionList) {
       return (
-        <div className="sidebar-wrapper">
-          <AnswerVideo
-            className="box"
-            myNickname={myNickname}
-            answerWord={questionList[gameCnt].name}
-            answerApi={questionList[gameCnt].contentUrl}
-            presenter={playersList[gameCnt % 4]}
-            showAnswer={showAnswer} //
-            whoGetScore={whoGetScore()}
-          />
+        <div>
+          <div>
+            {gameCnt === 12 ? (
+              <div>
+                <div>게임이 종료되었습니다</div>
+                <div>결과창으로 넘어갑니다.</div>
+              </div>
+            ) : (
+              <AnswerVideo
+                className="box"
+                myNickname={myNickname}
+                answerWord={
+                  gameCnt === 12 ? "null" : questionList[gameCnt].name
+                }
+                answerApi={
+                  gameCnt === 12 ? "null" : questionList[gameCnt].contentUrl
+                }
+                presenter={playersList[gameCnt % 4]}
+                showAnswer={showAnswer} //
+                whoGetScore={whoGetScore()}
+              />
+            )}
+          </div>
           <ChatComponent
             user={props.user}
             chatDisplay={props.chatDisplay}
             close={props.close}
             messageReceived={props.messageReceived}
-            answerWord={questionList[gameCnt].name}
+            answerWord={gameCnt === 12 ? "null" : questionList[gameCnt].name}
+            questionList={questionList}
             whoGetScore={whoGetScore()}
           />
         </div>

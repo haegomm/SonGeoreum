@@ -3,24 +3,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import lock from "../../assets/images/lock.jpg";
 import "./Timer.scss";
 
-const renderTime = ({ remainingTime }) => {
-  if (remainingTime === 0) {
-    return (
-      <div className="timer">
-        정답을
-        <br />
-        시청해주세요
-      </div>
-    );
-  }
-
-  return (
-    <div className="timer">
-      <div className="value">{remainingTime}</div>
-    </div>
-  );
-};
-
 const AnswerVideo = (props) => {
   console.log("리렌더링!!!", props.showAnswer);
   const myNickname = props.myNickname;
@@ -28,6 +10,18 @@ const AnswerVideo = (props) => {
   const answerApi = props.answerApi;
   const presenter = props.presenter;
   const showAnswer = props.showAnswer;
+
+  const renderTime = ({ remainingTime }) => {
+    if (remainingTime === 0) {
+      return <div className="timer">{answerWord}</div>;
+    }
+
+    return (
+      <div className="timer">
+        <div className="value">{remainingTime}</div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (!showAnswer) {
