@@ -5,6 +5,7 @@ import ButtonTest from "../../common/button/ButtonTest";
 import MotionTest from "../study/test/MotionTest";
 import CardTest from "../../common/card/CardTest";
 import HomeRanking from "./HomeRanking";
+import Carousel from "./Carousel";
 
 const TestApiCall = async () => {
   try {
@@ -25,6 +26,7 @@ export default function Home() {
           <button onClick={TestApiCall}>카테고리 요청</button>
           <div>이곳은 홈페이지 입니다.</div>
           <div><HomeRanking /></div>
+          <div><Carousel /></div>
         </div>
       </Grid>
     </Grid>
