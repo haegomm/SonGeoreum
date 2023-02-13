@@ -60,15 +60,15 @@ const SideBar = (props) => {
       const Idx = playersList.indexOf(who);
       setSocreList((scoreList[Idx] += 1));
     }
-    // if (showAnswer === false) {
-    //   setTimeout(() => {
-    //     onShowAnswer(true);
-    //   }, 5000);
-    //   // onShowAnswer(true) // true
-    //   setTimeout(() => {
-    //     toNext();
-    //   }, 5000);
-    // }
+    if (showAnswer === false) {
+      setTimeout(() => {
+        onShowAnswer(true);
+      }, 5000);
+      // onShowAnswer(true) // true
+      setTimeout(() => {
+        toNext();
+      }, 5000);
+    }
   };
 
   const test = showAnswer ? "정답보여줌" : "문제푸는중";
