@@ -16,7 +16,7 @@ const SideBar = (props) => {
 
   const handletheEndGame = async () => {
     const result = await resultScore();
-    navigate("result", { state: result });
+    navigate("/result", { state: result });
     // props.leaveSession();
   };
 
@@ -27,8 +27,8 @@ const SideBar = (props) => {
         nickname: playersList[i],
         score: scoreList[i],
       });
-      return result;
     }
+    return result;
   };
 
   const onShowAnswer = (status) => {
