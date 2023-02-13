@@ -29,6 +29,15 @@ $blue: #6488e5;
   display: flex;
   justify-content: center;
 }
+.relativeBox {
+  position: relative;
+}
+.testScreenInner {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .fixedBox {
   position: fixed;
@@ -102,4 +111,11 @@ $blue: #6488e5;
   top: 180px;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
+  color: $blue;
+  padding-top: 20px;
+  .gif {
+    width: 100px;
+    margin: 16px;
+  }
 }
