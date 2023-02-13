@@ -138,15 +138,15 @@ export default class ChatComponent extends Component {
     return (
       <div id="chatContainer">
         <div id="chatComponent" style={styleChat}>
-          <div id="chatToolbar">
-            <span>
-              {/* {this.props.user.getStreamManager().stream.session.sessionId} - */}
-              CHAT
-            </span>
-            {/* <IconButton id="closeButton" onClick={this.close}>
+          {/* <div id="chatToolbar"> */}
+          {/* <span> */}
+          {/* {this.props.user.getStreamManager().stream.session.sessionId} - */}
+          {/* 채팅하기 */}
+          {/* </span> */}
+          {/* <IconButton id="closeButton" onClick={this.close}>
                             <HighlightOff color="secondary" />
                         </IconButton> */}
-          </div>
+          {/* </div> */}
           <div className="message-wrap" ref={this.chatScroll}>
             {this.state.messageList.map((data, i) => (
               <div
@@ -180,7 +180,7 @@ export default class ChatComponent extends Component {
 
           <div id="messageInput">
             <input
-              placeholder="Send a messge"
+              placeholder="메시지를 작성하세요"
               id="chatInput"
               value={this.state.message}
               onChange={this.handleChange}

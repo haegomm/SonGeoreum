@@ -78,7 +78,7 @@ const SideBar = (props) => {
   if (playersList && playersList.length > 0) {
     if (questionList) {
       return (
-        <div>
+        <div className="sidebar-wrapper">
           <AnswerVideo
             className="box"
             myNickname={myNickname}
