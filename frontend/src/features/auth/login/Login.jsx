@@ -6,6 +6,10 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { saveUserInfo } from "../../../common/api/authInfo";
 import socailLoginButtons from "../../../assets/socialLogin/socialLoginButtons";
+import LargeButton from "../../../common/button/LargeButton";
+
+import "./Login.scss";
+import { textAlign } from "@mui/system";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -46,7 +50,7 @@ function Login(props) {
   };
 
   return (
-    <div>
+    <div className='loginTotoalDiv'>
       <h1>로그인</h1>
       <form onSubmit={onSubmitHandler}>
         <label>이메일</label>
@@ -58,11 +62,16 @@ function Login(props) {
       </form>
       아이디가 없으신가요?
       <br />
-      <Link to="/signup">가입하기</Link>
-      <br />
+      <div className='bottomButton'>
+      <Link to="/signup">
+        <button className="normalSignUpButton">
+          가입하기
+        </button>
+        </Link>
       <a href={KAKAO_REQUEST}>
-        <img src={socailLoginButtons} alt="" />
+        <img src={socailLoginButtons} className='kakaoSignUpButton' alt="" />
       </a>
+      </div>
     </div>
   );
 }

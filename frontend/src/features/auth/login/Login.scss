@@ -1,0 +1,39 @@
+$blue: #6488e5;
+
+.kakaoSignUpButton{
+    // margin-top: 792px;
+    // padding-left: 746px;
+    width: 100px; 
+    height: 50px;
+    margin-left: 20px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    // border: 1px;
+    // background-color: #FFF9ED;
+   }
+
+.loginTotoalDiv{
+    // text-align: center;
+}
+
+.bottomButton{
+    display: flex;
+    justify-content: center;
+    margin-top: 380px;
+}
+
+.normalSignUpButton{
+    margin-right: 20px;
+    width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: normal;
+    color: white;
+    border: none;
+    background-color: $blue;
+    border-radius: 8px;
+}
+
+
