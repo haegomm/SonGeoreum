@@ -77,13 +77,15 @@
 
 .errorMessage{
   color: #F16061;
-  display: inline-block;
+  display: flex;  
+  flex-direction: row;
+  // position: relative;
   // margin-left: 24px;
 }
 
 .divDivde{
-  display: inline-block;
-  position: absolute;
+  display: flex;
+  flex-direction: row;
 }
 
 .profileList{
