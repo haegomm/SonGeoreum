@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../../../../common/api/https";
 import { useNavigate } from "react-router-dom";
 import AnswerVideo from "./AnswerVideo";
@@ -70,8 +70,8 @@ const SideBar = (props) => {
   if (playersList && playersList.length > 0) {
     if (questionList) {
       return (
-        <div>
-          <div>
+        <div className="sidebar-wrapper">
+          <React.Fragment>
             {gameCnt === 12 ? (
               <div>
                 <div>게임이 종료되었습니다</div>
@@ -92,7 +92,7 @@ const SideBar = (props) => {
                 whoGetScore={whoGetScore()}
               />
             )}
-          </div>
+          </React.Fragment>
           <ChatComponent
             user={props.user}
             chatDisplay={props.chatDisplay}
