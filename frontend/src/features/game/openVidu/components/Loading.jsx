@@ -2,6 +2,7 @@ import axios from "../../../../common/api/https";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinnerCircular } from "spinners-react";
+import "./Loading.scss";
 
 const Loading = (props) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Loading = (props) => {
   useEffect(() => {
     try {
       const changeTips = setInterval(() => {
-        setTipNumber((tipNumber + 1) % tips.length);
+        setTipNumber((prev) => (prev + 1) % tips.length);
         // console.log(tipNumber);
         // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
       }, 3000);
@@ -49,24 +50,27 @@ const Loading = (props) => {
 
   return (
     <div id="LoadingBox">
-      <button onClick={() => roomOut()}>나가기버튼</button>
+      <button className="loadingButton fixedButton" onClick={() => roomOut()}>
+        나가기
+      </button>
       <div>
         <SpinnerCircular
-          size={90}
+          size={120}
           thickness={180}
           speed={100}
           color="rgba(57, 82, 172, 1)"
           secondaryColor="rgba(57, 78, 172, 0.22)"
+          className="gameLoadingSpinner"
         />
       </div>
       <div className="loadingTitleBox">
-        <h2>곧 게임이 시작됩니다.</h2>
+        <h2>곧 게임이 시작됩니다</h2>
       </div>
       <div className="waitingListBox">
-        <h1>4 명 중 {subscribers.length + 1} 명이 모였습니다.</h1>
+        <h1>4명 중 {subscribers.length + 1}명이 모였습니다</h1>
       </div>
       <div className="tipBox">
-        <h4>{tips[tipNumber]}</h4>
+        <h4>tip : {tips[tipNumber]}</h4>
       </div>
     </div>
   );
