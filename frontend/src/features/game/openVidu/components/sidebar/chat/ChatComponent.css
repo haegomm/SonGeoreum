@@ -174,9 +174,9 @@ span.triangle {
 #sendButton {
   background-color: #81e9b0;
   position: absolute;
-  right: 25px;
+  right: 30px;
   top: 0;
-  bottom: 30px;
+  bottom: 38px;
   margin: auto;
   border: 1px solid #7ae2a9;
   box-shadow: none !important;

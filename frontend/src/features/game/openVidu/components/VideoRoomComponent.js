@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false,
+      goGame: false, //
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
@@ -718,7 +718,7 @@ class VideoRoomComponent extends Component {
           />
         </div>
         <div className="container" id="container" style={gameScreen}>
-          <div>test</div>
+          {/* <div>test</div> */}
           <ToolbarComponent
             sessionId={mySessionId}
             user={localUser}
