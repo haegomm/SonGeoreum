@@ -1,7 +1,8 @@
-import kakaoButton from './kakao_login_medium_narrow.png'
+// import kakaoButton from './kakao_login_medium_narrow.png'
+import kakaoMiniButton from './kakao_login_large.png'
 
 const socailLoginButtons = [
-  kakaoButton,
+  kakaoMiniButton
 ]
 
 export default socailLoginButtons
