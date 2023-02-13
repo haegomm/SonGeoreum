@@ -10,7 +10,7 @@ import VideocamOff from "@mui/icons-material/VideocamOff";
 import StopScreenShare from "@mui/icons-material/StopScreenShare";
 import { IconButton } from "@mui/material";
 
-const logo = require("../../assets/images/openvidu_logo.png");
+const logo = require("../../../../../assets/logo/logo_fill_yellow.png");
 
 export default class ToolbarComponent extends Component {
   constructor(props) {
@@ -68,11 +68,11 @@ export default class ToolbarComponent extends Component {
           <div id="navSessionInfo">
             <img id="header_img" alt="OpenVidu Logo" src={logo} />
 
-            {this.props.sessionId && (
+            {/* {this.props.sessionId && (
               <div id="titleContent">
                 <span id="session-title">{mySessionId}</span>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="buttonsContent">

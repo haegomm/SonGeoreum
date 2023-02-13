@@ -1,16 +1,24 @@
+:root {
+  --red-bbb: #e56372;
+  --green-bbb: #90de8a;
+  --yellow-bbb: #f9be7d;
+  --blue-bbb: #6488e5;
+}
+
 #header {
   color: #ffffff;
-  height: 40px;
+  /* height: 100px; */
   padding: 0 14px 0 0;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 999999;
   min-width: 400px !important;
-  width: 70%;
+  /* width: 70%; */
 }
 .toolbar {
   padding: 0 !important;
+  min-height: 60px !important;
 }
 
 .headerLight {
@@ -20,6 +28,8 @@
 
 #navSessionInfo {
   position: absolute;
+  display: flex;
+  justify-content: center;
 }
 
 #navButtons {
@@ -52,9 +62,10 @@
 }
 
 #header_img {
-  max-width: 135px;
-  margin-right: 10px;
-  margin-top: 10px;
+  max-width: 40px;
+  margin: 12px;
+  /* margin-right: 10px;
+  margin-top: 10px; */
 }
 
 #session-title {
