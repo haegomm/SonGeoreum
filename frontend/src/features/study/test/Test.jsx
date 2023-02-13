@@ -138,12 +138,14 @@ export default function Test() {
       isTextTuto ? (
         <HandToWord
           categoryNum={categoryNum}
+          categoryInfo={categoryName}
           isTuto={true}
           finishTest={finishTest}
         />
       ) : (
         <HandToWord
           categoryNum={categoryNum}
+          categoryInfo="튜토리얼"
           isTuto={false}
           finishTest={finishTextTuto}
         />

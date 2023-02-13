@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "../../../common/api/https";
 import MotionTest from "./MotionTest";
 import TopCard from "../../../common/card/TopCard";
-
+import loadingGIF from "../../../assets/test_loading.gif";
 import "./HandToWord.scss";
+import "./confetti.scss";
 import "../../../common/card/TestScreen.scss";
 
 export default function WordToHand({ categoryNum, isTuto, finishTest }) {
@@ -131,6 +132,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
   };
 
   const tutoText = "웹캠이 정상적으로 작동한다면 V(브이)를 표시해주세요";
+  const tutoDone = "웹캡 테스트가 완료되었습니다.";
   const defaultText = "제시어를 보고 수어로 표현해보세요";
   const correctText = "정답입니다";
   const showAnswerText = "정답을 확인해보세요";
@@ -140,13 +142,15 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
         ? correctText
         : showAnswerText
       : defaultText
+    : showAnswer
+    ? tutoDone
     : tutoText;
 
-  const nextButtonText = isTuto ? "다음 문제" : "START";
+  const nextButtonText = isTuto ? "다음 문제" : "시작하기";
   const showAnswerWord =
     testList && testList.length > 0 ? (
       showAnswer ? (
-        <div className="flexBox">
+        <div className="flexBox whiteBox">
           <img
             className="answerImage"
             src={testList[number].contentUrl}
@@ -192,7 +196,27 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
 
   const camScreen = camReady ? motionTest : null;
 
-  const correctCircle = showCorrect ? null : null; // 이부분에 정답 효과를 넣습니다.
+  const displayNone = { display: "none" };
+  const displayBlock = { display: "flex" };
+  const motionScreen = showAnswer ? displayNone : displayBlock;
+
+  const correctCircle = showCorrect ? (
+    <div class="">
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+      <div class="confetti-piece"></div>
+    </div>
+  ) : null; // 이부분에 정답 효과를 넣습니다.
 
   if (testList && testList.length > 0 && number < testList.length) {
     return (
@@ -210,8 +234,15 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
             <div className="testScreen motionGuideText">
               {guide}
               {/* 아래 텍스트 대신에 로딩중 gif를 넣으면 좋을 것 같아요~~ */}
-              <div className="canvasText">잠시 후 테스트가 시작됩니다.</div>
-              <div className="flexBox">{motionTest}</div>
+              <div className="canvasText" style={motionScreen}>
+                <div className="gifText">
+                  <img className="gif" src={loadingGIF} />
+                  <div> 로딩중 </div>
+                </div>
+              </div>
+              <div className="flexBox" style={motionScreen}>
+                {motionTest}
+              </div>
               {showAnswerWord}
             </div>
           </div>
