@@ -50,15 +50,18 @@ function Login(props) {
   };
 
   return (
-    <div className='loginTotoalDiv'>
-      <h1>로그인</h1>
-      <form onSubmit={onSubmitHandler}>
-        <label>이메일</label>
-        <input type="email" onChange={onEmailHandler} />
-        <label>비밀번호</label>
-        <input type="password" onChange={onPasswordHandler} />
-        <br />
-        <button type="submit">로그인하기</button>
+    <div>
+      <h1 className='loginWord'>LOG IN</h1>
+      <form onSubmit={onSubmitHandler} >
+        <div className='formItem'>
+          <input type="email" placeholder='이메일' className='inputEmail' onChange={onEmailHandler} />
+          </div>
+        <div className='formItem'>
+        <input type="password" placeholder='비밀번호' className='inputPassword' onChange={onPasswordHandler} />
+        </div>
+        <div>
+        <button type="submit" className='loginButton'>로그인</button>
+        </div>
       </form>
       <div className='idMessage'>
       아직 아이디가 없으신가요?
