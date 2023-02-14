@@ -1,10 +1,94 @@
-.selected{
+.selected {
   width: 54px;
   height: 54px;
   border: 2px solid black;
 }
 
-.unselected{
+.unselected {
   width: 54px;
   height: 54px;
+}
+
+.divBase {
+  display: block;
+  margin: auto;
+  border-radius: 25%;
+}
+
+#accordionShape {
+  border-radius: 50px;
+}
+
+#panel1bh-header {
+  background-color: #fff9ed;
+}
+
+.accordionBase {
+  background-color: #fff9ed;
+}
+
+#modifyProfileTitle {
+  display: block;
+  margin: auto;
+  justify-content: center;
+  font-size: medium;
+  font-weight: 600;
+}
+
+.inputBox {
+  display: block;
+  margin: auto;
+}
+
+.inputNicknameString {
+  font-size: medium;
+  font-weight: 500;
+}
+
+.inputNickname {
+  display: block;
+  margin: auto;
+  margin-top: 12px;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  // border: 2px solid #d1d1d6;
+  // width: 320px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+// .inputNickname input:focus {
+//   border-bottom: 2px solid #66645f;
+// }
+// .formItem input:focus{
+//   border-bottom: 2px solid #66645f;
+// }
+
+.nicknameError {
+  color: #f16061;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+  margin-top: 8px;
+}
+
+.inputProfileImageString {
+  font-size: medium;
+  font-weight: 500;
+  margin-top: 32px;
+}
+
+.inputProfileImage {
+  display: block;
+  margin: auto;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.modifyButton {
+  display: block;
+  margin: auto;
+  margin-top: 16px;
 }
