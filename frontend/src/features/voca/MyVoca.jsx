@@ -162,7 +162,22 @@ export default function MyVoca() {
     console.log("번호는?", wordNumber);
     console.log("이것도..", wordList[wordNumber].name);
 
-    const media = null;
+    const media =
+      wordList[wordNumber].categoryId > 3 ? (
+        <video
+          src={wordList[wordNumber].contentUrl}
+          autoPlay
+          poster=""
+          //   control
+          loop
+        ></video>
+      ) : (
+        <img
+          className="handImage"
+          src={wordList[wordNumber].contentUrl}
+          referrerPolicy="no-referrer"
+        />
+      );
     //   categoryNum > 3 && wordList && wordList.length > 0 ? (
     //     <video
     //       src={wordList[wordNumber].contentUrl}
