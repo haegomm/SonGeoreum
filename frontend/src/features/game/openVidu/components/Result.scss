@@ -1,0 +1,35 @@
+.resultBox {
+  background-color: white;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+
+  border-radius: 40px;
+  margin: 16px;
+  padding: 16px;
+  width: calc(100% - 32px);
+  max-width: 960px;
+  height: 496px;
+  border: none;
+}
+
+.rankingBox {
+  display: flex;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+}
+
+.rankingItem {
+  margin: 16px;
+  max-width: 160px;
+  height: 272px;
+}
+
+.rank {
+  margin: 16px;
+}
+
+.nickName {
+  margin: 16px;
+}
