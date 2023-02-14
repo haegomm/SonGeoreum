@@ -65,7 +65,7 @@ const SideBar = (props) => {
       const copyScoreList = [...scoreList];
       copyScoreList[Idx]++;
       console.log("카운트 전", scoreList);
-      setSocreList(copyScoreList);
+      setSocreList(() => copyScoreList);
       console.log("카운트 후!", scoreList);
     }
     if (showAnswer === false) {
@@ -107,7 +107,7 @@ const SideBar = (props) => {
                 }
                 presenter={playersList[gameCnt % 4]}
                 showAnswer={showAnswer} //
-                whoGetScore={whoGetScore}
+                whoGetScore={whoGetScore()}
               />
             )}
           </React.Fragment>
@@ -118,7 +118,7 @@ const SideBar = (props) => {
             messageReceived={props.messageReceived}
             answerWord={gameCnt === 12 ? "null" : questionList[gameCnt].name}
             questionList={questionList}
-            whoGetScore={whoGetScore}
+            whoGetScore={whoGetScore()}
           />
         </div>
       );
