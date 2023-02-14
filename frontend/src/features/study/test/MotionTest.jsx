@@ -71,7 +71,7 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
       function onResults(results) {
         canvasCtx.save();
         canvasCtx.scale(-1, 1);
-        canvasCtx.translate(-473, 0);
+        canvasCtx.translate(-640, 0);
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
         canvasCtx.drawImage(
           results.image,
@@ -171,7 +171,7 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
 
   return (
     <div className="canvasBox">
-      <canvas className="output_canvas" width="473px" height="320px"></canvas>
+      <canvas className="output_canvas" width="640px" height="460px"></canvas>
       <div>
         <video className="input_video"></video>
       </div>
