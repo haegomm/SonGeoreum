@@ -19,6 +19,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 
 export default function NavbarSide() {
   const dispatch = useDispatch();
@@ -69,19 +71,23 @@ export default function NavbarSide() {
       {/* <Divider /> */}
       <List onClick={toggleDrawer(anchor, false)} onKeyDown={toggleDrawer(anchor, false)}>
         <ListItem key="logoutButton" disablePadding>
-          <ListItemButton>
+          <ListItemButton className="logoutButton">
+            <LogoutOutlinedIcon className="logoutIcon"></LogoutOutlinedIcon>
             <ListItemText
-              className="logoutButton"
               primary="로그아웃"
+              className="logoutString"
               onClick={() => {
                 onLogoutHandler();
               }}
             />
+            {/* <LogoutOutlinedIcon className="logoutIcon"></LogoutOutlinedIcon> */}
+            {/* 로그아웃 */}
           </ListItemButton>
         </ListItem>
         <ListItem key="myVocaButton" disablePadding>
           <ListItemButton>
-            <ListItemText primary="나의 단어장" className="myVocaButton" onClick={onMyVocaaHandler} />
+            <BookOutlinedIcon className="myVocaIcon"></BookOutlinedIcon>
+            <ListItemText primary="나의 단어장" className="myVocaString" onClick={onMyVocaaHandler} />
           </ListItemButton>
         </ListItem>
       </List>

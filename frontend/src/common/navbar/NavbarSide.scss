@@ -44,19 +44,43 @@ $blue: #6488e5;
 .logoutButton {
   font-size: large;
   font-weight: 600;
+  display: inline-block;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+}
+.logoutString {
+  width: 20px;
+  font-size: large;
+  font-weight: 600;
+  display: block;
   margin: auto;
   margin-top: 24px;
   align-self: center;
   text-align: center;
   color: #fff9ed;
 }
+.logoutIcon {
+  // display: block;
+  // margin: auto;
+  color: #fff9ed;
+}
+.logoutButton:hover {
+  height: 100%;
+  width: 170px;
+  overflow: hidden;
+}
 
-.myVocaButton {
+.myVocaString {
   font-size: large;
   font-weight: 600;
   margin: auto;
   margin-top: 24px;
   align-self: center;
   text-align: center;
+  color: #fff9ed;
+}
+.myVocaIcon {
   color: #fff9ed;
 }
