@@ -10,23 +10,14 @@ import CarouselMui from "./CarouselMui";
 
 import './home.scss'
 
-const TestApiCall = async () => {
-  try {
-    const response = await axios.get(
-      "https://i8b106.p.ssafy.io/api/categories"
-    );
-    console.log("response >>", response);
-  } catch (err) {
-    console.log("async Error");
-  }
-};
-
 export default function Home() {
   return (
     <div className="home-container">
       <div className="home-body">
-        <div><CarouselMui /></div>
+        {/* <div><CarouselMui /></div> */}
+        {/* <Carousel /> */}
       </div>
+
       <div className="ranking">
         <div><HomeRanking /></div>
       </div>

@@ -23,24 +23,25 @@ function HomeRanking() {
   // useEffect(() => {
   //   const refreshRanking = rankingInfo();
   // }, [])
+  async function rankingInfo() {
+    const data = await axios.get(
+      '/api/user/ranking'
+      );
+      // if (data.data.message === 'success') {
+      //   saveUserInfo(data.data)
+      //   alert('로그인 성공!')
+      //   window.location.replace("/")
+      //   // navigate('/');
+      // } else{
+      //   alert('로그인에 실패했습니다. 다시 시도해주세요');
+      // }
+      setRankingList(data.data)
+    console.log('랭킹!', data)
+  }
 
   useEffect(() => {
-    async function rankingInfo() {
-      const data = await axios.get(
-        '/api/user/ranking'
-        );
-        // if (data.data.message === 'success') {
-        //   saveUserInfo(data.data)
-        //   alert('로그인 성공!')
-        //   window.location.replace("/")
-        //   // navigate('/');
-        // } else{
-        //   alert('로그인에 실패했습니다. 다시 시도해주세요');
-        // }
-        setRankingList(data.data)
-      console.log('랭킹!', data)
-    }
-    rankingInfo()}
+    const updateRanking = setInterval(() => 
+    rankingInfo(), 10000)}
   ,[])
 
   return (
