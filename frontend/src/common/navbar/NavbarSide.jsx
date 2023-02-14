@@ -59,19 +59,19 @@ export default function NavbarSide() {
   const list = (anchor) => (
     <Box sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }} role="presentation">
       <List>
-        <ListItem key="profileBlock" disablePadding>
-          <img src={picture} alt="profileImage" />
+        <ListItem key="profileBlock">
+          <img src={picture} className="profileImage" alt="profileImage" />
         </ListItem>
         <ListItem key="ProfileInfo" disablePadding>
-          <span>{nickname}</span>
-          <span>님</span>
+          <div className="userNickname">{nickname} 님</div>
         </ListItem>
       </List>
-      <Divider />
+      {/* <Divider /> */}
       <List onClick={toggleDrawer(anchor, false)} onKeyDown={toggleDrawer(anchor, false)}>
         <ListItem key="logoutButton" disablePadding>
           <ListItemButton>
             <ListItemText
+              className="logoutButton"
               primary="로그아웃"
               onClick={() => {
                 onLogoutHandler();
@@ -81,7 +81,7 @@ export default function NavbarSide() {
         </ListItem>
         <ListItem key="myVocaButton" disablePadding>
           <ListItemButton>
-            <ListItemText primary="나의 단어장" onClick={onMyVocaaHandler} />
+            <ListItemText primary="나의 단어장" className="myVocaButton" onClick={onMyVocaaHandler} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -101,10 +101,19 @@ export default function NavbarSide() {
         <Button onClick={toggleDrawer("right", true)}>
           <img className="drawerButton" src={picture} alt="profileImage" />
         </Button>
-        <Drawer anchor="right" open={state["right"]} onClose={toggleDrawer("right", false)}>
+        <Drawer
+          PaperProps={{
+            sx: {
+              backgroundColor: "#6488E5",
+            },
+          }}
+          anchor="right"
+          open={state["right"]}
+          onClose={toggleDrawer("right", false)}
+        >
           <div className="drawerCloseDiv">
             <IconButton className="drawerCloseButton" onClick={toggleDrawer("right", false)}>
-              <ChevronRightIcon className="drawerColseArrow" />
+              <ChevronRightIcon fontSize="large" className="drawerColseArrow" />
             </IconButton>
           </div>
           {list("right")}

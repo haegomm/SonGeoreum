@@ -1,11 +1,8 @@
+$blue: #6488e5;
+
 .drawerButton {
   width: 56px;
   height: 56px;
-  background-color: gray;
-}
-
-.drawerBackground {
-  background-color: gray;
 }
 
 .drawerCloseDiv {
@@ -23,5 +20,43 @@
 }
 
 .drawerColseArrow {
-  color: aqua;
+  color: #fff9ed;
+}
+
+.profileImage {
+  width: 104px;
+  height: 104px;
+  margin: auto;
+  margin-top: 32px;
+  text-align: center;
+}
+
+.userNickname {
+  font-size: large;
+  font-weight: 600;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
+}
+
+.logoutButton {
+  font-size: large;
+  font-weight: 600;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
+}
+
+.myVocaButton {
+  font-size: large;
+  font-weight: 600;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
 }
