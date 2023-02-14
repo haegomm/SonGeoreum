@@ -17,7 +17,9 @@ const Result = () => {
           {ranking.map((it) => (
             <div className="rankingItem">
               <div className="rank">{ranking.indexOf(it) + 1}등</div>
-              <div className="profilePic">{it.image}</div>
+              <div className="profilePic">
+                <img src={it.image} alt="profile" />
+              </div>
               <div className="nickName">{it.nickname}</div>
               <div className="score">{it.score}점</div>
             </div>
