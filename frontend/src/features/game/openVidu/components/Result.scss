@@ -3,6 +3,16 @@ $green: #90de8a;
 $yellow: #f9be7d;
 $blue: #6488e5;
 
+.rankingCrown {
+  width: 40px;
+  height: 30px;
+}
+
+.rankingCrown img {
+  width: 40px;
+  height: 30px;
+}
+
 .resultContainer {
   display: flex;
   flex-direction: column;
@@ -35,7 +45,7 @@ $blue: #6488e5;
   padding: 76px 24px 40px 24px;
   width: calc(100% - 32px);
   max-width: 960px;
-  height: 300px;
+  // height: 300px;
   border: none;
 
   display: flex;
@@ -60,7 +70,7 @@ $blue: #6488e5;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .rank {
@@ -78,6 +88,7 @@ $blue: #6488e5;
 .score {
   font-weight: 700;
   font-size: 24px;
+  color: $red;
 }
 
 .exitButton {

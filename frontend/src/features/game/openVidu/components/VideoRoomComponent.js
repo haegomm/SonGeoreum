@@ -832,6 +832,8 @@ class VideoRoomComponent extends Component {
       imageList: imageList,
     });
 
+    console.log(imageList);
+
     // const tokenData = token.split("=");
     // console.log(tokenData);
     // const tokenID = tokenData[tokenData.length - 1];
