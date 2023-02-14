@@ -76,7 +76,7 @@ public class AuthToken { // JwtUtil
                 .compact();
     }
 
-    public boolean validate() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
+    public boolean validate() {
         log.debug("validate() 호출됨.");
         return this.getTokenClaims() != null;
     }
@@ -84,7 +84,7 @@ public class AuthToken { // JwtUtil
     /*
     토큰 뜯어보기
      */
-    public Claims getTokenClaims() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
+    public Claims getTokenClaims() {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -93,10 +93,8 @@ public class AuthToken { // JwtUtil
                     .getBody();
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
-            throw new SecurityException("유효하지 않은 토큰입니다.");
         } catch (MalformedJwtException e) {
             log.info("Invalid JWT token.");
-            throw new MalformedJwtException("유효하지 않은 토큰입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
@@ -104,7 +102,6 @@ public class AuthToken { // JwtUtil
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
             log.debug(e.getMessage());
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
         return null;
     }
