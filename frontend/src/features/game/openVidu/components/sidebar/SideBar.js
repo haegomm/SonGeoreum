@@ -74,8 +74,12 @@ const SideBar = (props) => {
           <div>
             {gameCnt === 12 ? (
               <div>
-                <div>게임이 종료되었습니다</div>
-                <div>결과창으로 넘어갑니다.</div>
+                <div className="box">
+                  <p>게임이 종료되었습니다</p>
+                </div>
+                <div className="box">
+                  <p>잠시 뒤 결과창으로 넘어갑니다.</p>
+                </div>
               </div>
             ) : (
               <AnswerVideo

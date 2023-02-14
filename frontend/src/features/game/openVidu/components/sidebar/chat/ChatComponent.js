@@ -9,6 +9,7 @@ export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props);
     let answerWord = this.props.answerWord;
 
     this.state = {

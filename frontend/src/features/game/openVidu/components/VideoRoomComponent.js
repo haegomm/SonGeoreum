@@ -10,7 +10,7 @@ import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
 import SideBar from "./sidebar/SideBar";
-import { Navigate } from "react-router-dom";
+import { navigate } from "react-router-dom";
 import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
 var localUser = new UserModel();
@@ -168,7 +168,7 @@ class VideoRoomComponent extends Component {
             status: error.status,
           });
         }
-        alert("There was an error connecting to the session:", error.message);
+        // alert("There was an error connecting to the session:", error.message);
         console.log(
           "There was an error connecting to the session:",
           error.code,
@@ -326,6 +326,7 @@ class VideoRoomComponent extends Component {
       try {
         const response = await axios.delete(`/api/game/session/${sessionId}`);
         console.log("나가요~ >> ", response.data.message);
+        navigate("/");
         return response.data;
       } catch (err) {
         console.log("못나감~ >>", err);
@@ -369,6 +370,7 @@ class VideoRoomComponent extends Component {
         const response = await axios.put(`/api/game/session/${sessionId}`);
         console.log("모두 나가주세요~ >> ");
         this.leaveSession();
+        navigate("/");
         // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
         return response.data;
       } catch (err) {
@@ -411,6 +413,12 @@ class VideoRoomComponent extends Component {
       this.setState({
         subscribers: remoteUsers,
       });
+    }
+    if (
+      (this.state.playGame || this.state.goGame) &&
+      this.state.subscribers < 3
+    ) {
+      this.leaveSession();
     }
   }
 
@@ -814,7 +822,7 @@ class VideoRoomComponent extends Component {
       return response.data; // The sessionId
     } catch (err) {
       alert("게임방 입장에 실패하셨습니다. 다시 시도해주세요:)");
-      Navigate("/");
+      navigate("/");
       console.log("요청실패 ㅠㅠ", err);
     }
   }
