@@ -1,51 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
-import ModifyProfile from './ModifyProfile';
-import './NavbarSide.scss'
+import ModifyProfile from "./ModifyProfile";
+import "./NavbarSide.scss";
 
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 export default function NavbarSide() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const nickname = getUserInfo().nickname
-  const picture = getUserInfo().picture
+
+  const nickname = getUserInfo().nickname;
+  const picture = getUserInfo().picture;
 
   const onLogoutHandler = (e) => {
     dispatch(authAction.logout()).then((response) => {
-      console.log(response.payload)
-      if (response.payload.message === 'success') {
-        alert('로그아웃이 완료되었습니다');
-        window.location.replace("/")
-        deleteUserInfo()
-      } else{
-        alert('로그아웃에 실패하였습니다. 다시 시도해주세요');
+      console.log(response.payload);
+      if (response.payload.message === "success") {
+        alert("로그아웃이 완료되었습니다");
+        window.location.replace("/");
+        deleteUserInfo();
+      } else {
+        alert("로그아웃에 실패하였습니다. 다시 시도해주세요");
       }
-    })
-  }
+    });
+  };
 
   const onMyVocaaHandler = (e) => {
-    console.log('단어장으로 이동해용~')
-    navigate('/myvoca');
-  }
-  
-  const [state, setState] = useState({right: false});
+    console.log("단어장으로 이동해용~");
+    navigate("/myvoca");
+  };
+
+  const [state, setState] = useState({ right: false });
 
   const toggleDrawer = (anchor, open) => (event) => {
-    console.log(authAction.isLogin())
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    console.log(authAction.isLogin());
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
 
@@ -53,43 +57,36 @@ export default function NavbarSide() {
   };
 
   const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      >
+    <Box sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }} role="presentation">
       <List>
-        <ListItem key='profileBlock' disablePadding>
-        <img src={picture} alt="profileImage" />
-      </ListItem>
-      <ListItem key='ProfileInfo' disablePadding>
-        <span>{nickname}</span>
-        <span>님</span>
+        <ListItem key="profileBlock" disablePadding>
+          <img src={picture} alt="profileImage" />
+        </ListItem>
+        <ListItem key="ProfileInfo" disablePadding>
+          <span>{nickname}</span>
+          <span>님</span>
         </ListItem>
       </List>
       <Divider />
-      <List
-        onClick={toggleDrawer(anchor, false)}
-        onKeyDown={toggleDrawer(anchor, false)}
-      >
-        <ListItem key='logoutButton' disablePadding>
+      <List onClick={toggleDrawer(anchor, false)} onKeyDown={toggleDrawer(anchor, false)}>
+        <ListItem key="logoutButton" disablePadding>
           <ListItemButton>
             <ListItemText
-              primary='로그아웃'
+              primary="로그아웃"
               onClick={() => {
-                onLogoutHandler()
-              } }/>
+                onLogoutHandler();
+              }}
+            />
           </ListItemButton>
         </ListItem>
-        <ListItem key='myVocaButton' disablePadding>
+        <ListItem key="myVocaButton" disablePadding>
           <ListItemButton>
-            <ListItemText
-              primary='나의 단어장'
-              onClick={onMyVocaaHandler} />
+            <ListItemText primary="나의 단어장" onClick={onMyVocaaHandler} />
           </ListItemButton>
         </ListItem>
       </List>
       <List>
-        <ListItem key='modifyProfileButton' disablePadding>
+        <ListItem key="modifyProfileButton" disablePadding>
           <ListItemButton>
             <ModifyProfile />
           </ListItemButton>
@@ -100,18 +97,19 @@ export default function NavbarSide() {
 
   return (
     <div>
-        <React.Fragment key='right'>
-          <Button onClick={toggleDrawer('right', true)}>
-            <img className="drawerButton" src={picture} alt="profileImage" />
-            </Button>
-          <Drawer
-            anchor='right'
-            open={state['right']}
-            onClose={toggleDrawer('right', false)}
-          >
-            {list('right')}
-          </Drawer>
-        </React.Fragment>
+      <React.Fragment key="right">
+        <Button onClick={toggleDrawer("right", true)}>
+          <img className="drawerButton" src={picture} alt="profileImage" />
+        </Button>
+        <Drawer anchor="right" open={state["right"]} onClose={toggleDrawer("right", false)}>
+          <div className="drawerCloseDiv">
+            <IconButton className="drawerCloseButton" onClick={toggleDrawer("right", false)}>
+              <ChevronRightIcon className="drawerColseArrow" />
+            </IconButton>
+          </div>
+          {list("right")}
+        </Drawer>
+      </React.Fragment>
     </div>
   );
 }
