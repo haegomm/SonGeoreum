@@ -61,6 +61,7 @@ function Signup(props) {
   }
 
   const onImageHandler = (e) => {
+    console.log(e.currentTarget.src)
     setProfileImageUrl(e.currentTarget.src)
   };
 
@@ -114,9 +115,9 @@ function Signup(props) {
           </div>
             <span className='passwordCheckError'>{confirmPasswordError}</span>
           <div className='profileList1'>
-            {profileImageList1().map((profileImage) => (
+            {profileImageList1().map((profileImage, idx) => (
               <img
-                className={profileImage===profileImageUrl ? 'selected' : 'unselected'}
+                className={profileImage.src===profileImageUrl.src ? 'unselected' : 'selectedImg'}
                 key={profileImage}
                 src={profileImage}
                 alt={profileImage}
@@ -132,6 +133,7 @@ function Signup(props) {
                 src={profileImage}
                 alt={profileImage}
                 onClick={onImageHandler}
+
               />
             ))}
           </div>
@@ -146,7 +148,7 @@ function Signup(props) {
 function profileImageList1() {
   let list1 = [];
   for (let i = 0; i < 6; i++) {
-    list1.push(profileImages.at(i));
+    list1.push(profileImages[i]);
   }
   return list1;
 }

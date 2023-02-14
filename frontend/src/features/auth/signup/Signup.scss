@@ -167,6 +167,7 @@ $blue: #6488e5;
 	grid-row-end: 6;  
   display: inline-block;
   flex-direction: row-reverse;
+  cursor: pointer;
 }
 .profileList2{
   text-align: center;
@@ -177,13 +178,15 @@ $blue: #6488e5;
 	grid-row-end: 7;  
   display: inline-block;
   flex-direction: row-reverse;
+  cursor: pointer;
 }
 
-img{
-  width: 60px;
+img.selected{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
+  border: 10px solid red;
 }
 
-.selected{
+.selectedImg{
   border: 2px solid black;
 }
 
