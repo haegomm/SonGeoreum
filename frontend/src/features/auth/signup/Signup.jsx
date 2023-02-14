@@ -93,25 +93,26 @@ function Signup(props) {
       <div>
         <form
           onSubmit={onSubmitHandler} className='formItem'>
-          <div>
+          <div className='divDivde'>
           <input type="email" placeholder="이메일" className='signUpInputEmail' onBlur={onEmailHandler} />
-          <span>{emailError}</span>
-            <span>{emailFormError}</span>
           </div>
+          <span className='errorMessage'>{emailError}</span>
+            <span className='errorMessage'>{emailFormError}</span>
+          
           <div>
           <input type="text" placeholder="닉네임" className='signUpInputNickname' onBlur={onNicknameHandler} />
-          <span>{nicknameError}</span>
-            <span>{nicknameFormError}</span>
+          <span className='errorMessage'>{nicknameError}</span>
+            <span className='errorMessage'>{nicknameFormError}</span>
           </div>
           <div>
           <input type="password" placeholder="비밀번호" className='signUpInputPassword' value={Password} onChange={onPasswordHandler} />
-            <span>{passwordError}</span>
+            <span className='errorMessage'>{passwordError}</span>
           </div>
           <div>
           <div>
           <input type="password" placeholder="비밀번호 확인" className='signUpInputPasswordCheck' value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
           </div>
-            <div className='errorMessage'>{confirmPasswordError}</div>
+            <span className='errorMessage'>{confirmPasswordError}</span>
             </div>
           <div className='profileList'>
             {profileImages.map((profileImage) => (
@@ -124,7 +125,7 @@ function Signup(props) {
               />
             ))}
           </div>
-          <button type="submit" className='signupButton' disable={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}>
+          <button type="submit" className='signupButton' disabled={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? true : false}>
               가입하기
           </button>
         </form>
