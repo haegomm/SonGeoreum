@@ -9,12 +9,13 @@ export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props);
+    let answerWord = this.props.answerWord;
+
     this.state = {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
-      answerWord: this.props.answerWord,
-      questionList: this.props.questionList,
     };
 
     this.chatScroll = React.createRef();
@@ -72,7 +73,7 @@ export default class ChatComponent extends Component {
       console.log("정답 단어", this.state.answerWord);
       console.log("게임 횟수", this.state.gameCnt);
       console.log("입력한 단어: " + word);
-      if (word === this.state.answerWord) {
+      if (word === this.answerWord) {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
         // 정답자 올려주기
