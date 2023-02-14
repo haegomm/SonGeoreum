@@ -5,9 +5,11 @@ import AnswerVideo from "./AnswerVideo";
 import ChatComponent from "./chat/ChatComponent";
 
 const SideBar = (props) => {
-  const playersList = props.playersList;
+  const playersList = props.playersList; // *** 임시 ***
+  // const playersList = [0, 1, 2, 3];
   const myNickname = props.myNickname;
-  const questionList = props.wordsList;
+  const questionList = props.wordsList; // *** 임시 ***
+  // const questionList = [0, 1, 2, 3];
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -42,7 +44,7 @@ const SideBar = (props) => {
     const num = gameCnt + 1;
     setGameCnt(num);
     if (gameCnt === 12) {
-      handletheEndGame();
+      handletheEndGame(); // ****** CSS 작업을 위한 임시 ******
     } else {
       console.log("다음 시작할 문제 번호: ", num);
       setTimeout(() => {
@@ -57,6 +59,7 @@ const SideBar = (props) => {
       setSocreList(() => (scoreList[Idx] += 1));
     }
     if (showAnswer === false) {
+      // *** 임시 ***
       setTimeout(() => {
         onShowAnswer(true);
       }, 5000);
@@ -68,6 +71,7 @@ const SideBar = (props) => {
   };
 
   if (playersList && playersList.length > 0) {
+    // *** 임시 ***
     if (questionList) {
       return (
         <div className="sidebar-wrapper">

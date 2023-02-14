@@ -38,7 +38,7 @@ const AnswerVideo = (props) => {
     <React.Fragment>
       <div className="timer-wrapper">
         <CountdownCircleTimer
-          size={150}
+          size={80}
           isPlaying
           duration={5}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
@@ -53,7 +53,7 @@ const AnswerVideo = (props) => {
             <div className="box-text">
               {answerWord} || {check}
             </div>
-            <video autoPlay loop>
+            <video className="box-video" autoPlay loop>
               <source src={answerApi}></source>
             </video>
           </React.Fragment>
