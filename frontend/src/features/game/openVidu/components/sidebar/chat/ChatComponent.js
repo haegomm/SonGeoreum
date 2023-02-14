@@ -9,13 +9,15 @@ export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props);
-    let answerWord = this.props.answerWord;
+    console.log("채팅 프롭스 확인", props);
 
     this.state = {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
+      questionList: props.questionList,
+      chatAnswerCnt: 0,
+      getScore: false,
     };
 
     this.chatScroll = React.createRef();
@@ -62,21 +64,54 @@ export default class ChatComponent extends Component {
       });
   }
 
+  changeChatAnswerCnt = setInterval(() => {
+    console.log("째깍");
+    if (this.state.chatAnswerCnt !== 12) {
+      this.setState(() => ({
+        chatAnswerCnt: this.state.chatAnswerCnt + 1,
+      }));
+      this.setState(() => ({
+        getScore: false,
+      }));
+    } else {
+      this.stopTimer();
+    }
+  }, 10000);
+
+  stopTimer() {
+    clearInterval(this.changeChatAnswerCnt);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.changeChatAnswerCnt);
+  }
+
   // 메시지 체크하여 정답 찾는 함수
   checkMessage(checkList) {
-    console.log(checkList);
+    // console.log(checkList);
     checkList.map((item, idx) => {
       // const nowWord = JSON.stringify(item.message).replace(/\"/g, "");
       // const nowNickname = JSON.stringify(item.nickname);
       const word = item.message;
       const nickname = item.nickname;
-      console.log("정답 단어", this.state.answerWord);
-      console.log("게임 횟수", this.state.gameCnt);
+      console.log(
+        "정답 단어",
+        this.state.questionList[this.state.chatAnswerCnt].name
+      );
+      console.log("게임 횟수", this.state.chatAnswerCnt);
       console.log("입력한 단어: " + word);
-      if (word === this.answerWord) {
+      if (
+        word ===
+        (this.state.chatAnswerCnt === 12 || this.state.getScore
+          ? "null"
+          : this.state.questionList[this.state.chatAnswerCnt].name)
+      ) {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
         // 정답자 올려주기
+        this.setState({
+          getScore: true,
+        });
         this.props.whoGetScore(nickname);
         this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다. //setState?
       } else {

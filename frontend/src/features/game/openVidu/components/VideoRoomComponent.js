@@ -136,6 +136,8 @@ class VideoRoomComponent extends Component {
         var token = await this.getToken();
         this.connect(token);
       } catch (error) {
+        Navigate("/");
+        // window.location.replace("/")
         console.error(
           "There was an error getting the token:",
           error.code,
@@ -161,6 +163,7 @@ class VideoRoomComponent extends Component {
         this.connectWebCam();
       })
       .catch((error) => {
+        window.location.replace("/");
         if (this.props.error) {
           this.props.error({
             error: error.error,
@@ -189,7 +192,7 @@ class VideoRoomComponent extends Component {
     let publisher = this.OV.initPublisher(undefined, {
       audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(false),
+      publishAudio: false, //
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -391,7 +394,9 @@ class VideoRoomComponent extends Component {
   micStatusChanged() {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.sendSignalUserChanged({
+      isAudioActive: localUser.isAudioActive(false),
+    });
     this.setState({ localUser: localUser });
   }
 
@@ -567,7 +572,7 @@ class VideoRoomComponent extends Component {
           var newPublisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            publishAudio: localUser.isAudioActive(false),
+            publishAudio: false,
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -596,7 +601,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        publishAudio: localUser.isAudioActive(false),
+        publishAudio: false,
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
@@ -838,7 +843,7 @@ class VideoRoomComponent extends Component {
     // console.log(tokenData);
     // const tokenID = tokenData[tokenData.length - 1];
     // this.state.subToken = tokenID;
-    console.log("토큰이 저장됐습니까? : ", this.state.subToken);
+    // console.log("토큰이 저장됐습니까? : ", this.state.subToken);
     console.log(this.state.sessionId);
     console.log("게임 시작했니!?!?!?!? ", this.playGame);
     // console.log(token.searchParams);
