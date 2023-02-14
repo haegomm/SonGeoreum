@@ -140,7 +140,7 @@ export default class ChatComponent extends Component {
     const styleChat = { display: "block" };
     return (
       <div id="chatContainer">
-        <div id="chatComponent" style={styleChat}>
+        <div id="chatComponent">
           {/* <div id="chatToolbar"> */}
           {/* <span> */}
           {/* {this.props.user.getStreamManager().stream.session.sessionId} - */}

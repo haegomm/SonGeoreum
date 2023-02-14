@@ -41,7 +41,7 @@
 .message-wrap {
   padding: 0 15px;
   /* height: calc(100% - 80px); */
-  height: 35vh;
+  height: 25vh;
   overflow: auto;
 }
 
@@ -176,7 +176,7 @@ span.triangle {
   position: absolute;
   right: 30px;
   top: 0;
-  bottom: 38px;
+  bottom: 30px;
   margin: auto;
   border: 1px solid #7ae2a9;
   box-shadow: none !important;
