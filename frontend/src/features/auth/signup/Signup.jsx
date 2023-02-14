@@ -113,8 +113,19 @@ function Signup(props) {
           <input type="password" placeholder="비밀번호 확인" className='signUpInputPasswordCheck' value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
           </div>
             <span className='passwordCheckError'>{confirmPasswordError}</span>
-          <div className='profileList'>
-            {profileImages.map((profileImage) => (
+          <div className='profileList1'>
+            {profileImageList1().map((profileImage) => (
+              <img
+                className={profileImage===profileImageUrl ? 'selected' : 'unselected'}
+                key={profileImage}
+                src={profileImage}
+                alt={profileImage}
+                onClick={onImageHandler}
+              />
+            ))}
+          </div>
+          <div className='profileList2'>
+            {profileImageList2().map((profileImage) => (
               <img
                 className={profileImage===profileImageUrl ? 'selected' : 'unselected'}
                 key={profileImage}
@@ -132,5 +143,20 @@ function Signup(props) {
     </div>
   )
 }
+function profileImageList1() {
+  let list1 = [];
+  for (let i = 0; i < 6; i++) {
+    list1.push(profileImages.at(i));
+  }
+  return list1;
+}
+function profileImageList2() {
+  let list2 = [];
+  for (let i = 6; i < profileImages.length; i++) {
+    list2.push(profileImages.at(i));
+  }
+  return list2;
+}
+
 
 export default Signup;

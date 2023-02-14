@@ -26,4 +26,5 @@ const profileImages = [
   profile12
 ];
 
+
 export default profileImages;
