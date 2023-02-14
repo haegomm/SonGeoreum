@@ -46,7 +46,7 @@ const SideBar = (props) => {
     const num = gameCnt + 1;
     setGameCnt(num);
     if (gameCnt === 12) {
-      handletheEndGame(); // ****** CSS 작업을 위한 임시 ******
+      handletheEndGame();
     } else {
       console.log("다음 시작할 문제 번호: ", num);
       setTimeout(() => {

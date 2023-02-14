@@ -163,12 +163,12 @@ export default class ChatComponent extends Component {
                     : " right")
                 }
               >
-                <canvas
+                {/* <canvas
                   id={"userImg-" + i}
                   width="60"
                   height="60"
                   className="user-img"
-                />
+                /> */}
                 <div className="msg-detail">
                   <div className="msg-info">
                     <p> {data.nickname}</p>
