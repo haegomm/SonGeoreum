@@ -231,7 +231,7 @@ export default function WordToHand({ categoryNum, isTuto, finishTest }) {
           </div>
           <div>{topCardScreen}</div>
           <div className="flexBox">
-            <div className="testScreen motionGuideText">
+            <div className="motionTestScreen motionGuideText">
               {guide}
               {/* 아래 텍스트 대신에 로딩중 gif를 넣으면 좋을 것 같아요~~ */}
               <div className="canvasText" style={motionScreen}>

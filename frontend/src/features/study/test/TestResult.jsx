@@ -12,7 +12,7 @@ export default function TestResult({ score, resetTestMode }) {
   return (
     <div className="flexBox marginTopBox">
       <div className="resultScreen">
-        <div className="compelete">COMPELETE</div>
+        <div className="compelete">실전모드 완료</div>
         <div>
           <div className="resultImg">
             <img src="https://picsum.photos/70/70" />
