@@ -1,6 +1,7 @@
 package com.bbb.songeoreum.exception;
 
 import com.bbb.songeoreum.api.response.ErrorRes;
+import io.jsonwebtoken.MalformedJwtException;
 import io.openvidu.java.client.OpenViduHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -74,7 +75,7 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage());
     }
 
-    @ExceptionHandler({UnAuthorizedException.class, SecurityException.class, IllegalArgumentException.class})
+    @ExceptionHandler({UnAuthorizedException.class, SecurityException.class, IllegalArgumentException.class, MalformedJwtException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ErrorRes handleUnAuthorizedException(UnAuthorizedException e) {

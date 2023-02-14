@@ -5,6 +5,7 @@ import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
 import com.bbb.songeoreum.util.HeaderUtil;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final AuthTokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, SecurityException, UnAuthorizedException, IllegalArgumentException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, SecurityException, UnAuthorizedException, IllegalArgumentException, MalformedJwtException {
 
         String headerToken = HeaderUtil.getAccessToken(request);
         log.debug("헤더로 넘어온 토큰 : {}", headerToken);

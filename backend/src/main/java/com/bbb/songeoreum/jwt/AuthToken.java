@@ -76,7 +76,7 @@ public class AuthToken { // JwtUtil
                 .compact();
     }
 
-    public boolean validate() throws java.lang.SecurityException, IllegalArgumentException {
+    public boolean validate() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
         log.debug("validate() 호출됨.");
         return this.getTokenClaims() != null;
     }
@@ -84,7 +84,7 @@ public class AuthToken { // JwtUtil
     /*
     토큰 뜯어보기
      */
-    public Claims getTokenClaims() throws java.lang.SecurityException, IllegalArgumentException {
+    public Claims getTokenClaims() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -96,6 +96,7 @@ public class AuthToken { // JwtUtil
             throw new SecurityException("유효하지 않은 토큰입니다.");
         } catch (MalformedJwtException e) {
             log.info("Invalid JWT token.");
+            throw new MalformedJwtException("유효하지 않은 토큰입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
