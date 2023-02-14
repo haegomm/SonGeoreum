@@ -241,10 +241,10 @@ export default function MyVoca() {
                   </div>
                 </div>
               </div>
-              <div className="wordList">
-                <div className="wordListCard">
+              <div className="mywordList">
+                <div className="mywordListCard">
                   <div className="arrowBox ">{up}</div>
-                  <div className="listBox scroll-container">
+                  <div className="mylistBox scroll-container">
                     <List
                       sx={{ width: "100%", maxWidth: 360 }}
                       style={{ color: "black", padding: 0 }}

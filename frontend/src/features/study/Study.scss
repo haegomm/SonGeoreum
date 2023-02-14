@@ -72,6 +72,13 @@ $blue: #6488e5;
   text-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
 }
 
+.titleText {
+  font-size: 48px;
+  font-weight: 700;
+  color: $yellow;
+  text-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+}
+
 .reselectButton {
   position: fixed;
   left: 0;
