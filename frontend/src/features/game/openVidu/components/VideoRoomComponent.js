@@ -47,6 +47,7 @@ class VideoRoomComponent extends Component {
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
+      imageList: null,
     };
     // this.timer // timer component를 갖고온다면
 
@@ -294,6 +295,7 @@ class VideoRoomComponent extends Component {
       playGame: this.state.playGame,
       playersList: this.state.playersList,
       wordsList: wordsData,
+      imageList: this.state.imageList,
     };
     this.state.session
       .signal({
@@ -496,6 +498,7 @@ class VideoRoomComponent extends Component {
         goGame: data.playGame,
         playersList: data.playersList,
         wordsList: data.wordsList,
+        imageList: data.imageList,
       });
     });
   }
@@ -785,6 +788,7 @@ class VideoRoomComponent extends Component {
                   myNickname={this.state.myUserName}
                   wordsList={this.state.wordsList}
                   leaveSession={this.leaveSession}
+                  imageList={this.state.imageList}
                 />
               )}
           </div>
@@ -817,6 +821,7 @@ class VideoRoomComponent extends Component {
     const playersList = sessionData.playersList;
     const sessionId = sessionData.sessionId;
     const token = sessionData.token;
+    const imageList = sessionData.imageList;
 
     this.setState({
       message: message,
@@ -824,6 +829,7 @@ class VideoRoomComponent extends Component {
       playersList: playersList,
       sessionId: sessionId,
       token: token,
+      imageList: imageList,
     });
 
     // const tokenData = token.split("=");
