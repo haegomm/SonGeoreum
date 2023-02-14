@@ -47,7 +47,7 @@ const SideBar = (props) => {
     const num = gameCnt + 1;
     setGameCnt(num);
     if (gameCnt === 12) {
-      handletheEndGame(); // ****** CSS 작업을 위한 임시 ******
+      handletheEndGame();
     } else {
       console.log("다음 시작할 문제 번호: ", num);
       setTimeout(() => {
@@ -87,13 +87,9 @@ const SideBar = (props) => {
         <div className="sidebar-wrapper">
           <React.Fragment>
             {gameCnt === 12 ? (
-              <div>
-                <div className="box">
-                  <p>게임이 종료되었습니다</p>
-                </div>
-                <div className="box">
-                  <p>잠시 뒤 결과창으로 넘어갑니다.</p>
-                </div>
+              <div className="box resultMessageBox">
+                <p>게임이 종료되었습니다</p>
+                <p>잠시 뒤 결과창으로 넘어갑니다.</p>
               </div>
             ) : (
               <AnswerVideo
