@@ -119,6 +119,20 @@
   height: 60%;
 }
 
+.resultMessageBox {
+  text-align: center;
+  height: 100%;
+}
+
+.resultMessageBox p:nth-child(1) {
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.resultMessageBox p:nth-child(2) {
+  font-size: 14px;
+}
+
 .box-video {
   border-radius: 16px;
   height: 100%;

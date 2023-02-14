@@ -51,7 +51,7 @@ const AnswerVideo = (props) => {
         {props.showAnswer || presenter === myNickname ? (
           <React.Fragment>
             <div className="box-text">
-              {answerWord} || {check}
+              "{answerWord}"{/* || {check} */}
             </div>
             <video className="box-video" autoPlay loop>
               <source src={answerApi}></source>

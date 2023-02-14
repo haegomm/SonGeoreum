@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import "./Result.scss";
 
 const Result = () => {
@@ -10,6 +11,11 @@ const Result = () => {
   console.log(ranking);
 
   const crown = require("../../../../assets/result/crown.png");
+
+  let navigate = useNavigate();
+  const exitButtonHandler = () => {
+    navigate("/");
+  };
 
   return (
     <div className="resultContainer">
@@ -37,7 +43,9 @@ const Result = () => {
           ))}
         </div>
       </div>
-      <button className="exitButton">나가기</button>
+      <button onClick={exitButtonHandler} className="exitButton">
+        나가기
+      </button>
     </div>
   );
 };

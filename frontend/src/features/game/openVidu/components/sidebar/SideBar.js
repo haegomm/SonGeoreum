@@ -78,14 +78,10 @@ const SideBar = (props) => {
       return (
         <div className="sidebar-wrapper">
           <React.Fragment>
-            {gameCnt === 12 ? (
-              <div>
-                <div className="box">
-                  <p>게임이 종료되었습니다</p>
-                </div>
-                <div className="box">
-                  <p>잠시 뒤 결과창으로 넘어갑니다.</p>
-                </div>
+            {gameCnt !== 12 ? (
+              <div className="box resultMessageBox">
+                <p>게임이 종료되었습니다</p>
+                <p>잠시 뒤 결과창으로 넘어갑니다.</p>
               </div>
             ) : (
               <AnswerVideo
