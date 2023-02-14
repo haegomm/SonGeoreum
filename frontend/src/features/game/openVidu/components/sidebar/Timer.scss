@@ -12,6 +12,7 @@ h1 {
   width: 100%;
   background-color: white;
   border-radius: 16px;
+  font-size: 100%;
 }
 
 .timer {
@@ -20,7 +21,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  line-height: 1.5;
+  // line-height: 1.5;
   font-weight: 700;
 }
 
@@ -29,7 +30,7 @@ h1 {
 }
 
 .value {
-  font-size: 40px;
+  font-size: 30px;
 }
 
 .info {
