@@ -92,28 +92,27 @@ function Signup(props) {
       <br />
       <div>
         <form
-          onSubmit={onSubmitHandler} className='formItem'>
-          <div className='divDivde'>
+          onSubmit={onSubmitHandler} className='formItemSignup'>
+          <div className='emailDiv'>
           <input type="email" placeholder="이메일" className='signUpInputEmail' onBlur={onEmailHandler} />
           </div>
-          <span className='errorMessage'>{emailError}</span>
-            <span className='errorMessage'>{emailFormError}</span>
+          <span className='emailError'>{emailError}{emailFormError}</span>
           
-          <div>
+          <div className='nicknameDiv'>
           <input type="text" placeholder="닉네임" className='signUpInputNickname' onBlur={onNicknameHandler} />
-          <span className='errorMessage'>{nicknameError}</span>
-            <span className='errorMessage'>{nicknameFormError}</span>
           </div>
-          <div>
+          <span className='nicknameError'>{nicknameError}{nicknameFormError}</span>
+          
+          <div className='passwordDiv'>
           <input type="password" placeholder="비밀번호" className='signUpInputPassword' value={Password} onChange={onPasswordHandler} />
-            <span className='errorMessage'>{passwordError}</span>
           </div>
-          <div>
-          <div>
+            <span className='passwordError'>{passwordError}</span>
+          
+          
+          <div className='passwordCheckDiv'>
           <input type="password" placeholder="비밀번호 확인" className='signUpInputPasswordCheck' value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
           </div>
-            <span className='errorMessage'>{confirmPasswordError}</span>
-            </div>
+            <span className='passwordCheckError'>{confirmPasswordError}</span>
           <div className='profileList'>
             {profileImages.map((profileImage) => (
               <img
@@ -125,7 +124,7 @@ function Signup(props) {
               />
             ))}
           </div>
-          <button type="submit" className='signupButton' disabled={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? true : false}>
+          <button type="submit" className='signupButton' disabled={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}>
               가입하기
           </button>
         </form>

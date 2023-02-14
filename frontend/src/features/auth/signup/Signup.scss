@@ -1,15 +1,28 @@
 $blue: #6488e5;
 
+
+.formItemSignup{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 56px;
+}
 .signUpTitle{
   margin-top: 76px;
   font-size: 40px;
   font-weight: 600;
 }
+.emailDiv{
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+  display: inline-block;
+  flex-direction: row-reverse;
+}
 
 .signUpInputEmail{
-  display: inline-block;
+  display: block;
   margin:auto;
-  margin-top: 56px;
   border:0;
   background-color: #FFF9ED;
   border-bottom: 2px solid #D1D1D6;
@@ -19,14 +32,34 @@ $blue: #6488e5;
   display: flex;
   justify-content: center;
   font-size: medium;
+  flex-direction: row-reverse;
 }
 .signUpInputEmail::placeholder{
   color: #D1D1D6;
+} 
+
+.emailError{
+  color: #F16061;
+  grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.nicknameDiv{
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 2;
+	grid-row-end: 3;  
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
 }
 .signUpInputNickname{
   display: block;
   margin:auto;
-  margin-top: 28px;
   border:0;
   background-color: #FFF9ED;
   border-bottom: 2px solid #D1D1D6;
@@ -40,10 +73,28 @@ $blue: #6488e5;
 .signUpInputNickname::placeholder{
   color: #D1D1D6;
 }
+.nicknameError{
+  color: #F16061;
+  grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 2;
+	grid-row-end: 3;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.passwordDiv{
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 3;
+	grid-row-end: 4;  
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
+}
 .signUpInputPassword{
   display: block;
   margin:auto;
-  margin-top: 28px;
   border:0;
   background-color: #FFF9ED;
   border-bottom: 2px solid #D1D1D6;
@@ -57,44 +108,65 @@ $blue: #6488e5;
 .signUpInputPassword::placeholder{
   color: #D1D1D6;
 }
+.passwordError{
+  color: #F16061;
+  grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 3;
+	grid-row-end: 4;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.passwordCheckDiv{
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 4;
+	grid-row-end: 5;  
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
+}
 .signUpInputPasswordCheck{
-  display: flex;
-  margin: auto;
-  margin-top: 28px;
+  display: block;
+  margin:auto;
   border:0;
   background-color: #FFF9ED;
   border-bottom: 2px solid #D1D1D6;
   color: #66645f;
   width: 360px;
   outline: none;
-  // justify-content: center;
+  display: flex;
+  justify-content: center;
   font-size: medium;
 }
 .signUpInputPasswordCheck::placeholder{
   color: #D1D1D6;
 }
-.formItem input:focus{
-  border-bottom: 2px solid #66645f;
-}
-
-.errorMessage{
+.passwordCheckError{
   color: #F16061;
-  display: inline-block;
+  grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 4;
+	grid-row-end: 5;
   font-size: small;
-  flex-direction: row-reverse;
-  // position: relative;
-  // margin-left: 24px;
+  text-align: start;
+  align-self: end;
 }
 
-.divDivde{
-  display: inline-block;
-  flex-direction: row-reverse;
+.formItemSignup input:focus{
+  border-bottom: 2px solid #66645f;
 }
 
 .profileList{
   text-align: center;
-  margin-top: 26px;
-  // width: 72px;
+  margin-top: 54px;
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 5;
+	grid-row-end: 6;  
+  display: inline-block;
+  flex-direction: row-reverse;
 }
 
 img{
@@ -106,7 +178,13 @@ img{
 }
 
 .signupButton{
- display: block;
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 7;
+	grid-row-end: 8;  
+  display: inline-block;
+  flex-direction: row-reverse;
+//  display: block;
  margin:auto;
  margin-top: 38px;
  width: 120px;
@@ -121,3 +199,8 @@ img{
  cursor: pointer;
 }
 
+.signupButton:disabled{
+  background-color: #C6C6C6;
+  color: white;
+  opacity: 0.5;
+}
