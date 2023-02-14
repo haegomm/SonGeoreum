@@ -29,22 +29,30 @@ function App() {
   // CssBaseline로 theme를 전처리해줍니다
   // 현재 보여지는 페이지에 따라 nav 크기를 조절해줍니다.
 
-    function reissueToken() {dispatch(userAction.issueAccessToken()).then((response) => {
-      console.log('토큰 재발급시도', response)
-      if (response.payload.message === 'success') {
-        console.log('토큰재발급 성공!')
-        window.localStorage.setItem('accessToken', response.payload.accessToken)
-      } else{
-        console.log('토큰재발급 실패ㅜㅜ')
+  function reissueToken() {
+    dispatch(userAction.issueAccessToken()).then((response) => {
+      console.log("토큰 재발급시도", response);
+      if (response.payload.message === "success") {
+        console.log("토큰재발급 성공!");
+        window.localStorage.setItem(
+          "accessToken",
+          response.payload.accessToken
+        );
+      } else {
+        console.log("토큰재발급 실패ㅜㅜ");
       }
-    })}
+    });
+  }
 
   useEffect(() => {
-    const tokenIssue = setInterval(() => {if (access) {
-      reissueToken()}}, 300000);
-  }, [])
-  
-  const access = authAction.isLogin()
+    const tokenIssue = setInterval(() => {
+      if (access) {
+        reissueToken();
+      }
+    }, 1200000);
+  }, []);
+
+  const access = authAction.isLogin();
 
   return (
     <div className="App">
@@ -73,16 +81,35 @@ function App() {
               <Route path="*" element={<Home />} />
               <Route path="game" element={<Game />} />
               <Route path="result" element={<Result />} />
-              
-              <Route path="signup" element={
-                <PublicRoute authenticated={access} component={<Signup />} />}/>
-              <Route path="login" element={
-                <PublicRoute authenticated={access} component={<Login />} />}/>
-              <Route path="oauth2/code/kakao" element={
-                <PublicRoute authenticated={access} component={<KakaoLogin />} />}/>
-              
-              <Route path="myvoca" element={
-                <PrivateRoute authenticated={access} component={<MyVoca />} />}/>
+
+              <Route
+                path="signup"
+                element={
+                  <PublicRoute authenticated={access} component={<Signup />} />
+                }
+              />
+              <Route
+                path="login"
+                element={
+                  <PublicRoute authenticated={access} component={<Login />} />
+                }
+              />
+              <Route
+                path="oauth2/code/kakao"
+                element={
+                  <PublicRoute
+                    authenticated={access}
+                    component={<KakaoLogin />}
+                  />
+                }
+              />
+
+              <Route
+                path="myvoca"
+                element={
+                  <PrivateRoute authenticated={access} component={<MyVoca />} />
+                }
+              />
             </Route>
           </Routes>
         </Router>
