@@ -75,7 +75,7 @@ public class ControllerExceptionHandler {
         return ErrorRes.make(e.getMessage());
     }
 
-    @ExceptionHandler({UnAuthorizedException.class, SecurityException.class, IllegalArgumentException.class, MalformedJwtException.class})
+    @ExceptionHandler(UnAuthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ErrorRes handleUnAuthorizedException(UnAuthorizedException e) {
