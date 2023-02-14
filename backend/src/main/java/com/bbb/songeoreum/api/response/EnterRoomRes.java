@@ -28,4 +28,7 @@ public class EnterRoomRes {
     @ApiModelProperty(example = "현재 세션에 연결되어 있는 유저 닉네임 리스트")
     private List<String> playersList;
 
+    @ApiModelProperty(example = "현재 세션에 연결되어 있는 유저 프로필사진 리스트")
+    private List<String> imageList;
+
 }

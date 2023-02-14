@@ -229,13 +229,16 @@ public class GameService {
                 .token(connection.getToken())
                 .playGame(playGame)
                 .sessionId(sessionId)
-                .playersList(new ArrayList<>()).build();
+                .playersList(new ArrayList<>())
+                .imageList(new ArrayList<>())
+                .build();
 
         for (Connection c : availableSession.getActiveConnections()) {
             Long cUserId = Long.parseLong(c.getServerData());
             User user = userRepository.findById(cUserId).orElseThrow(NotFoundException::new);
 
             enterRoomRes.getPlayersList().add(user.getNickname());
+            enterRoomRes.getImageList().add(user.getPicture());
         }
 
         enterRoomRes.getPlayersList().add(userRepository.findById(userId).orElseThrow(NotFoundException::new).getNickname());
