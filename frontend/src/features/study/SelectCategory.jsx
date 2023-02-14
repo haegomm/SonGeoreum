@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "../../common/api/https";
 import CategoryButton from "../../common/button/CategoryButton";
+import categoryImages from "../../assets/category/categoryImages";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
@@ -84,8 +85,8 @@ export default function SelectCategory({
           <CategoryButton
             key={category.id}
             text={category.name}
-            index={category.id % categoryList.length}
-            link="https://picsum.photos/70/30"
+            index={(category.id % categoryList.length == 0) ? categoryList.length : category.id % categoryList.length}
+            link={categoryImages[(category.id % categoryList.length == 0) ? categoryList.length-1 : category.id % categoryList.length-1]}
             color={colors[category.id % 3]}
             disable={category.isTestable}
             selectedCategory={selectedCategory}
