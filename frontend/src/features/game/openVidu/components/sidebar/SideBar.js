@@ -10,6 +10,7 @@ const SideBar = (props) => {
   const myNickname = props.myNickname;
   const questionList = props.wordsList; // *** 임시 ***
   // const questionList = [0, 1, 2, 3];
+  const imageList = props.imageList;
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -28,6 +29,7 @@ const SideBar = (props) => {
       result.push({
         nickname: playersList[i],
         score: scoreList[i],
+        image: imageList[i],
       });
     }
     return result;

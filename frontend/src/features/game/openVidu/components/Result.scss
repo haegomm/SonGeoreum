@@ -1,3 +1,29 @@
+$red: #e56372;
+$green: #90de8a;
+$yellow: #f9be7d;
+$blue: #6488e5;
+
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.resultGameTitle {
+  font-size: 42px;
+  font-weight: 700;
+  background-image: url(../../../../assets/result/result-banner.png);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding: 24px 64px;
+  // width: 75%;
+  height: 100%;
+  transform: translateY(50%);
+}
+
 .resultBox {
   background-color: white;
   text-align: center;
@@ -5,12 +31,17 @@
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
 
   border-radius: 40px;
-  margin: 16px;
-  padding: 16px;
+  margin: 0 16px 16px 16px;
+  padding: 76px 24px 40px 24px;
   width: calc(100% - 32px);
   max-width: 960px;
-  height: 496px;
+  height: 300px;
   border: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .rankingBox {
@@ -22,14 +53,63 @@
 
 .rankingItem {
   margin: 16px;
-  max-width: 160px;
-  height: 272px;
+  padding: 16px;
+  // max-width: 160px;
+  // height: 272px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 .rank {
-  margin: 16px;
+  // margin: 16px;
+  font-weight: 700;
+  font-size: 36px;
 }
 
 .nickName {
+  // margin: 16px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.score {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.exitButton {
   margin: 16px;
+  background-color: $yellow;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: 120px;
+  height: 50px;
+  border-radius: 15px;
+  border: none;
+  box-shadow: 3px 3px 3px #66666689, 4px 4px 4px rgba(87, 87, 87, 0.479);
+
+  cursor: pointer;
+
+  transition: all 0.5s;
+}
+.exitButton:active,
+.exitButton:hover,
+.exitButton:focus {
+  background-color: $yellow;
+  transition: all 0.5s;
+  transform: translateY(-7px);
+}
+.exitButton:disabled {
+  color: white;
+  opacity: 0.5;
+}
+
+.profilePic {
 }
