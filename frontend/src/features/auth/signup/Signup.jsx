@@ -61,6 +61,7 @@ function Signup(props) {
   }
 
   const onImageHandler = (e) => {
+    console.log(e.currentTarget.src)
     setProfileImageUrl(e.currentTarget.src)
   };
 
@@ -88,34 +89,48 @@ function Signup(props) {
 
   return (
     <div>
-      <h1>회원가입</h1>
+      <h1 className='signUpTitle'>회원가입</h1>
       <br />
       <div>
         <form
-          onSubmit={onSubmitHandler}>
-          <label>이메일</label>
-          <input type="email" onBlur={onEmailHandler} />
-          <span>{emailError}</span>
-          <span>{emailFormError}</span>
-          <br />
-          <span>닉네임</span>
-          <input type="text" onBlur={onNicknameHandler} />
-          <span>{nicknameError}</span>
-          <span>{nicknameFormError}</span>
-          <br />
-          <span>비밀번호</span>
-          <input type="password" value={Password} onChange={onPasswordHandler} />
-          <span>{passwordError}</span>
-          <br />
-          <span>비밀번호 확인</span>
-          <input type="password" value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
-          <span>{confirmPasswordError}</span>
-          <br />
-          <p>프로필 사진</p>
-          <div>
-            {profileImages.map((profileImage) => (
+          onSubmit={onSubmitHandler} className='formItemSignup'>
+          <div className='emailDiv'>
+          <input type="email" placeholder="이메일" className='signUpInputEmail' onBlur={onEmailHandler} />
+          </div>
+          <span className='emailError'>{emailError}{emailFormError}</span>
+          
+          <div className='nicknameDiv'>
+          <input type="text" placeholder="닉네임" className='signUpInputNickname' onBlur={onNicknameHandler} />
+          </div>
+          <span className='nicknameError'>{nicknameError}{nicknameFormError}</span>
+          
+          <div className='passwordDiv'>
+          <input type="password" placeholder="비밀번호" className='signUpInputPassword' value={Password} onChange={onPasswordHandler} />
+          </div>
+            <span className='passwordError'>{passwordError}</span>
+          
+          
+          <div className='passwordCheckDiv'>
+          <input type="password" placeholder="비밀번호 확인" className='signUpInputPasswordCheck' value={ConfirmPassword} onChange={onConfirmPasswordHandler} />
+          </div>
+            <span className='passwordCheckError'>{confirmPasswordError}</span>
+          <div className='profileList1'>
+            {profileImageList1().map((profileImage) => {
+              console.log(profileImage + " | " + profileImageUrl)
+              return (< img
+              className = { profileImage === profileImageUrl ? 'selectedImg' : 'unselected'
+            }
+              key = { profileImage }
+              src = { profileImage }
+              alt = { profileImage }
+              onClick = { onImageHandler }
+              />)
+              })}
+          </div>
+          <div className='profileList2'>
+            {profileImageList2().map((profileImage) => (
               <img
-                className={profileImage===profileImageUrl ? 'selected' : 'unselected'}
+                className={profileImage===profileImageUrl ? 'selectedImg' : 'unselected'}
                 key={profileImage}
                 src={profileImage}
                 alt={profileImage}
@@ -123,18 +138,28 @@ function Signup(props) {
               />
             ))}
           </div>
-          <button type="submit" className='signupButton'>
-            <LargeButton
-            text="가입하기"
-            type="gameStart"
-            backgroundColor="blue"
-            disable={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}
-            />
-            </button>
+          <button type="submit" className='signupButton' disabled={Email && Nickname && Password && ConfirmPassword && profileImageUrl && !emailError && !emailFormError && !nicknameError && !nicknameFormError && !passwordError && !confirmPasswordError ? false : true}>
+              가입하기
+          </button>
         </form>
       </div>
     </div>
   )
 }
+function profileImageList1() {
+  let list1 = [];
+  for (let i = 0; i < 6; i++) {
+    list1.push(profileImages[i]);
+  }
+  return list1;
+}
+function profileImageList2() {
+  let list2 = [];
+  for (let i = 6; i < profileImages.length; i++) {
+    list2.push(profileImages[i]);
+  }
+  return list2;
+}
+
 
 export default Signup;
