@@ -4,6 +4,7 @@ import lock from "../../assets/images/lock.jpg";
 import "./Timer.scss";
 
 const AnswerVideo = (props) => {
+  console.log("props 확인 >> ", props);
   console.log("리렌더링!!!", props.showAnswer);
   const myNickname = props.myNickname;
   const answerWord = props.answerWord;

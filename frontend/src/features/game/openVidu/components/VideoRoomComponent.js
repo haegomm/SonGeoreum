@@ -10,7 +10,7 @@ import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
 import SideBar from "./sidebar/SideBar";
-import { navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
 var localUser = new UserModel();
@@ -326,7 +326,7 @@ class VideoRoomComponent extends Component {
       try {
         const response = await axios.delete(`/api/game/session/${sessionId}`);
         console.log("나가요~ >> ", response.data.message);
-        navigate("/");
+        Navigate("/");
         return response.data;
       } catch (err) {
         console.log("못나감~ >>", err);
@@ -370,7 +370,7 @@ class VideoRoomComponent extends Component {
         const response = await axios.put(`/api/game/session/${sessionId}`);
         console.log("모두 나가주세요~ >> ");
         this.leaveSession();
-        navigate("/");
+        Navigate("/");
         // 음...api 안날리고 여기서 끊어도 되지않을까...leavesession...
         return response.data;
       } catch (err) {
@@ -414,12 +414,12 @@ class VideoRoomComponent extends Component {
         subscribers: remoteUsers,
       });
     }
-    if (
-      (this.state.playGame || this.state.goGame) &&
-      this.state.subscribers < 3
-    ) {
-      this.leaveSession();
-    }
+    // if (
+    //   (this.state.playGame || this.state.goGame) &&
+    //   this.state.subscribers < 3
+    // ) {
+    //   this.leaveSession();
+    // }
   }
 
   subscribeToStreamCreated() {
@@ -778,7 +778,7 @@ class VideoRoomComponent extends Component {
               localUser.getStreamManager() !== undefined && (
                 <div style={chatDisplay}>
                   <SideBar
-                    user={"localUser"}
+                    user={localUser}
                     chatDisplay={this.state.chatDisplay}
                     close={this.toggleChat}
                     messageReceived={this.checkNotification}
@@ -807,7 +807,7 @@ class VideoRoomComponent extends Component {
       return response.data; // The sessionId
     } catch (err) {
       alert("게임방 입장에 실패하셨습니다. 다시 시도해주세요:)");
-      navigate("/");
+      Navigate("/");
       console.log("요청실패 ㅠㅠ", err);
     }
   }
