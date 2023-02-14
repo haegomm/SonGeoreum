@@ -1,0 +1,12 @@
+.home-container {
+  display: flex;
+  .home-body {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .ranking {
+    width: 200px;
+  }
+}

@@ -6,6 +6,9 @@ import MotionTest from "../study/test/MotionTest";
 import CardTest from "../../common/card/CardTest";
 import HomeRanking from "./HomeRanking";
 import Carousel from "./Carousel";
+import CarouselMui from "./CarouselMui";
+
+import './home.scss'
 
 const TestApiCall = async () => {
   try {
@@ -20,15 +23,22 @@ const TestApiCall = async () => {
 
 export default function Home() {
   return (
-    <Grid container justifyContent="center">
-      <Grid item xs={8}>
-        <div className="HomePage">
-          <button onClick={TestApiCall}>카테고리 요청</button>
-          <div>이곳은 홈페이지 입니다.</div>
-          <div><HomeRanking /></div>
-          <div><Carousel /></div>
-        </div>
-      </Grid>
-    </Grid>
+    <div className="home-container">
+      <div className="home-body">
+        <div><CarouselMui /></div>
+      </div>
+      <div className="ranking">
+        <div><HomeRanking /></div>
+      </div>
+    </div>
+    // <Grid container justifyContent="center">
+    //   <Grid item xs={8}>
+    //     <div className="HomePage">
+    //       <button onClick={TestApiCall}>카테고리 요청</button>
+    //     </div>
+    //   </Grid>
+    //   <Grid item xs={8}>
+    //   </Grid>
+    // </Grid>
   );
 }
