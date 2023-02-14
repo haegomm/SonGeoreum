@@ -64,23 +64,23 @@ export default class ChatComponent extends Component {
       });
   }
 
-  changeChatAnswerCnt = setInterval(() => {
-    console.log("째깍");
-    if (this.state.chatAnswerCnt !== 12) {
-      this.setState(() => ({
-        chatAnswerCnt: this.state.chatAnswerCnt + 1,
-      }));
-      this.setState(() => ({
-        getScore: false,
-      }));
-    } else {
-      this.stopTimer();
-    }
-  }, 10000);
+  // changeChatAnswerCnt = setInterval(() => {
+  //   console.log("째깍");
+  //   if (this.state.chatAnswerCnt < 12) {
+  //     this.setState({
+  //       chatAnswerCnt: this.state.chatAnswerCnt + 1,
+  //     });
+  //     this.setState({
+  //       getScore: false,
+  //     });
+  //   } else {
+  //     this.stopTimer();
+  //   }
+  // }, 10000);
 
-  stopTimer() {
-    clearInterval(this.changeChatAnswerCnt);
-  }
+  // stopTimer() {
+  //   clearInterval(this.changeChatAnswerCnt);
+  // }
 
   componentWillUnmount() {
     clearInterval(this.changeChatAnswerCnt);
