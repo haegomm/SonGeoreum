@@ -28,7 +28,6 @@ export default function Navbar() {
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
-    { name: "알아보기", path: "/culture" },
   ]; // 페이지
   const location = useLocation();
   const [isShort, setShort] = useState(0); // navBar 사이즈 조절
@@ -82,7 +81,7 @@ export default function Navbar() {
     borderRadiusSize: 20, // 전체 nav 모서리는 scss에서 수정
     appBarMarginBottom: size.marginBottom,
     // logo
-    logo: "30px",
+    logo: "28px",
     logoWeight: 700,
     logoPaddingLeft: 60,
     // menu
@@ -133,10 +132,11 @@ export default function Navbar() {
               style={{
                 paddingLeft: sizeList.logoPaddingLeft,
                 textDecoration: "none",
+                lineHeight: "40px",
               }}
               sx={{ flexGrow: 1 }}
             >
-              <img className="logoImg" src={logoImg} height={30} />
+              <img className="logoImg" src={logoImg} height={"32px"} />
               손걸음
             </Typography>
             {pages.map((page) => (
