@@ -10,19 +10,21 @@ const Result = () => {
   console.log(ranking);
 
   return (
-    <div>
-      <h1>✨게임 결과✨</h1>
+    <div className="resultContainer">
+      <h1 className="resultGameTitle">✨ 게임 결과 ✨</h1>
       <div className="resultBox">
         <div className="rankingBox">
           {ranking.map((it) => (
             <div className="rankingItem">
-              <div className="rank">{ranking.indexOf(it) + 1}</div>
+              <div className="rank">{ranking.indexOf(it) + 1}등</div>
+              <div className="profilePic">{it.image}</div>
               <div className="nickName">{it.nickname}</div>
-              <div className="score">경험치: {it.score}</div>
+              <div className="score">{it.score}점</div>
             </div>
           ))}
         </div>
       </div>
+      <button className="exitButton">나가기</button>
     </div>
   );
 };
