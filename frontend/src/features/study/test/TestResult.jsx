@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import resultImages from "../../../assets/result/resultImages";
 import "./TestResult.scss";
 
 export default function TestResult({ score, resetTestMode }) {
@@ -15,7 +15,7 @@ export default function TestResult({ score, resetTestMode }) {
         <div className="compelete">COMPELETE</div>
         <div>
           <div className="resultImg">
-            <img src="https://picsum.photos/70/70" />
+            <img src={resultImages[num]} className="resultImage" />
             <div className="resultTitle">{resultTitle[num]}</div>
           </div>
         </div>
