@@ -18,7 +18,7 @@ const SideBar = (props) => {
 
   const handletheEndGame = async () => {
     const result = await resultScore();
-    navigate("result", { state: result });
+    navigate("/result", { state: result });
     // props.leaveSession();
   };
 
@@ -29,8 +29,8 @@ const SideBar = (props) => {
         nickname: playersList[i],
         score: scoreList[i],
       });
-      return result;
     }
+    return result;
   };
 
   const onShowAnswer = (status) => {
@@ -78,8 +78,12 @@ const SideBar = (props) => {
           <React.Fragment>
             {gameCnt === 12 ? (
               <div>
-                <div>게임이 종료되었습니다</div>
-                <div>결과창으로 넘어갑니다.</div>
+                <div className="box">
+                  <p>게임이 종료되었습니다</p>
+                </div>
+                <div className="box">
+                  <p>잠시 뒤 결과창으로 넘어갑니다.</p>
+                </div>
               </div>
             ) : (
               <AnswerVideo

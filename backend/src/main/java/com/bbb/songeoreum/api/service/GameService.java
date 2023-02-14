@@ -314,7 +314,7 @@ public class GameService {
             session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
             log.debug("게임방 종료 단계에서 다른 유저로 인해 이미 세션이 삭제되었습니다.");
-//            throw new NotFoundException("세션을 찾을 수 없습니다.");
+            throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
 
         LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");

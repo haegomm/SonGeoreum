@@ -4,6 +4,7 @@ import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.NotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

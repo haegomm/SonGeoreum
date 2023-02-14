@@ -124,7 +124,7 @@ public class AuthService {
      * access token, refresh token을 발급하고 refresh token은 쿠키에 저장합니다.
      * saveAndFlush는 save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 한다.
      *
-     * @param kakaoAccessToken 카카오가 발급한 access token
+     * @param kakaoAccessToken    카카오가 발급한 access token
      * @param httpServletRequest
      * @param httpServletResponse
      * @return 카카오 사용자 정보를 DB에 저장한 정보 중 화면에 상시 노출되어야 하는 정보를 {@code ResponseEntity}로 반환합니다.
