@@ -14,14 +14,18 @@ export default function SelectCategory({
 }) {
   const [categoryList, setCategoryList] = useState([]); // 카테고리 리스트 저장
   const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
+  const [infiniteCategoryList, setInfiniteCategoryList] = useState([]); // 무한 스크롤에 보여줄 카테고리 리스트
+  const [infiniteCount, setInfiniteCount] = useState(1); // 무한 스크롤이 갱신되는 횟수
 
   const colors = ["yellow", "green", "red"]; // 색깔 목록
+
 
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(`/api/categories`);
       setCategoryList(data.data);
       console.log(data.data);
+      setInfiniteCategoryList(data.data);
     }
     getInfo();
   }, []);
@@ -53,18 +57,41 @@ export default function SelectCategory({
       <button className="reselectButton" onClick={() => resetMode()}>
         <ArrowBackRoundedIcon fontSize="large" />
       </button>
-      <div className="categoryList fade-in-up">
-        {categoryList.map((category) => (
+      <div id = "infiniteScroll" className="categoryList fade-in-up infiniteScroll" onWheel={(event) => {
+        let scrollBox = document.getElementById("infiniteScroll");
+        // 엘리먼트의 overflow 포함 가로 길이(scrollWidth) * 0.95 <= 엘리먼트의 가로 길이 + 엘리먼트가 왼쪽에서부터 스크롤 된 길이
+        if (scrollBox.scrollWidth * 0.95 <= scrollBox.offsetWidth + scrollBox.scrollLeft) {
+          let newList = [];
+          for (let category of infiniteCategoryList) {
+            newList.push(category)
+          }
+
+          for (let category of categoryList) {
+            let uniqueCategory = JSON.parse(JSON.stringify(category));
+            uniqueCategory.id += infiniteCount * categoryList.length;
+            newList.push(uniqueCategory)
+          }
+          setInfiniteCount(infiniteCount => infiniteCount+1);
+          setInfiniteCategoryList(newList)
+        }
+        if (event.deltaY < 0) {
+          scrollBox.scrollLeft -= 200
+        } else {
+          scrollBox.scrollLeft += 200
+        }
+        }}>
+        {infiniteCategoryList.map((category) => (          
           <CategoryButton
             key={category.id}
             text={category.name}
-            index={category.id}
+            index={category.id % categoryList.length}
             link="https://picsum.photos/70/30"
             color={colors[category.id % 3]}
             disable={category.isTestable}
             selectedCategory={selectedCategory}
           />
         ))}
+
       </div>
     </div>
   );
