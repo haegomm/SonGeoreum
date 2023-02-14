@@ -9,6 +9,8 @@ const Result = () => {
   const ranking = result.sort((a, b) => b.score - a.score);
   console.log(ranking);
 
+  const crown = require("../../../../assets/result/crown.png");
+
   return (
     <div className="resultContainer">
       <h1 className="resultGameTitle">✨ 게임 결과 ✨</h1>
@@ -16,6 +18,15 @@ const Result = () => {
         <div className="rankingBox">
           {ranking.map((it) => (
             <div className="rankingItem">
+              <div
+                className="rankingCrown"
+                style={{
+                  visibility: ranking.indexOf(it) === 0 ? "" : "hidden",
+                }}
+              >
+                <img src={crown} alt="" />
+              </div>
+
               <div className="rank">{ranking.indexOf(it) + 1}등</div>
               <div className="profilePic">
                 <img src={it.image} alt="profile" />

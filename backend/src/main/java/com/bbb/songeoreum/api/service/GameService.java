@@ -242,6 +242,7 @@ public class GameService {
         }
 
         enterRoomRes.getPlayersList().add(userRepository.findById(userId).orElseThrow(NotFoundException::new).getNickname());
+        enterRoomRes.getImageList().add(userRepository.findById(userId).orElseThrow(NotFoundException::new).getPicture());
 
         List<String> activeConnections = new ArrayList<>();
         for (Connection c : standbyRooms.peek().getActiveConnections()) {

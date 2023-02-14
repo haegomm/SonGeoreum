@@ -3,6 +3,16 @@ $green: #90de8a;
 $yellow: #f9be7d;
 $blue: #6488e5;
 
+.rankingCrown {
+  width: 40px;
+  height: 30px;
+}
+
+.rankingCrown img {
+  width: 40px;
+  height: 30px;
+}
+
 .resultContainer {
   display: flex;
   flex-direction: column;
@@ -78,6 +88,7 @@ $blue: #6488e5;
 .score {
   font-weight: 700;
   font-size: 24px;
+  color: $red;
 }
 
 .exitButton {
