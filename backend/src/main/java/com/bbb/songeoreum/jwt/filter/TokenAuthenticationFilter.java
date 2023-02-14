@@ -1,5 +1,6 @@
 package com.bbb.songeoreum.jwt.filter;
 
+import com.bbb.songeoreum.exception.UnAuthorizedException;
 import com.bbb.songeoreum.jwt.AuthToken;
 import com.bbb.songeoreum.jwt.AuthTokenProvider;
 import com.bbb.songeoreum.oauth.entity.PrincipalDetails;
@@ -23,7 +24,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final AuthTokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, SecurityException, UnAuthorizedException, IllegalArgumentException {
 
         String headerToken = HeaderUtil.getAccessToken(request);
         log.debug("헤더로 넘어온 토큰 : {}", headerToken);
@@ -40,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             request.setAttribute("user", principalDetails.getUser());
 
             log.debug("TokenAuthenticationFilter로 접근한 user id(PK) : {}, 닉네임 : {}", principalDetails.getUser().getId(), principalDetails.getUser().getNickname());
-            
+
 
             // SecurityContextHolder 에다가 Authentication을 담아줌. 즉, 이 사용자는 인증이 완료되었다는 의미
             SecurityContextHolder.getContext().setAuthentication(authentication);
