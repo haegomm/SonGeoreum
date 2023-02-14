@@ -21,6 +21,8 @@ import "./Navbar.scss";
 import { getUserInfo } from "../api/authInfo";
 import NavbarSide from "./NavbarSide";
 import authAction from "../api/authAction";
+import backImg from "../../assets/navbar_background.png";
+import logoImg from "../../assets/logo/logo_fill_yellow.png";
 
 export default function Navbar() {
   const pages = [
@@ -34,7 +36,9 @@ export default function Navbar() {
   useEffect(() => {
     console.log(location);
     const path = location.pathname;
-    if (path === "/study" || path === "/test" || path === "/myvoca") {
+    if (path === "/signup") {
+      setShort(() => 3);
+    } else if (path === "/study" || path === "/test" || path === "/myvoca") {
       setShort(() => 1);
     } else if (path === "/game") {
       setShort(() => 2);
@@ -51,20 +55,24 @@ export default function Navbar() {
     setShort(0);
   };
 
-  const size = {
-    short: {
+  const size = [
+    {
       navHeight: 80,
       marginBottom: 60,
     },
-    long: {
+    {
       navHeight: 330,
       marginBottom: 140,
     },
-    max: {
+    {
       navHeight: "100vh",
       marginBottom: 140,
     },
-  };
+    {
+      navHeight: 0,
+      marginBottom: 140,
+    },
+  ];
 
   // customizing
   const sizeList = {
@@ -84,19 +92,19 @@ export default function Navbar() {
     iconButtonMargin: 24,
   };
 
+  const customColor = isShort === 3 ? "#FFF9ED" : null;
+  const customTextColor = isShort === 3 ? "#6488E5" : "white";
+
   return (
     <div>
       <div
         className="navBar"
         style={{
-          height:
-            isShort === 0
-              ? size.short.navHeight
-              : isShort === 1
-              ? size.long.navHeight
-              : size.max.navHeight,
+          height: size[isShort].navHeight,
         }}
-      ></div>
+      >
+        <img src={backImg} width={"100%"} />
+      </div>
       <Box
         sx={{
           flexGrow: 1,
@@ -111,6 +119,7 @@ export default function Navbar() {
             borderBottomRightRadius: sizeList.borderRadiusSize,
             paddingTop: sizeList.appBarHeightPaddingTop,
             marginBottom: sizeList.appBarMarginBottom,
+            backgroundColor: "rgba(0, 0, 0, 0)",
           }}
         >
           <Toolbar>
@@ -127,6 +136,7 @@ export default function Navbar() {
               }}
               sx={{ flexGrow: 1 }}
             >
+              <img className="logoImg" src={logoImg} height={30} />
               손걸음
             </Typography>
             {pages.map((page) => (
@@ -140,7 +150,7 @@ export default function Navbar() {
                   onClick={sizeLong}
                   style={{
                     textDecoration: "none",
-                    color: "white",
+                    color: customTextColor,
                   }}
                 >
                   {page.name}
@@ -177,7 +187,7 @@ export default function Navbar() {
                   to={"/login"} // 이동하는 링크입니다
                   style={{
                     textDecoration: "none",
-                    color: "white",
+                    color: customTextColor,
                   }}
                 >
                   로그인
