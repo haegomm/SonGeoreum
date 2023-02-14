@@ -4,6 +4,7 @@ import com.bbb.songeoreum.db.repository.UserRepository;
 import com.bbb.songeoreum.exception.NotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class AuthToken { // JwtUtil
                 .compact();
     }
 
-    public boolean validate() {
+    public boolean validate() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
         log.debug("validate() 호출됨.");
         return this.getTokenClaims() != null;
     }
@@ -83,7 +84,7 @@ public class AuthToken { // JwtUtil
     /*
     토큰 뜯어보기
      */
-    public Claims getTokenClaims() {
+    public Claims getTokenClaims() throws java.lang.SecurityException, IllegalArgumentException, MalformedJwtException {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -92,8 +93,10 @@ public class AuthToken { // JwtUtil
                     .getBody();
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
+            throw new SecurityException("유효하지 않은 토큰입니다.");
         } catch (MalformedJwtException e) {
             log.info("Invalid JWT token.");
+            throw new MalformedJwtException("유효하지 않은 토큰입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
@@ -101,6 +104,7 @@ public class AuthToken { // JwtUtil
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
             log.debug(e.getMessage());
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
         return null;
     }

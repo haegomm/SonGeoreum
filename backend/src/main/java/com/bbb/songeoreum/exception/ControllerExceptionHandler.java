@@ -1,6 +1,7 @@
 package com.bbb.songeoreum.exception;
 
 import com.bbb.songeoreum.api.response.ErrorRes;
+import io.jsonwebtoken.MalformedJwtException;
 import io.openvidu.java.client.OpenViduHttpException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -69,15 +70,15 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DuplicateException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    public ErrorRes handleDuplicateException(DuplicateException e){
+    public ErrorRes handleDuplicateException(DuplicateException e) {
         log.error(e.getMessage());
         return ErrorRes.make(e.getMessage());
     }
 
-    @ExceptionHandler(UnAuthorizedException.class)
+    @ExceptionHandler({UnAuthorizedException.class, SecurityException.class, IllegalArgumentException.class, MalformedJwtException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    public ErrorRes handleUnAuthorizedException(UnAuthorizedException e){
+    public ErrorRes handleUnAuthorizedException(UnAuthorizedException e) {
         log.error(e.getMessage());
         return ErrorRes.make(e.getMessage());
     }
@@ -85,7 +86,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(TokenValidFailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorRes handleTokenValidFailedException(TokenValidFailedException e){
+    public ErrorRes handleTokenValidFailedException(TokenValidFailedException e) {
         log.error(e.getMessage());
         return ErrorRes.make(e.getMessage());
     }
