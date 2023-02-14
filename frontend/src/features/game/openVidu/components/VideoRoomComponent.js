@@ -777,7 +777,7 @@ class VideoRoomComponent extends Component {
             {localUser !== undefined && // *** 임시 ***
               localUser.getStreamManager() !== undefined && (
                 <SideBar
-                  user={"localUser"}
+                  user={localUser}
                   chatDisplay={this.state.chatDisplay}
                   close={this.toggleChat}
                   messageReceived={this.checkNotification}
