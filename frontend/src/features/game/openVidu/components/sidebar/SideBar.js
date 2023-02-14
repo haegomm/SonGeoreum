@@ -39,6 +39,7 @@ const SideBar = (props) => {
     // const show = !showAnswer
     setShowAnswer(() => status);
     console.log("지금은 영상을 볼 수", status);
+    // console.log("여기서?", scoreList);
   };
 
   const toNext = () => {
@@ -57,8 +58,15 @@ const SideBar = (props) => {
 
   const whoGetScore = (who) => {
     if (who) {
-      const Idx = playersList.indexOf(who);
-      setSocreList(() => (scoreList[Idx] += 1));
+      console.log("정답자 카운트!!!");
+      console.log(who);
+      const Idx = Number(playersList.indexOf(who));
+      console.log(Idx);
+      const copyScoreList = [...scoreList];
+      copyScoreList[Idx]++;
+      console.log("카운트 전", scoreList);
+      setSocreList(copyScoreList);
+      console.log("카운트 후!", scoreList);
     }
     if (showAnswer === false) {
       // *** 임시 ***
@@ -95,7 +103,7 @@ const SideBar = (props) => {
                 }
                 presenter={playersList[gameCnt % 4]}
                 showAnswer={showAnswer} //
-                whoGetScore={whoGetScore()}
+                whoGetScore={whoGetScore}
               />
             )}
           </React.Fragment>
@@ -106,7 +114,7 @@ const SideBar = (props) => {
             messageReceived={props.messageReceived}
             answerWord={gameCnt === 12 ? "null" : questionList[gameCnt].name}
             questionList={questionList}
-            whoGetScore={whoGetScore()}
+            whoGetScore={whoGetScore}
           />
         </div>
       );
