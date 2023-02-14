@@ -7,15 +7,15 @@ function Carousel() {
   let slice = 0
 
   const onMoveLefttHandler = (e) => {
-    // const current = viewingPage
-    const current = slice
-    console.log(current)
+    const current = viewingPage
+    // const current = slice
+    console.log('지금 보는 페이지는', viewingPage)
     if (current === 0) {
-      // setViewingPage(4)
-      slice = 4
+      setViewingPage(4)
+      // slice = 4
     } else {
-      // setViewingPage(current-1)
-      slice = current - 1
+      setViewingPage(current-1)
+      // slice = current - 1
     }
   }
     
@@ -23,15 +23,15 @@ function Carousel() {
     // const next = current
     // current = current + 1
     // setSlide(next, current);
-    // const current = viewingPage
-    const current = slice
-    console.log(current)
+    const current = viewingPage
+    // const current = slice
+    console.log('지금 보는 페이지는', viewingPage)
     if (current === 4) {
-      // setViewingPage(0)
-      slice = 0
+      setViewingPage(0)
+      // slice = 0
     } else {
-      // setViewingPage(current+1)
-      slice = current+1
+      setViewingPage(current+1)
+      // slice = current+1
     }
   }
 
@@ -93,7 +93,7 @@ function Carousel() {
   // });
 
   return (
-    <div>
+    <div className='carouselBody'>
       <div className="carousel">
         <div className="carousel__nav">
           <span id="moveLeft" className="carousel__arrow">
@@ -108,8 +108,8 @@ function Carousel() {
           </span>
         </div>
         {carouselContents.map((carouselContent) => (
-          <div className={carouselContent.idx===slice ? 'active' : `carousel-item-${carouselContent.idx}`}>
-            <div className="carousel-item__image"><img src={carouselContent.imgUrl}/></div>
+          <div className={carouselContent.idx === viewingPage ? 'active' : `carousel-item-${carouselContent.idx}`}>
+            <img className="carousel-item__image" src={carouselContent.imgUrl}/>
             <div className="carousel-item__info">
               <h2 className="carousel-item__subtitle">{carouselContent.subtitle}</h2>
               <h1 className="carousel-item__title">{carouselContent.title}</h1>

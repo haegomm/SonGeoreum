@@ -7,6 +7,7 @@ import CardTest from "../../common/card/CardTest";
 import HomeRanking from "./HomeRanking";
 import Carousel from "./Carousel";
 import CarouselMui from "./CarouselMui";
+import HomeScroll from "./HomeScroll";
 
 import './home.scss'
 
@@ -16,6 +17,7 @@ export default function Home() {
       <div className="home-body">
         {/* <div><CarouselMui /></div> */}
         {/* <Carousel /> */}
+        <HomeScroll />
       </div>
 
       <div className="ranking">
