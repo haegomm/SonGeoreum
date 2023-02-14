@@ -22,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -310,11 +313,8 @@ public class GameService {
         try {
             session = (Session) sessionInfo.get("session");
         } catch (Exception e) {
-            log.error(Arrays.toString(e.getStackTrace()));
-            log.error(session.toString());
-            log.error("input id: {} / existing id: {}", id, session.getSessionId());
-            log.error("게임방 종료 단계에서 세션이 일치하지 않습니다.");
-            throw new NotFoundException("세션을 찾을 수 없습니다.");
+            log.debug("게임방 종료 단계에서 다른 유저로 인해 이미 세션이 삭제되었습니다.");
+//            throw new NotFoundException("세션을 찾을 수 없습니다.");
         }
 
         LocalDateTime startDate = (LocalDateTime) sessionInfo.get("startDate");
@@ -345,6 +345,7 @@ public class GameService {
 
         log.debug("gameRooms : {}", gameRooms.toString());
         log.debug("standbyRooms size : {}", standbyRooms.size());
+        log.debug("게임방이 성공적으로 삭제되었습니다.");
 
     }
 
