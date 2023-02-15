@@ -26,6 +26,8 @@
 
 .accordionBase {
   background-color: #fff9ed;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
 #modifyProfileTitle {
@@ -34,6 +36,8 @@
   justify-content: center;
   font-size: medium;
   font-weight: 600;
+  color: #fff9ed;
+  // text-shadow: 1px 1px 1px #66666689, 1px 2px 1px rgba(87, 87, 87, 0.479);
 }
 
 .inputBox {
@@ -92,13 +96,13 @@
   display: block;
   margin: auto;
   margin-top: 16px;
-  width: 50px;
+  width: 70px;
   height: 30px;
   border-radius: 5px;
   color: white;
   font-weight: 600;
   border: none;
-  background-color: #FFCA72;
+  background-color: #6488e5;
   cursor: pointer;
 }
 

@@ -68,9 +68,9 @@ function ModifyProfile() {
 
   return (
     <div className="divBase">
-      <Accordion style={{ marginLeft:"-6px", borderRadius: "20px", backgroundColor:"red" }}  expanded={expanded === "panel1"}  onChange={handleChange("panel1")}>
+      <Accordion style={{ marginLeft:"-6px", borderRadius: "16px", backgroundColor:"#FFCA72"}}  expanded={expanded === "panel1"}  onChange={handleChange("panel1")}>
         <AccordionSummary id="panel1bh-header">
-          <Typography id="modifyProfileTitle">프로필수정</Typography>
+          <Typography id="modifyProfileTitle">프로필 수정</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordionBase">
           <div>
@@ -81,7 +81,7 @@ function ModifyProfile() {
                 {nicknameError}
                 {nicknameFormError}
               </div>
-              <div className="inputProfileImageString">프로필사진</div>
+              <div className="inputProfileImageString">프로필 사진</div>
               <div className="inputProfileImage">
                 {profileImages.map((profileImage) => (
                   <img
@@ -94,7 +94,7 @@ function ModifyProfile() {
                 ))}
               </div>
               <button type="submit" className="modifyButton" disabled={nicknameError || nicknameFormError}>
-                수정
+                수정하기
               </button>
             </form>
           </div>
