@@ -8,7 +8,7 @@
 section {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 70%;
   padding-top: 24px;
 }
 section::after {
@@ -29,7 +29,7 @@ section h1 {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   // color: #fff;
-  font : normal 300 64px/1 'Josefin Sans', sans-serif;
+  // font : normal 300 64px/1 'Josefin Sans', sans-serif;
   text-align: center;
   white-space: nowrap;
 }
@@ -63,13 +63,13 @@ section h1 {
 #thanks h2 {
   margin-bottom: 60px;
   color: #333;
-  font : normal 300 64px/1 'Josefin Sans', sans-serif;
+  // font : normal 300 64px/1 'Josefin Sans', sans-serif;
   text-align: center;
   white-space: nowrap;
 }
 #thanks p {
   color: #333;
-  font : normal 400 20px/1 'Josefin Sans', sans-serif;
+  // font : normal 400 20px/1 'Josefin Sans', sans-serif;
 }
 #thanks p a {
   color: #333;
@@ -88,7 +88,7 @@ section h1 {
   -webkit-transform: translate(0, -50%);
   transform: translate(0, -50%);
   // color: #fff;
-  font : normal 400 20px/1 'Josefin Sans', sans-serif;
+  // font : normal 400 20px/1 'Josefin Sans', sans-serif;
   letter-spacing: .1em;
   text-decoration: none;
   transition: opacity .3s;
@@ -98,9 +98,12 @@ section h1 {
 }
 
 #section01{
-  display: flex;
-  flex-direction: row;
   .container01{
+    display: flex;
+    flex-direction: row;
+    margin-top: 64px;
+    justify-content: center;
+    align-items: center;
     .textbox01{
       .subtext01{
         font-size: 32px;
@@ -134,19 +137,23 @@ section h1 {
 
 
 #section02{
-  display: flex;
-  flex-direction: row;
   .container02{
+    display: flex;
+    flex-direction: row;
+    margin-top: 64px;
+    justify-content: center;
+    align-items: center;
     .textbox02{
       .subtext02{
         font-size: 32px;
       }
       .maintext02{
-        font-size: 64px;
+        font-size: 56px;
       }
     }
-    .img01{
+    .img02{
       height: 400px;
+      filter: drop-shadow(5px 5px 5px #99958E);
     }
   }
 }
@@ -180,7 +187,27 @@ section h1 {
   box-sizing: border-box;
 }
 
-
+#section03{
+  .container03{
+    display: flex;
+    flex-direction: row;
+    margin-top: 64px;
+    justify-content: center;
+    align-items: center;
+    .textbox03{
+      .subtext03{
+        font-size: 32px;
+      }
+      .maintext03{
+        font-size: 56px;
+      }
+    }
+    .img03{
+      height: 400px;
+      filter: drop-shadow(5px 5px 5px #99958E);
+    }
+  }
+}
 
 #section03 a {
   padding-top: 60px;
@@ -256,6 +283,27 @@ section h1 {
   }
 }
 
+#section04{
+  .container04{
+    display: flex;
+    flex-direction: row;
+    margin-top: 64px;
+    justify-content: center;
+    align-items: center;
+    .textbox04{
+      .subtext04{
+        font-size: 32px;
+      }
+      .maintext04{
+        font-size: 56px;
+      }
+    }
+    .img04{
+      height: 400px;
+      filter: drop-shadow(5px 5px 5px #99958E);
+    }
+  }
+}
 
 
 #section04 a {

@@ -39,22 +39,49 @@ function HomeScroll() {
   <section id="section02" class="demo">
     {/* <h1>Scroll Down Button #2</h1> */}
     <div className='container02'>
+          <div>
+            <img src={homeImages[1]} className='img02'/>
+          </div>
           <div className='textbox02'>
             <p className='subtext02'>STEP 1</p>
             <p className='maintext02'>수어도 한 걸음부터!</p>
-          </div>
-          <div>
-            {/* <img src={homeImages[0]} className='img01'/> */}
+            <div className='context02'>
+              <p></p>
+            </div>
           </div>
         </div>
     <a href="#section03"><span></span>Scroll</a>
   </section>
   <section id="section03" class="demo">
-    <h1>Scroll Down Button #3</h1>
+    {/* <h1>Scroll Down Button #3</h1> */}
+    <div className='container03'>
+          <div className='textbox03'>
+            <p className='subtext03'>STEP 2</p>
+            <p className='maintext03'>모션인식으로 재미있게!</p>
+            <div className='context03'>
+              <p></p>
+            </div>
+          <div>
+            <img src={homeImages[2]} className='img03'/>
+          </div>
+          </div>
+        </div>
     <a href="#section04"><span></span>Scroll</a>
   </section>
   <section id="section04" class="demo">
-    <h1>Scroll Down Button #4</h1>
+    {/* <h1>Scroll Down Button #4</h1> */}
+    <div className='container04'>
+          <div>
+            <img src={homeImages[3]} className='img04'/>
+          </div>
+          <div className='textbox04'>
+            <p className='subtext04'>STEP 3</p>
+            <p className='maintext04'>게임으로 실전처럼!</p>
+            <div className='context04'>
+              <p></p>
+            </div>
+          </div>
+        </div>
     <a href="#section05"><span></span>Scroll</a>
   </section>
   <section id="section05" class="demo">
@@ -63,22 +90,6 @@ function HomeScroll() {
   </section>
   <section id="section06" class="demo">
     <h1>Scroll Down Button #6</h1>
-    <a href="#section07"><span></span>Scroll</a>
-  </section>
-  <section id="section07" class="demo">
-    <h1>Scroll Down Button #7</h1>
-    <a href="#section08"><span></span><span></span><span></span>Scroll</a>
-  </section>
-  <section id="section08" class="demo">
-    <h1>Scroll Down Button #8</h1>
-    <a href="#section09"><span></span>Scroll</a>
-  </section>
-  <section id="section09" class="demo">
-    <h1>Scroll Down Button #9</h1>
-    <a href="#section10"><span></span>Scroll</a>
-  </section>
-  <section id="section10" class="demo">
-    <h1>Scroll Down Button #10</h1>
     <a href="#thanks"><span></span>Scroll</a>
   </section>
   <section id="thanks">
