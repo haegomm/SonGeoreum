@@ -18,12 +18,9 @@ const gameBar = (props) => {
   //   const gameTime = 0;
   const [gameTime, setGameTime] = useState(0);
 
-  //   const gameRoomTimer = setInterval(() => {
-  //     gameTime += 1;
-  //     if (quizSequence / 1000 === gameTime) {
-  //       clearInterval(gameRoomTimer);
-  //     }
-  //   }, 1000);
+  useEffect(() => {
+    quizTimeStart();
+  }, []);
 
   // 화면 타이머 업데이트
   const gameRoomTimer = setInterval(() => {
@@ -33,17 +30,16 @@ const gameBar = (props) => {
     }
   }, 1000);
 
-  // 퀴즈
+  // 퀴즈 푸는 시간 종료
   const quizTimeStop = () => {
     clearInterval(gameRoomTimer);
     clearTimeout(quizTimer);
-    setIsQuizTime(() => flase);
+    setIsQuizTime(() => false);
   };
 
-  // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청한다.
+  // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = () => {
     quizTimeStop();
-    clearInterval(gameRoomTimer);
     answerTimer();
   };
 
@@ -54,7 +50,6 @@ const gameBar = (props) => {
 
   // 정답 보는 타이머
   const answerTimer = setTimeout(() => {
-    setIsQuizTime(() => true);
     toNext(); // 정답 시청이 끝난 후 다음 문제로 넘어갑니다
   }, answerSequence);
 
@@ -76,6 +71,11 @@ const gameBar = (props) => {
 const toNext = () => {
   const curCnt = gameCnt + 1;
   setGameCnt(() => curCnt);
+  if (curCnt === 12) {
+    endGame();
+    return;
+  }
+  setIsQuizTime(() => true); //
   setPresenter(() => playersList[curCnt % 4]);
   setAnswerWord(() => wordsList[curCnt].name);
   setAnswerApi(() => wordsList[curCnt].contentUrl); // 다음 문제를 위한 정보 셋팅
@@ -84,10 +84,30 @@ const toNext = () => {
   quizTimeStart();
 };
 
+// 퀴즈 푸는 시간 시작
 const quizTimeStart = () => {
   gameRoomTimer();
   quizTimer(); // 다음 문제 타이머 시작
-  setIsQuizTime(() => true); // 문제 푸는 시간입니다. => true
+  setIsQuizTime(() => true); // 퀴즈 푸는 시간입니다. => true
+};
+
+// 게임 종료 조건
+const endGame = () => {
+  const result = resultScore();
+  navigate("/result", { state: result });
+};
+
+// 결과 값을 닉네임과 함께 객체로 묶어주기
+const resultScore = () => {
+  const result = [];
+  for (let i = 0; i < 4; i++) {
+    result.push({
+      nickname: playersList[i],
+      score: scoreList[i],
+      image: imageList[i],
+    });
+  }
+  return result;
 };
 
 return (
@@ -95,5 +115,31 @@ return (
     <div className="timer-wrapper">
       <div>{gameTime}</div>
     </div>
+    <div>지금 출제자: {presenter}</div>
+    <br></br>
+    <div className="box">
+      {(isQuizTime && presenter === myNickname) || !isQuizTime ? (
+        <React.Fragment>
+          <div>
+            <h1>{answerWord}</h1>
+          </div>
+          <video className="box-video" autoPlay>
+            <source src={answerApi}></source>
+          </video>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <div className="box-text">무엇일까요?</div>
+          <img src={lock}></img>
+        </React.Fragment>
+      )}
+    </div>
+    <ChatComponent
+      user={props.user}
+      chatDisplay={props.chatDisplay}
+      close={props.close}
+      messageReceived={props.messageReceived}
+      checkAnswer={checkAnswer}
+    />
   </React.Fragment>
 );

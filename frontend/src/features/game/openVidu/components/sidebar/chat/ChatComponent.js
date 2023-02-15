@@ -15,9 +15,9 @@ export default class ChatComponent extends Component {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
-      questionList: props.questionList,
-      chatAnswerCnt: 0,
-      getScore: false,
+      // questionList: props.questionList,
+      // chatAnswerCnt: 0,
+      // getScore: false,
     };
 
     this.chatScroll = React.createRef();
@@ -42,12 +42,12 @@ export default class ChatComponent extends Component {
         });
 
         // 정답 체크용 배열 (턴마다 초기화 됨)
-        let checkMessageList = this.state.checkMessageList;
-        checkMessageList.push({
-          nickname: JSON.stringify(data.nickname).replace(/\"/g, ""),
-          message: JSON.stringify(data.message).replace(/\"/g, ""),
-        });
-        this.checkMessage(checkMessageList); // 정답 체크해보자
+        // let checkMessageList = this.state.checkMessageList;
+        // checkMessageList.push({
+        //   nickname: JSON.stringify(data.nickname).replace(/\"/g, ""),
+        //   message: JSON.stringify(data.message).replace(/\"/g, ""),
+        // });
+        // this.checkMessage(checkMessageList); // 정답 체크해보자
 
         const document = window.document;
         setTimeout(() => {
@@ -61,26 +61,9 @@ export default class ChatComponent extends Component {
         }, 50);
         this.setState({ messageList: messageList });
         this.scrollToBottom();
+        this.props.checkAnswer(data.nickname, data.message);
       });
   }
-
-  // changeChatAnswerCnt = setInterval(() => {
-  //   console.log("째깍");
-  //   if (this.state.chatAnswerCnt < 12) {
-  //     this.setState({
-  //       chatAnswerCnt: this.state.chatAnswerCnt + 1,
-  //     });
-  //     this.setState({
-  //       getScore: false,
-  //     });
-  //   } else {
-  //     this.stopTimer();
-  //   }
-  // }, 10000);
-
-  // stopTimer() {
-  //   clearInterval(this.changeChatAnswerCnt);
-  // }
 
   componentWillUnmount() {
     clearInterval(this.changeChatAnswerCnt);
