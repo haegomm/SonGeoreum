@@ -8,6 +8,8 @@ import { saveUserInfo } from "../../../common/api/authInfo";
 import socailLoginButtons from "../../../assets/socialLogin/socialLoginButtons";
 import LargeButton from "../../../common/button/LargeButton";
 
+
+import "../../study/FadeIn.scss";
 import "./Login.scss";
 import { textAlign } from "@mui/system";
 
@@ -50,7 +52,7 @@ function Login(props) {
   };
 
   return (
-    <div>
+    <div className="fade-in-up">
       <h1 className='loginTitle'>로그인</h1>
       <form onSubmit={onSubmitHandler} >
         <div className='formItem'>

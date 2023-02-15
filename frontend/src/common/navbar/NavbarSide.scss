@@ -1,4 +1,103 @@
-.drawerButton{
+$blue: #6488e5;
+
+.drawerButton {
   width: 56px;
   height: 56px;
+}
+
+.drawerCloseDiv {
+  display: inline-flex;
+  justify-content: left;
+}
+
+.drawerCloseButton {
+  justify-content: left;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0%;
+  cursor: pointer;
+}
+
+.drawerColseArrow {
+  color: #fff9ed;
+}
+
+.profileImage {
+  width: 104px;
+  height: 104px;
+  margin: auto;
+  // margin-top: 12px;
+  text-align: center;
+}
+
+.userNickname {
+  font-size: large;
+  font-weight: 600;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
+}
+
+.logoutButton {
+  font-size: large;
+  font-weight: 600;
+  display: inline-block;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+}
+.logoutString {
+  width: 20px;
+  font-size: large;
+  font-weight: 600;
+  display: block;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
+}
+.logoutIcon {
+  // display: block;
+  // margin: auto;
+  color: #fff9ed;
+}
+
+
+.myVocaString {
+  font-size: large;
+  font-weight: 600;
+  margin: auto;
+  margin-top: 24px;
+  align-self: center;
+  text-align: center;
+  color: #fff9ed;
+}
+.myVocaIcon {
+  color: #fff9ed;
+}
+
+.modifyBase{
+  display: block;
+  margin: auto;
+}
+
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+.MuiPaper-root::-webkit-scrollbar {
+  display: none;
+}
+
+.MuiPaper-root {
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.MuiListItemText-root {
+  span {
+    font-weight: 600;
+  }
 }
