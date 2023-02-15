@@ -32,6 +32,8 @@ const gameBar = (props) => {
   // 퀴즈 푸는 타이머
   const quizTimer = setTimeout(() => {
     setIsQuizTime(() => false);
+    const curCnt = gameCnt;
+    setGameCnt(() => curCnt + 1);
   }, quizSequence); // 채팅에서 답을 못맞추고 문제푸는 시간이 끝났을 때 게임횟차 올라가야함
 
   // 정답 보는 타이머
