@@ -11,7 +11,7 @@ import LargeButton from '../../../common/button/LargeButton';
 function Signup(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const BASE_URL = process.env.REACT_APP_API; 
   const [Email, setEmail] = useState('');
   const [Nickname, setNickname] = useState('');
   const [Password, setPassword] = useState('');
@@ -87,6 +87,7 @@ function Signup(props) {
     });
   };
 
+
   return (
     <div>
       <h1 className='signUpTitle'>회원가입</h1>
@@ -116,13 +117,13 @@ function Signup(props) {
             <span className='passwordCheckError'>{confirmPasswordError}</span>
           <div className='profileList1'>
             {profileImageList1().map((profileImage) => {
-              console.log(profileImage + " | " + profileImageUrl)
+              // console.log(BASE_URL+profileImage + " | " + profileImageUrl)
               return (< img
-              className = { profileImage === profileImageUrl ? 'selectedImg' : 'unselected'
+              className = { BASE_URL+profileImage === profileImageUrl ? 'selectedImg' : 'unSelectedImg'
             }
-              key = { profileImage }
-              src = { profileImage }
-              alt = { profileImage }
+              key = { BASE_URL+profileImage }
+              src = { BASE_URL+profileImage }
+              alt = { BASE_URL+profileImage }
               onClick = { onImageHandler }
               />)
               })}
@@ -130,10 +131,10 @@ function Signup(props) {
           <div className='profileList2'>
             {profileImageList2().map((profileImage) => (
               <img
-                className={profileImage===profileImageUrl ? 'selectedImg' : 'unselected'}
-                key={profileImage}
-                src={profileImage}
-                alt={profileImage}
+                className={BASE_URL+profileImage===profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
+                key={BASE_URL+profileImage}
+                src={BASE_URL+profileImage}
+                alt={BASE_URL+profileImage}
                 onClick={onImageHandler}
               />
             ))}

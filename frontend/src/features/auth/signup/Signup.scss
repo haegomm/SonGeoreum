@@ -181,10 +181,13 @@ $blue: #6488e5;
 }
 
 .selectedImg {
-  // border: 2px solid black;
   width: 54px;
   height: 54px;
-  border: 10px solid red;
+}
+.unSelectedImg{
+  width: 54px;
+  height: 54px;
+  opacity: 0.5;
 }
 
 .signupButton {
