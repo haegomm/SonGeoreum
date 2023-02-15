@@ -27,7 +27,7 @@ $blue: #6488e5;
   width: 104px;
   height: 104px;
   margin: auto;
-  margin-top: 28px;
+  // margin-top: 12px;
   text-align: center;
 }
 
@@ -84,4 +84,20 @@ $blue: #6488e5;
 .modifyBase{
   display: block;
   margin: auto;
+}
+
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+.MuiPaper-root::-webkit-scrollbar {
+  display: none;
+}
+
+.MuiPaper-root {
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.MuiListItemText-root {
+  span {
+    font-weight: 600;
+  }
 }

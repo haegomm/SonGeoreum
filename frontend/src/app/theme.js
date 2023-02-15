@@ -58,7 +58,7 @@ const CustomMuiTheme = createTheme({
     }),
   },
   typography: {
-    fontFamily: ["IBM Plex Sans KR"].join(","),
+    fontFamily: ["Pretendard-Regular"].join(","),
   },
   spacing: 8,
 });

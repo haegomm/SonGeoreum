@@ -21,6 +21,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
+import StarRateIcon from '@mui/icons-material/StarRate';
 
 export default function NavbarSide() {
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ export default function NavbarSide() {
         </ListItem>
         <ListItem key="myVocaButton" disablePadding>
           <ListItemButton>
-            <BookOutlinedIcon className="myVocaIcon"></BookOutlinedIcon>
+            <StarRateIcon className="myVocaIcon"></StarRateIcon>
             <ListItemText primary="나의 단어장" className="myVocaString" onClick={onMyVocaaHandler} />
           </ListItemButton>
         </ListItem>
