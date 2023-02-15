@@ -5,8 +5,6 @@ import ButtonTest from "../../common/button/ButtonTest";
 import MotionTest from "../study/test/MotionTest";
 import CardTest from "../../common/card/CardTest";
 import HomeRanking from "./HomeRanking";
-import Carousel from "./Carousel";
-import CarouselMui from "./CarouselMui";
 import HomeScroll from "./HomeScroll";
 
 import './home.scss'
@@ -15,13 +13,11 @@ export default function Home() {
   return (
     <div className="home-container">
       <div className="home-body">
-        {/* <div><CarouselMui /></div> */}
-        {/* <Carousel /> */}
         <HomeScroll />
       </div>
 
       <div className="ranking">
-        <div><HomeRanking /></div>
+        {/* <div><HomeRanking /></div> */}
       </div>
     </div>
     // <Grid container justifyContent="center">

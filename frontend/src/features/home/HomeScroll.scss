@@ -5,11 +5,15 @@
 // html, body {
 //   height: 100%;
 // }
+a {
+  text-decoration: none;
+}
 section {
   position: relative;
   width: 100%;
-  height: 70%;
-  padding-top: 24px;
+  height: 45%;
+  // padding-top: 24px;
+  z-index: 2;
 }
 section::after {
   position: absolute;
@@ -17,7 +21,8 @@ section::after {
   left: 0;
   content: '';
   width: 100%;
-  height: 80%;
+  height: 30%;
+  z-index: 0;
   // background: -webkit-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 80%,rgba(0,0,0,.8) 100%);
   // background: linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 80%,rgba(0,0,0,.8) 100%);
 }
@@ -79,8 +84,9 @@ section h1 {
 #thanks p a:hover {
   color: #888;
 }
-.demo a {
+.demo #scrolla {
   position: absolute;
+  font-size: 24px;
   bottom: 20px;
   left: 50%;
   z-index: 2;
@@ -101,57 +107,77 @@ section h1 {
   .container01{
     display: flex;
     flex-direction: row;
-    margin-top: 64px;
     justify-content: center;
     align-items: center;
+    height: 100%;
+
     .textbox01{
+      margin-right: 40px;
       .subtext01{
         font-size: 32px;
+        margin-bottom: 24px;
       }
       .maintext01{
         font-size: 64px;
+        font-weight: 600;
       }
     }
     .img01{
+      margin-left: 40px;
       height: 400px;
     }
   }
 }
 
-#section01 a {
-  padding-top: 60px;
-}
-#section01 a span {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 24px;
-  height: 24px;
-  margin-left: -12px;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-  box-sizing: border-box;
-}
+// #section01 a {
+//   padding-top: 60px;
+// }
+// #section01 a span {
+//   position: absolute;
+//   top: 0;
+//   left: 50%;
+//   width: 24px;
+//   height: 24px;
+//   margin-left: -12px;
+//   border-left: 1px solid #fff;
+//   border-bottom: 1px solid #fff;
+//   -webkit-transform: rotate(-45deg);
+//   transform: rotate(-45deg);
+//   box-sizing: border-box;
+// }
 
 
 #section02{
   .container02{
     display: flex;
     flex-direction: row;
-    margin-top: 64px;
+    height: 100%;
     justify-content: center;
     align-items: center;
     .textbox02{
+      margin-left: 40px;
       .subtext02{
         font-size: 32px;
+        margin-bottom: 24px;
       }
       .maintext02{
         font-size: 56px;
+        font-weight: 600;
+      }
+      .context02{
+        margin-top: 24px;
+        p{
+          margin-bottom: 8px;
+          font-size: 24px;
+        }
+        a{
+          font-size: 24px;
+          margin-top: 16px;
+        }
       }
     }
     .img02{
+      margin-right: 40px;
       height: 400px;
       filter: drop-shadow(5px 5px 5px #99958E);
     }
@@ -191,18 +217,33 @@ section h1 {
   .container03{
     display: flex;
     flex-direction: row;
-    margin-top: 64px;
+    height: 100%;
     justify-content: center;
     align-items: center;
     .textbox03{
+      margin-right: 40px;
       .subtext03{
         font-size: 32px;
+        margin-bottom: 24px;
       }
       .maintext03{
         font-size: 56px;
+        font-weight: 600;
+      }
+      .context03{
+        margin-top: 24px;
+        p{
+          margin-bottom: 8px;
+          font-size: 24px;
+        }
+        a{
+          font-size: 24px;
+          margin-top: 16px;
+        }
       }
     }
     .img03{
+      margin-left: 40px;
       height: 400px;
       filter: drop-shadow(5px 5px 5px #99958E);
     }
@@ -287,18 +328,33 @@ section h1 {
   .container04{
     display: flex;
     flex-direction: row;
-    margin-top: 64px;
+    height: 100%;
     justify-content: center;
     align-items: center;
     .textbox04{
+      margin-left: 40px;
       .subtext04{
         font-size: 32px;
+        margin-bottom: 24px;
       }
       .maintext04{
         font-size: 56px;
+        font-weight: 600;
+      }
+      .context04{
+        margin-top: 24px;
+        p{
+          margin-bottom: 8px;
+          font-size: 24px;
+        }
+        a{
+          font-size: 24px;
+          margin-top: 16px;
+        }
       }
     }
     .img04{
+      margin-right: 40px;
       height: 400px;
       filter: drop-shadow(5px 5px 5px #99958E);
     }
@@ -347,6 +403,40 @@ section h1 {
   }
 }
 
+#section05{
+  .container05{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    .textbox05{
+      margin-bottom: 40px;
+      .maintext05{
+        font-size: 56px;
+        font-weight: 600;
+      }
+      .context05{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 24px;
+        p{
+          margin-bottom: 8px;
+          font-size: 24px;
+        }
+        a{
+          font-size: 24px;
+          margin-top: 16px;
+        }
+      }
+    }
+    .img01{
+      height: 400px;
+      filter: drop-shadow(5px 5px 5px #99958E);
+    }
+  }
+}
 
 
 #section05 a {
