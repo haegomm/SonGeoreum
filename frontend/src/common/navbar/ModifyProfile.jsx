@@ -32,7 +32,7 @@ function ModifyProfile() {
     const currentNickname = e.currentTarget.value;
     authValidation(currentNickname, "nickname")
       ? setNicknameFormError("")
-      : setNicknameFormError("2자 이상 8자 이하의 닉네임을 입력해주세요");
+      : setNicknameFormError("2자 이상 8자 이하로 입력해주세요");
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
       if (response.payload.message === "success" || currentNickname === "" || currentNickname === oldNickname) {
         setNicknameError("");
@@ -68,7 +68,7 @@ function ModifyProfile() {
 
   return (
     <div className="divBase">
-      <Accordion expanded={expanded === "panel1"} onChange={handleChange("panel1")}>
+      <Accordion style={{ marginLeft:"-6px", borderRadius: "20px", backgroundColor:"red" }}  expanded={expanded === "panel1"}  onChange={handleChange("panel1")}>
         <AccordionSummary id="panel1bh-header">
           <Typography id="modifyProfileTitle">프로필수정</Typography>
         </AccordionSummary>
@@ -77,7 +77,7 @@ function ModifyProfile() {
             <form onSubmit={onSubmitHandler} className="inputBox">
               <div className="inputNicknameString">닉네임</div>
               <input type="text" className="inputNickname" onBlur={onNicknameHandler} />
-              <div className="nicknameError">
+              <div className="nicknameModifyError">
                 {nicknameError}
                 {nicknameFormError}
               </div>

@@ -20,7 +20,8 @@
 }
 
 #panel1bh-header {
-  background-color: #fff9ed;
+  // background-color: #fff9ed;
+  // padding: 0 !important;
 }
 
 .accordionBase {
@@ -66,9 +67,9 @@
 //   border-bottom: 2px solid #66645f;
 // }
 
-.nicknameError {
+.nicknameModifyError {
   color: #f16061;
-  font-size: small;
+  font-size: 12px;
   text-align: start;
   align-self: end;
   margin-top: 8px;
@@ -77,7 +78,7 @@
 .inputProfileImageString {
   font-size: medium;
   font-weight: 500;
-  margin-top: 32px;
+  margin-top: 24px;
 }
 
 .inputProfileImage {
@@ -91,4 +92,27 @@
   display: block;
   margin: auto;
   margin-top: 16px;
+  width: 50px;
+  height: 30px;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  border: none;
+  background-color: #FFCA72;
+  cursor: pointer;
 }
+
+// .normalSignUpButton{
+//   margin-right: 20px;
+//   width: 100px;
+//   height: 48px;
+//   border-radius: 5px;
+//   font-size: 16px;
+//   font-weight: normal;
+//   color: white;
+//   border: none;
+//   // background-color: $blue;
+//   border-radius: 8px;
+//   cursor: pointer;
+// }
+

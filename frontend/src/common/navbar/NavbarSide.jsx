@@ -94,7 +94,7 @@ export default function NavbarSide() {
       <List>
         <ListItem key="modifyProfileButton" disablePadding>
           <ListItemButton>
-            <ModifyProfile />
+            <ModifyProfile className='modifyBase' />
           </ListItemButton>
         </ListItem>
       </List>

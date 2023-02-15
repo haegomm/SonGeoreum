@@ -27,7 +27,7 @@ $blue: #6488e5;
   width: 104px;
   height: 104px;
   margin: auto;
-  margin-top: 32px;
+  margin-top: 28px;
   text-align: center;
 }
 
@@ -66,11 +66,7 @@ $blue: #6488e5;
   // margin: auto;
   color: #fff9ed;
 }
-.logoutButton:hover {
-  height: 100%;
-  width: 170px;
-  overflow: hidden;
-}
+
 
 .myVocaString {
   font-size: large;
@@ -83,4 +79,9 @@ $blue: #6488e5;
 }
 .myVocaIcon {
   color: #fff9ed;
+}
+
+.modifyBase{
+  display: block;
+  margin: auto;
 }
