@@ -11,7 +11,8 @@ import LargeButton from '../../../common/button/LargeButton';
 function Signup(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const BASE_URL = process.env.REACT_APP_API; 
+  const BASE_URL = process.env.REACT_APP_API;
+
   const [Email, setEmail] = useState('');
   const [Nickname, setNickname] = useState('');
   const [Password, setPassword] = useState('');
@@ -116,17 +117,15 @@ function Signup(props) {
           </div>
             <span className='passwordCheckError'>{confirmPasswordError}</span>
           <div className='profileList1'>
-            {profileImageList1().map((profileImage) => {
-              // console.log(BASE_URL+profileImage + " | " + profileImageUrl)
-              return (< img
-              className = { BASE_URL+profileImage === profileImageUrl ? 'selectedImg' : 'unSelectedImg'
-            }
+            {profileImageList1().map((profileImage) => (
+              < img
+              className = { BASE_URL+profileImage === profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
               key = { BASE_URL+profileImage }
               src = { BASE_URL+profileImage }
               alt = { BASE_URL+profileImage }
               onClick = { onImageHandler }
-              />)
-              })}
+              />
+            ))}
           </div>
           <div className='profileList2'>
             {profileImageList2().map((profileImage) => (
