@@ -87,9 +87,9 @@ export default function NavbarSide() {
               marginLeft: "18px",
               marginRight: "12px",
               borderRadius: 5,
-              "& .css-jjlizq-MuiLinearProgress-bar1": {
-                backgroundColor: "#90D28A",
-              },
+              // "& .css-jjlizq-MuiLinearProgress-bar1": {
+              //   backgroundColor: "#90D28A",
+              // },
             }}
           />
         </ListItem>
