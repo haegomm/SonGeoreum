@@ -95,6 +95,9 @@ class VideoRoomComponent extends Component {
     window.addEventListener("resize", this.checkSize);
     console.log("join 하기 전 DidMount");
 
+    publisher.publishAudio(false);
+    subscriber.subscribeToAudio(false);
+
     this.joinSession();
 
     // this.timer = setTimeout(() => this.byeBye(), 100000) // 10분의 대기시간 후 나가세요 호출
@@ -193,7 +196,7 @@ class VideoRoomComponent extends Component {
     let publisher = this.OV.initPublisher(undefined, {
       audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: false, //
+      publishAudio: localUser.isAudioActive(), //
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -567,7 +570,7 @@ class VideoRoomComponent extends Component {
           var newPublisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            publishAudio: false,
+            publishAudio: localUser.isAudioActive(),
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -596,7 +599,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        publishAudio: false,
+        publishAudio: localUser.isAudioActive(),
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
