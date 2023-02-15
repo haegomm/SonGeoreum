@@ -25,7 +25,7 @@ const GameBar = (props) => {
 
   const navigate = useNavigate();
 
-  //   console.log("게임 카운트! >> ", gameCnt);
+  console.log("게임 카운트! >> ", gameTurnCnt);
   useEffect(() => {
     if (wordsList && wordsList.length > 0) {
       console.log("최초 게임시작");
@@ -65,6 +65,7 @@ const GameBar = (props) => {
   // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = (gameCnt) => {
     if (gameCnt === lastCnt) {
+      console.log("이미 정답 맞춤", lastCnt);
       return;
     }
     console.log("3. 정답 시청 시간 시작");
@@ -103,7 +104,7 @@ const GameBar = (props) => {
       setScoreList(() => copyScoreList);
       console.log("정답자 스코어 올려줬다 >> ", scoreList);
       setIsQuizTime(() => false);
-      answerTimeStart(gameTurnCnt);
+      //   answerTimeStart(gameTurnCnt); //
     }
   };
 
