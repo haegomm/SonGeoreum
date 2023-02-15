@@ -116,3 +116,14 @@ $blue: #6488e5;
 .categoryList {
   margin: 64px;
 }
+
+.infiniteScroll {
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  z-index: 100;
+}
+
+.infiniteScroll::-webkit-scrollbar {
+  display: none;
+}

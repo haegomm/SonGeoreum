@@ -4,8 +4,8 @@ import lock from "../../assets/images/lock.jpg";
 import "./Timer.scss";
 
 const AnswerVideo = (props) => {
-  console.log("props 확인 >> ", props);
-  console.log("리렌더링!!!", props.showAnswer);
+  // console.log("props 확인 >> ", props);
+  // console.log("리렌더링!!!", props.showAnswer);
   const myNickname = props.myNickname;
   const answerWord = props.answerWord;
   const answerApi = props.answerApi;
@@ -32,13 +32,11 @@ const AnswerVideo = (props) => {
     }
   }, []);
 
-  const check =
-    presenter === myNickname ? "내가 출제자야" : `다음 출제자: ${presenter}`;
   return (
     <React.Fragment>
       <div className="timer-wrapper">
         <CountdownCircleTimer
-          size={150}
+          size={80}
           isPlaying
           duration={5}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
@@ -50,10 +48,7 @@ const AnswerVideo = (props) => {
       <div className="box">
         {props.showAnswer || presenter === myNickname ? (
           <React.Fragment>
-            <div className="box-text">
-              {answerWord} || {check}
-            </div>
-            <video autoPlay loop>
+            <video className="box-video" autoPlay>
               <source src={answerApi}></source>
             </video>
           </React.Fragment>

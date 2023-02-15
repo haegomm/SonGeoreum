@@ -8,6 +8,8 @@ import { saveUserInfo } from "../../../common/api/authInfo";
 import socailLoginButtons from "../../../assets/socialLogin/socialLoginButtons";
 import LargeButton from "../../../common/button/LargeButton";
 
+
+import "../../study/FadeIn.scss";
 import "./Login.scss";
 import { textAlign } from "@mui/system";
 
@@ -50,8 +52,8 @@ function Login(props) {
   };
 
   return (
-    <div>
-      <h1 className='loginWord'>LOG IN</h1>
+    <div className="fade-in-up">
+      <h1 className='loginTitle'>로그인</h1>
       <form onSubmit={onSubmitHandler} >
         <div className='formItem'>
           <input type="email" placeholder='이메일' className='inputEmail' onChange={onEmailHandler} />
@@ -60,7 +62,7 @@ function Login(props) {
         <input type="password" placeholder='비밀번호' className='inputPassword' onChange={onPasswordHandler} />
         </div>
         <div>
-        <button type="submit" className='loginButton'>로그인</button>
+        <button type="submit" className='loginButton'>로그인하기</button>
         </div>
       </form>
       <div className='idMessage'>

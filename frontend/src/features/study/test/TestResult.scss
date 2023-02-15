@@ -29,6 +29,7 @@ $yellow: #f9be7d;
   font-weight: 700;
   color: white;
   border-radius: 10px;
+  width: 400px;
 
   top: 0%;
   left: 50%;
@@ -83,4 +84,9 @@ $yellow: #f9be7d;
 .exitButton:disabled {
   color: white;
   opacity: 0.5;
+}
+
+.resultImage {
+  width: 70px;
+  height: 70px;
 }

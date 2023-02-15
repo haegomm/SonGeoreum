@@ -1,10 +1,218 @@
-.selected{
-  border: 2px solid black;
+$blue: #6488e5;
+
+.formItemSignup {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 56px;
+}
+.signUpTitle {
+  margin-top: 76px;
+  font-size: 40px;
+  font-weight: 600;
+}
+.emailDiv {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: inline-block;
+  flex-direction: row-reverse;
 }
 
-.signupButton{
- width: 0; 
- height: 0;
- border: 0;
- background-color: #FFF9ED;
+.signUpInputEmail {
+  display: block;
+  margin: auto;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+  flex-direction: row-reverse;
+}
+.signUpInputEmail::placeholder {
+  color: #d1d1d6;
+}
+
+.emailError {
+  color: #f16061;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.nicknameDiv {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
+}
+.signUpInputNickname {
+  display: block;
+  margin: auto;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputNickname::placeholder {
+  color: #d1d1d6;
+}
+.nicknameError {
+  color: #f16061;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.passwordDiv {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
+}
+.signUpInputPassword {
+  display: block;
+  margin: auto;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputPassword::placeholder {
+  color: #d1d1d6;
+}
+.passwordError {
+  color: #f16061;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+.passwordCheckDiv {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin-top: 32px;
+}
+.signUpInputPasswordCheck {
+  display: block;
+  margin: auto;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 360px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
+}
+.signUpInputPasswordCheck::placeholder {
+  color: #d1d1d6;
+}
+.passwordCheckError {
+  color: #f16061;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  font-size: small;
+  text-align: start;
+  align-self: end;
+}
+
+.formItemSignup input:focus {
+  border-bottom: 2px solid #66645f;
+}
+
+.profileList1 {
+  text-align: center;
+  margin-top: 54px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 5;
+  grid-row-end: 6;
+  display: inline-block;
+  flex-direction: row-reverse;
+  cursor: pointer;
+}
+.profileList2 {
+  text-align: center;
+  margin-top: 10px;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 6;
+  grid-row-end: 7;
+  display: inline-block;
+  flex-direction: row-reverse;
+  cursor: pointer;
+}
+
+.selectedImg {
+  width: 54px;
+  height: 54px;
+}
+.unSelectedImg{
+  width: 54px;
+  height: 54px;
+  opacity: 0.5;
+}
+
+.signupButton {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 7;
+  grid-row-end: 8;
+  display: inline-block;
+  flex-direction: row-reverse;
+  margin: auto;
+  margin-top: 38px;
+  width: 120px;
+  height: 36px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: normal;
+  color: white;
+  border: none;
+  background-color: $blue;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.signupButton:disabled {
+  background-color: #c6c6c6;
+  color: white;
+  opacity: 0.5;
 }

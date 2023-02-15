@@ -5,9 +5,12 @@ import AnswerVideo from "./AnswerVideo";
 import ChatComponent from "./chat/ChatComponent";
 
 const SideBar = (props) => {
-  const playersList = props.playersList;
+  const playersList = props.playersList; // *** 임시 ***
+  // const playersList = [0, 1, 2, 3];
   const myNickname = props.myNickname;
-  const questionList = props.wordsList;
+  const questionList = props.wordsList; // *** 임시 ***
+  // const questionList = [0, 1, 2, 3];
+  const imageList = props.imageList;
   const [gameCnt, setGameCnt] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
@@ -26,6 +29,7 @@ const SideBar = (props) => {
       result.push({
         nickname: playersList[i],
         score: scoreList[i],
+        image: imageList[i],
       });
     }
     return result;
@@ -35,6 +39,7 @@ const SideBar = (props) => {
     // const show = !showAnswer
     setShowAnswer(() => status);
     console.log("지금은 영상을 볼 수", status);
+    // console.log("여기서?", scoreList);
   };
 
   const toNext = () => {
@@ -53,10 +58,18 @@ const SideBar = (props) => {
 
   const whoGetScore = (who) => {
     if (who) {
-      const Idx = playersList.indexOf(who);
-      setSocreList(() => (scoreList[Idx] += 1));
+      console.log("정답자 카운트!!!");
+      console.log(who);
+      const Idx = Number(playersList.indexOf(who));
+      console.log(Idx);
+      const copyScoreList = [...scoreList];
+      copyScoreList[Idx]++;
+      console.log("카운트 전", scoreList);
+      setSocreList(() => copyScoreList);
+      console.log("카운트 후!", scoreList);
     }
     if (showAnswer === false) {
+      // *** 임시 ***
       setTimeout(() => {
         onShowAnswer(true);
       }, 5000);
@@ -68,18 +81,15 @@ const SideBar = (props) => {
   };
 
   if (playersList && playersList.length > 0) {
+    // *** 임시 ***
     if (questionList) {
       return (
         <div className="sidebar-wrapper">
           <React.Fragment>
             {gameCnt === 12 ? (
-              <div>
-                <div className="box">
-                  <p>게임이 종료되었습니다</p>
-                </div>
-                <div className="box">
-                  <p>잠시 뒤 결과창으로 넘어갑니다.</p>
-                </div>
+              <div className="box resultMessageBox">
+                <p>게임이 종료되었습니다</p>
+                <p>잠시 뒤 결과창으로 넘어갑니다.</p>
               </div>
             ) : (
               <AnswerVideo

@@ -43,10 +43,11 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false, //
+      goGame: false, // *** 임시 ***
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
+      imageList: null,
     };
     // this.timer // timer component를 갖고온다면
 
@@ -135,6 +136,8 @@ class VideoRoomComponent extends Component {
         var token = await this.getToken();
         this.connect(token);
       } catch (error) {
+        Navigate("/");
+        // window.location.replace("/")
         console.error(
           "There was an error getting the token:",
           error.code,
@@ -160,6 +163,7 @@ class VideoRoomComponent extends Component {
         this.connectWebCam();
       })
       .catch((error) => {
+        window.location.replace("/");
         if (this.props.error) {
           this.props.error({
             error: error.error,
@@ -188,7 +192,7 @@ class VideoRoomComponent extends Component {
     let publisher = this.OV.initPublisher(undefined, {
       audioSource: undefined,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(false),
+      publishAudio: false, //
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -294,6 +298,7 @@ class VideoRoomComponent extends Component {
       playGame: this.state.playGame,
       playersList: this.state.playersList,
       wordsList: wordsData,
+      imageList: this.state.imageList,
     };
     this.state.session
       .signal({
@@ -389,7 +394,9 @@ class VideoRoomComponent extends Component {
   micStatusChanged() {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.sendSignalUserChanged({
+      isAudioActive: localUser.isAudioActive(false),
+    });
     this.setState({ localUser: localUser });
   }
 
@@ -496,6 +503,7 @@ class VideoRoomComponent extends Component {
         goGame: data.playGame,
         playersList: data.playersList,
         wordsList: data.wordsList,
+        imageList: data.imageList,
       });
     });
   }
@@ -564,7 +572,7 @@ class VideoRoomComponent extends Component {
           var newPublisher = this.OV.initPublisher(undefined, {
             audioSource: undefined,
             videoSource: newVideoDevice[0].deviceId,
-            publishAudio: localUser.isAudioActive(false),
+            publishAudio: false,
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -593,7 +601,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        publishAudio: localUser.isAudioActive(false),
+        publishAudio: false,
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
@@ -774,20 +782,19 @@ class VideoRoomComponent extends Component {
             ))}
           </div>
           <div className="sidebar">
-            {localUser !== undefined &&
+            {localUser !== undefined && // *** 임시 ***
               localUser.getStreamManager() !== undefined && (
-                <div style={chatDisplay}>
-                  <SideBar
-                    user={localUser}
-                    chatDisplay={this.state.chatDisplay}
-                    close={this.toggleChat}
-                    messageReceived={this.checkNotification}
-                    playersList={this.state.playersList}
-                    myNickname={this.state.myUserName}
-                    wordsList={this.state.wordsList}
-                    leaveSession={this.leaveSession}
-                  />
-                </div>
+                <SideBar
+                  user={localUser}
+                  chatDisplay={this.state.chatDisplay}
+                  close={this.toggleChat}
+                  messageReceived={this.checkNotification}
+                  playersList={this.state.playersList}
+                  myNickname={this.state.myUserName}
+                  wordsList={this.state.wordsList}
+                  leaveSession={this.leaveSession}
+                  imageList={this.state.imageList}
+                />
               )}
           </div>
         </div>
@@ -819,6 +826,7 @@ class VideoRoomComponent extends Component {
     const playersList = sessionData.playersList;
     const sessionId = sessionData.sessionId;
     const token = sessionData.token;
+    const imageList = sessionData.imageList;
 
     this.setState({
       message: message,
@@ -826,13 +834,16 @@ class VideoRoomComponent extends Component {
       playersList: playersList,
       sessionId: sessionId,
       token: token,
+      imageList: imageList,
     });
+
+    console.log(imageList);
 
     // const tokenData = token.split("=");
     // console.log(tokenData);
     // const tokenID = tokenData[tokenData.length - 1];
     // this.state.subToken = tokenID;
-    console.log("토큰이 저장됐습니까? : ", this.state.subToken);
+    // console.log("토큰이 저장됐습니까? : ", this.state.subToken);
     console.log(this.state.sessionId);
     console.log("게임 시작했니!?!?!?!? ", this.playGame);
     // console.log(token.searchParams);
