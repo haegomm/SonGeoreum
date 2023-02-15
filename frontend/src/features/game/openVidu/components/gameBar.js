@@ -9,6 +9,10 @@ const gameBar = (props) => {
   const [isQuizTime, setIsQuizTime] = useState(true);
   const [gameCnt, setGameCnt] = useState(0);
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
+  const [presenter, setPresenter] = useState(playersList[0]);
+  const [answerWord, setAnswerWord] = useState(wordsList[0].name);
+  const [answerApi, setAnswerApi] = useState(wordsList[0].contentUrl);
+
   const quizSequence = 10000;
   const answerSequence = 10000;
   //   const gameTime = 0;
@@ -57,6 +61,8 @@ const gameBar = (props) => {
     }
   };
 };
+
+const toNext = () => {};
 
 return (
   <React.Fragment>
