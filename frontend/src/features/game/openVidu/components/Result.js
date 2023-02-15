@@ -10,10 +10,24 @@ const Result = () => {
   const ranking = result.sort((a, b) => b.score - a.score);
   console.log(ranking);
 
+  //랭킹 리스트에서 내 점수 찾기
+  // ranking.map((it) => {
+
+  // })
+
   const crown = require("../../../../assets/result/crown.png");
 
   let navigate = useNavigate();
-  const exitButtonHandler = () => {
+
+  const exitButtonHandler = async () => {
+    // try {
+    //   const data = await axios.put(`/api/user/game/${score}`, {
+    //     experience: score,
+    //   });
+    //   console.log("경험치를 성공적으로 전달했습니다.", data);
+    // } catch {
+    //   console.log("경험치 넘기기 실패");
+    // }
     navigate("/");
   };
 

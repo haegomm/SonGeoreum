@@ -9,7 +9,7 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
-import SideBar from "./sidebar/SideBar";
+import GameBar from "./GameBar";
 import { Navigate } from "react-router-dom";
 import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
@@ -48,6 +48,7 @@ class VideoRoomComponent extends Component {
       wordsList: null,
       subToken: undefined, // ?
       imageList: null,
+      ready: null,
     };
     // this.timer // timer component를 갖고온다면
 
@@ -288,12 +289,6 @@ class VideoRoomComponent extends Component {
   }
 
   async startSignal(wordsData) {
-    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    // console.log("참가자들 닉네임", this.state.playersList);
-    // if (this.state.goGame === false) {
-    //   console.log("시그널 조건1 통과");
-    //   if (this.state.playGame === true) {
-    //     console.log("시그널 조건2 통과");
     const data = {
       playGame: this.state.playGame,
       playersList: this.state.playersList,
@@ -784,7 +779,7 @@ class VideoRoomComponent extends Component {
           <div className="sidebar">
             {localUser !== undefined && // *** 임시 ***
               localUser.getStreamManager() !== undefined && (
-                <gameBar
+                <GameBar
                   user={localUser}
                   chatDisplay={this.state.chatDisplay}
                   close={this.toggleChat}
