@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const gameBar = (props) => {
   const playersList = props.playersList;
   const myNickname = props.myNickname;
@@ -9,11 +11,19 @@ const gameBar = (props) => {
   const [scoreList, setSocreList] = useState([0, 0, 0, 0]);
   const quizSequence = 10000;
   const answerSequence = 10000;
-  const gameTime = 0;
+  //   const gameTime = 0;
+  const [gameTime, setGameTime] = useState(0);
+
+  //   const gameRoomTimer = setInterval(() => {
+  //     gameTime += 1;
+  //     if (quizSequence / 1000 === gameTime) {
+  //       clearInterval(gameRoomTimer);
+  //     }
+  //   }, 1000);
 
   // 화면에 보이는 타이머
   const gameRoomTimer = setInterval(() => {
-    gameTime += 1;
+    setGameTime((gameTime) => gameTime + 1);
     if (quizSequence / 1000 === gameTime) {
       clearInterval(gameRoomTimer);
     }
@@ -22,7 +32,7 @@ const gameBar = (props) => {
   // 퀴즈 푸는 타이머
   const quizTimer = setTimeout(() => {
     setIsQuizTime(() => false);
-  }, quizSequence);
+  }, quizSequence); // 채팅에서 답을 못맞추고 문제푸는 시간이 끝났을 때 게임횟차 올라가야함
 
   // 정답 보는 타이머
   const answerTimer = setTimeout(() => {
@@ -38,6 +48,7 @@ const gameBar = (props) => {
       copyScoreList[idx]++;
       setSocreList(() => copyScoreList);
       clearTimeout(quizTimer);
+      clearInterval(gameRoomTimer);
       setIsQuizTime(() => false);
       const curCnt = gameCnt;
       setGameCnt(() => curCnt + 1);
@@ -48,15 +59,7 @@ const gameBar = (props) => {
 return (
   <React.Fragment>
     <div className="timer-wrapper">
-      <CountdownCircleTimer
-        size={80}
-        isPlaying
-        duration={5}
-        colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-        onComplete={() => ({ shouldRepeat: true, delay: 5 })}
-      >
-        {renderTime}
-      </CountdownCircleTimer>
+      <div>{gameTime}</div>
     </div>
   </React.Fragment>
 );
