@@ -25,27 +25,40 @@ const gameBar = (props) => {
   //     }
   //   }, 1000);
 
-  // 화면에 보이는 타이머
+  // 화면 타이머 업데이트
   const gameRoomTimer = setInterval(() => {
     setGameTime((gameTime) => gameTime + 1);
     if (quizSequence / 1000 === gameTime) {
-      clearInterval(gameRoomTimer);
+      answerTimeStart();
     }
   }, 1000);
+
+  // 퀴즈
+  const quizTimeStop = () => {
+    clearInterval(gameRoomTimer);
+    clearTimeout(quizTimer);
+    setIsQuizTime(() => flase);
+  };
+
+  // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청한다.
+  const answerTimeStart = () => {
+    quizTimeStop();
+    clearInterval(gameRoomTimer);
+    answerTimer();
+  };
 
   // 퀴즈 푸는 타이머
   const quizTimer = setTimeout(() => {
     setIsQuizTime(() => false);
-    const curCnt = gameCnt;
-    setGameCnt(() => curCnt + 1);
-  }, quizSequence); // 채팅에서 답을 못맞추고 문제푸는 시간이 끝났을 때 게임횟차 올라가야함
+  }, quizSequence);
 
   // 정답 보는 타이머
   const answerTimer = setTimeout(() => {
     setIsQuizTime(() => true);
+    toNext(); // 정답 시청이 끝난 후 다음 문제로 넘어갑니다
   }, answerSequence);
 
-  // 정답 확인 함수
+  // 채팅 정답 확인 함수
   const checkAnswer = (nickName, chatMessage) => {
     const curAnswer = wordsList[gameCnt].name;
     if (nickName === myNickname && curAnswer === chatMessage) {
@@ -53,16 +66,29 @@ const gameBar = (props) => {
       const copyScoreList = [...setSocreList];
       copyScoreList[idx]++;
       setSocreList(() => copyScoreList);
-      clearTimeout(quizTimer);
-      clearInterval(gameRoomTimer);
       setIsQuizTime(() => false);
-      const curCnt = gameCnt;
-      setGameCnt(() => curCnt + 1);
+      answerTimeStart();
     }
   };
 };
 
-const toNext = () => {};
+// 다음 단계로 넘어가기
+const toNext = () => {
+  const curCnt = gameCnt + 1;
+  setGameCnt(() => curCnt);
+  setPresenter(() => playersList[curCnt % 4]);
+  setAnswerWord(() => wordsList[curCnt].name);
+  setAnswerApi(() => wordsList[curCnt].contentUrl); // 다음 문제를 위한 정보 셋팅
+  clearTimeout(quizTimer);
+  clearInterval(gameRoomTimer); // 확인사살
+  quizTimeStart();
+};
+
+const quizTimeStart = () => {
+  gameRoomTimer();
+  quizTimer(); // 다음 문제 타이머 시작
+  setIsQuizTime(() => true); // 문제 푸는 시간입니다. => true
+};
 
 return (
   <React.Fragment>
