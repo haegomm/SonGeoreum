@@ -41,6 +41,16 @@ $blue: #6488e5;
   color: #fff9ed;
 }
 
+.levelString {
+  color: #fff9ed;
+  font-weight: 600;
+  font-size: large;
+  vertical-align: bottom;
+  margin-top: 16px;
+}
+.MuiLinearProgress-root {
+  background-color: #fff9ed !important;
+}
 .logoutButton {
   font-size: large;
   font-weight: 600;
@@ -67,7 +77,6 @@ $blue: #6488e5;
   color: #fff9ed;
 }
 
-
 .myVocaString {
   font-size: large;
   font-weight: 600;
@@ -81,7 +90,7 @@ $blue: #6488e5;
   color: #fff9ed;
 }
 
-.modifyBase{
+.modifyBase {
   display: block;
   margin: auto;
 }

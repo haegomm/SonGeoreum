@@ -13,9 +13,9 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import { getUserInfo } from "../api/authInfo";
 import { Box } from "@mui/material";
-import BadgeIcon from '@mui/icons-material/Badge';
+import BadgeIcon from "@mui/icons-material/Badge";
 import { fontSize } from "@mui/system";
-import FaceIcon from '@mui/icons-material/Face';
+import FaceIcon from "@mui/icons-material/Face";
 
 function ModifyProfile() {
   const dispatch = useDispatch();
@@ -40,11 +40,11 @@ function ModifyProfile() {
       if (response.payload.message === "success" || currentNickname === "" || currentNickname === oldNickname) {
         setNicknameError("");
         setNickname(currentNickname);
-        console.log(currentNickname)
+        console.log(currentNickname);
       }
       //  else if (currentNickname === "") {
       //   setNicknameError("");
-      // } 
+      // }
       else {
         setNicknameError("중복 닉네임이 존재합니다");
       }
@@ -52,7 +52,7 @@ function ModifyProfile() {
   };
 
   const onImageHandler = (e) => {
-    console.log(e.currentTarget.src)
+    console.log(e.currentTarget.src);
     setProfileImageUrl(e.currentTarget.src);
   };
 
@@ -77,20 +77,28 @@ function ModifyProfile() {
 
   return (
     <div className="divBase">
-      <Accordion style={{ marginLeft:"-6px", borderRadius: "16px", backgroundColor:"#FFCA72"}}  expanded={expanded === "panel1"}  onChange={handleChange("panel1")}>
+      <Accordion
+        style={{ marginLeft: "0px", borderRadius: "16px", backgroundColor: "#FFCA72" }}
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
+      >
         <AccordionSummary id="panel1bh-header">
           <Typography id="modifyProfileTitle">프로필 수정</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordionBase">
           <div>
             <form onSubmit={onSubmitHandler} className="inputBox">
-              <div className="inputNicknameString"><BadgeIcon style={{fontSize: "16px"}}></BadgeIcon> 닉네임 </div>
+              <div className="inputNicknameString">
+                <BadgeIcon style={{ fontSize: "16px" }}></BadgeIcon> 닉네임{" "}
+              </div>
               <input type="text" className="inputNickname" placeholder={Nickname} onBlur={onNicknameHandler} />
               <div className="nicknameModifyError">
                 {nicknameError}
                 {nicknameFormError}
               </div>
-              <div className="inputProfileImageString"><FaceIcon style={{fontSize: "16px"}}></FaceIcon> 프로필 사진</div>
+              <div className="inputProfileImageString">
+                <FaceIcon style={{ fontSize: "16px" }}></FaceIcon> 프로필 사진
+              </div>
               <div className="inputProfileImage">
                 {profileImages.map((profileImage) => (
                   <img
