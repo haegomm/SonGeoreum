@@ -19,6 +19,7 @@ import FaceIcon from '@mui/icons-material/Face';
 
 function ModifyProfile() {
   const dispatch = useDispatch();
+  const BASE_URL = process.env.REACT_APP_API;
 
   const [expanded, setExpanded] = useState(false);
   const [Nickname, setNickname] = useState(getUserInfo().nickname);
@@ -37,9 +38,12 @@ function ModifyProfile() {
       ? setNicknameFormError("")
       : setNicknameFormError("2자 이상 8자 이하로 입력해주세요");
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
-      if (response.payload.message === "success" || currentNickname === "" || currentNickname === oldNickname) {
+      if (response.payload.message === "success" || currentNickname === oldNickname) {
         setNicknameError("");
         setNickname(currentNickname);
+        console.log(currentNickname)
+      } else if (currentNickname === "") {
+        setNicknameError("");
       } else {
         setNicknameError("중복 닉네임이 존재합니다");
       }
@@ -88,10 +92,10 @@ function ModifyProfile() {
               <div className="inputProfileImage">
                 {profileImages.map((profileImage) => (
                   <img
-                    className={profileImage === profileImageUrl ? "selected" : "unselected"}
-                    key={profileImage}
-                    src={profileImage}
-                    alt={profileImage}
+                    className={BASE_URL+profileImage === profileImageUrl ? "selectedImg" : "unSelectedImg"}
+                    key={BASE_URL+profileImage}
+                    src={BASE_URL+profileImage}
+                    alt={BASE_URL+profileImage}
                     onClick={onImageHandler}
                   />
                 ))}
