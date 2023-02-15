@@ -10,7 +10,7 @@ const GameBar = (props) => {
   const imageList = props.imageList;
 
   const [isQuizTime, setIsQuizTime] = useState(true);
-  //   const [gameCnt, setGameCnt] = useState(0);
+  const [gameTurnCnt, setGameTurnCnt] = useState(0);
   const [scoreList, setScoreList] = useState([0, 0, 0, 0]);
   const [presenter, setPresenter] = useState("");
   const [answerWord, setAnswerWord] = useState("");
@@ -18,6 +18,8 @@ const GameBar = (props) => {
 
   const quizSequence = 10000;
   const answerSequence = 10000;
+
+  const [lastCnt, setLastCnt] = useState(-1);
 
   const [gameTime, setGameTime] = useState(0);
 
@@ -62,9 +64,15 @@ const GameBar = (props) => {
 
   // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = (gameCnt) => {
+    if (gameCnt === lastCnt) {
+      return;
+    }
     console.log("3. 정답 시청 시간 시작");
     quizTimeStop();
     answerTimer(gameCnt);
+    setLastCnt(() => gameCnt);
+    console.log("게임! >> ", gameCnt);
+    console.log("라스트! >> ", lastCnt);
   };
 
   // 퀴즈 푸는 타이머
@@ -85,13 +93,17 @@ const GameBar = (props) => {
   // 채팅 정답 확인 함수
   const checkAnswer = (nickName, chatMessage) => {
     // const curAnswer = answerWord;
+    console.log("채팅 친 사람 >> ", nickName);
+    console.log("채팅 내용 >> ", chatMessage);
+    console.log("정답 단어 >> ", answerWord);
     if (nickName === myNickname && answerWord === chatMessage) {
       const idx = Number(playersList.indexOf(nickName));
-      const copyScoreList = [...setScoreList];
+      const copyScoreList = [...scoreList];
       copyScoreList[idx]++;
       setScoreList(() => copyScoreList);
+      console.log("정답자 스코어 올려줬다 >> ", scoreList);
       setIsQuizTime(() => false);
-      answerTimeStart();
+      answerTimeStart(gameTurnCnt);
     }
   };
 
@@ -99,7 +111,7 @@ const GameBar = (props) => {
   const toNext = (gameCnt) => {
     console.log("4. 다음 단계로 넘어갑니다");
     // const curCnt = gameCnt + 1;
-    // setGameCnt((gameCnt) => gameCnt + 1);
+    setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     // console.log("다음 단계 >> ", gameCnt);
     const nextCnt = gameCnt + 1;
     if (gameCnt === 12) {
@@ -156,8 +168,8 @@ const GameBar = (props) => {
             <div>
               <h1>{answerWord}</h1>
             </div>
-            <video className="box-video" autoPlay loop>
-              <source src={answerApi}></source>
+            <video className="box-video" autoPlay muted loop src={answerApi}>
+              {/* <source src={answerApi}></source> */}
             </video>
           </React.Fragment>
         ) : (
