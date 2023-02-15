@@ -19,7 +19,6 @@ import FaceIcon from '@mui/icons-material/Face';
 
 function ModifyProfile() {
   const dispatch = useDispatch();
-  const BASE_URL = process.env.REACT_APP_API;
 
   const [expanded, setExpanded] = useState(false);
   const [Nickname, setNickname] = useState(getUserInfo().nickname);
@@ -38,19 +37,22 @@ function ModifyProfile() {
       ? setNicknameFormError("")
       : setNicknameFormError("2자 이상 8자 이하로 입력해주세요");
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
-      if (response.payload.message === "success" || currentNickname === oldNickname) {
+      if (response.payload.message === "success" || currentNickname === "" || currentNickname === oldNickname) {
         setNicknameError("");
         setNickname(currentNickname);
         console.log(currentNickname)
-      } else if (currentNickname === "") {
-        setNicknameError("");
-      } else {
+      }
+      //  else if (currentNickname === "") {
+      //   setNicknameError("");
+      // } 
+      else {
         setNicknameError("중복 닉네임이 존재합니다");
       }
     });
   };
 
   const onImageHandler = (e) => {
+    console.log(e.currentTarget.src)
     setProfileImageUrl(e.currentTarget.src);
   };
 
@@ -83,7 +85,7 @@ function ModifyProfile() {
           <div>
             <form onSubmit={onSubmitHandler} className="inputBox">
               <div className="inputNicknameString"><BadgeIcon style={{fontSize: "16px"}}></BadgeIcon> 닉네임 </div>
-              <input type="text" className="inputNickname" onBlur={onNicknameHandler} />
+              <input type="text" className="inputNickname" placeholder={Nickname} onBlur={onNicknameHandler} />
               <div className="nicknameModifyError">
                 {nicknameError}
                 {nicknameFormError}
@@ -92,10 +94,10 @@ function ModifyProfile() {
               <div className="inputProfileImage">
                 {profileImages.map((profileImage) => (
                   <img
-                    className={BASE_URL+profileImage === profileImageUrl ? "selectedImg" : "unSelectedImg"}
-                    key={BASE_URL+profileImage}
-                    src={BASE_URL+profileImage}
-                    alt={BASE_URL+profileImage}
+                    className={profileImage === profileImageUrl ? "selectedImg" : "unSelectedImg"}
+                    key={profileImage}
+                    src={profileImage}
+                    alt={profileImage}
                     onClick={onImageHandler}
                   />
                 ))}
