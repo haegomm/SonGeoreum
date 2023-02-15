@@ -19,6 +19,7 @@ const gameBar = (props) => {
   const [gameTime, setGameTime] = useState(0);
 
   useEffect(() => {
+    console.log("최초 게임시작");
     quizTimeStart();
   }, []);
 
@@ -32,6 +33,7 @@ const gameBar = (props) => {
 
   // 퀴즈 푸는 시간 종료
   const quizTimeStop = () => {
+    console.log("2. 퀴즈 푸는 시간 종료");
     clearInterval(gameRoomTimer);
     clearTimeout(quizTimer);
     setIsQuizTime(() => false);
@@ -39,6 +41,7 @@ const gameBar = (props) => {
 
   // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = () => {
+    console.log("3. 정답 시청 시간 시작");
     quizTimeStop();
     answerTimer();
   };
@@ -69,8 +72,10 @@ const gameBar = (props) => {
 
 // 다음 단계로 넘어가기
 const toNext = () => {
+  console.log("4. 다음 단계로 넘어갑니다");
   const curCnt = gameCnt + 1;
   setGameCnt(() => curCnt);
+  console.log("다음 단계 >> ", gameCnt);
   if (curCnt === 12) {
     endGame();
     return;
@@ -86,6 +91,7 @@ const toNext = () => {
 
 // 퀴즈 푸는 시간 시작
 const quizTimeStart = () => {
+  console.log("1. 퀴즈 푸는 시간 시작");
   gameRoomTimer();
   quizTimer(); // 다음 문제 타이머 시작
   setIsQuizTime(() => true); // 퀴즈 푸는 시간입니다. => true
@@ -93,6 +99,7 @@ const quizTimeStart = () => {
 
 // 게임 종료 조건
 const endGame = () => {
+  console.log("모든 게임이 종료되었습니다.");
   const result = resultScore();
   navigate("/result", { state: result });
 };
