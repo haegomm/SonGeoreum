@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: true, // *** 임시 ***
+      goGame: false, //
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
