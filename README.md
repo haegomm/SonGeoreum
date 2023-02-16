@@ -5,7 +5,7 @@
 <br>
 
 ![메인배너](etc/assets/logo_outline_blue.png)
-![메인이미지](etc/assets//SonGeoreum_main_picture.png)
+![메인이미지](etc/assets/SonGeoreum_main_picture.png)
 
 이 자리에 메인배너 추가하면 좋을 것 같아요.
 
