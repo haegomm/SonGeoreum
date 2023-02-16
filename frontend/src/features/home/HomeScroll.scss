@@ -120,11 +120,21 @@ section {
       margin-right: 40px;
       .subtext01{
         font-size: 32px;
+        font-weight: 600;
         margin-bottom: 24px;
       }
       .maintext01{
         font-size: 64px;
         font-weight: 600;
+        #ths{
+          color: #6488E5;
+        }
+        #zhffhs{
+          color: #90D28A;
+        }
+        #rjfdma{
+          color: #F9BE7D;
+        }
       }
     }
     .img01{
@@ -178,7 +188,7 @@ section {
         }
         a{
           font-size: 16px;
-          margin-top: 40px;
+          margin-top: 16px;
         }
       }
     }
@@ -233,17 +243,17 @@ section {
         margin-bottom: 24px;
       }
       .maintext03{
-        font-size: 56px;
+        font-size: 48px;
         font-weight: 600;
       }
       .context03{
         margin-top: 24px;
         p{
           margin-bottom: 8px;
-          font-size: 24px;
+          font-size: 20px;
         }
         a{
-          font-size: 24px;
+          font-size: 16px;
           margin-top: 16px;
         }
       }
@@ -344,17 +354,17 @@ section {
         margin-bottom: 24px;
       }
       .maintext04{
-        font-size: 56px;
+        font-size: 48px;
         font-weight: 600;
       }
       .context04{
         margin-top: 24px;
         p{
           margin-bottom: 8px;
-          font-size: 24px;
+          font-size: 20px;
         }
         a{
-          font-size: 24px;
+          font-size: 16px;
           margin-top: 16px;
         }
       }
@@ -417,7 +427,7 @@ section {
     justify-content: center;
     align-items: center;
     .maintext05{
-      font-size: 56px;
+      font-size: 48px;
       font-weight: 600;
     }
     .textbox05{
@@ -434,7 +444,7 @@ section {
           font-size: 20px;
         }
         a{
-          font-size: 24px;
+          font-size: 16px;
           margin-top: 16px;
         }
       }
@@ -492,3 +502,18 @@ section {
 //     opacity: 0;
 //   }
 // }
+
+#home-nav{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p{
+    margin: 4px;
+    font-size: 16px;
+    color: #22254C;
+  }
+}
+
+#qkfhrkrl {
+  color: #22254C;
+}
