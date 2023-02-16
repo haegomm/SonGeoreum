@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 
 a {
   text-decoration: none;
@@ -8,7 +11,7 @@ section {
   height: 90vh;
 }
 
-.demo #scrolla {
+.demo #scroll-a {
   position: absolute;
   font-size: 24px;
   bottom: 20px;
@@ -45,13 +48,13 @@ section {
       .maintext01{
         font-size: 64px;
         font-weight: 600;
-        #ths{
+        #blue-span{
           color: #6488E5;
         }
-        #zhffhs{
+        #green-span{
           color: #90D28A;
         }
-        #rjfdma{
+        #yellow-span{
           color: #F9BE7D;
         }
       }
@@ -142,80 +145,6 @@ section {
   }
 }
 
-#section03 a {
-  padding-top: 60px;
-}
-#section03 a span {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 46px;
-  height: 46px;
-  margin-left: -23px;
-  border: 1px solid #fff;
-  border-radius: 100%;
-  box-sizing: border-box;
-}
-#section03 a span::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  content: '';
-  width: 16px;
-  height: 16px;
-  margin: -12px 0 0 -8px;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-  box-sizing: border-box;
-}
-#section03 a span::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  content: '';
-  width: 44px;
-  height: 44px;
-  box-shadow: 0 0 0 0 rgba(255,255,255,.1);
-  border-radius: 100%;
-  opacity: 0;
-  -webkit-animation: sdb03 3s infinite;
-  animation: sdb03 3s infinite;
-  box-sizing: border-box;
-}
-@-webkit-keyframes sdb03 {
-  0% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  60% {
-    box-shadow: 0 0 0 60px rgba(255,255,255,.1);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes sdb03 {
-  0% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  60% {
-    box-shadow: 0 0 0 60px rgba(255,255,255,.1);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 #section04{
   .container04{
     display: flex;
@@ -253,48 +182,6 @@ section {
   }
 }
 
-
-#section04 a {
-  padding-top: 60px;
-}
-#section04 a span {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 24px;
-  height: 24px;
-  margin-left: -12px;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-  -webkit-animation: sdb04 2s infinite;
-  animation: sdb04 2s infinite;
-  box-sizing: border-box;
-}
-@-webkit-keyframes sdb04 {
-  0% {
-    -webkit-transform: rotate(-45deg) translate(0, 0);
-  }
-  20% {
-    -webkit-transform: rotate(-45deg) translate(-10px, 10px);
-  }
-  40% {
-    -webkit-transform: rotate(-45deg) translate(0, 0);
-  }
-}
-@keyframes sdb04 {
-  0% {
-    transform: rotate(-45deg) translate(0, 0);
-  }
-  20% {
-    transform: rotate(-45deg) translate(-10px, 10px);
-  }
-  40% {
-    transform: rotate(-45deg) translate(0, 0);
-  }
-}
-
 #section05{
   .container05{
     display: flex;
@@ -311,9 +198,7 @@ section {
       margin-bottom: 40px;
       margin-right: 40px;
       .context05{
-        // display: flex;
-        // flex-direction: column;
-        // align-items: center;
+        line-height: 1.2;
         margin-top: 24px;
         p{
           margin-bottom: 8px;
@@ -331,11 +216,9 @@ section {
       filter: drop-shadow(5px 5px 5px #99958E);
     }
   }
-}
-
-
-#section05 a {
-  padding-top: 70px;
+  a {
+    padding-top: 70px;
+  }
 }
 
 #home-nav{
@@ -349,6 +232,6 @@ section {
   }
 }
 
-#qkfhrkrl {
+#navigating {
   color: #22254C;
 }
