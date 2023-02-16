@@ -125,12 +125,6 @@ export default function MyVoca() {
     // 이곳에 즐겨찾기 하기, 해제하기 코드가 들어갑니다.
   };
 
-  const isStar = star ? (
-    <StarIcon color="yellow" sx={{ fontSize: 45 }} onClick={starChange} />
-  ) : (
-    <StarIcon color="disabled" sx={{ fontSize: 45 }} onClick={starChange} />
-  );
-
   const flip = () => {
     document.getElementById("flip-container").className += " hover";
   };
@@ -246,7 +240,6 @@ export default function MyVoca() {
                       </div>
                     </div>
                     <div className="back">
-                      <div className="starBox">{isStar}</div>
                       {previous}
                       {next}
                       <div className="wordBackBox" onClick={flipAgain}>
