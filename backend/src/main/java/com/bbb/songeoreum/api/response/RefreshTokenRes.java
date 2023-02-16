@@ -13,8 +13,7 @@ public class RefreshTokenRes {
     @ApiModelProperty(example = "access token 재발급 성공했으면 success, 실패했으면 fail")
     private String message;
 
-    // access토큰
     @ApiModelProperty(example = "access토큰")
     private String accessToken;
-    
+
 }

@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @Slf4j
 @ToString
 @Entity
-@Getter // getter 생성
-@AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본생성자 생성
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User implements Serializable {
 
     // pk
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment 지원
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 사용자 타입(NORMAL:일반,  KAKAO:카카오톡)
