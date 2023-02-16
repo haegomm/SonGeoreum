@@ -9,15 +9,10 @@ export default class ChatComponent extends Component {
   constructor(props) {
     super(props);
 
-    console.log("채팅 프롭스 확인", props);
-
     this.state = {
       messageList: [],
       message: "",
       checkMessageList: [], // 정답 찾기 위해 만든 임시 생성 배열
-      // questionList: props.questionList,
-      // chatAnswerCnt: 0,
-      // getScore: false,
     };
 
     this.chatScroll = React.createRef();
@@ -26,7 +21,6 @@ export default class ChatComponent extends Component {
     this.handlePressKey = this.handlePressKey.bind(this);
     this.close = this.close.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    // this.handleWhoGetScore = this.handleWhoGetScore.bind(this);
   }
 
   componentDidMount() {
@@ -92,25 +86,11 @@ export default class ChatComponent extends Component {
         console.log("정답입니다.");
         console.log("정답자: " + nickname);
         // 정답자 올려주기
-        this.setState({
-          getScore: true,
-        });
-        this.props.whoGetScore(nickname);
         this.state.checkMessageList = []; // 정답을 체크했으니 초기화 해준다. //setState?
       } else {
         console.log("틀렸습니다.");
       }
-      console.log(
-        "현재 체크할 메시지 리스트 사이즈 : " +
-          this.state.checkMessageList.length
-      );
     });
-  }
-
-  // 정답자 올려주기 // nickname let에 담아서 보내줘야하나? / this.props.nickname
-  handleWhoGetScore(nickname) {
-    console.log("얘가 정답자야!!", nickname.props.user.nickname);
-    this.props.whoGetScore(nickname.props.user.nickname);
   }
 
   handleChange(event) {
