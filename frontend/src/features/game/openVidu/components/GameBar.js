@@ -191,7 +191,6 @@ const GameBar = (props) => {
     console.log("모든 게임이 종료되었습니다.");
     const result = resultScore();
     navigate("/result", { state: result });
-    props.leaveSession();
   };
 
   // 결과 값을 닉네임과 함께 객체로 묶어주기
@@ -220,10 +219,15 @@ const GameBar = (props) => {
           </div>
         ) : (
           <React.Fragment>
-            <div className="timer-wrapper">
-              <div>{gameTime}</div>
-              <div> 현재 출제자: {presenter.current}</div>
-            </div>
+            {isQuizTime ? (
+              <div className="timer-wrapper">
+                <div>{gameTime}</div>
+              </div>
+            ) : (
+              <div className="timer-wrapper">
+                <div>정답을 따라해보세요😊</div>
+              </div>
+            )}
             <div className="box">
               {(isQuizTime && presenter.current === myNickname) || !isQuizTime ? (
                 <React.Fragment>
