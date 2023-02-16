@@ -46,7 +46,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = determineTargetUrl(request, response, authentication);
         log.debug("targetUrl : {}", targetUrl);
 
-        // response commit 여부
         if (response.isCommitted()) {
             log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
@@ -64,35 +63,30 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new IllegalArgumentException("비인가 Redirect URI를 받아 인증을 진행할 수 없습니다!");
         }
 
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl()); // "/" 가 들어가 있음.
+        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         log.debug("determineTargetUrl method targetUrl : {}", targetUrl);
 
         log.debug("authentication.getPrincipal() : {}", authentication.getPrincipal().toString());
-        // Authentication 객체 안에는 UserDetails 타입(일반사용자)과 OAuth2User 타입(카카오사용자)만 저장할 수 있다.
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal(); // 현재 Authentication 객체에 들어있는 사용자 객체를 반환
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         log.debug("principalDetails : {}", principalDetails);
-        User user = principalDetails.getUser(); // 카카오톡 사용자 정보 가져옴.
+        User user = principalDetails.getUser();
         log.debug("userInfo : {}", user);
         Collection<? extends GrantedAuthority> authorities = ((PrincipalDetails) authentication.getPrincipal()).getAuthorities();
 
-        // 토큰 저장 시작
         RoleType roleType = hasAuthority(authorities, RoleType.ADMIN.getCode()) ? RoleType.ADMIN : RoleType.USER;
 
         Date now = new Date();
 
 
-        // access 토큰 설정
         AuthToken accessToken = tokenProvider.createAuthToken(
-                user.getId(), // access 토큰에 user pk 저장
+                user.getId(),
                 user.getNickname(),
                 roleType.getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        // refreshToken 기한
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
-        // refresh 토큰 설정
         AuthToken refreshToken = tokenProvider.createAuthToken(
                 appProperties.getAuth().getTokenSecret(),
                 new Date(now.getTime() + refreshTokenExpiry)
@@ -101,17 +95,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.debug("accessToken : {}", accessToken.getToken());
         log.debug("refreshToken : {}", refreshToken.getToken());
 
-        // DB 저장
         user.saveRefreshToken(refreshToken.getToken());
         log.debug("userInfo 리프레시 토큰 저장한 후 : {}", user.getRefreshToken());
-        userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
+        userRepository.saveAndFlush(user);
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-//        response.addHeader("accessToken", accessToken.getToken());
 
         return UriComponentsBuilder.fromUriString(targetUrl + "oauth2/code/kakao")
                 .queryParam("token", accessToken.getToken())
@@ -142,7 +134,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return appProperties.getOauth2().getAuthorizedRedirectUris()
                 .stream()
                 .anyMatch(authorizedRedirectUri -> {
-                    // Only validate host and port. Let the clients use different paths if they want to
                     URI authorizedURI = URI.create(authorizedRedirectUri);
                     if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
                             && authorizedURI.getPort() == clientRedirectUri.getPort()) {
