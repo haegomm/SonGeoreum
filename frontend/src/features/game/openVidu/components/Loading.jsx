@@ -18,32 +18,23 @@ const Loading = (props) => {
     "게임에서 좋은 점수를 얻고 싶다면 학습하기를 열심히 이용해보아요😘",
   ];
 
-  // Mount시 setTips 실행
   useEffect(() => {
     try {
       const changeTips = setInterval(() => {
         setTipNumber((prev) => (prev + 1) % tips.length);
-        // console.log(tipNumber);
-        // console.log("현재 보여주는 tip 번호는 " + tipNumber + " 입니다");
       }, 3000);
       return () => clearInterval(changeTips);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }, []);
 
   const roomOut = async () => {
-    // props.leaveSession();
     try {
       const response = await axios.post("/api/game/session/user", {
         sessionId: sessionId,
       });
-      console.log("나갈게~ >>", sessionId);
       navigate("/");
-      console.log(response.data);
       return response.data;
     } catch (err) {
-      console.log("못나가^^ >>", err);
       navigate("/");
     }
   };

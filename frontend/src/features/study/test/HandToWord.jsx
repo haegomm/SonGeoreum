@@ -19,19 +19,17 @@ export default function HandToWord({
 }) {
   let num = categoryNum;
   if (!isTuto) num = 3;
-  const [testList, setTestList] = useState([]); // 실제 시험 보는 단어 목록
-  const [number, setNumber] = useState(0); // 현재 문제 번호
-  const [myInput, setMyInput] = useState(""); // 사용자가 입력한 답
-  const [showCorrect, setShowCorrect] = useState(false); // 정답 시 효과 보여주기
-  const [showAnswer, setShowAnswer] = useState(false); // 오답 시 정답 보여주기
+  const [testList, setTestList] = useState([]);
+  const [number, setNumber] = useState(0);
+  const [myInput, setMyInput] = useState("");
+  const [showCorrect, setShowCorrect] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   const [tutoText, setTutoText] = useState(
     "수어를 보고 정답 2를 입력해보세요."
   );
-  const [score, setScore] = useState(0); // 점수
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
-    console.log("카테고리 번호를 확인합니다. >> ", categoryNum);
-    console.log("튜토리얼을 했나요? ?? ", isTuto);
     if (!isTuto) {
       async function getInfo() {
         const tutorialList = [
@@ -43,8 +41,6 @@ export default function HandToWord({
           },
         ];
         setTestList(tutorialList);
-        console.log("튜토리얼을 시작합니다. >> ", tutorialList);
-        console.log("길이가 어떤데?? >> ", tutorialList.length);
       }
       getInfo();
     } else {
@@ -53,7 +49,6 @@ export default function HandToWord({
           `/api/words?categoryId=${categoryNum}&isRandom=true`
         );
         setTestList(data.data);
-        console.log("data >> ", data.data);
       }
       getInfo();
     }
@@ -75,7 +70,6 @@ export default function HandToWord({
 
   const inputValue = () => {
     const text = document.getElementById("inputBox").value.trim();
-    console.log(text);
     if (text === "") return;
     setMyInput(text);
     const num = number + 1;
@@ -83,10 +77,8 @@ export default function HandToWord({
       text === testList[number].name ||
       text.includes(testList[number].name)
     ) {
-      console.log("정답입니다", num);
       setShowCorrect(true);
       const nowScore = score + 1;
-      console.log("현재 점수", nowScore);
 
       if (isTuto) setScore(() => nowScore);
       setTimeout(correct, 2000, num);
@@ -94,7 +86,6 @@ export default function HandToWord({
       if (!isTuto) {
         setTutoText("올바른 정답 2를 입력해주세요.");
       } else {
-        console.log("틀렸습니다", num);
         setShowAnswer(true);
       }
     }
@@ -104,7 +95,6 @@ export default function HandToWord({
   };
 
   const correct = (num) => {
-    console.log("정답효과 종료");
     if (isTuto) setNumber(num);
     setShowCorrect(false);
     if (document.getElementById("inputBox")) {
@@ -114,7 +104,6 @@ export default function HandToWord({
   };
 
   const next = (num) => {
-    console.log("다음 문제로 넘어갑니다");
     setNumber(num);
     setShowAnswer(false);
     const value = document.getElementById("inputBox");
@@ -123,14 +112,11 @@ export default function HandToWord({
 
   const exitTest = (resultScore) => {
     if (isTuto) {
-      console.log("테스트를 종료합니다.");
       setNumber(0);
       setShowAnswer(false);
       setShowCorrect(false);
       finishTest(resultScore);
-      console.log("test result >> ", score);
     } else {
-      console.log("튜토리얼 중도에 종료합니다.");
       setNumber(0);
       setShowAnswer(false);
       setShowCorrect(false);
@@ -139,7 +125,6 @@ export default function HandToWord({
   };
 
   const gotoTest = () => {
-    console.log("튜토리얼을 종료합니다.");
     setNumber(0);
     setShowAnswer(false);
     setShowCorrect(false);
@@ -149,7 +134,6 @@ export default function HandToWord({
         `/api/words?categoryId=${categoryNum}&isRandom=true`
       );
       setTestList(() => data.data);
-      console.log("data >> ", data.data);
     }
     getInfo();
   };
@@ -175,7 +159,6 @@ export default function HandToWord({
           inputProps={{
             onKeyPress: (event) => {
               const { key } = event;
-              console.log(key);
               if (key === "Enter") {
                 inputValue();
               }

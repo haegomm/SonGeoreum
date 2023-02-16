@@ -28,12 +28,11 @@ export default function Navbar() {
   const pages = [
     { name: "학습하기", path: "/study" },
     { name: "게임하기", path: "/game" },
-  ]; // 페이지
+  ];
   const location = useLocation();
-  const [isShort, setShort] = useState(0); // navBar 사이즈 조절
+  const [isShort, setShort] = useState(0);
 
   useEffect(() => {
-    console.log(location);
     const path = location.pathname;
     if (path === "/signup") {
       setShort(() => 3);
@@ -73,21 +72,17 @@ export default function Navbar() {
     },
   ];
 
-  // customizing
   const sizeList = {
     navHeight: size.navHeight,
     appBarHeight: 80,
     appBarHeightPaddingTop: 8,
-    borderRadiusSize: 20, // 전체 nav 모서리는 scss에서 수정
+    borderRadiusSize: 20,
     appBarMarginBottom: size.marginBottom,
-    // logo
     logo: "28px",
     logoWeight: 700,
     logoPaddingLeft: 60,
-    // menu
     menu: "18px",
     menuWeight: 500,
-    // iconButton
     iconButtonMargin: 24,
   };
 
@@ -126,8 +121,8 @@ export default function Navbar() {
               fontSize={sizeList.logo}
               fontWeight={sizeList.logoWeight}
               color="secondary"
-              component={Link} // anchor
-              to="/" // 이동하는 링크입니다
+              component={Link}
+              to="/"
               onClick={sizeShort}
               style={{
                 paddingLeft: sizeList.logoPaddingLeft,
@@ -145,8 +140,8 @@ export default function Navbar() {
                   textAlign="center"
                   fontSize={sizeList.menu}
                   fontWeight={sizeList.menuWeight}
-                  component={Link} // anchor
-                  to={page.path} // 이동하는 링크입니다
+                  component={Link}
+                  to={page.path}
                   onClick={sizeLong}
                   style={{
                     textDecoration: "none",
@@ -157,24 +152,7 @@ export default function Navbar() {
                 </Typography>
               </MenuItem>
             ))}
-            {/* <NavbarSide />
-            <MenuItem>
-                <Typography
-                  textAlign="center"
-                  fontSize={sizeList.menu}
-                  fontWeight={sizeList.menuWeight}
-                  component={Link} // anchor
-                  to={"/login"} // 이동하는 링크입니다
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                  }}
-                >
-                  로그인
-                </Typography>
-              </MenuItem> */}
 
-            {/* 나중에 아래 주석 풀기 : 로그인 상태에 따라 로그인 버튼과 프로필 버튼 다르게 */}
             {authAction.isLogin() ? (
               <NavbarSide />
             ) : (
@@ -183,8 +161,8 @@ export default function Navbar() {
                   textAlign="center"
                   fontSize={sizeList.menu}
                   fontWeight={sizeList.menuWeight}
-                  component={Link} // anchor
-                  to={"/login"} // 이동하는 링크입니다
+                  component={Link}
+                  to={"/login"}
                   style={{
                     textDecoration: "none",
                     color: customTextColor,

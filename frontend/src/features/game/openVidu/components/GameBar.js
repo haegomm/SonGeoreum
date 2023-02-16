@@ -23,16 +23,12 @@ const GameBar = (props) => {
   const quizSequence = 10000;
   const answerSequence = 7000;
 
-  //   const [lastCnt, setLastCnt] = useState(-1);
-
   const [gameTime, setGameTime] = useState(0);
 
   const navigate = useNavigate();
 
-  console.log("게임 카운트! >> ", gameTurnCnt);
   useEffect(() => {
     if (wordsList && wordsList.length > 0) {
-      console.log("최초 게임시작");
       setAnswerWord(() => wordsList[0].name);
       setAnswerApi(() => wordsList[0].contentUrl);
       presenter.current = playersList[0];
@@ -60,7 +56,6 @@ const GameBar = (props) => {
 
   // 퀴즈 푸는 시간 종료
   const quizTimeStop = () => {
-    console.log("2. 퀴즈 푸는 시간 종료");
     clearInterval(timerGame);
     clearTimeout(timerQuiz);
     setIsQuizTime(() => false);
@@ -68,14 +63,8 @@ const GameBar = (props) => {
 
   // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = (gameCnt) => {
-    // if (gameCnt === lastCnt) {
-    //   console.log("이미 정답 맞춤", lastCnt);
-    //   return;
-    // }
-    console.log("3. 정답 시청 시간 시작");
     quizTimeStop();
     answerTimer(gameCnt);
-    // setLastCnt(() => gameCnt);
   };
 
   // 퀴즈 푸는 타이머
@@ -95,18 +84,9 @@ const GameBar = (props) => {
 
   // 채팅 정답 확인 함수
   const checkAnswer = (nickName, chatMessage) => {
-    // const curAnswer = answerWord;
     if (answerWord === chatMessage) {
-      console.log(nickName, "님 이 정답을 맞췄습니다.");
       const idx = Number(playersList.indexOf(nickName));
-      //   const copyScoreList = [...scoreList];
-      //   copyScoreList[idx] += 1;
-      //   setScoreList([...copyScoreList]);
-      //   console.log("정답자 스코어 올려줬다 >> ", scoreList);
       scoreListRef.current[idx] += 1;
-      console.log("정답 스코어가 올라갔니?", scoreListRef);
-      //   setIsQuizTime(() => false);
-      //   answerTimeStart(gameTurnCnt); //
 
       // 정답자의 비디오를 찾아 CSS를 적용시켜 줍니다.
       let isMe = true;
@@ -135,17 +115,13 @@ const GameBar = (props) => {
 
   // 다음 단계로 넘어가기
   const toNext = (gameCnt) => {
-    console.log("4. 다음 단계로 넘어갑니다");
-    // const curCnt = gameCnt + 1;
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
-    // console.log("다음 단계 >> ", gameCnt);
     const nextCnt = gameCnt + 1;
     if (nextCnt === 12) {
-      console.log("마지막 턴에서 정답 스코어 리스트 확인");
       endGame();
       return;
     }
-    setIsQuizTime(() => true); //
+    setIsQuizTime(() => true);
     presenter.current = playersList[nextCnt % 4];
     setAnswerWord(() => wordsList[nextCnt].name);
     setAnswerApi(() => wordsList[nextCnt].contentUrl); // 다음 문제를 위한 정보 셋팅
@@ -156,8 +132,6 @@ const GameBar = (props) => {
 
   // 퀴즈 푸는 시간 시작
   const quizTimeStart = (gameCnt) => {
-    console.log("1. 퀴즈 푸는 시간 시작");
-
     // 발표자의 비디오를 찾아 CSS를 적용시켜 줍니다.
     let isMe = true;
     let streamId = null;
@@ -188,14 +162,12 @@ const GameBar = (props) => {
 
   // 게임 종료 조건.
   const endGame = () => {
-    console.log("모든 게임이 종료되었습니다.");
     const result = resultScore();
     navigate("/result", { state: result });
   };
 
   // 결과 값을 닉네임과 함께 객체로 묶어주기
   const resultScore = () => {
-    console.log("결과창 넘어가기 전 스코어 리스트");
     const resultScoreList = scoreListRef.current;
     const result = [];
     for (let i = 0; i < 4; i++) {
@@ -205,7 +177,6 @@ const GameBar = (props) => {
         image: imageList[i],
       });
     }
-    console.log("결과창 넘어갈 때 들고갈 스코어 리스트", result);
     return result.slice();
   };
 
@@ -229,12 +200,19 @@ const GameBar = (props) => {
               </div>
             )}
             <div className="box">
-              {(isQuizTime && presenter.current === myNickname) || !isQuizTime ? (
+              {(isQuizTime && presenter.current === myNickname) ||
+              !isQuizTime ? (
                 <React.Fragment>
                   <div>
                     <h1>{answerWord}</h1>
                   </div>
-                  <video className="box-video" autoPlay muted loop src={answerApi}></video>
+                  <video
+                    className="box-video"
+                    autoPlay
+                    muted
+                    loop
+                    src={answerApi}
+                  ></video>
                 </React.Fragment>
               ) : (
                 <React.Fragment>

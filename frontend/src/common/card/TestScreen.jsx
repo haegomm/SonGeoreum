@@ -5,13 +5,7 @@ import "./TestScreen.scss";
 export default function TestScreen({ link, categoryNum }) {
   const media =
     categoryNum > 3 ? (
-      <video
-        src={link}
-        autoPlay
-        poster=""
-        //   control
-        loop
-      ></video>
+      <video src={link} autoPlay poster="" loop></video>
     ) : (
       <img className="handImage" src={link} referrerPolicy="no-referrer" />
     );

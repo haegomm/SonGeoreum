@@ -17,11 +17,9 @@ const createStoreWithMiddleware = applyMiddleware(
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  /* Provider를 이용해 리덕스 적용 */
   <Provider
     store={createStoreWithMiddleware(
       Reducer,
-      /*{ 크롬 브라우저에서 디버깅 도구를 이용할 수 있도록 하는 도구 }*/
       window.__REDUX_DEVTOOLS_EXTENSION__ &&
         window.__REDUX_DEVTOOLS_EXTENSION__()
     )}
@@ -30,7 +28,4 @@ root.render(
   </Provider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
