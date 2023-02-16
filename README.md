@@ -42,13 +42,172 @@ SSAFY 8기 2학기 공통 프로젝트
 
 ## 개발환경
 
-개발환경을 기재합니다. (포팅매뉴얼 참고)
+### Frontend
+
+- Node.js 18.13.0 (LTS)
+- React 18.2.0
+  - Redux 4.2.1
+- mui/material 5.11.6
+- axios 1.2.6
+- Sass 1.57.1
+- Openvidu Browser 2.24.0
+- jQuery 3.6.3
+
+### Backend
+
+- Java
+  - Java OpenJDK 1.8.0
+  - Spring Boot 2.7.7
+    - Spring Data JPA 2.7.6
+    - Spring Security 5.7.6
+    - JUnit 4.13.2
+    - Lombok 1.18.24
+    - Swagger 3.0.0
+  - Gradle 7.6
+- Python
+  - Python 3.8.10
+  - Django 4.1.5
+  - OpenCV 4.5.5.64
+  - MediaPipe 0.9.0.1
+
+### Server
+
+- Ubuntu 20.04 LTS
+- Nginx 1.18.0
+- Docker 20.10.23
+- Docker Compose 2.15.1
+- OpenVidu 2.24.0
+
+### Database
+
+- MySQL (AWS RDS) 8.0.30
+
+### UI/UX
+
+- Figma 93.4.0
+
+### IDE
+
+- Visual Studio Code 1.75
+- IntelliJ IDEA 2022.3.1
+- PyCharm 22.3.2
+
+### 기타 툴
+
+- Postman 10.9.4
+- Termius 7.56.1
 
 <br>
 
 ## 프로젝트 구조
 
-FE, BE 프로젝트 구조를 트리 다이어그램? 형식으로 기재합니다 (선택)
+### Frontend (React)
+
+```
+SonGeoreum
+├── app
+├── assets
+│   ├── category
+│   ├── fonts
+│   ├── home
+│   ├── level
+│   ├── logo
+│   ├── profile
+│   ├── result
+│   └── socialLogin
+├── common
+│   ├── api
+│   ├── button
+│   ├── card
+│   ├── category
+│   ├── error
+│   ├── navbar
+│   └── routes
+└── features
+    ├── additional
+    ├── auth
+    │   ├── login
+    │   ├── modify
+    │   └── signup
+    ├── game
+    │   ├── effect
+    │   └── openVidu
+    │       ├── assets
+    │       │   └── images
+    │       ├── components
+    │       │   ├── dialog-extension
+    │       │   ├── sidebar
+    │       │   │   └── chat
+    │       │   ├── stream
+    │       │   └── toolbar
+    │       ├── docker
+    │       ├── layout
+    │       └── models
+    ├── home
+    ├── study
+    │   ├── learn
+    │   └── test
+    └── voca
+```
+
+### Backend (Spring Boot)
+
+```
+SonGeoreum
+├── api
+│   ├── controller
+│   ├── request
+│   ├── response
+│   └── service
+├── config
+├── db
+│   ├── domain
+│   └── repository
+├── exception
+├── jwt
+│   └── filter
+├── oauth
+│   ├── entity
+│   ├── handler
+│   ├── info
+│   └── service
+└── util
+```
+
+### Backend (Django)
+
+```
+SonGeoreum
+├── Dockerfile
+├── README.md
+├── handdetection
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── consumers.py
+│   ├── knn.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── routing.py
+│   ├── templates
+│   │   └── handdetection
+│   │       └── lobby.html
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── knn_dataset_consonant.txt
+├── knn_dataset_number.txt
+├── knn_dataset_vowel.txt
+├── manage.py
+├── mywebsite
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── requirements.txt
+```
 
 <br>
 
@@ -93,7 +252,11 @@ FE, BE 프로젝트 구조를 트리 다이어그램? 형식으로 기재합니�
 
 ## 협업 툴
 
-협업 툴을 기재합니다. (포팅매뉴얼 참고)
+- Git
+- GitLab
+- Jira
+- Notion
+- Mattermost
 
 <br>
 
@@ -105,7 +268,7 @@ FE, BE 프로젝트 구조를 트리 다이어그램? 형식으로 기재합니�
 
 ## 팀원 역할
 
-팀원들이 각자 맡은 역할을 기재합니다. (발표자료 첨부해도 좋을 듯 해요)
+![Team Members](etc/assets/SonGeoreum_members.jpg)
 
 <br>
 
@@ -122,9 +285,13 @@ FE, BE 프로젝트 구조를 트리 다이어그램? 형식으로 기재합니�
 
 <br>
 
-## 프로젝트 발표 자료
+## 프로젝트 발표자료
 
 - [중간발표 Presentation](docs/SonGeoreum_%EC%A4%91%EA%B0%84%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pdf)
 - [최종발표 Presentation]
 
 <br>
+
+## 회고
+
+프로젝트를 진행하며 배운 점들과 느낀 점들을 기재합니다.
