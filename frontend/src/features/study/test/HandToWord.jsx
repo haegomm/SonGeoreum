@@ -105,7 +105,9 @@ export default function HandToWord({
     console.log("정답효과 종료");
     if (isTuto) setNumber(num);
     setShowCorrect(false);
-    document.getElementById("inputBox").value = "";
+    if (document.getElementById("inputBox")) {
+      document.getElementById("inputBox").value = "";
+    }
     if (!isTuto) gotoTest();
   };
 
