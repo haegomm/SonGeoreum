@@ -308,7 +308,6 @@ class VideoRoomComponent extends Component {
         return response.data;
       } catch (err) {
         console.log("못나감~ >>", err);
-        window.location.replace("/");
       }
     }
 
