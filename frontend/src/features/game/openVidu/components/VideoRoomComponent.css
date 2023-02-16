@@ -8,12 +8,6 @@
   min-width: 400px !important;
 }
 
-.toolbar {
-  /* min-height: 40px !important; */
-  /* background-color: rgba(255, 255, 255, 0.349); */
-  /* box-shadow: none !important; */
-}
-
 #titleContent {
   max-width: 100px;
   background-color: #494949;
@@ -52,7 +46,6 @@
   top: 60px;
   bottom: 0;
   height: inherit;
-  /* min-width: 400px !important; */
   width: 75%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -67,16 +60,10 @@
   background-color: var(--blue-bbb);
   overflow: hidden;
   position: absolute;
-  /* left: 40%; */
   right: 0;
-  /* top: 50px; */
   bottom: 0;
-  /* transform: translate(100%, 0); */
-  /* min-width: 400px !important; */
   width: 25%;
   height: 100%;
-  /* margin: 0px;
-  padding: 8px; */
   display: flex;
 }
 
@@ -88,23 +75,16 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  /* height: 91%; */
   border-radius: 16px;
   padding: 16px;
   width: 100%;
 }
 
 .box {
-  /* width: calc(100% - 30px); */
   width: 100%;
-  /* height: 245px; */
   height: 100%;
-  /* height: 100px; */
   background-color: white;
   border-radius: 16px;
-  /* margin: auto; */
-  /* margin-top: 16px;
-  margin-bottom: 16px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -136,32 +116,14 @@
 
 .box-video {
   border-radius: 16px;
-  /* height: 100%; */
-  /* width: 100%; */
-}
-
-.box-text {
 }
 
 .chattingBox {
   background-color: yellowgreen;
   overflow: hidden;
-  /* position: absolute;
-  left: 40%;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transform: translate(100%, 100%); */
-  /* min-width: 400px !important; */
   width: 30%;
   height: 50%;
 }
-
-/*!
- * Copyright (c) 2017 TokBox, Inc.
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- */
 
 .custom-class {
   min-height: 0px !important;
@@ -175,16 +137,9 @@
   align-items: center;
 }
 
-/**
- * OT Base styles
- */
-
 .OT_widget-container {
   position: static;
   transform: none;
-  /* width: 100%;
-  height: 100%; */
-  /* margin: 20px auto !important; */
 }
 
 .streamComponent {
@@ -193,7 +148,6 @@
   position: relative;
 }
 
-/* Root OT object, this is where our CSS reset happens */
 .OT_root,
 .OT_root * {
   margin: 0;
@@ -201,7 +155,6 @@
   border: 0;
   font-size: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  /* vertical-align: baseline; */
   border-radius: 16px;
   display: inline-block;
 }
@@ -335,7 +288,7 @@
 }
 
 .OT_dialog-progress-bar {
-  display: inline-block; /* prevents margin collapse */
+  display: inline-block;
   width: 100%;
   margin-top: 5px;
   margin-bottom: 41px;
@@ -357,8 +310,6 @@
   font-weight: 100;
 }
 
-/* Helpers */
-
 .OT_centered {
   position: fixed;
   left: 50%;
@@ -377,8 +328,6 @@
 .OT_dialog-no-natural-margin {
   margin-bottom: 0;
 }
-
-/* Publisher and Subscriber styles */
 
 .OT_publisher,
 .OT_subscriber {
@@ -401,7 +350,6 @@
   transform-origin: 0 0;
 }
 
-/* Styles that are applied when the video element should be mirrored */
 .OT_publisher.OT_mirrored .OT_video-element {
   -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1);
@@ -419,7 +367,6 @@
   padding: 20px;
 }
 
-/* The publisher/subscriber name/mute background */
 .OT_publisher .OT_bar,
 .OT_subscriber .OT_bar,
 .OT_publisher .OT_name,
@@ -448,10 +395,9 @@
 
 .OT_publisher .OT_edge-bar-item,
 .OT_subscriber .OT_edge-bar-item {
-  z-index: 1; /* required to get audio level meter underneath */
+  z-index: 1;
 }
 
-/* The publisher/subscriber name panel/archiving status bar */
 .OT_publisher .OT_name,
 .OT_subscriber .OT_name {
   background-color: transparent;
@@ -644,14 +590,6 @@
   background-position: 7px 7px;
 }
 
-/**
- * Styles for display modes
- *
- * Note: It's important that these completely control the display and opacity
- * attributes, no other selectors should atempt to change them.
- */
-
-/* Default display mode transitions for various chrome elements */
 .OT_publisher .OT_edge-bar-item,
 .OT_subscriber .OT_edge-bar-item {
   -webkit-transition-property: top, bottom, opacity;
@@ -721,7 +659,6 @@
   opacity: 1;
 }
 
-/* Load animation */
 .OT_root .OT_video-loading {
   position: absolute;
   z-index: 1;
@@ -792,8 +729,6 @@
   object-fit: cover;
 }
 
-/* Workaround for iOS freezing issue when cropping videos */
-/* https://bugs.webkit.org/show_bug.cgi?id=176439 */
 @media only screen and (orientation: portrait) {
   .OT_subscriber.OT_ForceContain.OT_fit-mode-cover .OT_video-element {
     -o-object-fit: contain !important;
@@ -825,7 +760,6 @@
 }
 
 .OT_audio-level-meter:before {
-  /* makes the height of the container equals its width */
   content: "";
   display: block;
   padding-top: 100%;
@@ -833,9 +767,9 @@
 
 .OT_audio-level-meter__bar {
   position: absolute;
-  width: 192%; /* meter value can overflow of 8% */
+  width: 192%;
   height: 192%;
-  top: -96% /* half of the size */;
+  top: -96%;
   right: -96%;
   border-radius: 50%;
 
@@ -855,7 +789,6 @@
 }
 
 .OT_audio-level-meter__audio-only-img:before {
-  /* makes the height of the container equals its width */
   content: "";
   display: block;
   padding-top: 100%;
@@ -971,9 +904,9 @@
 .OT_video-unsupported-bar {
   display: none;
   position: absolute;
-  width: 192%; /* copy the size of the audio meter bar for symmetry */
+  width: 192%;
   height: 192%;
-  top: -96% /* half of the size */;
+  top: -96%;
   left: -96%;
   border-radius: 50%;
 
@@ -994,7 +927,6 @@
 }
 
 .OT_video-unsupported-img:before {
-  /* makes the height of the container 93% of its width (90/97 px) */
   content: "";
   display: block;
   padding-top: 93%;

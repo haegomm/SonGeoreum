@@ -1,6 +1,5 @@
 import * as React from "react";
 import TestScreen from "./TestScreen";
-// import WordLarge from "./WordLarge";
 import WordSmall from "./WordSmall";
 import TopCard from "./TopCard";
 import TestInput from "./TestInput";
@@ -11,7 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 
 export default function CardTest() {
-  const [auth, setAuth] = React.useState(true); // 로그인 유무
+  const [auth, setAuth] = React.useState(true);
 
   const handleChange = (event) => {
     setAuth(event.target.checked);
@@ -48,13 +47,6 @@ export default function CardTest() {
       </div>
       <div>
         <p>3. 단어장 (큰) + 단어 리스트 (스크롤 가능한) </p>
-        {/* <WordLarge
-          isLogin={auth}
-          link={
-            "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20191004/624421/MOV000244910_700X466.mp4"
-          }
-          ck
-        /> */}
       </div>
       <div>
         <p>4. 단어장 (작은)</p>

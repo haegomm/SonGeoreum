@@ -4,7 +4,8 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
-export default function TestInput({}) {
+
+export default function TestInput() {
   return (
     <Paper
       component="form"

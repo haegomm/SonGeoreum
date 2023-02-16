@@ -1,10 +1,8 @@
 .fade-in-box {
-  // background: yellow;
-  // padding: 10px;
   animation: fadein 3s;
-  -moz-animation: fadein 3s; /* Firefox */
-  -webkit-animation: fadein 3s; /* Safari and Chrome */
-  -o-animation: fadein 3s; /* Opera */
+  -moz-animation: fadein 3s;
+  -webkit-animation: fadein 3s;
+  -o-animation: fadein 3s;
 }
 @keyframes fadein {
   from {
@@ -15,7 +13,6 @@
   }
 }
 @-moz-keyframes fadein {
-  /* Firefox */
   from {
     opacity: 0;
   }
@@ -24,7 +21,6 @@
   }
 }
 @-webkit-keyframes fadein {
-  /* Safari and Chrome */
   from {
     opacity: 0;
   }
@@ -33,7 +29,6 @@
   }
 }
 @-o-keyframes fadein {
-  /* Opera */
   from {
     opacity: 0;
   }

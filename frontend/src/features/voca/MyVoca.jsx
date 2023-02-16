@@ -23,18 +23,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
 export default function MyVoca() {
-  const [star, setStar] = useState(false); // 즐겨찾기 유무
-  const [wordNumber, setWordNumber] = useState(); // 현재 단어 번호
-  const [startNumber, setStartNumber] = useState(); // 현재 단어 번호
-  const [endNumber, setEndNumber] = useState(); // 현재 단어 번호
-  const [wordList, setWordList] = useState(); // 단어 목록
-  const [blockListMode, setBlockListMode] = useState(false); // 작은 단어장 리스트
+  const [star, setStar] = useState(false);
+  const [wordNumber, setWordNumber] = useState();
+  const [startNumber, setStartNumber] = useState();
+  const [endNumber, setEndNumber] = useState();
+  const [wordList, setWordList] = useState();
+  const [blockListMode, setBlockListMode] = useState(false);
 
   useEffect(() => {
     async function getInfo() {
       const data = await axios.get(`/api/favorites`);
       setWordList(data.data);
-      console.log(data.data);
       setWordNumber(0);
       setStartNumber(data.data[0].id);
       setEndNumber(data.data.length - 1);
@@ -43,21 +42,17 @@ export default function MyVoca() {
   }, []);
 
   const handleListItemClick = (index) => {
-    console.log("index 확인중..", index);
     setWordNumber(index);
-    console.log(wordNumber);
   };
 
   const numberPlus = () => {
     const num = wordNumber;
     setWordNumber(num + 1);
-    console.log(wordNumber);
   };
 
   const numberMinus = () => {
     const num = wordNumber;
     setWordNumber(num - 1);
-    console.log(wordNumber);
   };
 
   const up =
@@ -136,33 +131,13 @@ export default function MyVoca() {
     setBlockListMode(!blockListMode);
   };
 
-  //   const shuffle = () => {
-  //     async function shuffleInfo() {
-  //       const data = await axios.get(
-  //         `https://i8b106.p.ssafy.io/api/words?categoryId=${categoryNum}&isRandom=true`
-  //       );
-  //       setWordList(data.data);
-  //       console.log(data.data);
-  //       setWordNumber(0);
-  //       setStartNumber(data.data[0].id);
-  //       setEndNumber(data.data.length - 1);
-  //     }
-  //     shuffleInfo();
-  //   };
-
   if (wordList && wordList.length > 0) {
-    console.log("나와라..", wordList);
-
-    console.log("번호는?", wordNumber);
-    console.log("이것도..", wordList[wordNumber].name);
-
     const media =
       wordList[wordNumber].categoryId > 3 ? (
         <video
           src={wordList[wordNumber].contentUrl}
           autoPlay
           poster=""
-          //   control
           loop
         ></video>
       ) : (
@@ -172,21 +147,6 @@ export default function MyVoca() {
           referrerPolicy="no-referrer"
         />
       );
-    //   categoryNum > 3 && wordList && wordList.length > 0 ? (
-    //     <video
-    //       src={wordList[wordNumber].contentUrl}
-    //       autoPlay
-    //       poster=""
-    //       //   control
-    //       loop
-    //     ></video>
-    //   ) : (
-    //     <img
-    //       className="handImage"
-    //       src={wordList[wordNumber].contentUrl}
-    //       referrerPolicy="no-referrer"
-    //     />
-    //   );
 
     if (blockListMode) {
       return (
@@ -219,13 +179,7 @@ export default function MyVoca() {
                 <div id="flip-container" className="flip-container">
                   <div className="flipper">
                     <div className="front">
-                      <div className="shuffleBox">
-                        {/* <ShuffleRoundedIcon
-                      color="blue"
-                      sx={{ fontSize: 45 }}
-                      onClick={() => shuffle()}
-                    /> */}
-                      </div>
+                      <div className="shuffleBox"></div>
                       <div className="menuBox">
                         <MenuRoundedIcon
                           color="blue"
@@ -283,11 +237,6 @@ export default function MyVoca() {
                   </div>
                   <div className="arrowBox">{down}</div>
                 </div>
-                {/* <LargeButton
-              text="TEST"
-              type="learnToTest"
-              backgroundColor="blue"
-            /> */}
               </div>
             </div>
           </Grid>

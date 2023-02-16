@@ -91,9 +91,7 @@ export default class StreamComponent extends Component {
             </FormControl>
           ) : (
             <div>
-              {/* <div onClick={this.toggleNicknameForm}> */}
               <span id="nickname">{this.props.user.getNickname()}</span>
-              {/* {this.props.user.isLocal() && <span id=""> (edit)</span>} */}
             </div>
           )}
         </div>
@@ -118,13 +116,7 @@ export default class StreamComponent extends Component {
                 </div>
               ) : null}
             </div>
-            <div>
-              {/* {!this.props.user.isLocal() && (
-                                <IconButton id="volumeButton" onClick={this.toggleSound}>
-                                    {this.state.mutedSound ? <VolumeOff color="secondary" /> : <VolumeUp />}
-                                </IconButton>
-                            )} */}
-            </div>
+            <div></div>
           </div>
         ) : null}
       </div>

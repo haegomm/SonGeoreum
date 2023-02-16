@@ -19,18 +19,7 @@ $yellow: #f9be7d;
 
 .bigWordCard {
   display: inline-block;
-
-  //   background-color: white;
-  //   text-align: center;
-  //   text-decoration: none;
-  //   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
-
-  //   border-radius: 20px;
   margin: 16px 0px 16px 16px;
-  //   max-width: 824px;
-  //   height: 464px;
-  //   border: none;
-  //   cursor: pointer;
 }
 
 .starBox {
@@ -100,11 +89,11 @@ $yellow: #f9be7d;
 .mylistBox {
   height: 384px;
   padding: 0px 8px 0px 8px;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .mylistBox::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera*/
+  display: none;
 }
 
 .top {

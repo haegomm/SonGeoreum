@@ -35,11 +35,8 @@ export default function NavbarSide() {
   const experience = getUserInfo().experience;
   const graphExperience = (experience % 10) * 10;
 
-  console.log(experience + " " + graphExperience);
-
   const onLogoutHandler = (e) => {
     dispatch(authAction.logout()).then((response) => {
-      console.log(response.payload);
       if (response.payload.message === "success") {
         alert("로그아웃이 완료되었습니다");
         window.location.replace("/");
@@ -51,22 +48,26 @@ export default function NavbarSide() {
   };
 
   const onMyVocaaHandler = (e) => {
-    console.log("단어장으로 이동해용~");
     navigate("/myvoca");
   };
 
   const [state, setState] = useState({ right: false });
 
   const toggleDrawer = (anchor, open) => (event) => {
-    console.log(authAction.isLogin());
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
 
     setState({ ...state, [anchor]: open });
   };
   const list = (anchor) => (
-    <Box sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 270 }} role="presentation">
+    <Box
+      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 270 }}
+      role="presentation"
+    >
       <List>
         <ListItem key="profileBlock">
           <img src={picture} className="profileImage" alt="profileImage" />
@@ -87,15 +88,14 @@ export default function NavbarSide() {
               marginLeft: "18px",
               marginRight: "12px",
               borderRadius: 5,
-              // "& .css-jjlizq-MuiLinearProgress-bar1": {
-              //   backgroundColor: "#90D28A",
-              // },
             }}
           />
         </ListItem>
       </List>
-      {/* <Divider /> */}
-      <List onClick={toggleDrawer(anchor, false)} onKeyDown={toggleDrawer(anchor, false)}>
+      <List
+        onClick={toggleDrawer(anchor, false)}
+        onKeyDown={toggleDrawer(anchor, false)}
+      >
         <ListItem key="logoutButton" disablePadding>
           <ListItemButton className="logoutButton">
             <LogoutOutlinedIcon className="logoutIcon"></LogoutOutlinedIcon>
@@ -106,14 +106,16 @@ export default function NavbarSide() {
                 onLogoutHandler();
               }}
             />
-            {/* <LogoutOutlinedIcon className="logoutIcon"></LogoutOutlinedIcon> */}
-            {/* 로그아웃 */}
           </ListItemButton>
         </ListItem>
         <ListItem key="myVocaButton" disablePadding>
           <ListItemButton>
             <StarRateIcon className="myVocaIcon"></StarRateIcon>
-            <ListItemText primary="나의 단어장" className="myVocaString" onClick={onMyVocaaHandler} />
+            <ListItemText
+              primary="나의 단어장"
+              className="myVocaString"
+              onClick={onMyVocaaHandler}
+            />
           </ListItemButton>
         </ListItem>
       </List>
@@ -144,7 +146,10 @@ export default function NavbarSide() {
           onClose={toggleDrawer("right", false)}
         >
           <div className="drawerCloseDiv">
-            <IconButton className="drawerCloseButton" onClick={toggleDrawer("right", false)}>
+            <IconButton
+              className="drawerCloseButton"
+              onClick={toggleDrawer("right", false)}
+            >
               <ChevronRightIcon fontSize="large" className="drawerColseArrow" />
             </IconButton>
           </div>

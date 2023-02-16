@@ -2,7 +2,6 @@ import { Button } from "@mui/material";
 
 export default function Test({ able, selectedTestMode }) {
   const selectedMode = (mode) => {
-    console.log("switch", mode);
     selectedTestMode(mode);
   };
 
