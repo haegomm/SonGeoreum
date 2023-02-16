@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 
 import authAction from "../api/authAction";
 import { deleteUserInfo, getUserInfo } from "../api/authInfo";
@@ -21,7 +22,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import StarRateIcon from '@mui/icons-material/StarRate';
+import StarRateIcon from "@mui/icons-material/StarRate";
+import { green, red, yellow } from "@mui/material/colors";
 
 export default function NavbarSide() {
   const dispatch = useDispatch();
@@ -29,6 +31,11 @@ export default function NavbarSide() {
 
   const nickname = getUserInfo().nickname;
   const picture = getUserInfo().picture;
+  const level = getUserInfo().level;
+  const experience = getUserInfo().experience;
+  const graphExperience = (experience % 10) * 10;
+
+  console.log(experience + " " + graphExperience);
 
   const onLogoutHandler = (e) => {
     dispatch(authAction.logout()).then((response) => {
@@ -58,15 +65,33 @@ export default function NavbarSide() {
 
     setState({ ...state, [anchor]: open });
   };
-
   const list = (anchor) => (
-    <Box sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }} role="presentation">
+    <Box sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 270 }} role="presentation">
       <List>
         <ListItem key="profileBlock">
           <img src={picture} className="profileImage" alt="profileImage" />
         </ListItem>
         <ListItem key="ProfileInfo" disablePadding>
           <div className="userNickname">{nickname} 님</div>
+        </ListItem>
+        <ListItem>
+          <div className="levelString">Lv.{level}</div>
+          <LinearProgress
+            variant="determinate"
+            value={graphExperience}
+            sx={{
+              margin: 0,
+              marginTop: "20px",
+              width: "200px",
+              height: 10,
+              marginLeft: "18px",
+              marginRight: "12px",
+              borderRadius: 5,
+              // "& .css-jjlizq-MuiLinearProgress-bar1": {
+              //   backgroundColor: "#90D28A",
+              // },
+            }}
+          />
         </ListItem>
       </List>
       {/* <Divider /> */}
@@ -95,7 +120,7 @@ export default function NavbarSide() {
       <List>
         <ListItem key="modifyProfileButton" disablePadding>
           <ListItemButton>
-            <ModifyProfile className='modifyBase' />
+            <ModifyProfile className="modifyBase" />
           </ListItemButton>
         </ListItem>
       </List>

@@ -11,7 +11,6 @@ import LargeButton from '../../../common/button/LargeButton';
 function Signup(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const BASE_URL = process.env.REACT_APP_API;
 
   const [Email, setEmail] = useState('');
   const [Nickname, setNickname] = useState('');
@@ -119,10 +118,10 @@ function Signup(props) {
           <div className='profileList1'>
             {profileImageList1().map((profileImage) => (
               < img
-              className = { BASE_URL+profileImage === profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
-              key = { BASE_URL+profileImage }
-              src = { BASE_URL+profileImage }
-              alt = { BASE_URL+profileImage }
+              className = {profileImage === profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
+              key = {profileImage}
+              src = {profileImage}
+              alt = {profileImage}
               onClick = { onImageHandler }
               />
             ))}
@@ -130,10 +129,10 @@ function Signup(props) {
           <div className='profileList2'>
             {profileImageList2().map((profileImage) => (
               <img
-                className={BASE_URL+profileImage===profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
-                key={BASE_URL+profileImage}
-                src={BASE_URL+profileImage}
-                alt={BASE_URL+profileImage}
+                className={profileImage===profileImageUrl ? 'selectedImg' : 'unSelectedImg'}
+                key={profileImage}
+                src={profileImage}
+                alt={profileImage}
                 onClick={onImageHandler}
               />
             ))}

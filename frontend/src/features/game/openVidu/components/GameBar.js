@@ -137,7 +137,7 @@ const GameBar = (props) => {
     setIsQuizTime(() => true); // 퀴즈 푸는 시간입니다. => true
   };
 
-  // 게임 종료 조건
+  // 게임 종료 조건.
   const endGame = () => {
     console.log("모든 게임이 종료되었습니다.");
     const result = resultScore();

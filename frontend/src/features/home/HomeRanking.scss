@@ -1,0 +1,118 @@
+.rankingMember{
+  height: 240px;
+  overflow: hidden;
+  .wrapElement{
+    height: 24px;
+
+    .rankingElement1{
+      display: flex;
+      margin-bottom: 8px;
+      width: 180px;
+      height: 24px;
+      overflow: hidden;
+      // .rankingElement:first-child {
+        animation: show 0s linear infinite;
+        // }
+        
+        //   @keyframes show {
+        //     0% {margin-top:0px;}
+        //     5% {margin-top:0px;}
+        //     33% {margin-top:0px;}
+        //     38% {margin-top:0px;}
+        //     66% {margin-top:0px;}
+        //     71% {margin-top:0px;}
+        //     99.99% {margin-top:0px;}
+        //     100% {margin-top:0px;}
+        //   }
+        // }
+    
+        // .rankingElement2{
+        //   display: flex;
+        //   margin-bottom: 8px;
+        //   width: 180px;
+        //   height: 24px;
+        //   overflow: hidden;
+        //   // .rankingElement:first-child {
+        //     animation: show 1s linear infinite;
+        //   // }
+        
+        //   @keyframes show {
+        //     0% {margin-top:-24px;}
+        //     5% {margin-top:-16px;}
+        //     10%{margin-top:0px;}
+        //     33% {margin-top:0px;}
+        //     38% {margin-top:0px;}
+        //     66% {margin-top:0px;}
+        //     71% {margin-top:0px;}
+        //     99.99% {margin-top:0px;}
+        //     100% {margin-top:0px;}
+        //   }
+        // }
+    
+        // .rankingElement3{
+        //   display: flex;
+        //   margin-bottom: 8px;
+        //   width: 180px;
+        //   height: 24px;
+        //   overflow: hidden;
+        //   // .rankingElement:first-child {
+        //     animation: show 10s linear infinite;
+        //   // }
+        
+        //   @keyframes show {
+        //     0% {margin-top:-24px;}
+        //     5% {margin-top:-16px;}
+        //     33% {margin-top:-16px;}
+        //     38% {margin-top:-8px;}
+        //     66% {margin-top:-8px;}
+        //     71% {margin-top:0px;}
+        //     99.99% {margin-top:0px;}
+        //     100% {margin-top:0px;}
+        //   }
+        // }
+    
+        // .rankingElement4{
+        //   display: flex;
+        //   margin-bottom: 8px;
+        //   width: 180px;
+        //   height: 24px;
+        //   overflow: hidden;
+        //   // .rankingElement:first-child {
+        //     animation: show 10s linear infinite;
+        //   // }
+        
+        //   @keyframes show {
+        //     0% {margin-top:-24px;}
+        //     5% {margin-top:-16px;}
+        //     33% {margin-top:-16px;}
+        //     38% {margin-top:-8px;}
+        //     66% {margin-top:-8px;}
+        //     71% {margin-top:0px;}
+        //     99.99% {margin-top:0px;}
+        //     100% {margin-top:0px;}
+        //   }
+        }
+    
+    
+    
+    
+      }
+  
+  
+}  
+
+.rankingIndex{
+  margin-right: 8px;
+  width: 20px;
+}
+.rankingLevel{
+  margin-right: 8px;
+  width: 20px;
+}
+.rankingNickname{
+  margin-right: 8px;
+  width: 80px;
+}
+.rankingExperience{
+  margin-right: 8px;
+}

@@ -23,7 +23,7 @@ export default function WordSmall({
   return (
     <div className="smallWordBox" onClick={onClick}>
       {isLogin ? <div className="smallStarBox">{isStar}</div> : null}
-      <div className="text">{text}</div>
+      <div className="wordSmallText">{text}</div>
     </div>
   );
 }
