@@ -32,7 +32,7 @@
 }
 
 #chatComponent {
-  background-color: #b8b8b8;
+  background-color: white;
   /* position: absolute; */
   z-index: 99999;
   /* top: 0;
@@ -50,6 +50,7 @@
   /* height: calc(100% - 80px); */
   height: 25vh;
   overflow: auto;
+  scrollbar-width: none;
 }
 
 .message {
@@ -137,7 +138,7 @@ span.triangle {
 
 .text {
   word-break: break-all;
-  color: #000000;
+  color: #22254c;
   line-height: 1 !important;
 }
 
