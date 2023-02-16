@@ -9,14 +9,16 @@ const GameBar = (props) => {
   const myNickname = props.myNickname;
   const wordsList = props.wordsList;
   const imageList = props.imageList;
+  const subscribers = props.subscribers;
+  const localUser = props.user;
 
   const [isQuizTime, setIsQuizTime] = useState(true);
   const [gameTurnCnt, setGameTurnCnt] = useState(0);
-  const [presenter, setPresenter] = useState("");
   const [answerWord, setAnswerWord] = useState("");
   const [answerApi, setAnswerApi] = useState("");
 
   const scoreListRef = useRef([0, 0, 0, 0]);
+  const presenter = useRef("");
 
   const quizSequence = 10000;
   const answerSequence = 7000;
@@ -33,7 +35,7 @@ const GameBar = (props) => {
       console.log("최초 게임시작");
       setAnswerWord(() => wordsList[0].name);
       setAnswerApi(() => wordsList[0].contentUrl);
-      setPresenter(() => playersList[0]);
+      presenter.current = playersList[0];
       quizTimeStart(0);
     }
   }, [wordsList]);
@@ -105,6 +107,29 @@ const GameBar = (props) => {
       console.log("정답 스코어가 올라갔니?", scoreListRef);
       //   setIsQuizTime(() => false);
       //   answerTimeStart(gameTurnCnt); //
+
+      // 정답자의 비디오를 찾아 CSS를 적용시켜 줍니다.
+      let isMe = true;
+      let streamId = null;
+
+      subscribers.forEach((user) => {
+        if (user.nickname === nickName) {
+          isMe = false;
+          streamId = user.streamManager.stream.streamId;
+        }
+      });
+
+      if (isMe) {
+        streamId = localUser.streamManager.stream.streamId;
+      }
+
+      if (streamId !== null) {
+        let videoElement = document.getElementById("video-" + streamId);
+        videoElement.classList.add("answerScreen");
+        setTimeout(() => {
+          videoElement.classList.remove("answerScreen");
+        }, 5000);
+      }
     }
   };
 
@@ -115,13 +140,13 @@ const GameBar = (props) => {
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     // console.log("다음 단계 >> ", gameCnt);
     const nextCnt = gameCnt + 1;
-    if (nextCnt === 2) {
+    if (nextCnt === 12) {
       console.log("마지막 턴에서 정답 스코어 리스트 확인");
       endGame();
       return;
     }
     setIsQuizTime(() => true); //
-    setPresenter(() => playersList[nextCnt % 4]);
+    presenter.current = playersList[nextCnt % 4];
     setAnswerWord(() => wordsList[nextCnt].name);
     setAnswerApi(() => wordsList[nextCnt].contentUrl); // 다음 문제를 위한 정보 셋팅
     clearTimeout(timerQuiz);
@@ -132,6 +157,30 @@ const GameBar = (props) => {
   // 퀴즈 푸는 시간 시작
   const quizTimeStart = (gameCnt) => {
     console.log("1. 퀴즈 푸는 시간 시작");
+
+    // 발표자의 비디오를 찾아 CSS를 적용시켜 줍니다.
+    let isMe = true;
+    let streamId = null;
+
+    subscribers.forEach((user) => {
+      if (user.nickname === presenter.current) {
+        isMe = false;
+        streamId = user.streamManager.stream.streamId;
+      }
+    });
+
+    if (isMe) {
+      streamId = localUser.streamManager.stream.streamId;
+    }
+
+    if (streamId !== null) {
+      let videoElement = document.getElementById("video-" + streamId);
+      videoElement.classList.add("presenterScreen");
+      setTimeout(() => {
+        videoElement.classList.remove("presenterScreen");
+      }, quizSequence);
+    }
+
     gameRoomTimer(gameCnt);
     quizTimer(); // 다음 문제 타이머 시작
     setIsQuizTime(() => true); // 퀴즈 푸는 시간입니다. => true
@@ -173,21 +222,15 @@ const GameBar = (props) => {
           <React.Fragment>
             <div className="timer-wrapper">
               <div>{gameTime}</div>
-              <div> 현재 출제자: {presenter}</div>
+              <div> 현재 출제자: {presenter.current}</div>
             </div>
             <div className="box">
-              {(isQuizTime && presenter === myNickname) || !isQuizTime ? (
+              {(isQuizTime && presenter.current === myNickname) || !isQuizTime ? (
                 <React.Fragment>
                   <div>
                     <h1>{answerWord}</h1>
                   </div>
-                  <video
-                    className="box-video"
-                    autoPlay
-                    muted
-                    loop
-                    src={answerApi}
-                  ></video>
+                  <video className="box-video" autoPlay muted loop src={answerApi}></video>
                 </React.Fragment>
               ) : (
                 <React.Fragment>
