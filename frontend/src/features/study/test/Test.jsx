@@ -73,6 +73,8 @@ export default function Test() {
           experience: score,
         });
         console.log(data);
+        window.localStorage.setItem("level", data.data.level);
+        window.localStorage.setItem("experience", data.data.experience);
       }
       putScore();
     }
