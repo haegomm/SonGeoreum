@@ -49,16 +49,16 @@ export default class ChatComponent extends Component {
         // });
         // this.checkMessage(checkMessageList); // 정답 체크해보자
 
-        const document = window.document;
-        setTimeout(() => {
-          const userImg = document.getElementById(
-            "userImg-" + (this.state.messageList.length - 1)
-          );
-          const video = document.getElementById("video-" + data.streamId);
-          // const avatar = userImg.getContext("2d");
-          // avatar.drawImage(video, 200, 120, 285, 285, 0, 0, 60, 60);
-          this.props.messageReceived();
-        }, 50);
+        // const document = window.document;
+        // setTimeout(() => {
+        //   const userImg = document.getElementById(
+        //     "userImg-" + (this.state.messageList.length - 1)
+        //   );
+        //   const video = document.getElementById("video-" + data.streamId);
+        //   // const avatar = userImg.getContext("2d");
+        //   // avatar.drawImage(video, 200, 120, 285, 285, 0, 0, 60, 60);
+        //   this.props.messageReceived();
+        // }, 50);
         this.setState({ messageList: messageList });
         this.scrollToBottom();
         this.props.checkAnswer(data.nickname, data.message);
