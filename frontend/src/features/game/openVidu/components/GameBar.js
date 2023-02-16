@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatComponent from "./sidebar/chat/ChatComponent";
 import lock from "../assets/images/lock.jpg";
@@ -12,13 +12,14 @@ const GameBar = (props) => {
 
   const [isQuizTime, setIsQuizTime] = useState(true);
   const [gameTurnCnt, setGameTurnCnt] = useState(0);
-  const [scoreList, setScoreList] = useState([0, 0, 0, 0]);
   const [presenter, setPresenter] = useState("");
   const [answerWord, setAnswerWord] = useState("");
   const [answerApi, setAnswerApi] = useState("");
 
+  const scoreListRef = useRef([0, 0, 0, 0]);
+
   const quizSequence = 10000;
-  const answerSequence = 10000;
+  const answerSequence = 7000;
 
   //   const [lastCnt, setLastCnt] = useState(-1);
 
@@ -72,7 +73,7 @@ const GameBar = (props) => {
     console.log("3. 정답 시청 시간 시작");
     quizTimeStop();
     answerTimer(gameCnt);
-    setLastCnt(() => gameCnt);
+    // setLastCnt(() => gameCnt);
   };
 
   // 퀴즈 푸는 타이머
@@ -96,11 +97,13 @@ const GameBar = (props) => {
     if (answerWord === chatMessage) {
       console.log(nickName, "님 이 정답을 맞췄습니다.");
       const idx = Number(playersList.indexOf(nickName));
-      const copyScoreList = [...scoreList];
-      copyScoreList[idx]++;
-      setScoreList(() => copyScoreList);
-      console.log("정답자 스코어 올려줬다 >> ", scoreList);
-      setIsQuizTime(() => false);
+      //   const copyScoreList = [...scoreList];
+      //   copyScoreList[idx] += 1;
+      //   setScoreList([...copyScoreList]);
+      //   console.log("정답자 스코어 올려줬다 >> ", scoreList);
+      scoreListRef.current[idx] += 1;
+      console.log("정답 스코어가 올라갔니?", scoreListRef);
+      //   setIsQuizTime(() => false);
       //   answerTimeStart(gameTurnCnt); //
     }
   };
@@ -112,7 +115,8 @@ const GameBar = (props) => {
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     // console.log("다음 단계 >> ", gameCnt);
     const nextCnt = gameCnt + 1;
-    if (nextCnt === 12) {
+    if (nextCnt === 2) {
+      console.log("마지막 턴에서 정답 스코어 리스트 확인");
       endGame();
       return;
     }
@@ -143,21 +147,24 @@ const GameBar = (props) => {
 
   // 결과 값을 닉네임과 함께 객체로 묶어주기
   const resultScore = () => {
+    console.log("결과창 넘어가기 전 스코어 리스트");
+    const resultScoreList = scoreListRef.current;
     const result = [];
     for (let i = 0; i < 4; i++) {
       result.push({
         nickname: playersList[i],
-        score: scoreList[i],
+        score: resultScoreList[i],
         image: imageList[i],
       });
     }
-    return result;
+    console.log("결과창 넘어갈 때 들고갈 스코어 리스트", result);
+    return result.slice();
   };
 
   return (
     <div className="sidebar-wrapper">
       <React.Fragment>
-        {gameTurnCnt === 12 ? (
+        {gameTurnCnt > 11 ? (
           <div className="box resultMessageBox">
             <p>게임이 종료되었습니다</p>
             <p>잠시 뒤 결과창으로 넘어갑니다.</p>
