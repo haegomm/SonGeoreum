@@ -17,7 +17,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { fontSize } from "@mui/system";
 import FaceIcon from "@mui/icons-material/Face";
 
-function ModifyProfile() {
+export default function ModifyProfile({}) {
   const dispatch = useDispatch();
 
   const [expanded, setExpanded] = useState(false);
@@ -37,22 +37,20 @@ function ModifyProfile() {
       ? setNicknameFormError("")
       : setNicknameFormError("2자 이상 8자 이하로 입력해주세요");
     dispatch(authAction.checkNickname(currentNickname)).then((response) => {
-      if (response.payload.message === "success" || currentNickname === "" || currentNickname === oldNickname) {
+      if (
+        response.payload.message === "success" ||
+        currentNickname === "" ||
+        currentNickname === oldNickname
+      ) {
         setNicknameError("");
         setNickname(currentNickname);
-        console.log(currentNickname);
-      }
-      //  else if (currentNickname === "") {
-      //   setNicknameError("");
-      // }
-      else {
+      } else {
         setNicknameError("중복 닉네임이 존재합니다");
       }
     });
   };
 
   const onImageHandler = (e) => {
-    console.log(e.currentTarget.src);
     setProfileImageUrl(e.currentTarget.src);
   };
 
@@ -78,7 +76,11 @@ function ModifyProfile() {
   return (
     <div className="divBase">
       <Accordion
-        style={{ marginLeft: "0px", borderRadius: "16px", backgroundColor: "#FFCA72" }}
+        style={{
+          marginLeft: "0px",
+          borderRadius: "16px",
+          backgroundColor: "#FFCA72",
+        }}
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
       >
@@ -91,7 +93,12 @@ function ModifyProfile() {
               <div className="inputNicknameString">
                 <BadgeIcon style={{ fontSize: "16px" }}></BadgeIcon> 닉네임{" "}
               </div>
-              <input type="text" className="inputNickname" placeholder={Nickname} onBlur={onNicknameHandler} />
+              <input
+                type="text"
+                className="inputNickname"
+                placeholder={Nickname}
+                onBlur={onNicknameHandler}
+              />
               <div className="nicknameModifyError">
                 {nicknameError}
                 {nicknameFormError}
@@ -102,7 +109,11 @@ function ModifyProfile() {
               <div className="inputProfileImage">
                 {profileImages.map((profileImage) => (
                   <img
-                    className={profileImage === profileImageUrl ? "selectedImg" : "unSelectedImg"}
+                    className={
+                      profileImage === profileImageUrl
+                        ? "selectedImg"
+                        : "unSelectedImg"
+                    }
                     key={profileImage}
                     src={profileImage}
                     alt={profileImage}
@@ -110,7 +121,11 @@ function ModifyProfile() {
                   />
                 ))}
               </div>
-              <button type="submit" className="modifyButton" disabled={nicknameError || nicknameFormError}>
+              <button
+                type="submit"
+                className="modifyButton"
+                disabled={nicknameError || nicknameFormError}
+              >
                 수정하기
               </button>
             </form>
@@ -120,5 +135,3 @@ function ModifyProfile() {
     </div>
   );
 }
-
-export default ModifyProfile;

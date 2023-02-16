@@ -15,37 +15,31 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SelectCategory from "./SelectCategory";
 
 export default function Study() {
-  const [mode, setMode] = useState(); // 학습 모드 저장
-  const [categoryNum, setCategoryNum] = useState(); // 선택한 카테고리 번호
-  const [categoryName, setCategoryName] = useState(); // 선택한 카테고리 이름
+  const [mode, setMode] = useState();
+  const [categoryNum, setCategoryNum] = useState();
+  const [categoryName, setCategoryName] = useState();
   const isLogin = getUserInfo().nickname;
-  console.log(isLogin);
 
   const navigate = useNavigate();
 
   const selectedMode = (mode) => {
-    console.log("switch", mode);
     setMode(mode);
     if (mode === "실전모드") navigate("/test");
   };
 
   const selectedCategoryNum = (num) => {
-    console.log("category", num);
     setCategoryNum(num);
   };
 
   const resetModeSelect = () => {
-    console.log("study에서 모드를 초기화합니다.");
     setMode(null);
   };
 
   const resetCategory = () => {
-    console.log("카테고리를 초기화합니다.");
     setCategoryNum(null);
   };
 
   const selectedCategoryInfo = (name, isTestable) => {
-    console.log(name, isTestable);
     setCategoryName(name);
   };
 

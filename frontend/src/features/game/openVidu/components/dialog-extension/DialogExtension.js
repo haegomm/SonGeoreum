@@ -12,7 +12,6 @@ export default class DialogExtensionComponent extends Component {
     super(props);
     this.openviduExtensionUrl =
       "https://chrome.google.com/webstore/detail/openvidu-screensharing/lfcgfepafnobdloecchnfaclibenjold";
-    //isInstalled: boolean;
 
     this.state = {
       isInstalled: false,
@@ -27,7 +26,6 @@ export default class DialogExtensionComponent extends Component {
   componentDidMount() {}
 
   onNoClick() {
-    // this.cancel.emit();
     this.props.cancelClicked();
   }
 

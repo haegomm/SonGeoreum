@@ -11,7 +11,6 @@ function customCompare(prev, next) {
 }
 
 const MotionTest = ({ categoryNum, startCorrect }) => {
-  console.log("리렌더링 테스트");
   $script(
     [
       "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js",
@@ -20,8 +19,6 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
       "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js",
     ],
     () => {
-      console.log("succeess script loading");
-
       const videoElement = document.getElementsByClassName("input_video")[0];
       const canvasElement = document.getElementsByClassName("output_canvas")[0];
       const canvasCtx = canvasElement.getContext("2d");
@@ -39,16 +36,12 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
       handSocket.onmessage = function (e) {
         let data = JSON.parse(e.data).response;
         status = true;
-        // console.log(JSON.parse(e.data));
-        // console.log(JSON.parse(e.data).response);
         if (word !== data) {
           count = 0;
           word = data;
         } else {
-          console.log("같다");
           count = count + 1;
           if (count > 20) {
-            console.log(word);
             count = 0;
             startCorrect(word);
           }
@@ -87,12 +80,8 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
           let oneHandLandMarks = results.multiHandLandmarks[0];
           // send data to server for prediction
 
-          // handSocket.current.onopen = () => {
-          //webSocket이 맺어지고 난 후, 실행
           sendMessage(oneHandLandMarks);
-          // };
 
-          // draw connections and connectors of landmarks
           for (const landmarks of results.multiHandLandmarks) {
             drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
               color: "#90de8a",

@@ -15,7 +15,6 @@ export default function WordSmall({
   ) : null;
 
   const onClick = () => {
-    console.log(index);
     handleListItemClick(index);
     listMode(listMode);
   };
