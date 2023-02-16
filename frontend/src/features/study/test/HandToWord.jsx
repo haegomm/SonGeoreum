@@ -230,7 +230,7 @@ export default function HandToWord({
           <div className="fixedBox">
             <div>{number + 1} / 10</div>
             {showNextButton}
-            <button className="fixedButton red" onClick={exitTest}>
+            <button className="fixedButton red" onClick={() => exitTest(score)}>
               종료
             </button>
           </div>
