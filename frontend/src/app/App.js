@@ -23,6 +23,8 @@ import userAction from "../common/api/userAction";
 import { getUserInfo } from "../common/api/authInfo";
 import authAction from "../common/api/authAction";
 
+import './app.scss'
+
 function App() {
   const dispatch = useDispatch();
   // ThemeProvider로 기본 테마를 적용합니다.
