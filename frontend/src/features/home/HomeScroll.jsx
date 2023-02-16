@@ -20,15 +20,15 @@ function HomeScroll() {
           <div className='textbox01'>
             <p className='subtext01'>당신과 함께하는 첫 수어,</p>
             <p className='maintext01'>
-              <span id='ths'>손</span>
-              <span id='zhffhs'>:</span>
-              <span id='rjfdma'>걸음</span>
+              <span id='blue-span'>손</span>
+              <span id='green-span'>:</span>
+              <span id='yellow-span'>걸음</span>
             </p>
           </div>
           <div>
             <img src={homeImages[0]} alt='' className='img01'/>
           </div>
-          <a href="#section02" id='scrolla'>
+          <a href="#section02" id='scroll-a'>
             <div id='home-nav'>
               <p>시작해볼까요?</p>
               <p>▽</p>
@@ -47,10 +47,10 @@ function HomeScroll() {
         <div className='context02'>
           <p>자모음 표현부터</p>
           <p>실용적인 일상 회화 한마디까지</p>
-          <a href='/study' id='qkfhrkrl'>바로가기 ▷</a>
+          <a href='/study' id='navigating'>바로가기 ▷</a>
         </div>
       </div>
-      <a href="#section03" id='scrolla'>
+      <a href="#section03" id='scroll-a'>
         <div id='home-nav'>
           <p>STEP 2</p>
           <p>▽</p>
@@ -66,13 +66,13 @@ function HomeScroll() {
         <div className='context03'>
           <p>놀면서 쌓는 경험치!</p>
           <p>머신러닝 기반 모션인식 테스트</p>
-          <a href='/study' id='qkfhrkrl'>바로가기 ▷</a>
+          <a href='/study' id='navigating'>바로가기 ▷</a>
         </div>
       </div>
       <div {...animatedItem[1]}> 
         <img src={homeImages[2]} alt='' className='img03'/>
       </div>
-      <a href="#section04" id='scrolla'>
+      <a href="#section04" id='scroll-a'>
         <div id='home-nav'>
           <p>STEP 3</p>
           <p>▽</p>
@@ -91,10 +91,10 @@ function HomeScroll() {
         <div className='context04'>
           <p>얼굴을 마주하고 수어로 표현해요</p>
           <p>손으로 말해요 게임</p>
-          <a href='/game' id='qkfhrkrl'>바로가기 ▷</a>
+          <a href='/game' id='navigating'>바로가기 ▷</a>
         </div>
       </div>
-      <a href="#section05" id='scrolla'>
+      <a href="#section05" id='scroll-a'>
         <div id='home-nav'>
           <p>공존으로 가는 한걸음</p>
           <p>▽</p>
@@ -123,7 +123,7 @@ function HomeScroll() {
       <div {...animatedItem[3]}>
         <img src={logoImages[1]} alt='' className='logo01'/>
       </div>
-      <a href="#section01" id='scrolla'>
+      <a href="#" id='scroll-a'>
         <div id='home-nav'>
           <p>△</p>
           <p>처음으로</p>
