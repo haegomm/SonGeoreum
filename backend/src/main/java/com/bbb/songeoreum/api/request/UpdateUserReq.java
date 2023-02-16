@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class UpdateUserReq {
 
     // 닉네임
-    @NotBlank // Null, 빈 문자열, 스페이스만 있는 문자열 불가
+    @NotBlank
     @Size(min = 2, max = 6)
     private String nickname;
 

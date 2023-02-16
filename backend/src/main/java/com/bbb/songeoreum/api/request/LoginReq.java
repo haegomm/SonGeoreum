@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -16,7 +14,7 @@ import javax.validation.constraints.Size;
 public class LoginReq {
 
     // 일반 회원 아이디
-    @ApiModelProperty(example = "kim1234@ssafy.com") // Swagger에 예시로 보여줌.
+    @ApiModelProperty(example = "kim1234@ssafy.com")
     private String email;
 
     // 비밀번호

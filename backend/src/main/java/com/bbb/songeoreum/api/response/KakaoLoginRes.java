@@ -11,23 +11,18 @@ import lombok.ToString;
 @ToString
 public class KakaoLoginRes {
 
-    // 닉네임
     @ApiModelProperty(example = "닉네임")
     private String nickname;
 
-    // 프로필 사진 URL
     @ApiModelProperty(example = "프로필 사진 URL")
     private String picture;
 
-    // 레벨
     @ApiModelProperty(example = "레벨")
     private int level;
 
-    // 경험치
     @ApiModelProperty(example = "경험치")
     private int experience;
 
-    // access토큰
     @ApiModelProperty(example = "access토큰")
     private String accessToken;
 

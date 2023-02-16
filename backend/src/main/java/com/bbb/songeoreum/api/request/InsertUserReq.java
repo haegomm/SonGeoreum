@@ -15,13 +15,13 @@ import javax.validation.constraints.Size;
 public class InsertUserReq {
 
     // 사용자 타입(NORMAL:일반,  KAKAO:카카오톡)
-    @ApiModelProperty(example = "사용자 타입(NORMAL:일반,  KAKAO:카카오톡)") // Swagger에 예시로 보여줌.
-    @NotBlank // Null, 빈 문자열, 스페이스만 있는 문자열 불가
+    @ApiModelProperty(example = "사용자 타입(NORMAL:일반,  KAKAO:카카오톡)")
+    @NotBlank
     private String userType;
 
     // 일반 회원 아이디
-    @ApiModelProperty(example = "kim1234@ssafy.com") // Swagger에 예시로 보여줌.
-    @Email // 이메일 형식만 가능
+    @ApiModelProperty(example = "kim1234@ssafy.com")
+    @Email
     @Size(max = 100)
     private String email;
 
@@ -30,7 +30,7 @@ public class InsertUserReq {
     private String password;
 
     // 닉네임
-    @NotBlank // Null, 빈 문자열, 스페이스만 있는 문자열 불가
+    @NotBlank
     @Size(min = 2, max = 10)
     private String nickname;
 
