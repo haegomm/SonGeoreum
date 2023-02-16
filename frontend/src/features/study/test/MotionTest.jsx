@@ -92,15 +92,10 @@ const MotionTest = ({ categoryNum, startCorrect }) => {
           sendMessage(oneHandLandMarks);
           // };
 
-          // draw detected hand boundary
-          if (oneHandLandMarks) {
-            drawHandBoundary(oneHandLandMarks, canvasCtx, results.image);
-          }
-
           // draw connections and connectors of landmarks
           for (const landmarks of results.multiHandLandmarks) {
             drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
-              color: "#00FF00",
+              color: "#90de8a",
               lineWidth: 5,
             });
             drawLandmarks(canvasCtx, landmarks, {

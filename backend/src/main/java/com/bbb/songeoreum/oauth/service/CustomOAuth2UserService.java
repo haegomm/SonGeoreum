@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-// user가 카카오 로그인 한 후에 redirect 되면서 호출되는 클래스
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,10 +26,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    // 카카오로부터 받은 userRequest 데이터에 대한 후처리되는 함수
-    // 함수 종료시 @AuthenticationPrincipal 어노테이션이 만들어짐.
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
@@ -56,7 +51,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.debug("kakao가 넘겨준 accessToken : {}", userRequest.getAccessToken().getTokenValue());
         log.debug("providerType : {}", providerType);
 
-        // 카카오 사용자는 최초 로그인 시 닉네임이 guest + 숫자로 지정
         String nickname = "guest" + (userRepository.count() + 1);
 
         log.debug("카카오 사용자 nickname : {}", nickname);
@@ -74,7 +68,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                                 " account. Please use your " + savedUser.getUserType() + " account to login."
                 );
             }
-//            updateUser(savedUser, userInfo);
         } else {
             log.debug("카카오 로그인 최초입니다.");
             savedUser = createUser(userInfo, providerType, nickname);
@@ -88,14 +81,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         User user = new User(providerType.toString(), userInfo.getProviderId(), nickname, createdDate);
 
-        return userRepository.saveAndFlush(user); // save() 메서드와 달리 실행중(트랜잭션)에 즉시 data를 flush 함.
+        return userRepository.saveAndFlush(user);
     }
 
     private User updateUser(User user, OAuth2UserInfo userInfo) {
 
         log.debug("카카오 유저 updateUser 호출 ");
         String email = userInfo.getEmail();
-        // 카카오톡 사용자가 원래 이메일이 등록되어 있지 않았는데 이메일 등록한 경우 이메일 추가 해줌.
         if (email != null && !user.getEmail().equals(email)) {
             user.updateEmail(email);
         }

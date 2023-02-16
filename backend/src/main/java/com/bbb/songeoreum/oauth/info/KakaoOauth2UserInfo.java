@@ -7,7 +7,7 @@ import java.util.Map;
 @Slf4j
 public class KakaoOauth2UserInfo implements OAuth2UserInfo {
 
-    private Map<String, Object> attributes; // oauth2User.getAttributes()
+    private Map<String, Object> attributes;
 
     public KakaoOauth2UserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;

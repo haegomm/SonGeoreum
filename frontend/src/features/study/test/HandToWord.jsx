@@ -74,14 +74,20 @@ export default function HandToWord({
     : tutoText;
 
   const inputValue = () => {
-    const text = document.getElementById("inputBox").value;
+    const text = document.getElementById("inputBox").value.trim();
     console.log(text);
+    if (text === "") return;
     setMyInput(text);
     const num = number + 1;
-    if (text === testList[number].name) {
+    if (
+      text === testList[number].name ||
+      text.includes(testList[number].name)
+    ) {
       console.log("정답입니다", num);
       setShowCorrect(true);
       const nowScore = score + 1;
+      console.log("현재 점수", nowScore);
+
       if (isTuto) setScore(() => nowScore);
       setTimeout(correct, 2000, num);
     } else {
@@ -93,7 +99,7 @@ export default function HandToWord({
       }
     }
     if (num === 10 && !showAnswer && !showCorrect) {
-      setTimeout(exitTest, 2000); // 결과 페이지로 넘어가야 합니다
+      setTimeout(exitTest(score + 1), 2000); // 결과 페이지로 넘어가야 합니다
     }
   };
 
@@ -101,7 +107,9 @@ export default function HandToWord({
     console.log("정답효과 종료");
     if (isTuto) setNumber(num);
     setShowCorrect(false);
-    document.getElementById("inputBox").value = "";
+    if (document.getElementById("inputBox")) {
+      document.getElementById("inputBox").value = "";
+    }
     if (!isTuto) gotoTest();
   };
 
@@ -113,13 +121,13 @@ export default function HandToWord({
     if (value) value.value = "";
   };
 
-  const exitTest = () => {
+  const exitTest = (resultScore) => {
     if (isTuto) {
       console.log("테스트를 종료합니다.");
       setNumber(0);
       setShowAnswer(false);
       setShowCorrect(false);
-      finishTest(score);
+      finishTest(resultScore);
       console.log("test result >> ", score);
     } else {
       console.log("튜토리얼 중도에 종료합니다.");

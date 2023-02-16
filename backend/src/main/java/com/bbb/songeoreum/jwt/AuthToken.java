@@ -1,7 +1,6 @@
 package com.bbb.songeoreum.jwt;
 
 import com.bbb.songeoreum.db.repository.UserRepository;
-import com.bbb.songeoreum.exception.NotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SecurityException;
@@ -14,7 +13,7 @@ import java.util.Date;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthToken { // JwtUtil
+public class AuthToken {
 
     @Getter
     private final String token;
@@ -23,14 +22,14 @@ public class AuthToken { // JwtUtil
 
     private final UserRepository userRepository;
 
-    // refresh token
+
     public AuthToken(String id, Date expiry, Key key, UserRepository userRepository) {
         this.userRepository = userRepository;
         this.key = key;
         this.token = createAuthToken(id, expiry);
     }
 
-    // access token
+
     public AuthToken(Long id, String nickname, String role, Date expiry, Key key, UserRepository userRepository) {
         this.userRepository = userRepository;
         this.key = key;
@@ -44,33 +43,23 @@ public class AuthToken { // JwtUtil
      * expire : 토큰 유효기간 설정을 위한 값
      * jwt 토큰의 구성 : header+payload+signature
      */
-    // jwt refresh token 생성
     private String createAuthToken(String id, Date expiry) {
         return Jwts.builder()
-                // Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
                 .setHeaderParam("type", "JWT")
-                .setHeaderParam("createdDate", System.currentTimeMillis()) // 생성 시간
-                // Payload 설정 : 유효기간(Expiration), 토큰 제목 (Subject), 데이터 (Claim) 등 정보 세팅.
-                .setSubject("refreshToken") // 토큰 제목 설정 ex) accessToken, refreshToken
-//                .claim("id", id) // user table PK
-                // Signature 설정 : secret key를 활용한 암호화.
+                .setHeaderParam("createdDate", System.currentTimeMillis())
+                .setSubject("refreshToken")
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)
                 .compact();
     }
 
-    // jwt access token 생성
     private String createAuthToken(Long id, String nickname, String role, Date expiry) {
         return Jwts.builder()
-                // Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
                 .setHeaderParam("type", "JWT")
-                .setHeaderParam("createdDate", System.currentTimeMillis()) // 생성 시간
-                // Payload 설정 : 유효기간(Expiration), 토큰 제목 (Subject), 데이터 (Claim) 등 정보 세팅.
                 .setSubject("accessToken")
                 .claim(AUTHORITIES_KEY, role)
-                .claim("id", id) // user table PK
+                .claim("id", id)
                 .claim("nickname", nickname)
-                // Signature 설정 : secret key를 활용한 암호화.
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)
                 .compact();
@@ -81,9 +70,6 @@ public class AuthToken { // JwtUtil
         return this.getTokenClaims() != null;
     }
 
-    /*
-    토큰 뜯어보기
-     */
     public Claims getTokenClaims() {
         try {
             return Jwts.parserBuilder()

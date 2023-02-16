@@ -1,4 +1,4 @@
--- Category 데이터 추가
+-- category 데이터 추가
 INSERT INTO category(name, is_testable) VALUES('자음','T');
 INSERT INTO category(name, is_testable) VALUES('모음','T');
 INSERT INTO category(name, is_testable) VALUES('숫자','T');
@@ -6,7 +6,7 @@ INSERT INTO category(name, is_testable) VALUES('회화','F');
 INSERT INTO category(name, is_testable) VALUES('관계','F');
 INSERT INTO category(name, is_testable) VALUES('감정표현','F');
 
--- Word 데이터 추가
+-- word 데이터 추가
 -- 자음
 INSERT INTO word(name, content_url, category_id) VALUES('ㄱ','https://dbscthumb-phinf.pstatic.net/2157_000_1/20121029221635952_OWXO8MQ23.jpg/m51_7_i1.jpg?type=w165_fst&wm=N',1);
 INSERT INTO word(name, content_url, category_id) VALUES('ㄴ','https://dbscthumb-phinf.pstatic.net/2157_000_1/20121029221636105_WJKK5JTII.jpg/m51_7_i2.jpg?type=w165_fst&wm=N',1);
