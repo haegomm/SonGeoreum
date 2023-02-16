@@ -9,6 +9,5 @@ import lombok.ToString;
 @NoArgsConstructor
 public class KakaoTokenDto {
 
-    // 카카오가 넘겨주는 access token
     String access_token;
 }

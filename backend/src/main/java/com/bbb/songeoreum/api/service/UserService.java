@@ -38,6 +38,7 @@ public class UserService {
 
     /**
      * 요청 온 이메일을 DB에서 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
+     *
      * @param email 중복체크 요청한 이메일
      * @throws DuplicateException
      */
@@ -49,6 +50,7 @@ public class UserService {
 
     /**
      * 요청 온 닉네임을 DB에서 중복체크하여 중복된 경우에만 DuplicateException을 throw 합니다.
+     *
      * @param nickname 중복체크 요청한 닉네임
      * @throws DuplicateException
      */
@@ -61,6 +63,7 @@ public class UserService {
 
     /**
      * DB에 사용자 정보를 저장합니다.
+     *
      * @param insertUserReq 회원 가입 form에 사용자가 입력한 정보
      * @throws DuplicateException
      */
@@ -82,7 +85,8 @@ public class UserService {
 
     /**
      * 로그인 요청한 정보와 DB에 저장된 정보가 일치하는지 확인합니다.
-     * @param email 사용자가 입력한 이메일
+     *
+     * @param email    사용자가 입력한 이메일
      * @param password 사용자가 입력한 비밀번호
      * @return 성공 시 해당 사용자의 정보 중 화면에 상시 노출되어야 하는 정보를 User 객체로 반환합니다.
      * @throws NotFoundException
@@ -100,7 +104,8 @@ public class UserService {
 
     /**
      * 발급된 refresh token을 DB에 저장합니다.
-     * @param id refresh token을 저장할 사용자의 id(user table PK)
+     *
+     * @param id           refresh token을 저장할 사용자의 id(user table PK)
      * @param refreshToken DB에 저장할 refresh token
      * @throws NotFoundException
      */
@@ -113,6 +118,7 @@ public class UserService {
 
     /**
      * 로그아웃 시 호출되는 메서드로 DB에 저장된 refresh token을 삭제합니다.
+     *
      * @param id refresh token을 삭제할 id(user table PK)
      * @throws NotFoundException
      */
@@ -124,6 +130,7 @@ public class UserService {
 
     /**
      * 파라미터로 넘어온 id에 해당하는 사용자의 정보를 반환합니다.
+     *
      * @param id DB에서 정보를 조회할 id(user table PK)
      * @return 요청 들어온 사용자의 정보를 담은 GetUserRes DTO
      * @throws NotFoundException
@@ -136,8 +143,9 @@ public class UserService {
      * 프로필 수정을 요청한 정보를 DB에 저장합니다.
      * 이때 request에 들어있는 User 정보는 영속성에 등록되어 있지 않기 때문에 영속성에 등록시키기 위해 한 번 더 검색합니다.
      * 닉네임을 수정하지 않은 경우 원래 본인이 쓰던 닉네임이 넘어올 것이므로 중복 체크를 하지 않습니다.
+     *
      * @param updateUserReq 수정할 닉네임, 프로필 사진
-     * @param id 프로필 수정할 id(user table PK)
+     * @param id            프로필 수정할 id(user table PK)
      * @throws NotFoundException
      * @throws DuplicateException
      */
@@ -156,7 +164,8 @@ public class UserService {
 
     /**
      * 게임, 테스트 결과 획득한 경험치를 DB에 저장합니다.
-     * @param id 경험치를 저장할 id(user table PK)
+     *
+     * @param id         경험치를 저장할 id(user table PK)
      * @param experience 게임, 테스트에서 획득한 경험치
      * @return 파라미터로 넘어온 경험치를 반영한 UpdateExperienceRes DTO로 반환합니다.
      */
@@ -172,7 +181,7 @@ public class UserService {
 
         realUser.updateExperience(level, calculatedExperience);
 
-        UpdateExperienceRes updateExperienceRes = UpdateExperienceRes.builder().level(level).experience(experience).build();
+        UpdateExperienceRes updateExperienceRes = UpdateExperienceRes.builder().level(level).experience(calculatedExperience).build();
 
         return updateExperienceRes;
 
@@ -180,6 +189,7 @@ public class UserService {
 
     /**
      * 경험치를 기준으로 상위 10명의 리스트를 반환합니다.
+     *
      * @return 상위 10명을 GetTopTenUserRes DTO로 담은 List
      * @throws NotFoundException
      */
