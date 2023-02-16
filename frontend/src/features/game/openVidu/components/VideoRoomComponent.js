@@ -14,8 +14,7 @@ import { Navigate } from "react-router-dom";
 import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://i8b106.p.ssafy.io";
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === "production" ? "" : "https://i8b106.p.ssafy.io";
 
 class VideoRoomComponent extends Component {
   constructor(props) {
@@ -23,9 +22,7 @@ class VideoRoomComponent extends Component {
 
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
-    let sessionName = this.props.sessionName
-      ? this.props.sessionName
-      : "SonGeoreum";
+    let sessionName = this.props.sessionName ? this.props.sessionName : "SonGeoreum";
     let userName = window.localStorage.getItem("nickname");
     console.log(this.props.user);
     this.remotes = [];
@@ -85,10 +82,7 @@ class VideoRoomComponent extends Component {
       animate: true, // Whether you want to animate the transitions
     };
 
-    this.layout.initLayoutContainer(
-      document.getElementById("layout"),
-      openViduLayoutOptions
-    );
+    this.layout.initLayoutContainer(document.getElementById("layout"), openViduLayoutOptions);
     window.addEventListener("beforeunload", this.onbeforeunload);
     window.addEventListener("resize", this.updateLayout);
     window.addEventListener("resize", this.checkSize);
@@ -138,11 +132,7 @@ class VideoRoomComponent extends Component {
       } catch (error) {
         // Navigate("/");
         window.location.replace("/");
-        console.error(
-          "There was an error getting the token:",
-          error.code,
-          error.message
-        );
+        console.error("There was an error getting the token:", error.code, error.message);
         if (this.props.error) {
           this.props.error({
             error: error.error,
@@ -173,11 +163,7 @@ class VideoRoomComponent extends Component {
           });
         }
         // alert("There was an error connecting to the session:", error.message);
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
+        console.log("There was an error connecting to the session:", error.code, error.message);
       });
   }
 
@@ -232,17 +218,12 @@ class VideoRoomComponent extends Component {
       isScreenShareActive: localUser.isScreenShareActive(),
     });
 
-    this.setState(
-      { currentVideoDevice: videoDevices[0], localUser: localUser },
-      () => {
-        this.state.localUser.getStreamManager().on("streamPlaying", (e) => {
-          this.updateLayout();
-          publisher.videos[0].video.parentElement.classList.remove(
-            "custom-class"
-          );
-        });
-      }
-    );
+    this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
+      this.state.localUser.getStreamManager().on("streamPlaying", (e) => {
+        this.updateLayout();
+        publisher.videos[0].video.parentElement.classList.remove("custom-class");
+      });
+    });
     if (this.state.goGame === false) {
       if (this.state.playGame === true) {
         this.letsStart();
@@ -277,9 +258,7 @@ class VideoRoomComponent extends Component {
 
   async getWordsList() {
     try {
-      const response = await axios.get(
-        "/api/words?isRandom=true&isTestable=false&num=12"
-      );
+      const response = await axios.get("/api/words?isRandom=true&isTestable=false&num=12");
       console.log("단어 리스트를 갖고 왔어^^", response.data);
       return response.data;
     } catch (err) {
@@ -406,9 +385,7 @@ class VideoRoomComponent extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter(
-      (user) => user.getStreamManager().stream === stream
-    )[0];
+    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -430,9 +407,7 @@ class VideoRoomComponent extends Component {
       // var subscribers = this.state.subscribers;
       subscriber.on("streamPlaying", (e) => {
         this.checkSomeoneShareScreen();
-        subscriber.videos[0].video.parentElement.classList.remove(
-          "custom-class"
-        );
+        subscriber.videos[0].video.parentElement.classList.remove("custom-class");
       });
       const newUser = new UserModel();
       newUser.setStreamManager(subscriber);
@@ -552,9 +527,7 @@ class VideoRoomComponent extends Component {
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
-      var videoDevices = devices.filter(
-        (device) => device.kind === "videoinput"
-      );
+      var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
       if (videoDevices && videoDevices.length > 1) {
         var newVideoDevice = videoDevices.filter(
@@ -573,9 +546,7 @@ class VideoRoomComponent extends Component {
           });
 
           //newPublisher.once("accessAllowed", () => {
-          await this.state.session.unpublish(
-            this.state.localUser.getStreamManager()
-          );
+          await this.state.session.unpublish(this.state.localUser.getStreamManager());
           await this.state.session.publish(newPublisher);
           this.state.localUser.setStreamManager(newPublisher);
           this.setState({
@@ -590,8 +561,7 @@ class VideoRoomComponent extends Component {
   }
 
   screenShare() {
-    const videoSource =
-      navigator.userAgent.indexOf("Firefox") !== -1 ? "window" : "screen";
+    const videoSource = navigator.userAgent.indexOf("Firefox") !== -1 ? "window" : "screen";
     const publisher = this.OV.initPublisher(
       undefined,
       {
@@ -644,8 +614,7 @@ class VideoRoomComponent extends Component {
     let isScreenShared;
     // return true if at least one passes the test
     isScreenShared =
-      this.state.subscribers.some((user) => user.isScreenShareActive()) ||
-      localUser.isScreenShareActive();
+      this.state.subscribers.some((user) => user.isScreenShareActive()) || localUser.isScreenShareActive();
     const openviduLayoutOptions = {
       maxRatio: 3 / 2,
       minRatio: 9 / 16,
@@ -684,17 +653,11 @@ class VideoRoomComponent extends Component {
   }
   checkSize() {
     // if (!this.state.playGame) return;
-    if (
-      document.getElementById("layout").offsetWidth <= 700 &&
-      !this.hasBeenUpdated
-    ) {
+    if (document.getElementById("layout").offsetWidth <= 700 && !this.hasBeenUpdated) {
       this.toggleChat("none");
       this.hasBeenUpdated = true;
     }
-    if (
-      document.getElementById("layout").offsetWidth > 700 &&
-      this.hasBeenUpdated
-    ) {
+    if (document.getElementById("layout").offsetWidth > 700 && this.hasBeenUpdated) {
       this.hasBeenUpdated = false;
     }
   }
@@ -714,10 +677,8 @@ class VideoRoomComponent extends Component {
     const displayNone = { display: "none" };
     const displayBlock = { display: "block" };
 
-    const gameScreen =
-      !this.state.goGame && !this.state.playGame ? displayNone : displayBlock;
-    const loadingScreen =
-      !this.state.goGame && !this.state.playGame ? displayBlock : displayNone;
+    const gameScreen = !this.state.goGame && !this.state.playGame ? displayNone : displayBlock;
+    const loadingScreen = !this.state.goGame && !this.state.playGame ? displayBlock : displayNone;
 
     return (
       <div>
@@ -751,28 +712,14 @@ class VideoRoomComponent extends Component {
           />
 
           <div id="layout" className="bounds">
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
-                <div
-                  className="OT_root OT_publisher custom-class"
-                  id="localUser"
-                >
-                  <StreamComponent
-                    user={localUser}
-                    handleNickname={this.nicknameChanged}
-                  />
-                </div>
-              )}
+            {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+              <div className="OT_root OT_publisher custom-class" id="localUser">
+                <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+              </div>
+            )}
             {this.state.subscribers.map((sub, i) => (
-              <div
-                key={i}
-                className="OT_root OT_publisher custom-class"
-                id="remoteUsers"
-              >
-                <StreamComponent
-                  user={sub}
-                  streamId={sub.streamManager.stream.streamId}
-                />
+              <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers">
+                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
               </div>
             ))}
           </div>
@@ -789,6 +736,7 @@ class VideoRoomComponent extends Component {
                   wordsList={this.state.wordsList}
                   leaveSession={this.leaveSession}
                   imageList={this.state.imageList}
+                  subscribers={this.state.subscribers}
                 />
               )}
           </div>
