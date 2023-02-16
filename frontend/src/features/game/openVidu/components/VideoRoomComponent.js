@@ -9,7 +9,7 @@ import OpenViduLayout from "../layout/openvidu-layout";
 import UserModel from "../models/user-model";
 import ToolbarComponent from "./toolbar/ToolbarComponent";
 import Loading from "./Loading";
-import SideBar from "./sidebar/SideBar";
+import GameBar from "./GameBar";
 import { Navigate } from "react-router-dom";
 import { ThirtyFpsSelectSharp } from "@mui/icons-material";
 
@@ -43,7 +43,7 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false, // *** 임시 ***
+      goGame: true, // *** 임시 ***
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
@@ -183,16 +183,16 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     await this.OV.getUserMedia({
-      audioSource: undefined,
+      audioSource: false,
       videoSource: undefined,
     });
     var devices = await this.OV.getDevices();
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
-      audioSource: undefined,
+      audioSource: false,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: false, //
+      publishAudio: localUser.isAudioActive(),
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -288,12 +288,6 @@ class VideoRoomComponent extends Component {
   }
 
   async startSignal(wordsData) {
-    // 마지막 사람이 playGame이 모두에게 true라는 것을 알려주기
-    // console.log("참가자들 닉네임", this.state.playersList);
-    // if (this.state.goGame === false) {
-    //   console.log("시그널 조건1 통과");
-    //   if (this.state.playGame === true) {
-    //     console.log("시그널 조건2 통과");
     const data = {
       playGame: this.state.playGame,
       playersList: this.state.playersList,
@@ -570,9 +564,9 @@ class VideoRoomComponent extends Component {
           // Creating a new publisher with specific videoSource
           // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
-            audioSource: undefined,
+            audioSource: false,
             videoSource: newVideoDevice[0].deviceId,
-            publishAudio: false,
+            publishAudio: localUser.isAudioActive(),
             publishVideo: localUser.isVideoActive(),
             mirror: true,
           });
@@ -601,7 +595,7 @@ class VideoRoomComponent extends Component {
       undefined,
       {
         videoSource: videoSource,
-        publishAudio: false,
+        publishAudio: localUser.isAudioActive(),
         publishVideo: localUser.isVideoActive(),
         mirror: false,
       },
@@ -784,7 +778,7 @@ class VideoRoomComponent extends Component {
           <div className="sidebar">
             {localUser !== undefined && // *** 임시 ***
               localUser.getStreamManager() !== undefined && (
-                <SideBar
+                <GameBar
                   user={localUser}
                   chatDisplay={this.state.chatDisplay}
                   close={this.toggleChat}

@@ -74,11 +74,15 @@ export default function HandToWord({
     : tutoText;
 
   const inputValue = () => {
-    const text = document.getElementById("inputBox").value;
+    const text = document.getElementById("inputBox").value.trim();
     console.log(text);
+    if (text === "") return;
     setMyInput(text);
     const num = number + 1;
-    if (text === testList[number].name) {
+    if (
+      text === testList[number].name ||
+      text.includes(testList[number].name)
+    ) {
       console.log("정답입니다", num);
       setShowCorrect(true);
       const nowScore = score + 1;
