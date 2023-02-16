@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatComponent from "./sidebar/chat/ChatComponent";
 import lock from "../assets/images/lock.jpg";
+import "./sidebar/Timer.scss";
 
 const GameBar = (props) => {
   const playersList = props.playersList;
@@ -97,7 +98,7 @@ const GameBar = (props) => {
     console.log("채팅 친 사람 >> ", nickName);
     console.log("채팅 내용 >> ", chatMessage);
     console.log("정답 단어 >> ", answerWord);
-    if (nickName === myNickname && answerWord === chatMessage) {
+    if (answerWord === chatMessage) {
       const idx = Number(playersList.indexOf(nickName));
       const copyScoreList = [...scoreList];
       copyScoreList[idx]++;
@@ -157,37 +158,51 @@ const GameBar = (props) => {
   };
 
   return (
-    <React.Fragment>
-      <div className="timer-wrapper">
-        <div>{gameTime}</div>
-      </div>
-      <div>지금 출제자: {presenter}</div>
-      <br></br>
-      <div className="box">
-        {(isQuizTime && presenter === myNickname) || !isQuizTime ? (
-          <React.Fragment>
-            <div>
-              <h1>{answerWord}</h1>
-            </div>
-            <video className="box-video" autoPlay muted loop src={answerApi}>
-              {/* <source src={answerApi}></source> */}
-            </video>
-          </React.Fragment>
+    <div className="sidebar-wrapper">
+      <React.Fragment>
+        {gameTurnCnt === 12 ? (
+          <div className="box resultMessageBox">
+            <p>게임이 종료되었습니다</p>
+            <p>잠시 뒤 결과창으로 넘어갑니다.</p>
+          </div>
         ) : (
           <React.Fragment>
-            <div className="box-text">무엇일까요?</div>
-            <img src={lock}></img>
+            <div className="timer-wrapper">
+              <div>{gameTime}</div>
+              <div> 현재 출제자: {presenter}</div>
+            </div>
+            <div className="box">
+              {(isQuizTime && presenter === myNickname) || !isQuizTime ? (
+                <React.Fragment>
+                  <div>
+                    <h1>{answerWord}</h1>
+                  </div>
+                  <video
+                    className="box-video"
+                    autoPlay
+                    muted
+                    loop
+                    src={answerApi}
+                  ></video>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <div className="box-text">무엇일까요?</div>
+                  <img src={lock}></img>
+                </React.Fragment>
+              )}
+            </div>
           </React.Fragment>
         )}
-      </div>
-      <ChatComponent
-        user={props.user}
-        chatDisplay={props.chatDisplay}
-        close={props.close}
-        messageReceived={props.messageReceived}
-        checkAnswer={checkAnswer}
-      />
-    </React.Fragment>
+        <ChatComponent
+          user={props.user}
+          chatDisplay={props.chatDisplay}
+          close={props.close}
+          messageReceived={props.messageReceived}
+          checkAnswer={checkAnswer}
+        />
+      </React.Fragment>
+    </div>
   );
 };
 

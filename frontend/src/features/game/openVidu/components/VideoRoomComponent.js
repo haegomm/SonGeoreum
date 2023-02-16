@@ -43,12 +43,11 @@ class VideoRoomComponent extends Component {
       sessionId: undefined, //
       token: "", //
       playGame: false, //
-      goGame: false, // *** 임시 ***
+      goGame: true, // *** 임시 ***
       playersList: null, //
       wordsList: null,
       subToken: undefined, // ?
       imageList: null,
-      ready: null,
     };
     // this.timer // timer component를 갖고온다면
 
@@ -94,9 +93,6 @@ class VideoRoomComponent extends Component {
     window.addEventListener("resize", this.updateLayout);
     window.addEventListener("resize", this.checkSize);
     console.log("join 하기 전 DidMount");
-
-    publisher.publishAudio(false);
-    subscriber.subscribeToAudio(false);
 
     this.joinSession();
 
@@ -187,16 +183,16 @@ class VideoRoomComponent extends Component {
 
   async connectWebCam() {
     await this.OV.getUserMedia({
-      audioSource: undefined,
+      audioSource: false,
       videoSource: undefined,
     });
     var devices = await this.OV.getDevices();
     var videoDevices = devices.filter((device) => device.kind === "videoinput");
 
     let publisher = this.OV.initPublisher(undefined, {
-      audioSource: undefined,
+      audioSource: false,
       videoSource: videoDevices[0].deviceId,
-      publishAudio: localUser.isAudioActive(), //
+      publishAudio: localUser.isAudioActive(),
       publishVideo: localUser.isVideoActive(),
       resolution: "640x480",
       frameRate: 30,
@@ -568,7 +564,7 @@ class VideoRoomComponent extends Component {
           // Creating a new publisher with specific videoSource
           // In mobile devices the default and first camera is the front one
           var newPublisher = this.OV.initPublisher(undefined, {
-            audioSource: undefined,
+            audioSource: false,
             videoSource: newVideoDevice[0].deviceId,
             publishAudio: localUser.isAudioActive(),
             publishVideo: localUser.isVideoActive(),
