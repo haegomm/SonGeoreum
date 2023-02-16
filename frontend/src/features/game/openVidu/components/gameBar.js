@@ -20,7 +20,7 @@ const GameBar = (props) => {
   const quizSequence = 10000;
   const answerSequence = 10000;
 
-  const [lastCnt, setLastCnt] = useState(-1);
+  //   const [lastCnt, setLastCnt] = useState(-1);
 
   const [gameTime, setGameTime] = useState(0);
 
@@ -65,16 +65,14 @@ const GameBar = (props) => {
 
   // 정답을 맞추거나 타임아웃이 되었을 때 정답 시청시작.
   const answerTimeStart = (gameCnt) => {
-    if (gameCnt === lastCnt) {
-      console.log("이미 정답 맞춤", lastCnt);
-      return;
-    }
+    // if (gameCnt === lastCnt) {
+    //   console.log("이미 정답 맞춤", lastCnt);
+    //   return;
+    // }
     console.log("3. 정답 시청 시간 시작");
     quizTimeStop();
     answerTimer(gameCnt);
     setLastCnt(() => gameCnt);
-    console.log("게임! >> ", gameCnt);
-    console.log("라스트! >> ", lastCnt);
   };
 
   // 퀴즈 푸는 타이머
@@ -95,10 +93,8 @@ const GameBar = (props) => {
   // 채팅 정답 확인 함수
   const checkAnswer = (nickName, chatMessage) => {
     // const curAnswer = answerWord;
-    console.log("채팅 친 사람 >> ", nickName);
-    console.log("채팅 내용 >> ", chatMessage);
-    console.log("정답 단어 >> ", answerWord);
     if (answerWord === chatMessage) {
+      console.log(nickName, "님 이 정답을 맞췄습니다.");
       const idx = Number(playersList.indexOf(nickName));
       const copyScoreList = [...scoreList];
       copyScoreList[idx]++;
@@ -116,7 +112,7 @@ const GameBar = (props) => {
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     // console.log("다음 단계 >> ", gameCnt);
     const nextCnt = gameCnt + 1;
-    if (gameCnt === 12) {
+    if (nextCnt === 12) {
       endGame();
       return;
     }
@@ -142,6 +138,7 @@ const GameBar = (props) => {
     console.log("모든 게임이 종료되었습니다.");
     const result = resultScore();
     navigate("/result", { state: result });
+    props.leaveSession();
   };
 
   // 결과 값을 닉네임과 함께 객체로 묶어주기
