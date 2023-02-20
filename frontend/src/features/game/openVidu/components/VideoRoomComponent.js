@@ -278,18 +278,18 @@ class VideoRoomComponent extends Component {
     const mySession = this.state.session;
     const sessionId = this.state.sessionId;
 
-    mySession.disconnect();
-
-    if (mySession) {
-      mySession.disconnect();
-    }
-
     if (this.state.playGame || this.state.goGame) {
       try {
         const response = await axios.delete(`/api/game/session/${sessionId}`);
         Navigate("/");
         return response.data;
       } catch (err) {}
+    }
+
+    mySession.disconnect();
+
+    if (mySession) {
+      mySession.disconnect();
     }
 
     // Empty all properties...
