@@ -51,7 +51,7 @@ const GameBar = (props) => {
       clearInterval(timerGame);
       answerTimeStart(gameCnt);
       setGameTime(() => 0);
-    }, 10000);
+    }, quizSequence);
   };
 
   // 퀴즈 푸는 시간 종료
@@ -117,7 +117,7 @@ const GameBar = (props) => {
   const toNext = (gameCnt) => {
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     const nextCnt = gameCnt + 1;
-    if (nextCnt === 12) {
+    if (nextCnt === 4) {
       endGame();
       return;
     }
