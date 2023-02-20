@@ -21,7 +21,7 @@ const GameBar = (props) => {
   const presenter = useRef("");
 
   const quizSequence = 10000;
-  const answerSequence = 7000;
+  const answerSequence = 5000;
 
   const [gameTime, setGameTime] = useState(0);
 
