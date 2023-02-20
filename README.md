@@ -372,7 +372,26 @@ SonGeoreum
 
 ## 와이어프레임
 
-![Wireframe](docs/SonGeoreum_wireframe.png)
+- 홈
+
+![Wireframe](docs/SonGeoreum_wireframe(홈).png)
+
+- 나의 단어장
+
+![Wireframe](docs/SonGeoreum_wireframe(나의 단어장).jpg)
+
+- 학습하기
+
+![Wireframe](docs/SonGeoreum_wireframe(학습하기).jpg)
+
+- 테스트
+
+![Wireframe](docs/SonGeoreum_wireframe(테스트).jpg)
+
+- 게임
+
+![Wireframe](docs/SonGeoreum_wireframe(게임).jpg)
+
 (가은님)
 
 <br>
