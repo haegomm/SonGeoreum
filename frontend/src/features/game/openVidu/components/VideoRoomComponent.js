@@ -252,9 +252,7 @@ class VideoRoomComponent extends Component {
 
   async getWordsList() {
     try {
-      const response = await axios.get(
-        "/api/words?isRandom=true&isTestable=false&num=12"
-      );
+      const response = await axios.get("/api/words?isTestable=false&num=12");
       return response.data;
     } catch (err) {}
   }
