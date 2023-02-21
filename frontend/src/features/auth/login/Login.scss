@@ -1,103 +1,106 @@
 $blue: #6488e5;
 
-
-.loginTitle{
-    margin-top: 76px;
-    font-size: 40px;
-    font-weight: 600;
+.loginTitle {
+  margin-top: 76px;
+  font-size: 40px;
+  font-weight: 600;
 }
 
-.inputEmail{
-    display: block;
-    margin:auto;
-    margin-top: 56px;
-    border:0;
-    background-color: #FFF9ED;
-    border-bottom: 2px solid #D1D1D6;
-    color: #66645f;
-    width: 320px;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    font-size: medium;
+.inputEmail {
+  display: block;
+  margin: auto;
+  margin-top: 56px;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 320px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
 }
-.inputEmail::placeholder{
-    color: #D1D1D6;
+.inputEmail::placeholder {
+  color: #d1d1d6;
 }
-.inputPassword{
-    display: block;
-    margin:auto;
-    margin-top: 24px;
-    border:0;
-    background-color: #FFF9ED;
-    border-bottom: 2px solid #D1D1D6;
-    color: #66645f;
-    width: 320px;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    font-size: medium;
+.inputPassword {
+  display: block;
+  margin: auto;
+  margin-top: 24px;
+  border: 0;
+  background-color: #fff9ed;
+  border-bottom: 2px solid #d1d1d6;
+  color: #66645f;
+  width: 320px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  font-size: medium;
 }
-.inputPassword::placeholder{
-    color: #D1D1D6;
+.inputPassword::placeholder {
+  color: #d1d1d6;
 }
-.formItem input:focus{
-    border-bottom: 2px solid #66645f;
-}
-
-.loginButton{
-    display: block;
-    margin:auto;
-    margin-top: 38px;
-    width: 120px;
-    height: 36px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: normal;
-    color: white;
-    border: none;
-    background-color: $blue;
-    border-radius: 8px;
-    cursor: pointer;
-    
+.formItem input:focus {
+  border-bottom: 2px solid #66645f;
 }
 
-.idMessage{
-    display: flex;
-    justify-content: center;
-    margin-top: 80px;
-    font-size: medium;
-    font-weight: 600;
-    color: #66645f;
+.loginButton {
+  display: block;
+  margin: auto;
+  margin-top: 38px;
+  width: 120px;
+  height: 36px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: normal;
+  color: white;
+  border: none;
+  background-color: $blue;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.bottomButton{
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+.idMessage {
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+  font-size: medium;
+  font-weight: 600;
+  color: #66645f;
 }
 
-.kakaoSignUpButton{
-    width: 100px; 
-    height: 48px;
-    margin-left: 20px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-   }
+.bottomButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
 
-.normalSignUpButton{
-    margin-right: 20px;
-    width: 100px;
-    height: 48px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: normal;
-    color: white;
-    border: none;
-    background-color: $blue;
-    border-radius: 8px;
-    cursor: pointer;
+.kakaoSignUpButton {
+  width: 100px;
+  height: 48px;
+  margin-left: 20px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.normalSignUpButton {
+  margin-right: 20px;
+  width: 100px;
+  height: 48px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: normal;
+  color: white;
+  border: none;
+  background-color: $blue;
+  border-radius: 8px;
+  //   cursor: pointer; // 가입하기 버튼 클릭 금지 해제 시 이 주석도 해제하기
+}
+
+.disable {
+  pointer-events: none;
+  cursor: default;
 }
 
 // .loginTotoalDiv{
@@ -105,7 +108,3 @@ $blue: #6488e5;
 //     // justify-content: center;
 //     // align-items: center;
 // }
-
-
-
-
