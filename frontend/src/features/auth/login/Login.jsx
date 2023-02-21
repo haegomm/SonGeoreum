@@ -54,20 +54,10 @@ function Login(props) {
       <h1 className="loginTitle">로그인</h1>
       <form onSubmit={onSubmitHandler}>
         <div className="formItem">
-          <input
-            type="email"
-            placeholder="이메일"
-            className="inputEmail"
-            onChange={onEmailHandler}
-          />
+          <input type="email" placeholder="이메일" className="inputEmail" onChange={onEmailHandler} />
         </div>
         <div className="formItem">
-          <input
-            type="password"
-            placeholder="비밀번호"
-            className="inputPassword"
-            onChange={onPasswordHandler}
-          />
+          <input type="password" placeholder="비밀번호" className="inputPassword" onChange={onPasswordHandler} />
         </div>
         <div>
           <button type="submit" className="loginButton">
@@ -78,9 +68,13 @@ function Login(props) {
       <div className="idMessage">아직 아이디가 없으신가요?</div>
       <div className="bottomButton">
         <Link to="/signup">
-          <button className="normalSignUpButton">가입하기</button>
+          {/* 다시 클릭하고 싶으면 disabled 지우고 normalSignUpButton 클래스에서 주석 처리된 속성 하나 주석 제거하기 */}
+          <button className="normalSignUpButton" disabled>
+            가입하기
+          </button>
         </Link>
-        <a href={KAKAO_REQUEST}>
+        {/* 아래 className을 삭제하면 다시 클릭 가능 */}
+        <a href={KAKAO_REQUEST} className="disable">
           <img src={socailLoginButtons} className="kakaoSignUpButton" alt="" />
         </a>
       </div>
