@@ -73,6 +73,7 @@ $blue: #6488e5;
   display: flex;
   justify-content: center;
   margin-top: 40px;
+  gap: 20px;
 }
 
 .kakaoSignUpButton {
@@ -85,7 +86,7 @@ $blue: #6488e5;
 }
 
 .normalSignUpButton {
-  margin-right: 20px;
+  // margin-right: 20px;
   width: 100px;
   height: 48px;
   border-radius: 5px;
