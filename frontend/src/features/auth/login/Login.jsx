@@ -68,13 +68,11 @@ function Login(props) {
       <div className="idMessage">아직 아이디가 없으신가요?</div>
       <div className="bottomButton">
         <Link to="/signup">
-          {/* 다시 클릭하고 싶으면 disabled 지우고 normalSignUpButton 클래스에서 주석 처리된 속성 하나 주석 제거하기 */}
-          <button className="normalSignUpButton" disabled>
+          <button className="normalSignUpButton">
             가입하기
           </button>
         </Link>
-        {/* 아래 className을 삭제하면 다시 클릭 가능 */}
-        <a href={KAKAO_REQUEST} className="disable">
+        <a href={KAKAO_REQUEST} >
           <img src={socailLoginButtons} className="kakaoSignUpButton" alt="" />
         </a>
       </div>
