@@ -21,7 +21,7 @@ const GameBar = (props) => {
   const presenter = useRef("");
 
   const quizSequence = 10000;
-  const answerSequence = 5000;
+  const answerSequence = 7000;
 
   const [gameTime, setGameTime] = useState(0);
 
@@ -117,7 +117,7 @@ const GameBar = (props) => {
   const toNext = (gameCnt) => {
     setGameTurnCnt((gameTurnCnt) => gameCnt + 1);
     const nextCnt = gameCnt + 1;
-    if (nextCnt === 4) {
+    if (nextCnt === 12) {
       endGame();
       return;
     }
